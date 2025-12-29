@@ -28,11 +28,31 @@
     }
   ],
   "carouselSlides": [
-    "http://localhost:3005/uploads/1766565823513-865544056.jpeg",
-    "/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg",
-    "/assets/images/8778ae33-e80b-4bfa-9d38-169e54cd558d.png",
-    "/assets/images/8c95d0bb-99d5-40b2-bcd8-5db9503b8341.png",
-    "/assets/images/39c91b7a-9464-4acc-85a5-8ac436268dd2.png"
+    {
+      "image": "http://localhost:3005/uploads/1766565823513-865544056.jpeg",
+      "href": "https://example.com/slide1",
+      "alt": "輪播圖 1"
+    },
+    {
+      "image": "/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg",
+      "href": "https://example.com/slide2", 
+      "alt": "輪播圖 2"
+    },
+    {
+      "image": "/assets/images/8778ae33-e80b-4bfa-9d38-169e54cd558d.png",
+      "href": "https://example.com/slide3",
+      "alt": "輪播圖 3"
+    },
+    {
+      "image": "/assets/images/8c95d0bb-99d5-40b2-bcd8-5db9503b8341.png",
+      "href": "https://example.com/slide4",
+      "alt": "輪播圖 4"
+    },
+    {
+      "image": "/assets/images/39c91b7a-9464-4acc-85a5-8ac436268dd2.png",
+      "href": "https://example.com/slide5",
+      "alt": "輪播圖 5"
+    }
   ],
   "titles": {
     "recommendedRoutes": "/assets/images/c526fd1a-8fdf-4892-8dd3-72c3ced9e82c.png",
@@ -83,20 +103,80 @@
     }
   ],
   "videoThumbnails": [
-    "/assets/images/508f359d-7332-42f2-9181-565f7571e1af.png",
-    "/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png",
-    "/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png",
-    "/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png",
-    "/assets/images/4e67c664-2a43-4ac2-9e09-dff556a007ce.png",
-    "/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png"
+    {
+      "image": "/assets/images/508f359d-7332-42f2-9181-565f7571e1af.png",
+      "href": "https://example.com/video1",
+      "alt": "精選短視頻 1",
+      "title": "熱門影片 1"
+    },
+    {
+      "image": "/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png",
+      "href": "https://example.com/video2",
+      "alt": "精選短視頻 2", 
+      "title": "熱門影片 2"
+    },
+    {
+      "image": "/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png",
+      "href": "https://example.com/video3",
+      "alt": "精選短視頻 3",
+      "title": "熱門影片 3"
+    },
+    {
+      "image": "/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png",
+      "href": "https://example.com/video4",
+      "alt": "精選短視頻 4",
+      "title": "熱門影片 4"
+    },
+    {
+      "image": "/assets/images/4e67c664-2a43-4ac2-9e09-dff556a007ce.png",
+      "href": "https://example.com/video5",
+      "alt": "精選短視頻 5",
+      "title": "熱門影片 5"
+    },
+    {
+      "image": "/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png",
+      "href": "https://example.com/video6",
+      "alt": "精選短視頻 6",
+      "title": "熱門影片 6"
+    }
   ],
   "programThumbnails": [
-    "/assets/images/29627d6a-6020-49ae-8625-44f0ec5f7999.jpg",
-    "/assets/images/c67bb6cc-e00c-4811-a62a-38604bda41f7.png",
-    "/assets/images/391bcfda-fff2-4a55-b3d2-444884ddf87f.png",
-    "/assets/images/a1d2e390-0a0f-4dde-8d9b-6de5bb9f4de0.jpg",
-    "/assets/images/626e1c19-bf48-40ed-9a2f-8e2a8e4dce13.png",
-    "/assets/images/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg"
+    {
+      "image": "/assets/images/29627d6a-6020-49ae-8625-44f0ec5f7999.jpg",
+      "href": "https://example.com/program1",
+      "alt": "火熱節目 1",
+      "title": "熱門節目 1"
+    },
+    {
+      "image": "/assets/images/c67bb6cc-e00c-4811-a62a-38604bda41f7.png",
+      "href": "https://example.com/program2",
+      "alt": "火熱節目 2",
+      "title": "熱門節目 2"
+    },
+    {
+      "image": "/assets/images/391bcfda-fff2-4a55-b3d2-444884ddf87f.png",
+      "href": "https://example.com/program3",
+      "alt": "火熱節目 3",
+      "title": "熱門節目 3"
+    },
+    {
+      "image": "/assets/images/a1d2e390-0a0f-4dde-8d9b-6de5bb9f4de0.jpg",
+      "href": "https://example.com/program4",
+      "alt": "火熱節目 4",
+      "title": "熱門節目 4"
+    },
+    {
+      "image": "/assets/images/626e1c19-bf48-40ed-9a2f-8e2a8e4dce13.png",
+      "href": "https://example.com/program5",
+      "alt": "火熱節目 5",
+      "title": "熱門節目 5"
+    },
+    {
+      "image": "/assets/images/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg",
+      "href": "https://example.com/program6",
+      "alt": "火熱節目 6",
+      "title": "熱門節目 6"
+    }
   ],
   "floatAdButtons": [
     {

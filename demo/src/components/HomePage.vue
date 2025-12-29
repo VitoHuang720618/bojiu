@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import ImageComponent from './ImageComponent.vue'
 import ImageButton from './ImageButton.vue'
 import { assetManifest } from '../config/assetManifest'
@@ -12,12 +12,57 @@ import {
   carouselSlides,
   floatAdButtons
 } from '../config/siteConfig'
+import { carouselService } from '../services/carouselService'
 
 const currentSlide = ref(0)
 let carouselInterval: number | null = null
 
+// 从API获取的轮播图数据
+const apiCarouselSlides = ref<{image: string, href: string, alt: string}[]>([])
+const apiBanner = ref<string>('')
+const apiVideoThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
+const apiProgramThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
+
+// 计算属性：优先使用API数据，否则使用默认数据
+const effectiveCarouselSlides = computed(() => {
+  return apiCarouselSlides.value.length > 0 ? 
+    apiCarouselSlides.value.map((slide, index) => ({
+      id: `api-slide-${index}`,
+      alt: slide.alt,
+      href: slide.href,
+      image: slide.image
+    })) : 
+    carouselSlides
+})
+
+const effectiveBanner = computed(() => {
+  return apiBanner.value
+})
+
+const effectiveVideoThumbnails = computed(() => {
+  return apiVideoThumbnails.value.length > 0 ? 
+    apiVideoThumbnails.value : 
+    videoContent.map((video, index) => ({
+      image: assetManifest.videoThumbnails[index],
+      href: '#',
+      alt: video.title,
+      title: video.title
+    }))
+})
+
+const effectiveProgramThumbnails = computed(() => {
+  return apiProgramThumbnails.value.length > 0 ? 
+    apiProgramThumbnails.value : 
+    programContent.map((program, index) => ({
+      image: assetManifest.programThumbnails[index],
+      href: '#',
+      alt: program.title,
+      title: program.title
+    }))
+})
+
 const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % carouselSlides.length
+  currentSlide.value = (currentSlide.value + 1) % effectiveCarouselSlides.value.length
 }
 
 const startCarousel = () => {
@@ -31,9 +76,28 @@ const stopCarousel = () => {
   }
 }
 
-onMounted(() => {
+// 加载轮播图和banner数据
+const loadConfig = async () => {
+  try {
+    const config = await carouselService.getConfig()
+    apiCarouselSlides.value = config.carouselSlides
+    apiBanner.value = config.banner
+    apiVideoThumbnails.value = config.videoThumbnails
+    apiProgramThumbnails.value = config.programThumbnails
+    console.log('Loaded config from API:', config)
+  } catch (error) {
+    console.error('Failed to load config:', error)
+  }
+}
+
+onMounted(async () => {
+  await loadConfig()
   startCarousel()
 })
+
+const onBannerSizeLoaded = () => {
+  // 當原圖載入完成後，佔位區域會自動獲得相同尺寸
+}
 
 onUnmounted(() => {
   stopCarousel()
@@ -45,10 +109,20 @@ onUnmounted(() => {
     <!-- Banner -->
     <div id="banner">
       <ImageComponent
-        :src="assetManifest.banner"
+        v-if="effectiveBanner"
+        :src="effectiveBanner"
         alt="Banner"
         :lazy="false"
       />
+      <div v-else class="banner-placeholder">
+        <!-- 隱藏的原圖用來獲取尺寸 -->
+        <img 
+          :src="assetManifest.banner" 
+          alt="Banner placeholder" 
+          class="banner-size-reference"
+          @load="onBannerSizeLoaded"
+        />
+      </div>
     </div>
 
     <!-- Main Content -->
@@ -81,15 +155,21 @@ onUnmounted(() => {
               @mouseleave="startCarousel"
             >
               <div class="carousel-container">
+                <!-- 隱藏的參考圖片，用來設定容器尺寸 -->
+                <img 
+                  src="/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg" 
+                  class="carousel-size-reference"
+                  alt="Size reference"
+                />
                 <div
-                  v-for="(slide, index) in carouselSlides"
+                  v-for="(slide, index) in effectiveCarouselSlides"
                   :key="slide.id"
                   class="carousel-slide"
                   :class="{ active: currentSlide === index }"
                 >
                   <a :href="slide.href" target="_blank" rel="noopener noreferrer">
                     <ImageComponent
-                      :src="assetManifest.carouselSlides[index]"
+                      :src="slide.image || assetManifest.carouselSlides[index]"
                       :alt="slide.alt"
                     />
                   </a>
@@ -164,17 +244,23 @@ onUnmounted(() => {
             </div>
             <div class="list">
               <div
-                v-for="(video, index) in videoContent"
-                :key="video.id"
+                v-for="(video, index) in effectiveVideoThumbnails"
+                :key="video ? `video-${index}` : `empty-${index}`"
                 class="item"
+                :class="{ 'empty-item': !video }"
               >
-                <div class="img">
-                  <ImageComponent
-                    :src="assetManifest.videoThumbnails[index]"
-                    :alt="video.title"
-                  />
-                </div>
-                <span>{{ video.title }}</span>
+                <template v-if="video">
+                  <a :href="video.href" target="_blank" rel="noopener noreferrer">
+                    <div class="img">
+                      <ImageComponent
+                        :src="video.image"
+                        :alt="video.alt"
+                      />
+                    </div>
+                    <span>{{ video.title }}</span>
+                  </a>
+                </template>
+                <div v-else class="empty-placeholder"></div>
               </div>
             </div>
           </div>
@@ -190,17 +276,23 @@ onUnmounted(() => {
             </div>
             <div class="list">
               <div
-                v-for="(program, index) in programContent"
-                :key="program.id"
+                v-for="(program, index) in effectiveProgramThumbnails"
+                :key="program ? `program-${index}` : `empty-program-${index}`"
                 class="item"
+                :class="{ 'empty-item': !program }"
               >
-                <div class="img">
-                  <ImageComponent
-                    :src="assetManifest.programThumbnails[index]"
-                    :alt="program.title"
-                  />
-                </div>
-                <span>{{ program.title }}</span>
+                <template v-if="program">
+                  <a :href="program.href" target="_blank" rel="noopener noreferrer">
+                    <div class="img">
+                      <ImageComponent
+                        :src="program.image"
+                        :alt="program.alt"
+                      />
+                    </div>
+                    <span>{{ program.title }}</span>
+                  </a>
+                </template>
+                <div v-else class="empty-placeholder"></div>
               </div>
             </div>
           </div>
@@ -236,6 +328,17 @@ onUnmounted(() => {
 #banner img {
   display: block;
   width: 100%;
+}
+
+.banner-placeholder {
+  width: 100%;
+  position: relative;
+}
+
+.banner-size-reference {
+  width: 100%;
+  opacity: 0; /* 完全透明，但保持尺寸 */
+  display: block;
 }
 
 #home-main {
@@ -413,7 +516,32 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
+.carousel-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* 保持比例，裁切多餘部分 */
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-size-reference {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0; /* 完全透明，但佔據空間 */
+}
+
 .carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: none;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
@@ -426,11 +554,15 @@ onUnmounted(() => {
 
 .carousel-slide a {
   display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .carousel-slide img {
   display: block;
   width: 100%;
+  height: 100%;
+  object-fit: fill; /* 強制填滿容器，可能會變形 */
 }
 
 .recommend-links {
@@ -693,6 +825,8 @@ onUnmounted(() => {
   margin-bottom: 0.5rem;
   overflow: hidden;
   position: relative;
+  width: 187px;  /* 固定寬度 */
+  height: 105px; /* 固定高度 */
 }
 
 .programme-wrap .list .item .img::before {
@@ -710,6 +844,22 @@ onUnmounted(() => {
 
 .programme-wrap .list .item .img img {
   width: 100%;
+  height: 100%;
+  object-fit: fill; /* 強制填滿，可能變形 */
+}
+
+/* 空資料的處理 */
+.programme-wrap .list .item.empty-item {
+  opacity: 0.3; /* 半透明顯示空位置 */
+}
+
+.programme-wrap .list .item .empty-placeholder {
+  width: 187px;
+  height: 105px;
+  border: 2px dashed #b3905b;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  background-color: transparent;
 }
 
 .programme-wrap .list .item span {
