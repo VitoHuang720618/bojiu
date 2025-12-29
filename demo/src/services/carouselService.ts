@@ -5,6 +5,7 @@ class CarouselService {
   async getConfig(): Promise<{
     carouselSlides: {image: string, href: string, alt: string}[], 
     banner: string,
+    backgroundImage: string,
     videoThumbnails: ({image: string, href: string, alt: string, title: string} | null)[],
     programThumbnails: ({image: string, href: string, alt: string, title: string} | null)[]
   }> {
@@ -19,6 +20,7 @@ class CarouselService {
       return {
         carouselSlides: config.carouselSlides || [],
         banner: config.banner || '',
+        backgroundImage: config.backgroundImage || '',
         videoThumbnails: config.videoThumbnails || [],
         programThumbnails: config.programThumbnails || []
       }
@@ -55,6 +57,7 @@ class CarouselService {
           }
         ],
         banner: '',
+        backgroundImage: '',
         videoThumbnails: [],
         programThumbnails: []
       }

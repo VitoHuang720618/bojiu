@@ -7,8 +7,6 @@ import {
   siteConfig,
   recommendedRoutes,
   recommendedTools,
-  videoContent,
-  programContent,
   carouselSlides,
   floatAdButtons
 } from '../config/siteConfig'
@@ -20,6 +18,7 @@ let carouselInterval: number | null = null
 // 从API获取的轮播图数据
 const apiCarouselSlides = ref<{image: string, href: string, alt: string}[]>([])
 const apiBanner = ref<string>('')
+const apiBackgroundImage = ref<string>('')
 const apiVideoThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
 const apiProgramThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
 
@@ -32,33 +31,32 @@ const effectiveCarouselSlides = computed(() => {
       href: slide.href,
       image: slide.image
     })) : 
-    carouselSlides
+    carouselSlides.map((slide, index) => ({
+      id: slide.id,
+      alt: slide.alt,
+      href: slide.href || '#',
+      image: assetManifest.carouselSlides[index] || '' // 使用 assetManifest 中的圖片
+    }))
 })
 
 const effectiveBanner = computed(() => {
   return apiBanner.value
 })
 
+const effectiveBackgroundImage = computed(() => {
+  const bgImage = apiBackgroundImage.value
+  console.log('計算背景圖:', bgImage)
+  return bgImage
+})
+
 const effectiveVideoThumbnails = computed(() => {
-  return apiVideoThumbnails.value.length > 0 ? 
-    apiVideoThumbnails.value : 
-    videoContent.map((video, index) => ({
-      image: assetManifest.videoThumbnails[index],
-      href: '#',
-      alt: video.title,
-      title: video.title
-    }))
+  // 只使用API數據，不使用預設資料
+  return apiVideoThumbnails.value
 })
 
 const effectiveProgramThumbnails = computed(() => {
-  return apiProgramThumbnails.value.length > 0 ? 
-    apiProgramThumbnails.value : 
-    programContent.map((program, index) => ({
-      image: assetManifest.programThumbnails[index],
-      href: '#',
-      alt: program.title,
-      title: program.title
-    }))
+  // 只使用API數據，不使用預設資料
+  return apiProgramThumbnails.value
 })
 
 const nextSlide = () => {
@@ -79,12 +77,16 @@ const stopCarousel = () => {
 // 加载轮播图和banner数据
 const loadConfig = async () => {
   try {
+    console.log('開始加載配置...')
     const config = await carouselService.getConfig()
+    console.log('從 API 加載的配置:', config)
     apiCarouselSlides.value = config.carouselSlides
     apiBanner.value = config.banner
+    apiBackgroundImage.value = config.backgroundImage
     apiVideoThumbnails.value = config.videoThumbnails
     apiProgramThumbnails.value = config.programThumbnails
-    console.log('Loaded config from API:', config)
+    console.log('背景圖設置為:', config.backgroundImage)
+    console.log('effectiveBackgroundImage:', effectiveBackgroundImage.value)
   } catch (error) {
     console.error('Failed to load config:', error)
   }
@@ -126,7 +128,14 @@ onUnmounted(() => {
     </div>
 
     <!-- Main Content -->
-    <div id="home-main">
+    <div id="home-main" :style="{ 
+      backgroundImage: effectiveBackgroundImage ? `url('${effectiveBackgroundImage}')` : 
+        'radial-gradient(circle, rgba(80, 80, 80, 0.4) 1.5px, transparent 1.5px), radial-gradient(circle, rgba(60, 60, 60, 0.3) 1px, transparent 1px), linear-gradient(180deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px), linear-gradient(0deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px)',
+      backgroundColor: effectiveBackgroundImage ? 'transparent' : '#0a0a0a',
+      backgroundSize: effectiveBackgroundImage ? 'cover' : '16px 16px, 32px 32px, 100% 60px, 100% 60px',
+      backgroundPosition: effectiveBackgroundImage ? 'center' : '0 0, 8px 8px, top, bottom',
+      backgroundRepeat: effectiveBackgroundImage ? 'no-repeat' : 'repeat, repeat, repeat-x, repeat-x'
+    }">
       <div class="home-main__inner">
         <!-- Top Button Links -->
         <div class="button-links">
@@ -242,7 +251,7 @@ onUnmounted(() => {
                 :lazy="false"
               />
             </div>
-            <div class="list">
+            <div class="list" v-if="effectiveVideoThumbnails.length > 0">
               <div
                 v-for="(video, index) in effectiveVideoThumbnails"
                 :key="video ? `video-${index}` : `empty-${index}`"
@@ -263,6 +272,7 @@ onUnmounted(() => {
                 <div v-else class="empty-placeholder"></div>
               </div>
             </div>
+            <div v-else class="empty-section-placeholder"></div>
           </div>
 
           <!-- Hot Programs -->
@@ -274,7 +284,7 @@ onUnmounted(() => {
                 :lazy="false"
               />
             </div>
-            <div class="list">
+            <div class="list" v-if="effectiveProgramThumbnails.length > 0">
               <div
                 v-for="(program, index) in effectiveProgramThumbnails"
                 :key="program ? `program-${index}` : `empty-program-${index}`"
@@ -295,6 +305,7 @@ onUnmounted(() => {
                 <div v-else class="empty-placeholder"></div>
               </div>
             </div>
+            <div v-else class="empty-section-placeholder"></div>
           </div>
         </div>
       </div>
@@ -342,15 +353,6 @@ onUnmounted(() => {
 }
 
 #home-main {
-  background-color: #0a0a0a;
-  background-image: 
-    radial-gradient(circle, rgba(80, 80, 80, 0.4) 1.5px, transparent 1.5px),
-    radial-gradient(circle, rgba(60, 60, 60, 0.3) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px),
-    linear-gradient(0deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px);
-  background-size: 16px 16px, 32px 32px, 100% 60px, 100% 60px;
-  background-position: 0 0, 8px 8px, top, bottom;
-  background-repeat: repeat, repeat, repeat-x, repeat-x;
   border-color: #dfb082;
   border-style: solid;
   border-width: 4px 0;
@@ -860,6 +862,25 @@ onUnmounted(() => {
   border-radius: 10px;
   margin-bottom: 0.5rem;
   background-color: transparent;
+}
+
+/* 整個區塊為空時的佔位區域 */
+.empty-section-placeholder {
+  width: 612px;
+  height: 353px;
+  border: 2px dashed #b3905b;
+  border-radius: 10px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b3905b;
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+.empty-section-placeholder::after {
+  content: "暫無內容";
 }
 
 .programme-wrap .list .item span {

@@ -1,6 +1,7 @@
 {
   "logo": "/assets/images/logo.png",
   "banner": "/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png",
+  "backgroundImage": "/assets/images/bg_01.png",
   "buttonLinks": [
     {
       "id": "universal-browser",
