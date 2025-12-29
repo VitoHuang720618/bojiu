@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import LoginView from '../views/LoginView.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
-import DashboardView from '../views/DashboardView.vue'
-import EditorView from '../views/EditorView.vue'
+import ConfigView from '../views/ConfigView.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -20,17 +19,12 @@ const router = createRouter({
             children: [
                 {
                     path: '',
-                    redirect: '/dashboard'
+                    redirect: '/config'
                 },
                 {
-                    path: 'dashboard',
-                    name: 'dashboard',
-                    component: DashboardView
-                },
-                {
-                    path: 'editor',
-                    name: 'editor',
-                    component: EditorView
+                    path: 'config',
+                    name: 'config',
+                    component: ConfigView
                 }
             ],
             meta: { requiresAuth: true }
@@ -44,7 +38,7 @@ router.beforeEach((to, _from, next) => {
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         next('/login')
     } else if (to.name === 'login' && authStore.isAuthenticated) {
-        next('/dashboard')
+        next('/config')
     } else {
         next()
     }

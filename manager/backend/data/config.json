@@ -1,7 +1,7 @@
 {
   "logo": "/assets/images/logo.png",
   "banner": "/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png",
-  "backgroundImage": "/assets/images/bg_01.png",
+  "backgroundImage": "",
   "buttonLinks": [
     {
       "id": "universal-browser",
@@ -30,13 +30,13 @@
   ],
   "carouselSlides": [
     {
-      "image": "http://localhost:3005/uploads/1766565823513-865544056.jpeg",
-      "href": "https://example.com/slide1",
+      "image": "http://localhost:3005/uploads/carousel-0.png",
+      "href": "http://www.google.com.tw",
       "alt": "輪播圖 1"
     },
     {
       "image": "/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg",
-      "href": "https://example.com/slide2", 
+      "href": "https://www.yahoo.com.tw",
       "alt": "輪播圖 2"
     },
     {
@@ -108,13 +108,13 @@
       "image": "/assets/images/508f359d-7332-42f2-9181-565f7571e1af.png",
       "href": "https://example.com/video1",
       "alt": "精選短視頻 1",
-      "title": "熱門影片 1"
+      "title": "歐拉"
     },
     {
       "image": "/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png",
       "href": "https://example.com/video2",
-      "alt": "精選短視頻 2", 
-      "title": "熱門影片 2"
+      "alt": "三小",
+      "title": "馬洛"
     },
     {
       "image": "/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png",

@@ -7,15 +7,19 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const menuItems = [
-  { id: 'dashboard', label: '控制台', icon: '📊', path: '/dashboard' },
-  { id: 'editor', label: '圖片編輯器', icon: '🖼️', path: '/editor' },
+  { id: 'config', label: '配置管理', icon: '⚙️', path: '/config' },
   { id: 'users', label: '用戶管理', icon: '👥', path: '/users' },
   { id: 'games', label: '遊戲配置', icon: '🎮', path: '/games' },
   { id: 'finance', label: '財務報表', icon: '💰', path: '/finance' },
-  { id: 'settings', label: '系統設置', icon: '⚙️', path: '/settings' },
+  { id: 'settings', label: '系統設置', icon: '🔧', path: '/settings' },
 ]
 
-const activeMenu = ref('dashboard')
+const activeMenu = ref('config')
+
+const handleMenuClick = (item: any) => {
+  activeMenu.value = item.id
+  router.push(item.path)
+}
 
 const handleLogout = () => {
   authStore.logout()
