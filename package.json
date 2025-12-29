@@ -1,0 +1,26 @@
+{
+  "name": "b9-website-recreation",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "demo",
+    "manager/front",
+    "manager/backend"
+  ],
+  "scripts": {
+    "dev:demo": "yarn workspace b9-website-recreation-demo dev",
+    "dev:manager": "yarn workspace b9-website-recreation-manager dev",
+    "dev:backend": "yarn workspace backend dev",
+    "build:shared": "yarn workspace @b9-website/shared build",
+    "build:demo": "yarn workspace b9-website-recreation-demo build",
+    "build:manager": "yarn workspace b9-website-recreation-manager build",
+    "build:all": "yarn build:shared && yarn build:demo && yarn build:manager",
+    "test:shared": "yarn workspace @b9-website/shared test",
+    "test:demo": "yarn workspace b9-website-recreation-demo test",
+    "test:manager": "yarn workspace b9-website-recreation-manager test",
+    "test:all": "yarn test:shared && yarn test:demo && yarn test:manager"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}

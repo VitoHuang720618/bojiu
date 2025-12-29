@@ -1,0 +1,9 @@
+{
+  "logo": "/assets/images/logo.png",
+  "banner": "/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png",
+  "carouselSlides": [
+    "http://localhost:3005/uploads/1766565823513-865544056.jpeg",
+    "/assets/images/TEST-IMAGE-2.png",
+    "/assets/images/TEST-IMAGE-3.png"
+  ]
+}

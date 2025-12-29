@@ -1,0 +1,98 @@
+// 共享型別定義，與前端保持一致
+export interface AssetManifest {
+  logo: string
+  banner: string
+  buttonLinks: ButtonLink[]
+  carouselSlides: string[]
+  titles: TitleImages
+  routeLinks: RouteLinks
+  toolIcons: ToolIcon[]
+  videoThumbnails: string[]
+  programThumbnails: string[]
+  floatAdButtons: FloatAdButton[]
+}
+
+export interface ButtonLink {
+  id: string
+  default: string
+  hover: string
+  alt: string
+}
+
+export interface TitleImages {
+  recommendedRoutes: string
+  recommendedBrowsers: string
+  selectedVideos: string
+  hotPrograms: string
+}
+
+export interface RouteLinks {
+  default: string
+  hover: string
+}
+
+export interface ToolIcon {
+  id: string
+  default: string
+  hover: string
+  alt: string
+}
+
+export interface FloatAdButton {
+  id: string
+  default: string
+  hover: string
+  alt: string
+}
+
+// API 請求/回應型別
+export interface ImageUploadRequest {
+  file: Express.Multer.File
+  assetPath: string
+  assetType: 'single' | 'button' | 'carousel' | 'array'
+  position?: number
+}
+
+export interface ImageUploadResponse {
+  success: boolean
+  data?: {
+    filename: string
+    path: string
+    size: number
+    mimetype: string
+  }
+  error?: string
+}
+
+// WebSocket 事件型別
+export interface ConfigUpdateEvent {
+  type: 'asset_update'
+  timestamp: number
+  changes: {
+    path: string
+    oldValue: any
+    newValue: any
+  }[]
+  manifest: AssetManifest
+}
+
+// 錯誤型別
+export enum UploadErrorType {
+  FILE_TOO_LARGE = 'FILE_TOO_LARGE',
+  INVALID_FORMAT = 'INVALID_FORMAT',
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  SERVER_ERROR = 'SERVER_ERROR',
+  PERMISSION_DENIED = 'PERMISSION_DENIED'
+}
+
+export class UploadError extends Error {
+  public type: UploadErrorType
+  public details?: any
+
+  constructor(message: string, options: { type: UploadErrorType; details?: any }) {
+    super(message)
+    this.name = 'UploadError'
+    this.type = options.type
+    this.details = options.details
+  }
+}
