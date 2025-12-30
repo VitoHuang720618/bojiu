@@ -1,7 +1,7 @@
 {
   "logo": "/assets/images/logo.png",
   "banner": "/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png",
-  "backgroundImage": "",
+  "backgroundImage": "http://localhost:3005/uploads/backgroundImage.png",
   "buttonLinks": [
     {
       "id": "universal-browser",
@@ -113,8 +113,8 @@
     {
       "image": "/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png",
       "href": "https://example.com/video2",
-      "alt": "精選短視頻 2",
-      "title": "熱門影片 2"
+      "alt": "三小",
+      "title": "馬洛"
     },
     {
       "image": "/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png",

@@ -22,6 +22,9 @@ const apiBackgroundImage = ref<string>('')
 const apiVideoThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
 const apiProgramThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
 
+// 浮動按鈕收合狀態
+const isFloatAdCollapsed = ref(false)
+
 // 计算属性：优先使用API数据，否则使用默认数据
 const effectiveCarouselSlides = computed(() => {
   return apiCarouselSlides.value.length > 0 ? 
@@ -99,6 +102,22 @@ onMounted(async () => {
 
 const onBannerSizeLoaded = () => {
   // 當原圖載入完成後，佔位區域會自動獲得相同尺寸
+}
+
+// 切換浮動按鈕收合狀態
+const toggleFloatAd = (event?: Event) => {
+  console.log('toggleFloatAd clicked, current state:', isFloatAdCollapsed.value)
+  console.log('Event:', event)
+  console.log('Event target:', event?.target)
+  
+  // 防止事件冒泡
+  if (event) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+  
+  isFloatAdCollapsed.value = !isFloatAdCollapsed.value
+  console.log('new state:', isFloatAdCollapsed.value)
 }
 
 onUnmounted(() => {
@@ -312,8 +331,18 @@ onUnmounted(() => {
     </div>
 
     <!-- Float Ad Buttons -->
-    <div id="float-ad">
-      <div class="links">
+    <div id="float-ad" :class="{ collapsed: isFloatAdCollapsed }">
+      <!-- 收合/展開按鈕 -->
+      <button 
+        class="float-ad-toggle" 
+        @click.stop="toggleFloatAd($event)"
+        @touchend.stop="toggleFloatAd($event)"
+        type="button"
+      >
+        <span class="toggle-icon">{{ isFloatAdCollapsed ? '▲' : '▼' }}</span>
+      </button>
+      
+      <div class="links" v-show="!isFloatAdCollapsed">
         <div
           v-for="(button, index) in floatAdButtons"
           :key="button.id"
@@ -382,6 +411,7 @@ onUnmounted(() => {
   #home-main {
     border-width: 2px 0;
     padding: 1.5625rem 0.9375rem;
+    padding-bottom: 5rem; /* 為收合按鈕留出空間 */
   }
 }
 
@@ -793,27 +823,33 @@ onUnmounted(() => {
 .programme-wrap .list {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 自適應網格 */
 }
 
 @media (max-width: 1024px) {
   .programme-wrap .list {
     gap: 0.875rem;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
   .programme-wrap .list {
     gap: 1rem;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
 
 @media (max-width: 480px) {
   .programme-wrap .list {
     gap: 0.625rem;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
+@media (max-width: 360px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(2, 1fr); /* 極窄螢幕強制 2 欄 */
   }
 }
 
@@ -827,8 +863,9 @@ onUnmounted(() => {
   margin-bottom: 0.5rem;
   overflow: hidden;
   position: relative;
-  width: 187px;  /* 固定寬度 */
-  height: 105px; /* 固定高度 */
+  width: 100%;  /* 改為彈性寬度 */
+  max-width: 187px; /* 最大寬度限制 */
+  aspect-ratio: 187 / 105; /* 保持寬高比 */
 }
 
 .programme-wrap .list .item .img::before {
@@ -856,8 +893,9 @@ onUnmounted(() => {
 }
 
 .programme-wrap .list .item .empty-placeholder {
-  width: 187px;
-  height: 105px;
+  width: 100%;
+  max-width: 187px;
+  aspect-ratio: 187 / 105;
   border: 2px dashed #b3905b;
   border-radius: 10px;
   margin-bottom: 0.5rem;
@@ -866,8 +904,9 @@ onUnmounted(() => {
 
 /* 整個區塊為空時的佔位區域 */
 .empty-section-placeholder {
-  width: 612px;
-  height: 353px;
+  width: 100%;
+  max-width: 612px;
+  aspect-ratio: 612 / 353;
   border: 2px dashed #b3905b;
   border-radius: 10px;
   background-color: transparent;
@@ -910,6 +949,7 @@ onUnmounted(() => {
   right: 2.5rem;
   width: 5.7%;
   z-index: 99;
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 1440px) {
@@ -921,13 +961,68 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   #float-ad {
-    background-color: rgba(0, 0, 0, 0.8);
-    bottom: 0;
-    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
     max-width: none;
-    min-width: 100%;
-    padding: 1.25rem 2rem;
-    right: 0;
+    min-width: auto;
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 999;
+    position: fixed;
+  }
+  
+  #float-ad.collapsed {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* 收合/展開按鈕 */
+.float-ad-toggle {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .float-ad-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    cursor: pointer;
+    background-color: rgba(223, 176, 130, 0.2);
+    border-radius: 12px 12px 0 0;
+    transition: all 0.2s;
+    position: relative;
+    z-index: 1001; /* 提高 z-index 確保可點擊 */
+    border: none;
+    width: 100%;
+    outline: none;
+    -webkit-tap-highlight-color: transparent; /* 移除 iOS 點擊高亮 */
+    touch-action: manipulation; /* 優化觸控體驗 */
+  }
+  
+  .float-ad-toggle:hover {
+    background-color: rgba(223, 176, 130, 0.3);
+  }
+  
+  .float-ad-toggle:active {
+    background-color: rgba(223, 176, 130, 0.4);
+    transform: scale(0.98);
+  }
+  
+  .toggle-icon {
+    color: #dfb082;
+    font-size: 1.2rem;
+    font-weight: bold;
+    pointer-events: none;
+    user-select: none; /* 防止文字選取 */
+  }
+  
+  #float-ad.collapsed .float-ad-toggle {
+    border-radius: 12px;
   }
 }
 
@@ -946,7 +1041,20 @@ onUnmounted(() => {
 @media (max-width: 480px) {
   #float-ad .links {
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 1rem;
+    padding: 1rem;
+    animation: slideDown 0.3s ease;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 </style>

@@ -1,7 +1,7 @@
 {
   "logo": "/assets/images/logo.png",
   "banner": "/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png",
-  "backgroundImage": "",
+  "backgroundImage": "http://localhost:3005/uploads/backgroundImage.png",
   "buttonLinks": [
     {
       "id": "universal-browser",
@@ -30,7 +30,7 @@
   ],
   "carouselSlides": [
     {
-      "image": "http://localhost:3005/uploads/carousel-0.png",
+      "image": "",
       "href": "http://www.google.com.tw",
       "alt": "輪播圖 1"
     },
