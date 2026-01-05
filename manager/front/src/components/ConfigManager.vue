@@ -8,10 +8,25 @@
       </div>
     </div>
 
+    <!-- 主要 Tabs -->
+    <div class="main-tabs">
+      <button 
+        :class="['main-tab-btn', { active: mainActiveTab === 'preview' }]"
+        @click="mainActiveTab = 'preview'"
+      >
+        預覽
+      </button>
+      <button 
+        :class="['main-tab-btn', { active: mainActiveTab === 'config' }]"
+        @click="mainActiveTab = 'config'"
+      >
+        配置管理
+      </button>
+    </div>
+
     <div class="config-content">
       <!-- 預覽區域 -->
-      <div class="preview-section">
-        <h2>預覽</h2>
+      <div v-if="mainActiveTab === 'preview'" class="preview-section full-width">
         <div class="preview-container">
           <iframe 
             ref="previewFrame"
@@ -23,7 +38,7 @@
       </div>
 
       <!-- 配置區域 -->
-      <div class="config-section">
+      <div v-if="mainActiveTab === 'config'" class="config-section full-width">
         <div class="config-tabs">
           <button 
             v-for="tab in tabs" 
@@ -242,6 +257,7 @@ import { configService, type ConfigData } from '../services/configService'
 
 const loading = ref(false)
 const hasChanges = ref(false)
+const mainActiveTab = ref('preview') // 主要 tab，預設顯示預覽
 const activeTab = ref('banner')
 const previewFrame = ref<HTMLIFrameElement>()
 
@@ -551,18 +567,45 @@ onMounted(() => {
 
 .config-content {
   flex: 1;
-  display: flex;
-  gap: 2rem;
-  padding: 2rem;
+  padding: 0;
   overflow: hidden;
 }
 
-.preview-section {
-  flex: 1;
+.main-tabs {
+  display: flex;
   background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #ddd;
+  padding: 0 2rem;
+}
+
+.main-tab-btn {
+  padding: 1rem 2rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.main-tab-btn:hover {
+  background: #f8f9fa;
+}
+
+.main-tab-btn.active {
+  border-bottom-color: #007bff;
+  color: #007bff;
+}
+
+.preview-section {
+  background: white;
+  padding: 2rem;
+  height: calc(100vh - 140px);
+}
+
+.preview-section.full-width {
+  width: 100%;
 }
 
 .preview-section h2 {
@@ -588,12 +631,14 @@ onMounted(() => {
 }
 
 .config-section {
-  flex: 1;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 140px);
+}
+
+.config-section.full-width {
+  width: 100%;
 }
 
 .config-tabs {
