@@ -135,9 +135,15 @@
 
           <!-- Video Thumbnails 配置 -->
           <div v-if="activeTab === 'videos'" class="config-panel">
-            <h3>精選短視頻設置</h3>
+            <div class="section-header">
+              <h3>精選短視頻設置</h3>
+              <button @click="addVideoItem" class="btn btn-primary">新增視頻</button>
+            </div>
             <div v-for="(video, index) in config.videoThumbnails" :key="index" class="thumbnail-item">
-              <h4>視頻 {{ index + 1 }}</h4>
+              <div class="item-header">
+                <h4>視頻 {{ index + 1 }}</h4>
+                <button @click="removeVideoItem(index)" class="btn btn-danger btn-sm">刪除項目</button>
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label>縮圖</label>
@@ -150,7 +156,7 @@
                       accept="image/*"
                       class="file-input"
                     />
-                    <button @click="clearVideoImage(index)" class="btn btn-danger btn-sm">刪除</button>
+                    <button @click="clearVideoImage(index)" class="btn btn-danger btn-sm">刪除圖片</button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -189,9 +195,15 @@
 
           <!-- Program Thumbnails 配置 -->
           <div v-if="activeTab === 'programs'" class="config-panel">
-            <h3>火熱節目設置</h3>
+            <div class="section-header">
+              <h3>火熱節目設置</h3>
+              <button @click="addProgramItem" class="btn btn-primary">新增節目</button>
+            </div>
             <div v-for="(program, index) in config.programThumbnails" :key="index" class="thumbnail-item">
-              <h4>節目 {{ index + 1 }}</h4>
+              <div class="item-header">
+                <h4>節目 {{ index + 1 }}</h4>
+                <button @click="removeProgramItem(index)" class="btn btn-danger btn-sm">刪除項目</button>
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label>縮圖</label>
@@ -204,7 +216,7 @@
                       accept="image/*"
                       class="file-input"
                     />
-                    <button @click="clearProgramImage(index)" class="btn btn-danger btn-sm">刪除</button>
+                    <button @click="clearProgramImage(index)" class="btn btn-danger btn-sm">刪除圖片</button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -504,6 +516,44 @@ const clearProgramImage = async (index: number) => {
     alert('清除節目縮圖失敗')
   } finally {
     loading.value = false
+  }
+}
+
+// 新增視頻項目
+const addVideoItem = () => {
+  config.videoThumbnails.push({
+    image: '',
+    href: '',
+    title: '',
+    alt: ''
+  })
+  hasChanges.value = true
+}
+
+// 刪除視頻項目
+const removeVideoItem = (index: number) => {
+  if (config.videoThumbnails.length > 0) {
+    config.videoThumbnails.splice(index, 1)
+    hasChanges.value = true
+  }
+}
+
+// 新增節目項目
+const addProgramItem = () => {
+  config.programThumbnails.push({
+    image: '',
+    href: '',
+    title: '',
+    alt: ''
+  })
+  hasChanges.value = true
+}
+
+// 刪除節目項目
+const removeProgramItem = (index: number) => {
+  if (config.programThumbnails.length > 0) {
+    config.programThumbnails.splice(index, 1)
+    hasChanges.value = true
   }
 }
 
@@ -833,5 +883,66 @@ onMounted(() => {
   padding: 2rem;
   border-radius: 8px;
   font-size: 1.2rem;
+}
+
+/* 區塊標題樣式 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.section-header h3 {
+  margin: 0;
+}
+
+/* 項目標題樣式 */
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.item-header h4 {
+  margin: 0;
+}
+
+/* 按鈕樣式 */
+.btn {
+  padding: 0.375rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
 }
 </style>

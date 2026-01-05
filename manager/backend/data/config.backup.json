@@ -135,10 +135,10 @@
       "title": "熱門影片 5"
     },
     {
-      "image": "/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png",
-      "href": "https://example.com/video6",
-      "alt": "精選短視頻 6",
-      "title": "熱門影片 6"
+      "image": "http://localhost:3002/uploads/videoThumbnails-5-image.png",
+      "href": "",
+      "title": "",
+      "alt": ""
     }
   ],
   "programThumbnails": [

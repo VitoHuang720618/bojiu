@@ -62,6 +62,54 @@ const effectiveProgramThumbnails = computed(() => {
   return apiProgramThumbnails.value
 })
 
+// Dynamic grid configuration for video sections
+const videoGridConfig = computed(() => {
+  const itemCount = effectiveVideoThumbnails.value.filter(item => item !== null).length
+  return calculateGridConfig(itemCount)
+})
+
+const programGridConfig = computed(() => {
+  const itemCount = effectiveProgramThumbnails.value.filter(item => item !== null).length
+  return calculateGridConfig(itemCount)
+})
+
+// Helper function to calculate optimal grid configuration
+const calculateGridConfig = (itemCount: number) => {
+  if (itemCount === 0) {
+    return {
+      itemCount: 0,
+      maxColumns: 0,
+      optimalColumns: 0,
+      cssClass: 'grid-empty'
+    }
+  }
+  
+  // Determine optimal columns based on item count
+  // For 1-4 items, use the exact number of columns
+  // For 5+ items, use responsive layout with maximum 4 columns
+  let optimalColumns: number
+  if (itemCount <= 4) {
+    optimalColumns = itemCount
+  } else {
+    optimalColumns = 4 // Always use 4 columns for 5+ items
+  }
+  
+  // Generate CSS class based on item count
+  let cssClass: string
+  if (itemCount <= 8) {
+    cssClass = `grid-${itemCount}-items`
+  } else {
+    cssClass = 'grid-many-items' // For unlimited items (9+)
+  }
+  
+  return {
+    itemCount,
+    maxColumns: 4, // Maximum columns for responsive design
+    optimalColumns,
+    cssClass
+  }
+}
+
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % effectiveCarouselSlides.value.length
 }
@@ -270,25 +318,25 @@ onUnmounted(() => {
                 :lazy="false"
               />
             </div>
-            <div class="list" v-if="effectiveVideoThumbnails.length > 0">
+            <div 
+              class="list" 
+              :class="videoGridConfig.cssClass"
+              v-if="videoGridConfig.itemCount > 0"
+            >
               <div
-                v-for="(video, index) in effectiveVideoThumbnails"
-                :key="video ? `video-${index}` : `empty-${index}`"
+                v-for="(video, index) in effectiveVideoThumbnails.filter(item => item !== null)"
+                :key="`video-${index}`"
                 class="item"
-                :class="{ 'empty-item': !video }"
               >
-                <template v-if="video">
-                  <a :href="video.href" target="_blank" rel="noopener noreferrer">
-                    <div class="img">
-                      <ImageComponent
-                        :src="video.image"
-                        :alt="video.alt"
-                      />
-                    </div>
-                    <span>{{ video.title }}</span>
-                  </a>
-                </template>
-                <div v-else class="empty-placeholder"></div>
+                <a :href="video.href" target="_blank" rel="noopener noreferrer">
+                  <div class="img">
+                    <ImageComponent
+                      :src="video.image"
+                      :alt="video.alt"
+                    />
+                  </div>
+                  <span>{{ video.title }}</span>
+                </a>
               </div>
             </div>
             <div v-else class="empty-section-placeholder"></div>
@@ -303,25 +351,25 @@ onUnmounted(() => {
                 :lazy="false"
               />
             </div>
-            <div class="list" v-if="effectiveProgramThumbnails.length > 0">
+            <div 
+              class="list" 
+              :class="programGridConfig.cssClass"
+              v-if="programGridConfig.itemCount > 0"
+            >
               <div
-                v-for="(program, index) in effectiveProgramThumbnails"
-                :key="program ? `program-${index}` : `empty-program-${index}`"
+                v-for="(program, index) in effectiveProgramThumbnails.filter(item => item !== null)"
+                :key="`program-${index}`"
                 class="item"
-                :class="{ 'empty-item': !program }"
               >
-                <template v-if="program">
-                  <a :href="program.href" target="_blank" rel="noopener noreferrer">
-                    <div class="img">
-                      <ImageComponent
-                        :src="program.image"
-                        :alt="program.alt"
-                      />
-                    </div>
-                    <span>{{ program.title }}</span>
-                  </a>
-                </template>
-                <div v-else class="empty-placeholder"></div>
+                <a :href="program.href" target="_blank" rel="noopener noreferrer">
+                  <div class="img">
+                    <ImageComponent
+                      :src="program.image"
+                      :alt="program.alt"
+                    />
+                  </div>
+                  <span>{{ program.title }}</span>
+                </a>
               </div>
             </div>
             <div v-else class="empty-section-placeholder"></div>
@@ -820,35 +868,124 @@ onUnmounted(() => {
   }
 }
 
+/* Programme Sections - Dynamic Grid Classes */
 .programme-wrap .list {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 自適應網格 */
+}
+
+/* Dynamic grid classes for different item counts */
+.programme-wrap .list.grid-1-items {
+  grid-template-columns: 1fr;
+  justify-content: center;
+}
+
+.programme-wrap .list.grid-2-items {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.programme-wrap .list.grid-3-items {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.programme-wrap .list.grid-4-items {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.programme-wrap .list.grid-5-items,
+.programme-wrap .list.grid-6-items,
+.programme-wrap .list.grid-7-items,
+.programme-wrap .list.grid-8-items,
+.programme-wrap .list.grid-many-items {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.programme-wrap .list.grid-empty {
+  display: none;
 }
 
 @media (max-width: 1024px) {
   .programme-wrap .list {
     gap: 0.875rem;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  
+  .programme-wrap .list.grid-1-items {
+    grid-template-columns: 1fr;
+  }
+  
+  .programme-wrap .list.grid-2-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .programme-wrap .list.grid-3-items {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .programme-wrap .list.grid-4-items,
+  .programme-wrap .list.grid-5-items,
+  .programme-wrap .list.grid-6-items,
+  .programme-wrap .list.grid-7-items,
+  .programme-wrap .list.grid-8-items,
+  .programme-wrap .list.grid-many-items {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .programme-wrap .list {
     gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  
+  .programme-wrap .list.grid-1-items {
+    grid-template-columns: 1fr;
+  }
+  
+  .programme-wrap .list.grid-2-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .programme-wrap .list.grid-3-items,
+  .programme-wrap .list.grid-4-items,
+  .programme-wrap .list.grid-5-items,
+  .programme-wrap .list.grid-6-items,
+  .programme-wrap .list.grid-7-items,
+  .programme-wrap .list.grid-8-items,
+  .programme-wrap .list.grid-many-items {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 480px) {
   .programme-wrap .list {
     gap: 0.625rem;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+  
+  .programme-wrap .list.grid-1-items {
+    grid-template-columns: 1fr;
+  }
+  
+  .programme-wrap .list.grid-2-items,
+  .programme-wrap .list.grid-3-items,
+  .programme-wrap .list.grid-4-items,
+  .programme-wrap .list.grid-5-items,
+  .programme-wrap .list.grid-6-items,
+  .programme-wrap .list.grid-7-items,
+  .programme-wrap .list.grid-8-items,
+  .programme-wrap .list.grid-many-items {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 360px) {
-  .programme-wrap .list {
+  .programme-wrap .list.grid-1-items,
+  .programme-wrap .list.grid-2-items,
+  .programme-wrap .list.grid-3-items,
+  .programme-wrap .list.grid-4-items,
+  .programme-wrap .list.grid-5-items,
+  .programme-wrap .list.grid-6-items,
+  .programme-wrap .list.grid-7-items,
+  .programme-wrap .list.grid-8-items,
+  .programme-wrap .list.grid-many-items {
     grid-template-columns: repeat(2, 1fr); /* 極窄螢幕強制 2 欄 */
   }
 }
