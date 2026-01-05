@@ -1,7 +1,7 @@
 {
   "logo": "/assets/images/logo.png",
   "banner": "/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png",
-  "backgroundImage": "http://localhost:3005/uploads/backgroundImage.png",
+  "backgroundImage": "http://localhost:3002/uploads/backgroundImage.png",
   "buttonLinks": [
     {
       "id": "universal-browser",
@@ -30,7 +30,7 @@
   ],
   "carouselSlides": [
     {
-      "image": "",
+      "image": "http://localhost:3002/uploads/carousel-0.png",
       "href": "http://www.google.com.tw",
       "alt": "輪播圖 1"
     },
@@ -135,7 +135,7 @@
       "title": "熱門影片 5"
     },
     {
-      "image": "/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png",
+      "image": "",
       "href": "https://example.com/video6",
       "alt": "精選短視頻 6",
       "title": "熱門影片 6"
