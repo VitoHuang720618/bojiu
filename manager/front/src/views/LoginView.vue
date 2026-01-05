@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
@@ -8,22 +8,43 @@ const authStore = useAuthStore()
 
 const username = ref('')
 const password = ref('')
-const isLoading = ref(false)
+const error = ref('')
+const showPassword = ref(false)
+
+// Check if user is already authenticated
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    router.push('/config')
+  }
+})
 
 const handleLogin = async () => {
   if (!username.value || !password.value) {
-    alert('請輸入帳號密碼')
+    error.value = '請輸入帳號和密碼'
     return
   }
   
-  isLoading.value = true
+  error.value = ''
   
-  // 模擬登入延遲
-  setTimeout(() => {
-    authStore.login(username.value)
-    isLoading.value = false
-    router.push('/dashboard')
-  }, 800)
+  const result = await authStore.login({
+    username: username.value,
+    password: password.value
+  })
+  
+  if (result.success) {
+    // Check if user must change password
+    if (result.user?.mustChangePassword) {
+      router.push('/change-password')
+    } else {
+      router.push('/config')
+    }
+  } else {
+    error.value = result.error || '登入失敗，請檢查帳號密碼'
+  }
+}
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value
 }
 </script>
 
@@ -42,26 +63,45 @@ const handleLogin = async () => {
             v-model="username" 
             type="text" 
             placeholder="請輸入帳號"
+            :disabled="authStore.isLoading"
             required
+            autocomplete="username"
           />
         </div>
         
         <div class="form-group">
           <label>密碼</label>
-          <input 
-            v-model="password" 
-            type="password" 
-            placeholder="請輸入密碼"
-            required
-          />
+          <div class="password-input">
+            <input 
+              v-model="password" 
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="請輸入密碼"
+              :disabled="authStore.isLoading"
+              required
+              autocomplete="current-password"
+            />
+            <button 
+              type="button" 
+              class="password-toggle"
+              @click="togglePasswordVisibility"
+              :disabled="authStore.isLoading"
+            >
+              {{ showPassword ? '隱藏' : '顯示' }}
+            </button>
+          </div>
         </div>
         
-        <button type="submit" :disabled="isLoading" class="login-btn">
-          {{ isLoading ? '登入中...' : '登入' }}
+        <div v-if="error" class="error-message">
+          {{ error }}
+        </div>
+        
+        <button type="submit" :disabled="authStore.isLoading" class="login-btn">
+          {{ authStore.isLoading ? '登入中...' : '登入' }}
         </button>
       </form>
       
       <div class="login-footer">
+        <p>預設帳號: admin / Admin123!</p>
         <p>© 2025 B9 Entertainment. All rights reserved.</p>
       </div>
     </div>
@@ -125,11 +165,62 @@ const handleLogin = async () => {
   border-radius: 6px;
   color: white;
   transition: border-color 0.3s;
+  box-sizing: border-box;
 }
 
 .login-form input:focus {
   outline: none;
   border-color: var(--color-primary);
+}
+
+.login-form input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.password-input {
+  position: relative;
+  display: flex;
+}
+
+.password-input input {
+  flex: 1;
+  padding-right: 60px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.password-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.password-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: var(--spacing-md);
+  font-size: 14px;
+  text-align: center;
 }
 
 .login-btn {
@@ -145,7 +236,7 @@ const handleLogin = async () => {
   transition: transform 0.2s, opacity 0.2s;
 }
 
-.login-btn:hover {
+.login-btn:hover:not(:disabled) {
   opacity: 0.9;
   transform: translateY(-1px);
 }
@@ -153,6 +244,7 @@ const handleLogin = async () => {
 .login-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .login-footer {
@@ -160,5 +252,11 @@ const handleLogin = async () => {
   text-align: center;
   color: #666;
   font-size: 12px;
+}
+
+.login-footer p:first-child {
+  color: var(--color-accent);
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 </style>

@@ -12,7 +12,7 @@ const handleLogin = () => {
     return
   }
   
-  isLoading.ref = true
+  isLoading.value = true
   // 模擬登入延遲
   setTimeout(() => {
     isLoading.value = false

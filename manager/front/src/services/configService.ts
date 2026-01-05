@@ -62,11 +62,34 @@ export interface UploadResponse {
 }
 
 class ConfigService {
-  private baseUrl = 'http://localhost:3005'
+  private baseUrl: string
+
+  constructor() {
+    // Use environment variable or default to relative path for container deployment
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
+    // Remove trailing slash if present
+    this.baseUrl = this.baseUrl.replace(/\/$/, '')
+  }
+
+  // Helper method to get auth headers
+  private getAuthHeaders(): HeadersInit {
+    const token = localStorage.getItem('auth_token')
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json'
+    }
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+    
+    return headers
+  }
 
   // 獲取配置
   async getConfig(): Promise<ConfigData> {
-    const response = await fetch(`${this.baseUrl}/api/config`)
+    const response = await fetch(`${this.baseUrl}/config`, {
+      headers: this.getAuthHeaders()
+    })
     if (!response.ok) {
       throw new Error(`Failed to fetch config: ${response.statusText}`)
     }
@@ -75,17 +98,27 @@ class ConfigService {
 
   // 更新配置
   async updateConfig(config: ConfigData): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/api/config`, {
+    const response = await fetch(`${this.baseUrl}/config`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: this.getAuthHeaders(),
       body: JSON.stringify(config)
     })
     
     if (!response.ok) {
       throw new Error(`Failed to update config: ${response.statusText}`)
     }
+  }
+
+  // Helper method to get auth headers for FormData
+  private getAuthHeadersForFormData(): HeadersInit {
+    const token = localStorage.getItem('auth_token')
+    const headers: HeadersInit = {}
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+    
+    return headers
   }
 
   // 上傳圖片
@@ -97,8 +130,9 @@ class ConfigService {
     if (assetType) formData.append('assetType', assetType)
     if (position !== undefined) formData.append('position', position.toString())
 
-    const response = await fetch(`${this.baseUrl}/api/upload`, {
+    const response = await fetch(`${this.baseUrl}/upload`, {
       method: 'POST',
+      headers: this.getAuthHeadersForFormData(),
       body: formData
     })
 
@@ -107,11 +141,9 @@ class ConfigService {
 
   // 更新特定資產路徑
   async updateAssetPath(path: string, value: any): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/api/asset/${path}`, {
+    const response = await fetch(`${this.baseUrl}/asset/${path}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: this.getAuthHeaders(),
       body: JSON.stringify({ value })
     })
 

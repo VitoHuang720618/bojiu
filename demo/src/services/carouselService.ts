@@ -1,6 +1,14 @@
 // 简单的轮播图和banner API服务
 class CarouselService {
-  private baseUrl = 'http://localhost:3005'
+  private baseUrl: string
+
+  constructor() {
+    // In development with proxy, use relative path
+    // In production container, use environment variable or default
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
+    // Remove trailing slash if present
+    this.baseUrl = this.baseUrl.replace(/\/$/, '')
+  }
 
   async getConfig(): Promise<{
     carouselSlides: {image: string, href: string, alt: string}[], 
@@ -10,19 +18,36 @@ class CarouselService {
     programThumbnails: ({image: string, href: string, alt: string, title: string} | null)[]
   }> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/config`)
+      const response = await fetch(`${this.baseUrl}/public/config`)
       
       if (!response.ok) {
         throw new Error(`Failed to fetch config: ${response.statusText}`)
       }
 
       const config = await response.json()
+      
+      // Process image URLs to ensure they work in container environment
+      const processImageUrl = (url: string) => {
+        if (!url) return ''
+        if (url.startsWith('http')) return url
+        if (url.startsWith('/uploads/')) return url
+        if (url.startsWith('/assets/')) return url
+        return url
+      }
+
       return {
-        carouselSlides: config.carouselSlides || [],
-        banner: config.banner || '',
-        backgroundImage: config.backgroundImage || '',
-        videoThumbnails: config.videoThumbnails || [],
-        programThumbnails: config.programThumbnails || []
+        carouselSlides: (config.carouselSlides || []).map((slide: any) => ({
+          ...slide,
+          image: processImageUrl(slide.image)
+        })),
+        banner: processImageUrl(config.banner || ''),
+        backgroundImage: processImageUrl(config.backgroundImage || ''),
+        videoThumbnails: (config.videoThumbnails || []).map((video: any) => 
+          video ? { ...video, image: processImageUrl(video.image) } : null
+        ),
+        programThumbnails: (config.programThumbnails || []).map((program: any) => 
+          program ? { ...program, image: processImageUrl(program.image) } : null
+        )
       }
     } catch (error) {
       console.error('Failed to fetch config from API:', error)

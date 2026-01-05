@@ -1,10 +1,18 @@
 import type { SiteConfig } from '../types'
 
+// Get base URL from environment or use relative path for container deployment
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+  return import.meta.env.VITE_BASE_URL || ''
+}
+
 // Site configuration based on original B9 website
 export const siteConfig: SiteConfig = {
   title: '博九娱乐网',
   description: 'B9 Entertainment Website',
-  baseUrl: 'http://localhost:3001',
+  baseUrl: getBaseUrl(),
   
   navigation: [
     // Top navigation buttons

@@ -15,7 +15,7 @@
         <div class="preview-container">
           <iframe 
             ref="previewFrame"
-            src="http://localhost:3001" 
+            :src="getPreviewUrl()" 
             class="preview-frame"
             @load="onPreviewLoad"
           ></iframe>
@@ -499,6 +499,16 @@ const reloadPreview = () => {
     const currentSrc = previewFrame.value.src.split('?')[0]
     previewFrame.value.src = `${currentSrc}?t=${timestamp}`
   }
+}
+
+// 獲取預覽 URL
+const getPreviewUrl = () => {
+  // In container deployment, demo is served at root path
+  if (import.meta.env.PROD) {
+    return '/'
+  }
+  // In development, use localhost:3000 (demo frontend)
+  return 'http://localhost:3000'
 }
 
 // 預覽載入完成

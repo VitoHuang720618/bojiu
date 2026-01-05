@@ -43,7 +43,7 @@ const effectiveCarouselSlides = computed(() => {
 })
 
 const effectiveBanner = computed(() => {
-  return apiBanner.value
+  return apiBanner.value || assetManifest.banner
 })
 
 const effectiveBackgroundImage = computed(() => {

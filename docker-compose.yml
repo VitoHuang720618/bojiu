@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  b9-website:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      # Persistent data volumes
+      - uploads_data:/app/uploads
+      - config_data:/app/data
+      # Optional: Bind mounts for development
+      # - ./uploads:/app/uploads
+      # - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - API_PORT=3005
+      - UPLOAD_PATH=/app/uploads
+      - CONFIG_PATH=/app/data
+      - MAX_FILE_SIZE=10485760
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "&&", "curl", "-f", "http://localhost/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    # Resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+# Named volumes for persistent data
+volumes:
+  uploads_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./uploads
+  config_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data
+
+# Development override example
+# Create docker-compose.override.yml for development:
+# version: '3.8'
+# services:
+#   b9-website:
+#     environment:
+#       - NODE_ENV=development
+#     volumes:
+#       - ./uploads:/app/uploads
+#       - ./data:/app/data
+#       - ./demo/src:/app/demo/src
+#       - ./manager:/app/manager

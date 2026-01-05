@@ -1,16 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import ImageComponent from './ImageComponent.vue'
-import ImageButton from './ImageButton.vue'
-import { assetManifest } from '../config/assetManifest'
 import {
-  siteConfig,
-  recommendedRoutes,
-  recommendedTools,
-  videoContent,
-  programContent,
-  carouselSlides,
-  floatAdButtons
+  carouselSlides
 } from '../config/siteConfig'
 
 const currentSlide = ref(0)

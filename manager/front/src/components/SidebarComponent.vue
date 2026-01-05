@@ -1,29 +1,41 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 
-const menuItems = [
-  { id: 'config', label: '配置管理', icon: '⚙️', path: '/config' },
-  { id: 'users', label: '用戶管理', icon: '👥', path: '/users' },
-  { id: 'games', label: '遊戲配置', icon: '🎮', path: '/games' },
-  { id: 'finance', label: '財務報表', icon: '💰', path: '/finance' },
-  { id: 'settings', label: '系統設置', icon: '🔧', path: '/settings' },
+const allMenuItems = [
+  { id: 'config', label: '配置管理', icon: '⚙️', path: '/config', roles: ['admin', 'user'] },
+  { id: 'users', label: '用戶管理', icon: '👥', path: '/users', roles: ['admin'] },
 ]
 
-const activeMenu = ref('config')
+// Filter menu items based on user role
+const menuItems = computed(() => {
+  if (!authStore.user) return []
+  return allMenuItems.filter(item => 
+    item.roles.includes(authStore.user!.role)
+  )
+})
+
+// Get active menu based on current route
+const activeMenu = computed(() => {
+  const currentPath = route.path
+  const activeItem = menuItems.value.find(item => item.path === currentPath)
+  return activeItem?.id || 'config'
+})
 
 const handleMenuClick = (item: any) => {
-  activeMenu.value = item.id
   router.push(item.path)
 }
 
-const handleLogout = () => {
-  authStore.logout()
-  router.push('/login')
+const handleLogout = async () => {
+  if (confirm('確定要登出嗎？')) {
+    await authStore.logout()
+    router.push('/login')
+  }
 }
 </script>
 
