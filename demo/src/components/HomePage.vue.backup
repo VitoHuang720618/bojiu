@@ -744,20 +744,20 @@ onUnmounted(() => {
   margin-right: 0;
   margin-bottom: 0;
   background-color: #8B0000;
-  padding: 0 20px;
+  padding: 0;
   border-radius: 0;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   height: 100%;
   flex: 0 0 300px;
   min-width: 0;
 }
 
 .recommend-tools .block-title img {
-  width: auto !important;
-  height: 60% !important;
-  object-fit: contain !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
   display: block !important;
 }
 
@@ -874,6 +874,114 @@ onUnmounted(() => {
     max-width: 160px !important;
     max-height: 60px !important;
   }
+}
+
+/* Programme Sections */
+.programme-wrap {
+  display: grid;
+  gap: 3.5rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 1024px) {
+  .programme-wrap {
+    gap: 2.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .programme-wrap {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .programme-wrap {
+    gap: 2rem;
+  }
+}
+  .recommend-tools {
+    height: 60px; /* 極小螢幕調整高度 */
+    padding: 0;
+    flex-direction: row;
+  }
+  
+  .recommend-tools .block-title {
+    display: none; /* 極小螢幕隱藏標題 */
+  }
+  
+  .recommend-tools .tools {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.0625rem;
+    height: 100%;
+  }
+  
+  .recommend-tools .tools .item {
+    height: 100%;
+  }
+  
+  .recommend-tools .tools .item :deep(.img-button) {
+    height: 100% !important;
+  }
+  
+  .recommend-tools .tools .item :deep(.img-button img) {
+    max-width: 160px !important;
+    max-height: 60px !important;
+  }
+}
+  
+  .recommend-tools .tools .item {
+    height: 100%;
+  }
+  
+  .recommend-tools .tools .item :deep(.img-button) {
+    height: 100% !important;
+  }
+}
+
+.recommend-tools .tools .item {
+  position: relative;
+}
+
+.recommend-tools .tools .item::after {
+  background-color: #ffc990;
+  content: '';
+  display: block;
+  height: 60px;
+  position: absolute;
+  right: -1.5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+}
+
+@media (max-width: 1024px) {
+  .recommend-tools .tools .item::after {
+    height: 50px;
+    right: -6.5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .recommend-tools .tools .item::after {
+    height: 40px;
+    right: -8.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recommend-tools .tools .item::after {
+    height: 45px;
+  }
+  
+  .recommend-tools .tools .item:nth-child(3n+3)::after {
+    display: none;
+  }
+}
+
+.recommend-tools .tools .item:last-child::after {
+  display: none;
 }
 
 /* Programme Sections */

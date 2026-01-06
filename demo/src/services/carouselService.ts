@@ -73,7 +73,7 @@ class CarouselService {
             alt: '輪播圖 1'
           },
           {
-            image: '/assets/images/3f553531-765d-40fb-80ac-78f33c9897cd.png',
+            image: '/assets/images/tools-title.webp',
             href: '#',
             alt: '輪播圖 2'
           },
