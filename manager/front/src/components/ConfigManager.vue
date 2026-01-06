@@ -89,6 +89,177 @@
             </div>
           </div>
 
+          <!-- Button Links 配置 -->
+          <div v-if="activeTab === 'buttonlinks'" class="config-panel">
+            <div class="panel-header">
+              <h3>按鈕鏈接設置</h3>
+              <div class="button-actions">
+                <button @click="resetButtonLinks" class="btn btn-secondary">重置為預設</button>
+                <button @click="addButtonLink" class="btn btn-primary">新增按鈕</button>
+              </div>
+            </div>
+            
+            <div class="button-links-info">
+              <p class="info-text">
+                <strong>說明：</strong>這裡配置的按鈕會替換前端頁面頂部的按鈕。
+                可以上傳自定義的按鈕圖片（默認圖和懸停圖），並設置鏈接地址和顯示文字。
+                所有鏈接都會在新視窗中打開。
+              </p>
+            </div>
+            
+            <!-- 如果沒有按鈕鏈接，顯示提示 -->
+            <div v-if="config.buttonLinks.length === 0" class="empty-state">
+              <p>目前沒有按鈕鏈接配置，將使用預設配置</p>
+              <button @click="addButtonLink" class="btn btn-primary btn-lg">新增第一個按鈕鏈接</button>
+            </div>
+            
+            <div v-for="(button, index) in config.buttonLinks" :key="index" class="button-link-item">
+              <div class="item-header">
+                <h4>按鈕 {{ index + 1 }}</h4>
+                <button @click="removeButtonLink(index)" class="btn btn-danger btn-sm">刪除</button>
+              </div>
+              <div class="button-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>顯示文字</label>
+                    <input 
+                      v-model="button.text" 
+                      type="text" 
+                      class="form-control"
+                      placeholder="例如：官方網站"
+                      @input="hasChanges = true"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>鏈接地址</label>
+                    <input 
+                      v-model="button.href" 
+                      type="url" 
+                      class="form-control"
+                      placeholder="https://example.com"
+                      @input="hasChanges = true"
+                    />
+                  </div>
+                </div>
+                <div class="image-row">
+                  <div class="form-group">
+                    <label>默認圖片</label>
+                    <div class="image-upload">
+                      <img v-if="button.defaultImage" :src="getImageUrl(button.defaultImage)" alt="Default" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleButtonImageUpload(e, index, 'defaultImage')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeButtonImage(index, 'defaultImage')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>懸停圖片</label>
+                    <div class="image-upload">
+                      <img v-if="button.hoverImage" :src="getImageUrl(button.hoverImage)" alt="Hover" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleButtonImageUpload(e, index, 'hoverImage')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeButtonImage(index, 'hoverImage')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tool Icons 配置 -->
+          <div v-if="activeTab === 'toolicons'" class="config-panel">
+            <div class="panel-header">
+              <h3>工具圖標設置</h3>
+              <div class="button-actions">
+                <button @click="resetToolIcons" class="btn btn-secondary">重置為預設</button>
+                <button @click="addToolIcon" class="btn btn-primary">新增圖標</button>
+              </div>
+            </div>
+            
+            <div class="button-links-info">
+              <p class="info-text">
+                <strong>說明：</strong>這裡配置的工具圖標會替換前端頁面推薦瀏覽器區域的圖標。
+                可以上傳自定義的圖標（默認圖和懸停圖），並設置圖標名稱。
+              </p>
+            </div>
+            
+            <!-- 如果沒有工具圖標，顯示提示 -->
+            <div v-if="config.toolIcons.length === 0" class="empty-state">
+              <p>目前沒有工具圖標配置，將使用預設配置</p>
+              <button @click="addToolIcon" class="btn btn-primary btn-lg">新增第一個工具圖標</button>
+            </div>
+            
+            <div v-for="(tool, index) in config.toolIcons" :key="index" class="button-link-item">
+              <div class="item-header">
+                <h4>工具圖標 {{ index + 1 }}</h4>
+                <button @click="removeToolIcon(index)" class="btn btn-danger btn-sm">刪除</button>
+              </div>
+              <div class="button-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>圖標名稱</label>
+                    <input 
+                      v-model="tool.alt" 
+                      type="text" 
+                      class="form-control"
+                      placeholder="例如：Chrome 瀏覽器"
+                      @input="hasChanges = true"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>圖標 ID</label>
+                    <input 
+                      v-model="tool.id" 
+                      type="text" 
+                      class="form-control"
+                      placeholder="例如：chrome"
+                      @input="hasChanges = true"
+                    />
+                  </div>
+                </div>
+                <div class="image-row">
+                  <div class="form-group">
+                    <label>默認圖標</label>
+                    <div class="image-upload">
+                      <img v-if="tool.default" :src="getImageUrl(tool.default)" alt="Default" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleToolIconImageUpload(e, index, 'default')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeToolIconImage(index, 'default')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>懸停圖標</label>
+                    <div class="image-upload">
+                      <img v-if="tool.hover" :src="getImageUrl(tool.hover)" alt="Hover" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleToolIconImageUpload(e, index, 'hover')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeToolIconImage(index, 'hover')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Carousel 配置 -->
           <div v-if="activeTab === 'carousel'" class="config-panel">
             <h3>輪播圖設置</h3>
@@ -122,7 +293,7 @@
                 <div class="form-group">
                   <label>描述</label>
                   <input 
-                    v-model="slide.alt" 
+                    v-model="slide.description" 
                     type="text" 
                     class="form-control"
                     placeholder="圖片描述"
@@ -135,9 +306,22 @@
 
           <!-- Video Thumbnails 配置 -->
           <div v-if="activeTab === 'videos'" class="config-panel">
-            <h3>精選短視頻設置</h3>
+            <div class="panel-header">
+              <h3>精選短視頻設置</h3>
+              <button @click="addVideo" class="btn btn-primary">新增視頻</button>
+            </div>
+            
+            <!-- 如果沒有視頻，顯示提示和新增按鈕 -->
+            <div v-if="config.videoThumbnails.length === 0" class="empty-state">
+              <p>目前沒有視頻項目</p>
+              <button @click="addVideo" class="btn btn-primary btn-lg">新增第一個視頻</button>
+            </div>
+            
             <div v-for="(video, index) in config.videoThumbnails" :key="index" class="thumbnail-item">
-              <h4>視頻 {{ index + 1 }}</h4>
+              <div class="item-header">
+                <h4>視頻 {{ index + 1 }}</h4>
+                <button @click="removeVideo(index)" class="btn btn-danger btn-sm">刪除項目</button>
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label>縮圖</label>
@@ -150,7 +334,7 @@
                       accept="image/*"
                       class="file-input"
                     />
-                    <button @click="clearVideoImage(index)" class="btn btn-danger btn-sm">刪除</button>
+                    <button @click="removeVideoImage(index)" class="btn btn-danger btn-sm">刪除圖片</button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -189,9 +373,22 @@
 
           <!-- Program Thumbnails 配置 -->
           <div v-if="activeTab === 'programs'" class="config-panel">
-            <h3>火熱節目設置</h3>
+            <div class="panel-header">
+              <h3>火熱節目設置</h3>
+              <button @click="addProgram" class="btn btn-primary">新增節目</button>
+            </div>
+            
+            <!-- 如果沒有節目，顯示提示和新增按鈕 -->
+            <div v-if="config.programThumbnails.length === 0" class="empty-state">
+              <p>目前沒有節目項目</p>
+              <button @click="addProgram" class="btn btn-primary btn-lg">新增第一個節目</button>
+            </div>
+            
             <div v-for="(program, index) in config.programThumbnails" :key="index" class="thumbnail-item">
-              <h4>節目 {{ index + 1 }}</h4>
+              <div class="item-header">
+                <h4>節目 {{ index + 1 }}</h4>
+                <button @click="removeProgram(index)" class="btn btn-danger btn-sm">刪除項目</button>
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label>縮圖</label>
@@ -204,7 +401,7 @@
                       accept="image/*"
                       class="file-input"
                     />
-                    <button @click="clearProgramImage(index)" class="btn btn-danger btn-sm">刪除</button>
+                    <button @click="removeProgramImage(index)" class="btn btn-danger btn-sm">刪除圖片</button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -264,6 +461,8 @@ const previewFrame = ref<HTMLIFrameElement>()
 const tabs = [
   { id: 'banner', label: 'Banner' },
   { id: 'background', label: '背景圖' },
+  { id: 'buttonlinks', label: '按鈕鏈接' },
+  { id: 'toolicons', label: '工具圖標' },
   { id: 'carousel', label: '輪播圖' },
   { id: 'videos', label: '精選視頻' },
   { id: 'programs', label: '火熱節目' }
@@ -297,6 +496,100 @@ const loadConfig = async () => {
   try {
     const data = await configService.getConfig()
     Object.assign(config, data)
+    
+    // 如果 buttonLinks 為空或不完整，初始化預設值
+    if (!config.buttonLinks || config.buttonLinks.length === 0) {
+      config.buttonLinks = [
+        {
+          text: '寰宇瀏覽器',
+          href: 'https://www.ub66.com/',
+          target: '_blank',
+          defaultImage: '/assets/images/2d60d632-004e-4b69-ac84-8fc1817ce52e.png',
+          hoverImage: '/assets/images/6ef6554f-4b80-4cd0-9bbf-782dc066c330.png'
+        },
+        {
+          text: 'APP',
+          href: 'https://haa68686.com:9900/web/simple.php#/aioDownload',
+          target: '_blank',
+          defaultImage: '/assets/images/1630a76f-f7e7-4af7-8099-082bc201512c.png',
+          hoverImage: '/assets/images/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png'
+        },
+        {
+          text: 'FUN乐园',
+          href: 'https://fun99666.com/',
+          target: '_blank',
+          defaultImage: '/assets/images/64e1d47d-537d-45d0-bfd4-801e473bb525.png',
+          hoverImage: '/assets/images/87fe8990-8297-4e70-9693-e37c665ee087.png'
+        },
+        {
+          text: '合作夥伴',
+          href: 'https://haa68686.com:9900/web/#/article/at3',
+          target: '_blank',
+          defaultImage: '/assets/images/95e17bec-043c-49ea-a438-e8057a39f4ad.png',
+          hoverImage: '/assets/images/e9df8ef5-cd97-4c06-b051-a894e67f0935.png'
+        }
+      ]
+    } else {
+      // 確保現有的 buttonLinks 有完整的字段
+      config.buttonLinks = config.buttonLinks.map((button, index) => ({
+        text: button.text || '',
+        href: button.href || '',
+        target: button.target || '_blank',
+        defaultImage: button.defaultImage || '',
+        hoverImage: button.hoverImage || ''
+      }))
+    }
+    
+    // 如果 toolIcons 為空或不完整，初始化預設值
+    if (!config.toolIcons || config.toolIcons.length === 0) {
+      config.toolIcons = [
+        {
+          id: "xiaohongshu",
+          default: "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+          hover: "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png",
+          alt: "小紅書"
+        },
+        {
+          id: "douyin",
+          default: "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
+          hover: "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png",
+          alt: "抖音"
+        },
+        {
+          id: "baidu",
+          default: "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
+          hover: "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png",
+          alt: "百度"
+        },
+        {
+          id: "youku",
+          default: "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+          hover: "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png",
+          alt: "YOUKU"
+        },
+        {
+          id: "iqiyi",
+          default: "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+          hover: "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png",
+          alt: "iQIYI"
+        },
+        {
+          id: "x",
+          default: "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+          hover: "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png",
+          alt: "X"
+        }
+      ]
+    } else {
+      // 確保現有的 toolIcons 有完整的字段
+      config.toolIcons = config.toolIcons.map((tool, index) => ({
+        id: tool.id || '',
+        default: tool.default || '',
+        hover: tool.hover || '',
+        alt: tool.alt || ''
+      }))
+    }
+    
     hasChanges.value = false
   } catch (error) {
     console.error('載入配置失敗:', error)
@@ -470,7 +763,7 @@ const clearCarouselImage = async (index: number) => {
 }
 
 // 清除視頻縮圖
-const clearVideoImage = async (index: number) => {
+const removeVideoImage = async (index: number) => {
   config.videoThumbnails[index].image = ''
   hasChanges.value = true
   
@@ -489,7 +782,7 @@ const clearVideoImage = async (index: number) => {
 }
 
 // 清除節目縮圖
-const clearProgramImage = async (index: number) => {
+const removeProgramImage = async (index: number) => {
   config.programThumbnails[index].image = ''
   hasChanges.value = true
   
@@ -504,6 +797,339 @@ const clearProgramImage = async (index: number) => {
     alert('清除節目縮圖失敗')
   } finally {
     loading.value = false
+  }
+}
+
+// 新增視頻
+const addVideo = () => {
+  config.videoThumbnails.push({
+    image: '',
+    href: '',
+    title: '',
+    alt: ''
+  })
+  hasChanges.value = true
+}
+
+// 刪除視頻
+const removeVideo = async (index: number) => {
+  if (confirm('確定要刪除這個視頻嗎？')) {
+    config.videoThumbnails.splice(index, 1)
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('刪除視頻失敗:', error)
+      alert('刪除視頻失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// 新增節目
+const addProgram = () => {
+  config.programThumbnails.push({
+    image: '',
+    href: '',
+    title: '',
+    alt: ''
+  })
+  hasChanges.value = true
+}
+
+// 刪除節目
+const removeProgram = async (index: number) => {
+  if (confirm('確定要刪除這個節目嗎？')) {
+    config.programThumbnails.splice(index, 1)
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('刪除節目失敗:', error)
+      alert('刪除節目失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// ButtonLinks 管理方法
+// 新增按鈕鏈接
+const addButtonLink = () => {
+  config.buttonLinks.push({
+    text: '',
+    href: '',
+    target: '_blank',
+    defaultImage: '',
+    hoverImage: ''
+  })
+  hasChanges.value = true
+}
+
+// 處理按鈕圖片上傳
+const handleButtonImageUpload = async (event: Event, index: number, imageType: 'defaultImage' | 'hoverImage') => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  loading.value = true
+  try {
+    const response = await configService.uploadImage(file, `buttonLinks.${index}.${imageType}`)
+    if (response.success && response.data) {
+      config.buttonLinks[index][imageType] = response.data.path
+      hasChanges.value = true
+      // 立即保存並重新載入預覽
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } else {
+      alert(response.error || '上傳失敗')
+    }
+  } catch (error) {
+    console.error('上傳失敗:', error)
+    alert('上傳失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 刪除按鈕圖片
+const removeButtonImage = async (index: number, imageType: 'defaultImage' | 'hoverImage') => {
+  config.buttonLinks[index][imageType] = ''
+  hasChanges.value = true
+  
+  // 立即保存並重新載入預覽
+  loading.value = true
+  try {
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    reloadPreview()
+  } catch (error) {
+    console.error('刪除按鈕圖片失敗:', error)
+    alert('刪除按鈕圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 刪除按鈕鏈接
+const removeButtonLink = async (index: number) => {
+  if (confirm('確定要刪除這個按鈕鏈接嗎？')) {
+    config.buttonLinks.splice(index, 1)
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('刪除按鈕鏈接失敗:', error)
+      alert('刪除按鈕鏈接失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// 重置按鈕鏈接為預設值
+const resetButtonLinks = async () => {
+  if (confirm('確定要重置按鈕鏈接為預設配置嗎？這將清除所有自定義設置。')) {
+    // 設置為預設的按鈕鏈接配置
+    config.buttonLinks = [
+      {
+        text: '寰宇瀏覽器',
+        href: 'https://www.ub66.com/',
+        target: '_blank',
+        defaultImage: '/assets/images/2d60d632-004e-4b69-ac84-8fc1817ce52e.png',
+        hoverImage: '/assets/images/6ef6554f-4b80-4cd0-9bbf-782dc066c330.png'
+      },
+      {
+        text: 'APP',
+        href: 'https://haa68686.com:9900/web/simple.php#/aioDownload',
+        target: '_blank',
+        defaultImage: '/assets/images/1630a76f-f7e7-4af7-8099-082bc201512c.png',
+        hoverImage: '/assets/images/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png'
+      },
+      {
+        text: 'FUN乐园',
+        href: 'https://fun99666.com/',
+        target: '_blank',
+        defaultImage: '/assets/images/64e1d47d-537d-45d0-bfd4-801e473bb525.png',
+        hoverImage: '/assets/images/87fe8990-8297-4e70-9693-e37c665ee087.png'
+      },
+      {
+        text: '合作夥伴',
+        href: 'https://haa68686.com:9900/web/#/article/at3',
+        target: '_blank',
+        defaultImage: '/assets/images/95e17bec-043c-49ea-a438-e8057a39f4ad.png',
+        hoverImage: '/assets/images/e9df8ef5-cd97-4c06-b051-a894e67f0935.png'
+      }
+    ]
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('重置按鈕鏈接失敗:', error)
+      alert('重置按鈕鏈接失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// ToolIcons 管理方法
+// 新增工具圖標
+const addToolIcon = () => {
+  config.toolIcons.push({
+    id: '',
+    default: '',
+    hover: '',
+    alt: ''
+  })
+  hasChanges.value = true
+}
+
+// 處理工具圖標圖片上傳
+const handleToolIconImageUpload = async (event: Event, index: number, imageType: 'default' | 'hover') => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  loading.value = true
+  try {
+    const response = await configService.uploadImage(file, `toolIcons.${index}.${imageType}`)
+    if (response.success && response.data) {
+      config.toolIcons[index][imageType] = response.data.path
+      hasChanges.value = true
+      // 立即保存並重新載入預覽
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } else {
+      alert(response.error || '上傳失敗')
+    }
+  } catch (error) {
+    console.error('上傳失敗:', error)
+    alert('上傳失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 刪除工具圖標圖片
+const removeToolIconImage = async (index: number, imageType: 'default' | 'hover') => {
+  config.toolIcons[index][imageType] = ''
+  hasChanges.value = true
+  
+  // 立即保存並重新載入預覽
+  loading.value = true
+  try {
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    reloadPreview()
+  } catch (error) {
+    console.error('刪除工具圖標圖片失敗:', error)
+    alert('刪除工具圖標圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 刪除工具圖標
+const removeToolIcon = async (index: number) => {
+  if (confirm('確定要刪除這個工具圖標嗎？')) {
+    config.toolIcons.splice(index, 1)
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('刪除工具圖標失敗:', error)
+      alert('刪除工具圖標失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// 重置工具圖標為預設值
+const resetToolIcons = async () => {
+  if (confirm('確定要重置工具圖標為預設配置嗎？這將清除所有自定義設置。')) {
+    // 設置為預設的工具圖標配置
+    config.toolIcons = [
+      {
+        id: "xiaohongshu",
+        default: "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+        hover: "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png",
+        alt: "小紅書"
+      },
+      {
+        id: "douyin",
+        default: "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
+        hover: "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png",
+        alt: "抖音"
+      },
+      {
+        id: "baidu",
+        default: "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
+        hover: "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png",
+        alt: "百度"
+      },
+      {
+        id: "youku",
+        default: "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+        hover: "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png",
+        alt: "YOUKU"
+      },
+      {
+        id: "iqiyi",
+        default: "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+        hover: "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png",
+        alt: "iQIYI"
+      },
+      {
+        id: "x",
+        default: "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+        hover: "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png",
+        alt: "X"
+      }
+    ]
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('重置工具圖標失敗:', error)
+      alert('重置工具圖標失敗')
+    } finally {
+      loading.value = false
+    }
   }
 }
 
@@ -530,6 +1156,29 @@ const getPreviewUrl = () => {
 // 預覽載入完成
 const onPreviewLoad = () => {
   console.log('預覽載入完成')
+}
+
+// 處理圖片 URL，確保能正確顯示
+const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return ''
+  
+  // 如果是 /uploads/ 路徑，直接使用
+  if (imagePath.startsWith('/uploads/')) {
+    return imagePath
+  }
+  
+  // 如果是 /assets/ 路徑，需要轉換為 demo 前端的路徑
+  if (imagePath.startsWith('/assets/')) {
+    // 在開發環境中，demo 運行在 localhost:3000
+    if (import.meta.env.DEV) {
+      return `http://localhost:3000${imagePath}`
+    }
+    // 在生產環境中，假設 demo 在根路徑
+    return imagePath
+  }
+  
+  // 其他情況直接返回
+  return imagePath
 }
 
 onMounted(() => {
@@ -677,6 +1326,45 @@ onMounted(() => {
 .config-panel h3 {
   margin: 0 0 1.5rem 0;
   color: #333;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.panel-header h3 {
+  margin: 0;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.item-header h4 {
+  margin: 0;
+  color: #333;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #666;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
 }
 
 .form-group {
@@ -833,5 +1521,68 @@ onMounted(() => {
   padding: 2rem;
   border-radius: 8px;
   font-size: 1.2rem;
+}
+
+/* Button Links 特定樣式 */
+.button-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.button-links-info {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 4px;
+}
+
+.info-text {
+  margin: 0;
+  color: #1565c0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.button-link-item {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.button-link-item h4 {
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.button-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+}
+
+.image-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .form-row,
+  .image-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .button-actions {
+    flex-direction: column;
+  }
 }
 </style>

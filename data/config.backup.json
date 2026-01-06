@@ -1,0 +1,97 @@
+{
+  "logo": "/uploads/logo.png",
+  "banner": "/uploads/banner.png",
+  "backgroundImage": "/uploads/backgroundImage.png",
+  "buttonLinks": [
+    {
+      "text": "官方網站",
+      "href": "https://example.com",
+      "target": "_blank"
+    },
+    {
+      "text": "聯絡我們",
+      "href": "https://google.com",
+      "target": "_blank"
+    }
+  ],
+  "carouselSlides": [
+    {
+      "image": "/uploads/29627d6a-6020-49ae-8625-44f0ec5f7999.jpg",
+      "title": "最新消息",
+      "description": "歡迎來到我們的平台",
+      "href": "https://example.com"
+    },
+    {
+      "image": "/uploads/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg",
+      "title": "精彩內容",
+      "description": "探索更多精彩內容",
+      "href": "https://google.com"
+    },
+    {
+      "image": "/uploads/a1d2e390-0a0f-4dde-8d9b-6de5bb9f4de0.jpg",
+      "title": "熱門推薦",
+      "description": "不容錯過的熱門內容",
+      "href": "https://example.com"
+    }
+  ],
+  "titles": {
+    "recommendedRoutes": "推薦路線",
+    "recommendedBrowsers": "推薦瀏覽器",
+    "selectedVideos": "精選視頻",
+    "hotPrograms": "火熱影片"
+  },
+  "routeLinks": {
+    "default": "#007bff",
+    "hover": "#0056b3"
+  },
+  "toolIcons": [
+    {
+      "image": "/uploads/0bade21c-9e90-45bf-96d9-e531a926738a.png",
+      "href": "https://example.com",
+      "title": "工具A",
+      "alt": "工具圖標A"
+    },
+    {
+      "image": "/uploads/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "href": "https://google.com",
+      "title": "工具B",
+      "alt": "工具圖標B"
+    },
+    {
+      "image": "/uploads/1630a76f-f7e7-4af7-8099-082bc201512c.png",
+      "href": "https://example.com",
+      "title": "工具C",
+      "alt": "工具圖標C"
+    },
+    {
+      "image": "/uploads/19951f5f-6382-4bad-b8a8-07fa1b015267.png",
+      "href": "https://google.com",
+      "title": "工具D",
+      "alt": "工具圖標D"
+    }
+  ],
+  "videoThumbnails": [
+    {
+      "image": "/uploads/2d60d632-004e-4b69-ac84-8fc1817ce52e.png",
+      "href": "https://www.youtube.com/watch?v=example1",
+      "title": "測試視頻1",
+      "alt": "測試視頻縮圖"
+    }
+  ],
+  "programThumbnails": [
+    {
+      "image": "/uploads/391bcfda-fff2-4a55-b3d2-444884ddf87f.png",
+      "href": "https://example.com/program1",
+      "title": "測試節目1",
+      "alt": "測試節目縮圖"
+    }
+  ],
+  "floatAdButtons": [
+    {
+      "image": "/uploads/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png",
+      "href": "https://example.com/ad1",
+      "title": "特別優惠",
+      "alt": "特別優惠廣告"
+    }
+  ]
+}

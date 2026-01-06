@@ -5,7 +5,7 @@ class CarouselService {
   constructor() {
     // In development with proxy, use relative path
     // In production container, use environment variable or default
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:3002/api' : '/api')
     // Remove trailing slash if present
     this.baseUrl = this.baseUrl.replace(/\/$/, '')
   }
@@ -15,7 +15,9 @@ class CarouselService {
     banner: string,
     backgroundImage: string,
     videoThumbnails: ({image: string, href: string, alt: string, title: string} | null)[],
-    programThumbnails: ({image: string, href: string, alt: string, title: string} | null)[]
+    programThumbnails: ({image: string, href: string, alt: string, title: string} | null)[],
+    buttonLinks: ({text: string, href: string, target: string, defaultImage?: string, hoverImage?: string} | null)[],
+    toolIcons: ({id: string, default: string, hover: string, alt: string} | null)[]
   }> {
     try {
       const response = await fetch(`${this.baseUrl}/public/config`)
@@ -47,6 +49,16 @@ class CarouselService {
         ),
         programThumbnails: (config.programThumbnails || []).map((program: any) => 
           program ? { ...program, image: processImageUrl(program.image) } : null
+        ),
+        buttonLinks: (config.buttonLinks || []).map((button: any) => 
+          button ? { ...button } : null
+        ),
+        toolIcons: (config.toolIcons || []).map((tool: any) => 
+          tool ? { 
+            ...tool, 
+            default: processImageUrl(tool.default),
+            hover: processImageUrl(tool.hover)
+          } : null
         )
       }
     } catch (error) {
@@ -84,7 +96,9 @@ class CarouselService {
         banner: '',
         backgroundImage: '',
         videoThumbnails: [],
-        programThumbnails: []
+        programThumbnails: [],
+        buttonLinks: [],
+        toolIcons: []
       }
     }
   }

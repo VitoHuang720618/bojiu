@@ -1,31 +1,35 @@
 {
   "logo": "/assets/images/logo.png",
-  "banner": "/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png",
-  "backgroundImage": "http://localhost:3005/uploads/backgroundImage.png",
+  "banner": "http://localhost:3002/uploads/banner.png",
+  "backgroundImage": "http://localhost:3002/uploads/backgroundImage.png",
   "buttonLinks": [
     {
-      "id": "universal-browser",
-      "default": "/assets/images/2d60d632-004e-4b69-ac84-8fc1817ce52e.png",
-      "hover": "/assets/images/6ef6554f-4b80-4cd0-9bbf-782dc066c330.png",
-      "alt": "寰宇瀏覽器"
+      "text": "寰宇瀏覽器",
+      "href": "https://www.ub66.com/",
+      "target": "_blank",
+      "defaultImage": "http://localhost:3002/uploads/button-0-defaultImage.png",
+      "hoverImage": "http://localhost:3002/uploads/button-0-hoverImage.png"
     },
     {
-      "id": "app",
-      "default": "/assets/images/1630a76f-f7e7-4af7-8099-082bc201512c.png",
-      "hover": "/assets/images/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png",
-      "alt": "APP"
+      "text": "APP",
+      "href": "https://haa68686.com:9900/web/simple.php#/aioDownload",
+      "target": "_blank",
+      "defaultImage": "http://localhost:3002/uploads/button-1-defaultImage.png",
+      "hoverImage": "http://localhost:3002/uploads/button-1-hoverImage.png"
     },
     {
-      "id": "fun-park",
-      "default": "/assets/images/64e1d47d-537d-45d0-bfd4-801e473bb525.png",
-      "hover": "/assets/images/87fe8990-8297-4e70-9693-e37c665ee087.png",
-      "alt": "FUN乐园"
+      "text": "FUN乐园",
+      "href": "https://fun99666.com/",
+      "target": "_blank",
+      "defaultImage": "http://localhost:3002/uploads/button-2-defaultImage.png",
+      "hoverImage": "http://localhost:3002/uploads/button-2-hoverImage.png"
     },
     {
-      "id": "partners",
-      "default": "/assets/images/95e17bec-043c-49ea-a438-e8057a39f4ad.png",
-      "hover": "/assets/images/e9df8ef5-cd97-4c06-b051-a894e67f0935.png",
-      "alt": "合作夥伴"
+      "text": "合作夥伴",
+      "href": "https://haa68686.com:9900/web/#/article/at3",
+      "target": "_blank",
+      "defaultImage": "http://localhost:3002/uploads/button-3-defaultImage.png",
+      "hoverImage": "http://localhost:3002/uploads/button-3-hoverImage.png"
     }
   ],
   "carouselSlides": [
@@ -68,7 +72,7 @@
   "toolIcons": [
     {
       "id": "xiaohongshu",
-      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "default": "http://localhost:3002/uploads/tool-0-default.png",
       "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png",
       "alt": "小紅書"
     },
@@ -108,7 +112,7 @@
       "image": "/assets/images/508f359d-7332-42f2-9181-565f7571e1af.png",
       "href": "https://example.com/video1",
       "alt": "精選短視頻 1",
-      "title": "歐拉123"
+      "title": "歐拉1111"
     },
     {
       "image": "/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png",
@@ -139,6 +143,12 @@
       "href": "https://example.com/video6",
       "alt": "精選短視頻 6",
       "title": "熱門影片 6"
+    },
+    {
+      "image": "http://localhost:3002/uploads/videoThumbnails-6-image.png",
+      "href": "",
+      "title": "",
+      "alt": ""
     }
   ],
   "programThumbnails": [

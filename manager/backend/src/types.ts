@@ -2,14 +2,45 @@
 export interface AssetManifest {
   logo: string
   banner: string
-  buttonLinks: ButtonLink[]
-  carouselSlides: string[]
+  backgroundImage?: string
+  buttonLinks: ButtonLinkConfig[]
+  carouselSlides: CarouselSlide[]
   titles: TitleImages
   routeLinks: RouteLinks
   toolIcons: ToolIcon[]
-  videoThumbnails: string[]
-  programThumbnails: string[]
+  videoThumbnails: VideoThumbnail[]
+  programThumbnails: ProgramThumbnail[]
   floatAdButtons: FloatAdButton[]
+}
+
+export interface ButtonLinkConfig {
+  text: string
+  href: string
+  target: string
+  defaultImage?: string
+  hoverImage?: string
+}
+
+export interface CarouselSlide {
+  image: string
+  title?: string
+  description?: string
+  href: string
+  alt?: string
+}
+
+export interface VideoThumbnail {
+  image: string
+  href: string
+  title: string
+  alt: string
+}
+
+export interface ProgramThumbnail {
+  image: string
+  href: string
+  title: string
+  alt: string
 }
 
 export interface ButtonLink {

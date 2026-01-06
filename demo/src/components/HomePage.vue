@@ -11,6 +11,7 @@ import {
   floatAdButtons
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
+import type { ButtonLinkConfig } from '../types'
 
 const currentSlide = ref(0)
 let carouselInterval: number | null = null
@@ -21,6 +22,8 @@ const apiBanner = ref<string>('')
 const apiBackgroundImage = ref<string>('')
 const apiVideoThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
 const apiProgramThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
+const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
+const apiToolIcons = ref<({id: string, default: string, hover: string, alt: string} | null)[]>([])
 
 // 浮動按鈕收合狀態
 const isFloatAdCollapsed = ref(false)
@@ -43,7 +46,9 @@ const effectiveCarouselSlides = computed(() => {
 })
 
 const effectiveBanner = computed(() => {
-  return apiBanner.value || assetManifest.banner
+  const bannerImage = apiBanner.value
+  console.log('計算 Banner:', bannerImage)
+  return bannerImage
 })
 
 const effectiveBackgroundImage = computed(() => {
@@ -60,6 +65,32 @@ const effectiveVideoThumbnails = computed(() => {
 const effectiveProgramThumbnails = computed(() => {
   // 只使用API數據，不使用預設資料
   return apiProgramThumbnails.value
+})
+
+const effectiveButtonLinks = computed(() => {
+  // 只使用API數據，和背景圖設置一樣
+  const buttonLinksData = apiButtonLinks.value
+  console.log('計算按鈕鏈接:', buttonLinksData)
+  return buttonLinksData.map((button, index) => ({
+    id: `api-button-${index}`,
+    text: button?.text || '',
+    href: button?.href || '#',
+    target: button?.target || '_blank',
+    defaultImage: button?.defaultImage || '',
+    hoverImage: button?.hoverImage || ''
+  }))
+})
+
+const effectiveToolIcons = computed(() => {
+  // 只使用API數據，和背景圖設置一樣
+  const toolIconsData = apiToolIcons.value
+  console.log('計算工具圖標:', toolIconsData)
+  return toolIconsData.map((tool, index) => ({
+    id: tool?.id || `api-tool-${index}`,
+    default: tool?.default || '',
+    hover: tool?.hover || '',
+    alt: tool?.alt || ''
+  }))
 })
 
 const nextSlide = () => {
@@ -88,8 +119,13 @@ const loadConfig = async () => {
     apiBackgroundImage.value = config.backgroundImage
     apiVideoThumbnails.value = config.videoThumbnails
     apiProgramThumbnails.value = config.programThumbnails
+    apiButtonLinks.value = config.buttonLinks
+    apiToolIcons.value = config.toolIcons
     console.log('背景圖設置為:', config.backgroundImage)
     console.log('effectiveBackgroundImage:', effectiveBackgroundImage.value)
+    console.log('buttonLinks 設置為:', config.buttonLinks)
+    console.log('toolIcons 設置為:', config.toolIcons)
+    console.log('effectiveToolIcons:', effectiveToolIcons.value)
   } catch (error) {
     console.error('Failed to load config:', error)
   }
@@ -164,10 +200,11 @@ onUnmounted(() => {
             class="item"
           >
             <ImageButton
-              :default-src="item.default"
-              :hover-src="item.hover"
+              :default-src="effectiveButtonLinks[index]?.defaultImage || item.default"
+              :hover-src="effectiveButtonLinks[index]?.hoverImage || item.hover"
               :alt="item.alt"
-              :href="siteConfig.navigation[index]?.href"
+              :href="effectiveButtonLinks[index]?.href"
+              :target="effectiveButtonLinks[index]?.target"
             />
           </div>
         </div>
@@ -247,11 +284,12 @@ onUnmounted(() => {
                 v-for="(tool, index) in recommendedTools"
                 :key="tool.id"
                 class="item"
+                v-show="effectiveToolIcons[index]?.default"
               >
                 <ImageButton
-                  :default-src="assetManifest.toolIcons[index].default"
-                  :hover-src="assetManifest.toolIcons[index].hover"
-                  :alt="tool.name"
+                  :default-src="effectiveToolIcons[index]?.default"
+                  :hover-src="effectiveToolIcons[index]?.hover"
+                  :alt="effectiveToolIcons[index]?.alt || tool.name"
                   :href="tool.href"
                 />
               </div>
