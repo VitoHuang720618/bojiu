@@ -85,12 +85,15 @@ const effectiveToolIcons = computed(() => {
   // 只使用API數據，和背景圖設置一樣
   const toolIconsData = apiToolIcons.value
   console.log('計算工具圖標:', toolIconsData)
-  return toolIconsData.map((tool, index) => ({
+  console.log('toolIconsData 長度:', toolIconsData.length)
+  const result = toolIconsData.map((tool, index) => ({
     id: tool?.id || `api-tool-${index}`,
     default: tool?.default || '',
     hover: tool?.hover || '',
     alt: tool?.alt || ''
   }))
+  console.log('effectiveToolIcons 結果:', result)
+  return result
 })
 
 const nextSlide = () => {
@@ -284,12 +287,19 @@ onUnmounted(() => {
                 v-for="(tool, index) in recommendedTools"
                 :key="tool.id"
                 class="item"
-                v-show="effectiveToolIcons[index]?.default"
               >
                 <ImageButton
-                  :default-src="effectiveToolIcons[index]?.default"
-                  :hover-src="effectiveToolIcons[index]?.hover"
-                  :alt="effectiveToolIcons[index]?.alt || tool.name"
+                  v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
+                  :default-src="effectiveToolIcons[index].default"
+                  :hover-src="effectiveToolIcons[index].hover"
+                  :alt="effectiveToolIcons[index].alt || tool.name"
+                  :href="tool.href"
+                />
+                <ImageButton
+                  v-else
+                  :default-src="assetManifest.toolIcons[index]?.default"
+                  :hover-src="assetManifest.toolIcons[index]?.hover"
+                  :alt="tool.name"
                   :href="tool.href"
                 />
               </div>

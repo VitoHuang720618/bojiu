@@ -71,40 +71,40 @@
   },
   "toolIcons": [
     {
-      "id": "xiaohongshu",
+      "id": "",
       "default": "http://localhost:3002/uploads/tool-0-default.png",
       "hover": "http://localhost:3002/uploads/tool-0-hover.png",
-      "alt": "小紅書"
+      "alt": ""
     },
     {
-      "id": "douyin",
-      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
-      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png",
-      "alt": "抖音"
+      "id": "",
+      "default": "http://localhost:3002/uploads/tool-1-default.png",
+      "hover": "http://localhost:3002/uploads/tool-1-hover.png",
+      "alt": ""
     },
     {
-      "id": "baidu",
-      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
-      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png",
-      "alt": "百度"
+      "id": "",
+      "default": "http://localhost:3002/uploads/tool-2-default.png",
+      "hover": "http://localhost:3002/uploads/tool-2-hover.png",
+      "alt": ""
     },
     {
-      "id": "youku",
-      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
-      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png",
-      "alt": "YOUKU"
+      "id": "",
+      "default": "http://localhost:3002/uploads/tool-3-default.png",
+      "hover": "http://localhost:3002/uploads/tool-3-hover.png",
+      "alt": ""
     },
     {
-      "id": "iqiyi",
-      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
-      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png",
-      "alt": "iQIYI"
+      "id": "",
+      "default": "http://localhost:3002/uploads/tool-4-default.png",
+      "hover": "http://localhost:3002/uploads/tool-4-hover.png",
+      "alt": ""
     },
     {
-      "id": "x",
-      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
-      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png",
-      "alt": "X"
+      "id": "",
+      "default": "http://localhost:3002/uploads/tool-5-default.png",
+      "hover": "http://localhost:3002/uploads/tool-5-hover.png",
+      "alt": ""
     }
   ],
   "videoThumbnails": [
