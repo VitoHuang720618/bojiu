@@ -734,9 +734,8 @@ onUnmounted(() => {
   border-top: 2px solid #dfb082;
   box-sizing: border-box;
   padding: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: 300px 1fr;
   height: 94px;
 }
 
@@ -744,30 +743,30 @@ onUnmounted(() => {
   margin-right: 0;
   margin-bottom: 0;
   background-color: #8B0000;
-  padding: 0 20px;
+  padding: 0 25px;
   border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   height: 100%;
-  flex: 0 0 300px;
-  min-width: 0;
+  min-width: 200px;
+  max-width: 300px;
 }
 
 .recommend-tools .block-title img {
-  width: auto !important;
-  height: 60% !important;
+  width: 150px !important;
+  height: 30px !important;
   object-fit: contain !important;
   display: block !important;
 }
 
 .recommend-tools .tools {
   display: grid;
-  gap: 0.0625rem;
+  gap: 0.25rem;
   grid-template-columns: repeat(6, 1fr);
-  flex: 1;
   height: 100%;
   align-items: stretch;
+  padding: 0 0.5rem;
 }
 
 .recommend-tools .tools .item {
@@ -784,95 +783,167 @@ onUnmounted(() => {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+.recommend-tools .tools .item :deep(.img-button):hover {
+  transform: none !important;
+  filter: brightness(1.1);
 }
 
 .recommend-tools .tools .item :deep(.img-button img) {
-  max-width: 160px !important;
-  max-height: 60px !important;
-  width: auto !important;
-  height: auto !important;
+  width: 140px !important;
+  height: 70px !important;
   object-fit: contain !important;
   display: block !important;
-}
-
-.recommend-tools .tools .item::after {
-  background-color: #ffc990;
-  content: '';
-  display: block;
-  height: 60px;
-  position: absolute;
-  right: -1.5px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-}
-
-.recommend-tools .tools .item:last-child::after {
-  display: none;
+  transition: none !important;
+  transform: none !important;
 }
 
 @media (max-width: 1024px) {
   .recommend-tools {
-    height: 80px;
-    padding: 0;
+    height: auto;
+    grid-template-columns: 250px 1fr;
+    min-height: 80px;
   }
   
-  .recommend-tools .tools .item::after {
-    height: 50px;
-    right: -6.5px;
+  .recommend-tools .block-title {
+    height: 80px;
+    padding: 0 20px;
+  }
+  
+  .recommend-tools .block-title img {
+    width: 130px !important;
+    height: 26px !important;
+  }
+  
+  .recommend-tools .tools {
+    height: 80px;
+    padding: 0 0.4rem;
+    gap: 0.2rem;
   }
   
   .recommend-tools .tools .item :deep(.img-button img) {
-    max-width: 140px !important;
-    max-height: 50px !important;
+    width: 120px !important;
+    height: 60px !important;
   }
 }
 
 @media (max-width: 768px) {
   .recommend-tools {
-    height: 70px;
-    padding: 0;
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 0;
   }
   
-  .recommend-tools .tools .item::after {
-    height: 40px;
-    right: -8.5px;
+  .recommend-tools .block-title {
+    height: 50px;
+    width: 100%;
+    justify-content: center;
+    padding: 0 20px;
+  }
+  
+  .recommend-tools .block-title img {
+    width: 120px !important;
+    height: 22px !important;
+  }
+  
+  .recommend-tools .tools {
+    height: 60px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.15rem;
+    padding: 0 0.3rem;
+  }
+  
+  .recommend-tools .tools .item {
+    height: 60px;
   }
   
   .recommend-tools .tools .item :deep(.img-button img) {
-    max-width: 120px !important;
-    max-height: 40px !important;
+    width: 100px !important;
+    height: 50px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .recommend-tools .block-title {
+    height: 40px;
+    padding: 0 10px;
+  }
+  
+  .recommend-tools .block-title img {
+    width: 120px !important;
+    height: 22px !important;
+  }
+  
+  .recommend-tools .tools {
+    height: 50px;
+  }
+  
+  .recommend-tools .tools .item {
+    height: 50px;
+  }
+  
+  .recommend-tools .tools .item :deep(.img-button img) {
+    width: 100px !important;
+    height: 50px !important;
+  }
+}
+  
+@media (max-width: 640px) {
+  .recommend-tools .block-title {
+    height: 40px;
+    padding: 0 10px;
+  }
+  
+  .recommend-tools .block-title img {
+    width: 120px !important;
+    height: 22px !important;
+  }
+  
+  .recommend-tools .tools {
+    height: 50px;
+  }
+  
+  .recommend-tools .tools .item {
+    height: 50px;
+  }
+  
+  .recommend-tools .tools .item :deep(.img-button img) {
+    width: 100px !important;
+    height: 50px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .recommend-tools {
-    height: 60px;
-    padding: 0;
-    flex-direction: row;
+  .recommend-tools .block-title {
+    height: 35px;
+    padding: 0 8px;
   }
   
-  .recommend-tools .block-title {
-    display: none;
+  .recommend-tools .block-title img {
+    width: 100px !important;
+    height: 18px !important;
   }
   
   .recommend-tools .tools {
+    height: 45px;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.0625rem;
-    height: 100%;
+    gap: 0.03125rem;
   }
   
-  .recommend-tools .tools .item::after {
+  .recommend-tools .tools .item {
     height: 45px;
   }
   
-  .recommend-tools .tools .item:nth-child(3n+3)::after {
+  .recommend-tools .tools .item:nth-child(n+4) {
     display: none;
   }
   
   .recommend-tools .tools .item :deep(.img-button img) {
-    max-width: 160px !important;
-    max-height: 60px !important;
+    width: 80px !important;
+    height: 40px !important;
   }
 }
 
