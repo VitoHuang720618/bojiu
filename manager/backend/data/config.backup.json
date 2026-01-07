@@ -34,27 +34,27 @@
   ],
   "carouselSlides": [
     {
-      "image": "",
-      "href": "http://www.google.com.tw",
+      "image": "http://localhost:3002/uploads/carousel-0.png",
+      "href": "",
       "alt": "輪播圖 1"
     },
     {
-      "image": "/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg",
+      "image": "",
       "href": "https://www.yahoo.com.tw",
       "alt": "輪播圖 2"
     },
     {
-      "image": "/assets/images/8778ae33-e80b-4bfa-9d38-169e54cd558d.png",
+      "image": "",
       "href": "https://example.com/slide3",
       "alt": "輪播圖 3"
     },
     {
-      "image": "/assets/images/8c95d0bb-99d5-40b2-bcd8-5db9503b8341.png",
+      "image": "",
       "href": "https://example.com/slide4",
       "alt": "輪播圖 4"
     },
     {
-      "image": "/assets/images/39c91b7a-9464-4acc-85a5-8ac436268dd2.png",
+      "image": "",
       "href": "https://example.com/slide5",
       "alt": "輪播圖 5"
     }
@@ -62,8 +62,8 @@
   "titles": {
     "recommendedRoutes": "/assets/images/c526fd1a-8fdf-4892-8dd3-72c3ced9e82c.png",
     "recommendedBrowsers": "/assets/images/tools-title.webp",
-    "selectedVideos": "/assets/images/19951f5f-6382-4bad-b8a8-07fa1b015267.png",
-    "hotPrograms": "/assets/images/7b10e448-7064-4567-ae15-a065a64e0191.png"
+    "selectedVideos": "/assets/images/live-title.webp",
+    "hotPrograms": "/assets/images/sport-title.webp"
   },
   "routeLinks": {
     "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
@@ -71,45 +71,39 @@
   },
   "toolIcons": [
     {
-      "id": "",
+      "href": "https://live.titan007.com/oldIndexall.aspx",
       "default": "http://localhost:3002/uploads/tool-0-default.png",
-      "hover": "http://localhost:3002/uploads/tool-0-hover.png",
-      "alt": ""
+      "hover": "http://localhost:3002/uploads/tool-0-hover.png"
     },
     {
-      "id": "",
+      "href": "https://live.leisu.com/",
       "default": "http://localhost:3002/uploads/tool-1-default.png",
-      "hover": "http://localhost:3002/uploads/tool-1-hover.png",
-      "alt": ""
+      "hover": "http://localhost:3002/uploads/tool-1-hover.png"
     },
     {
-      "id": "",
+      "href": "https://live.nowscore.com/2in1.aspx",
       "default": "http://localhost:3002/uploads/tool-2-default.png",
-      "hover": "http://localhost:3002/uploads/tool-2-hover.png",
-      "alt": ""
+      "hover": "http://localhost:3002/uploads/tool-2-hover.png"
     },
     {
-      "id": "",
+      "href": "https://v.douyin.com/KZUpEUBUIlI/",
       "default": "http://localhost:3002/uploads/tool-3-default.png",
-      "hover": "http://localhost:3002/uploads/tool-3-hover.png",
-      "alt": ""
+      "hover": "http://localhost:3002/uploads/tool-3-hover.png"
     },
     {
-      "id": "",
+      "href": "https://www.baidu.com/",
       "default": "http://localhost:3002/uploads/tool-4-default.png",
-      "hover": "http://localhost:3002/uploads/tool-4-hover.png",
-      "alt": ""
+      "hover": "http://localhost:3002/uploads/tool-4-hover.png"
     },
     {
-      "id": "",
+      "href": "https://x.com/ezfun9527",
       "default": "http://localhost:3002/uploads/tool-5-default.png",
-      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png",
-      "alt": ""
+      "hover": "http://localhost:3002/uploads/tool-5-hover.png"
     }
   ],
   "videoThumbnails": [
     {
-      "image": "/assets/images/508f359d-7332-42f2-9181-565f7571e1af.png",
+      "image": "http://localhost:3002/uploads/videoThumbnails-0-image.png",
       "href": "https://example.com/video1",
       "alt": "精選短視頻 1",
       "title": "歐拉1111"

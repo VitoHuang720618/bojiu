@@ -47,8 +47,8 @@ export const assetManifest = {
   titles: {
     recommendedRoutes: '/assets/images/c526fd1a-8fdf-4892-8dd3-72c3ced9e82c.png',
     recommendedBrowsers: '/assets/images/tools-title.webp',
-    selectedVideos: '/assets/images/19951f5f-6382-4bad-b8a8-07fa1b015267.png',
-    hotPrograms: '/assets/images/7b10e448-7064-4567-ae15-a065a64e0191.png'
+    selectedVideos: '/assets/images/live-title.webp',
+    hotPrograms: '/assets/images/sport-title.webp'
   },
   
   // Route links (6 items)

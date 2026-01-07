@@ -63,10 +63,9 @@ export interface RouteLinks {
 }
 
 export interface ToolIcon {
-  id: string
+  href: string
   default: string
   hover: string
-  alt: string
 }
 
 export interface FloatAdButton {

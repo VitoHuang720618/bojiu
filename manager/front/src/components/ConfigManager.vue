@@ -207,22 +207,12 @@
               <div class="button-form">
                 <div class="form-row">
                   <div class="form-group">
-                    <label>圖標名稱</label>
+                    <label>連結網址</label>
                     <input 
-                      v-model="tool.alt" 
-                      type="text" 
+                      v-model="tool.href" 
+                      type="url" 
                       class="form-control"
-                      placeholder="例如：Chrome 瀏覽器"
-                      @input="hasChanges = true"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label>圖標 ID</label>
-                    <input 
-                      v-model="tool.id" 
-                      type="text" 
-                      class="form-control"
-                      placeholder="例如：chrome"
+                      placeholder="https://example.com"
                       @input="hasChanges = true"
                     />
                   </div>
@@ -545,49 +535,42 @@ const loadConfig = async () => {
     if (!config.toolIcons || config.toolIcons.length === 0) {
       config.toolIcons = [
         {
-          id: "xiaohongshu",
+          href: "https://www.xiaohongshu.com",
           default: "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
-          hover: "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png",
-          alt: "小紅書"
+          hover: "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
         },
         {
-          id: "douyin",
+          href: "https://www.douyin.com",
           default: "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
-          hover: "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png",
-          alt: "抖音"
+          hover: "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
         },
         {
-          id: "baidu",
+          href: "https://www.baidu.com",
           default: "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
-          hover: "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png",
-          alt: "百度"
+          hover: "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
         },
         {
-          id: "youku",
+          href: "https://www.youku.com",
           default: "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
-          hover: "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png",
-          alt: "YOUKU"
+          hover: "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
         },
         {
-          id: "iqiyi",
+          href: "https://www.iqiyi.com",
           default: "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
-          hover: "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png",
-          alt: "iQIYI"
+          hover: "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
         },
         {
-          id: "x",
+          href: "https://x.com",
           default: "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
-          hover: "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png",
-          alt: "X"
+          hover: "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
         }
       ]
     } else {
       // 確保現有的 toolIcons 有完整的字段
       config.toolIcons = config.toolIcons.map((tool, index) => ({
-        id: tool.id || '',
+        href: tool.href || '',
         default: tool.default || '',
-        hover: tool.hover || '',
-        alt: tool.alt || ''
+        hover: tool.hover || ''
       }))
     }
     
@@ -1000,10 +983,9 @@ const resetButtonLinks = async () => {
 // 新增工具圖標
 const addToolIcon = () => {
   config.toolIcons.push({
-    id: '',
+    href: '',
     default: '',
-    hover: '',
-    alt: ''
+    hover: ''
   })
   hasChanges.value = true
 }
@@ -1081,40 +1063,34 @@ const resetToolIcons = async () => {
     // 設置為預設的工具圖標配置
     config.toolIcons = [
       {
-        id: "xiaohongshu",
+        href: "https://www.xiaohongshu.com",
         default: "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
-        hover: "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png",
-        alt: "小紅書"
+        hover: "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
       },
       {
-        id: "douyin",
+        href: "https://www.douyin.com",
         default: "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
-        hover: "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png",
-        alt: "抖音"
+        hover: "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
       },
       {
-        id: "baidu",
+        href: "https://www.baidu.com",
         default: "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
-        hover: "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png",
-        alt: "百度"
+        hover: "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
       },
       {
-        id: "youku",
+        href: "https://www.youku.com",
         default: "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
-        hover: "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png",
-        alt: "YOUKU"
+        hover: "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
       },
       {
-        id: "iqiyi",
+        href: "https://www.iqiyi.com",
         default: "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
-        hover: "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png",
-        alt: "iQIYI"
+        hover: "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
       },
       {
-        id: "x",
+        href: "https://x.com",
         default: "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
-        hover: "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png",
-        alt: "X"
+        hover: "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
       }
     ]
     hasChanges.value = true

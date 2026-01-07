@@ -90,7 +90,8 @@ const effectiveToolIcons = computed(() => {
     id: tool?.id || `api-tool-${index}`,
     default: tool?.default || '',
     hover: tool?.hover || '',
-    alt: tool?.alt || ''
+    alt: tool?.alt || '',
+    href: tool?.href || ''
   }))
   console.log('effectiveToolIcons 結果:', result)
   return result
@@ -293,7 +294,7 @@ onUnmounted(() => {
                   :default-src="effectiveToolIcons[index].default"
                   :hover-src="effectiveToolIcons[index].hover"
                   :alt="effectiveToolIcons[index].alt || tool.name"
-                  :href="tool.href"
+                  :href="effectiveToolIcons[index].href || tool.href"
                 />
                 <ImageButton
                   v-else
@@ -508,12 +509,32 @@ onUnmounted(() => {
   .block-title {
     height: 30px;
   }
+  
+  .programme-block .block-title {
+    height: 35px;
+  }
+  
+  .programme-block .block-title img {
+    width: 280px !important;
+    height: 30px !important;
+    object-fit: fill;
+  }
 }
 
 @media (max-width: 480px) {
   .block-title {
     height: 28px;
     margin-bottom: 1rem;
+  }
+  
+  .programme-block .block-title {
+    height: 30px;
+  }
+  
+  .programme-block .block-title img {
+    width: 220px !important;
+    height: 25px !important;
+    object-fit: fill;
   }
 }
 
@@ -522,11 +543,24 @@ onUnmounted(() => {
   width: auto;
 }
 
+/* 精選短視頻標題特定樣式 */
+.programme-block .block-title {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.programme-block .block-title img {
+  width: 330px !important;
+  height: 35px !important;
+  object-fit: fill;
+}
+
 /* Recommend Section */
 .recommend {
-  background-color: rgba(0, 0, 0, 0.8);
-  border: 2px solid #dfb082;
-  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 8px;
   box-sizing: border-box;
   margin-bottom: 3rem;
 }
@@ -580,6 +614,15 @@ onUnmounted(() => {
   .recommend-slider {
     margin-right: 0.9375rem;
   }
+  
+  .carousel-container {
+    border-radius: 10px;
+    border: 2px solid #f8eec9;
+  }
+  
+  .carousel-slide img {
+    border-radius: 8px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -588,12 +631,24 @@ onUnmounted(() => {
     margin-right: 0;
     width: 100%;
   }
+  
+  .carousel-container {
+    border-radius: 8px;
+    border: 2px solid #f8eec9;
+  }
+  
+  .carousel-slide img {
+    border-radius: 6px;
+  }
 }
 
 .carousel-container {
   position: relative;
   width: 100%;
   overflow: hidden;
+  border-radius: 12px;
+  border: 3px solid #f8eec9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .carousel-slide img {
@@ -642,7 +697,8 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: fill; /* 強制填滿容器，可能會變形 */
+  object-fit: cover;
+  border-radius: 9px;
 }
 
 .recommend-links {
@@ -735,38 +791,40 @@ onUnmounted(() => {
   box-sizing: border-box;
   padding: 0;
   display: grid;
-  grid-template-columns: 300px 1fr;
-  height: 94px;
+  grid-template-columns: 200px 1fr;
+  height: 80px;
+  background-color: #000000;
 }
 
 .recommend-tools .block-title {
   margin-right: 0;
   margin-bottom: 0;
   background-color: #8B0000;
-  padding: 0 25px;
+  padding: 0 15px;
   border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   height: 100%;
-  min-width: 200px;
-  max-width: 300px;
+  min-width: 150px;
+  max-width: 200px;
 }
 
 .recommend-tools .block-title img {
-  width: 150px !important;
-  height: 30px !important;
+  width: 120px !important;
+  height: 25px !important;
   object-fit: contain !important;
   display: block !important;
 }
 
 .recommend-tools .tools {
   display: grid;
-  gap: 0.25rem;
+  gap: 0.1rem;
   grid-template-columns: repeat(6, 1fr);
   height: 100%;
   align-items: stretch;
-  padding: 0 0.5rem;
+  padding: 0.5rem;
+  background-color: #000000;
 }
 
 .recommend-tools .tools .item {
@@ -793,8 +851,8 @@ onUnmounted(() => {
 }
 
 .recommend-tools .tools .item :deep(.img-button img) {
-  width: 140px !important;
-  height: 70px !important;
+  width: 120px !important;
+  height: 60px !important;
   object-fit: contain !important;
   display: block !important;
   transition: none !important;
@@ -804,29 +862,29 @@ onUnmounted(() => {
 @media (max-width: 1024px) {
   .recommend-tools {
     height: auto;
-    grid-template-columns: 250px 1fr;
-    min-height: 80px;
+    grid-template-columns: 180px 1fr;
+    min-height: 70px;
   }
   
   .recommend-tools .block-title {
-    height: 80px;
-    padding: 0 20px;
+    height: 70px;
+    padding: 0 12px;
   }
   
   .recommend-tools .block-title img {
-    width: 130px !important;
-    height: 26px !important;
+    width: 100px !important;
+    height: 20px !important;
   }
   
   .recommend-tools .tools {
-    height: 80px;
-    padding: 0 0.4rem;
-    gap: 0.2rem;
+    height: 70px;
+    padding: 0.4rem;
+    gap: 0.08rem;
   }
   
   .recommend-tools .tools .item :deep(.img-button img) {
-    width: 120px !important;
-    height: 60px !important;
+    width: 100px !important;
+    height: 50px !important;
   }
 }
 
@@ -838,31 +896,31 @@ onUnmounted(() => {
   }
   
   .recommend-tools .block-title {
-    height: 50px;
+    height: 45px;
     width: 100%;
     justify-content: center;
-    padding: 0 20px;
+    padding: 0 15px;
   }
   
   .recommend-tools .block-title img {
-    width: 120px !important;
-    height: 22px !important;
+    width: 90px !important;
+    height: 18px !important;
   }
   
   .recommend-tools .tools {
-    height: 60px;
+    height: 55px;
     grid-template-columns: repeat(6, 1fr);
-    gap: 0.15rem;
-    padding: 0 0.3rem;
+    gap: 0.05rem;
+    padding: 0.3rem;
   }
   
   .recommend-tools .tools .item {
-    height: 60px;
+    height: 55px;
   }
   
   .recommend-tools .tools .item :deep(.img-button img) {
-    width: 100px !important;
-    height: 50px !important;
+    width: 80px !important;
+    height: 40px !important;
   }
 }
 
