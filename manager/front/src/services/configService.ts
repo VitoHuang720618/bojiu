@@ -28,10 +28,9 @@ export interface ConfigData {
     hover: string
   }
   toolIcons: Array<{
-    id: string
+    href: string
     default: string
     hover: string
-    alt: string
   }>
   videoThumbnails: Array<{
     image: string
@@ -46,10 +45,9 @@ export interface ConfigData {
     alt: string
   }>
   floatAdButtons: Array<{
-    image: string
     href: string
-    title: string
-    alt: string
+    default: string
+    hover: string
   }>
 }
 

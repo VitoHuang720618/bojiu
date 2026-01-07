@@ -45,7 +45,7 @@ export const assetManifest = {
   
   // Section titles
   titles: {
-    recommendedRoutes: '/assets/images/c526fd1a-8fdf-4892-8dd3-72c3ced9e82c.png',
+    recommendedRoutes: '/assets/images/crown-icon.webp',
     recommendedBrowsers: '/assets/images/tools-title.webp',
     selectedVideos: '/assets/images/live-title.webp',
     hotPrograms: '/assets/images/sport-title.webp'

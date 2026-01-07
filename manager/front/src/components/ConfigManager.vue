@@ -251,11 +251,82 @@
             </div>
           </div>
 
+          <!-- Route Links 配置 -->
+          <div v-if="activeTab === 'routelinks'" class="config-panel">
+            <div class="panel-header">
+              <h3>推薦路線設置</h3>
+              <div class="button-actions">
+                <button @click="resetRouteLinks" class="btn btn-secondary">重置為預設</button>
+              </div>
+            </div>
+            
+            <div class="button-links-info">
+              <p class="info-text">
+                <strong>說明：</strong>這裡配置推薦優質線路區域的按鈕圖片。
+                可以上傳自定義的圖片（默認圖和懸停圖）。
+                這個按鈕會顯示在推薦優質線路標題下方。
+              </p>
+            </div>
+            
+            <div class="route-links-item">
+              <div class="item-header">
+                <h4>推薦路線按鈕</h4>
+              </div>
+              <div class="button-form">
+                <div class="image-row">
+                  <div class="form-group">
+                    <label>默認圖片</label>
+                    <div class="image-upload">
+                      <img v-if="config.routeLinks.default" :src="getImageUrl(config.routeLinks.default)" alt="Default" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleRouteLinksImageUpload(e, 'default')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeRouteLinksImage('default')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>懸停圖片</label>
+                    <div class="image-upload">
+                      <img v-if="config.routeLinks.hover" :src="getImageUrl(config.routeLinks.hover)" alt="Hover" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleRouteLinksImageUpload(e, 'hover')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeRouteLinksImage('hover')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Carousel 配置 -->
           <div v-if="activeTab === 'carousel'" class="config-panel">
-            <h3>輪播圖設置</h3>
+            <div class="panel-header">
+              <h3>輪播圖設置</h3>
+              <div class="button-actions">
+                <button @click="addCarouselSlide" class="btn btn-primary">新增輪播圖</button>
+              </div>
+            </div>
+            
+            <!-- 如果沒有輪播圖，顯示提示 -->
+            <div v-if="config.carouselSlides.length === 0" class="empty-state">
+              <p>目前沒有輪播圖配置</p>
+              <button @click="addCarouselSlide" class="btn btn-primary btn-lg">新增第一張輪播圖</button>
+            </div>
+            
             <div v-for="(slide, index) in config.carouselSlides" :key="index" class="carousel-item">
-              <h4>輪播圖 {{ index + 1 }}</h4>
+              <div class="item-header">
+                <h4>輪播圖 {{ index + 1 }}</h4>
+                <button @click="removeCarouselSlide(index)" class="btn btn-danger btn-sm">刪除</button>
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label>圖片</label>
@@ -428,6 +499,82 @@
               </div>
             </div>
           </div>
+
+          <!-- Float Ad Buttons 配置 -->
+          <div v-if="activeTab === 'floatads'" class="config-panel">
+            <div class="panel-header">
+              <h3>浮動廣告設置</h3>
+              <div class="button-actions">
+                <button @click="resetFloatAdButtons" class="btn btn-secondary">重置為預設</button>
+                <button @click="addFloatAdButton" class="btn btn-primary">新增廣告</button>
+              </div>
+            </div>
+
+            <div class="button-links-info">
+              <p class="info-text">
+                <strong>說明：</strong>這裡配置的浮動廣告按鈕會顯示在頁面右下角。
+                可以上傳自定義的圖標（默認圖和懸停圖），並設置點擊連結。
+                所有按鈕都會在新視窗中打開。
+              </p>
+            </div>
+            
+            <!-- 如果沒有浮動廣告，顯示提示 -->
+            <div v-if="config.floatAdButtons.length === 0" class="empty-state">
+              <p>目前沒有浮動廣告配置，將使用預設配置</p>
+              <button @click="addFloatAdButton" class="btn btn-primary btn-lg">新增第一個浮動廣告</button>
+            </div>
+            
+            <div v-for="(button, index) in config.floatAdButtons" :key="index" class="button-link-item">
+              <div class="item-header">
+                <h4>浮動廣告 {{ index + 1 }}</h4>
+                <button @click="removeFloatAdButton(index)" class="btn btn-danger btn-sm">刪除</button>
+              </div>
+              <div class="button-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>連結網址</label>
+                    <input 
+                      v-model="button.href" 
+                      type="url" 
+                      class="form-control"
+                      placeholder="https://example.com"
+                      @input="hasChanges = true"
+                    />
+                  </div>
+                </div>
+                <div class="image-row">
+                  <div class="form-group">
+                    <label>默認圖標</label>
+                    <div class="image-upload">
+                      <img v-if="button.default" :src="getImageUrl(button.default)" alt="Default" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleFloatAdImageUpload(e, index, 'default')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeFloatAdImage(index, 'default')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>懸停圖標</label>
+                    <div class="image-upload">
+                      <img v-if="button.hover" :src="getImageUrl(button.hover)" alt="Hover" class="preview-img small" />
+                      <div v-else class="placeholder small">無圖片</div>
+                      <input 
+                        type="file" 
+                        @change="(e) => handleFloatAdImageUpload(e, index, 'hover')"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <button @click="removeFloatAdImage(index, 'hover')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -454,9 +601,11 @@ const tabs = [
   { id: 'background', label: '背景圖' },
   { id: 'buttonlinks', label: '按鈕鏈接' },
   { id: 'toolicons', label: '工具圖標' },
+  { id: 'routelinks', label: '推薦路線' },
   { id: 'carousel', label: '輪播圖' },
   { id: 'videos', label: '精選視頻' },
-  { id: 'programs', label: '火熱節目' }
+  { id: 'programs', label: '火熱節目' },
+  { id: 'floatads', label: '浮動廣告' }
 ]
 
 const config = reactive<ConfigData>({
@@ -571,6 +720,34 @@ const loadConfig = async () => {
         href: tool.href || '',
         default: tool.default || '',
         hover: tool.hover || ''
+      }))
+    }
+    
+    // 如果 floatAdButtons 為空或不完整，初始化預設值
+    if (!config.floatAdButtons || config.floatAdButtons.length === 0) {
+      config.floatAdButtons = [
+        {
+          href: "https://example.com/customer-service",
+          default: "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
+          hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png"
+        },
+        {
+          href: "https://example.com/girl-douyin",
+          default: "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
+          hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png"
+        },
+        {
+          href: "https://example.com/sports-douyin",
+          default: "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
+          hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png"
+        }
+      ]
+    } else {
+      // 確保現有的 floatAdButtons 有完整的字段
+      config.floatAdButtons = config.floatAdButtons.map((button, index) => ({
+        href: button.href || '',
+        default: button.default || '',
+        hover: button.hover || ''
       }))
     }
     
@@ -743,6 +920,37 @@ const clearCarouselImage = async (index: number) => {
     alert('清除輪播圖片失敗')
   } finally {
     loading.value = false
+  }
+}
+
+// 新增輪播圖
+const addCarouselSlide = () => {
+  config.carouselSlides.push({
+    image: '',
+    href: '',
+    description: ''
+  })
+  hasChanges.value = true
+}
+
+// 刪除輪播圖
+const removeCarouselSlide = async (index: number) => {
+  if (confirm('確定要刪除這張輪播圖嗎？')) {
+    config.carouselSlides.splice(index, 1)
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('刪除輪播圖失敗:', error)
+      alert('刪除輪播圖失敗')
+    } finally {
+      loading.value = false
+    }
   }
 }
 
@@ -1104,6 +1312,196 @@ const resetToolIcons = async () => {
     } catch (error) {
       console.error('重置工具圖標失敗:', error)
       alert('重置工具圖標失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// FloatAdButtons 管理方法
+// 新增浮動廣告按鈕
+const addFloatAdButton = () => {
+  config.floatAdButtons.push({
+    href: '',
+    default: '',
+    hover: ''
+  })
+  hasChanges.value = true
+}
+
+// 處理浮動廣告按鈕圖片上傳
+const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 'default' | 'hover') => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  loading.value = true
+  try {
+    const response = await configService.uploadImage(file, `floatAdButtons.${index}.${imageType}`)
+    
+    if (response.success && response.data) {
+      config.floatAdButtons[index][imageType] = response.data.path
+      hasChanges.value = true
+      // 立即保存並重新載入預覽
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } else {
+      alert(response.error || '上傳失敗')
+    }
+  } catch (error) {
+    console.error('上傳浮動廣告圖片失敗:', error)
+    alert('上傳浮動廣告圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 刪除浮動廣告按鈕圖片
+const removeFloatAdImage = async (index: number, imageType: 'default' | 'hover') => {
+  config.floatAdButtons[index][imageType] = ''
+  hasChanges.value = true
+  
+  // 立即保存並重新載入預覽
+  loading.value = true
+  try {
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    reloadPreview()
+  } catch (error) {
+    console.error('刪除浮動廣告圖片失敗:', error)
+    alert('刪除浮動廣告圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 刪除浮動廣告按鈕
+const removeFloatAdButton = async (index: number) => {
+  if (confirm('確定要刪除這個浮動廣告按鈕嗎？')) {
+    config.floatAdButtons.splice(index, 1)
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('刪除浮動廣告按鈕失敗:', error)
+      alert('刪除浮動廣告按鈕失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// 重置浮動廣告按鈕為預設值
+const resetFloatAdButtons = async () => {
+  if (confirm('確定要重置浮動廣告按鈕為預設配置嗎？這將清除所有自定義設置。')) {
+    // 設置為預設的浮動廣告按鈕配置
+    config.floatAdButtons = [
+      {
+        href: "https://example.com/customer-service",
+        default: "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
+        hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png"
+      },
+      {
+        href: "https://example.com/girl-douyin",
+        default: "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
+        hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png"
+      },
+      {
+        href: "https://example.com/sports-douyin",
+        default: "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
+        hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png"
+      }
+    ]
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('重置浮動廣告按鈕失敗:', error)
+      alert('重置浮動廣告按鈕失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+// RouteLinks 管理方法
+// 處理推薦路線圖片上傳
+const handleRouteLinksImageUpload = async (event: Event, imageType: 'default' | 'hover') => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  loading.value = true
+  try {
+    const response = await configService.uploadImage(file, `routeLinks.${imageType}`)
+    
+    if (response.success && response.data) {
+      config.routeLinks[imageType] = response.data.path
+      hasChanges.value = true
+      // 立即保存並重新載入預覽
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } else {
+      alert(response.error || '上傳失敗')
+    }
+  } catch (error) {
+    console.error('上傳推薦路線圖片失敗:', error)
+    alert('上傳推薦路線圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 刪除推薦路線圖片
+const removeRouteLinksImage = async (imageType: 'default' | 'hover') => {
+  config.routeLinks[imageType] = ''
+  hasChanges.value = true
+  
+  // 立即保存並重新載入預覽
+  loading.value = true
+  try {
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    reloadPreview()
+  } catch (error) {
+    console.error('刪除推薦路線圖片失敗:', error)
+    alert('刪除推薦路線圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 重置推薦路線為預設值
+const resetRouteLinks = async () => {
+  if (confirm('確定要重置推薦路線為預設配置嗎？這將清除所有自定義設置。')) {
+    // 設置為預設的推薦路線配置
+    config.routeLinks = {
+      default: "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+      hover: "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png"
+    }
+    hasChanges.value = true
+    
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('重置推薦路線失敗:', error)
+      alert('重置推薦路線失敗')
     } finally {
       loading.value = false
     }
@@ -1522,6 +1920,14 @@ onMounted(() => {
 }
 
 .button-link-item {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.route-links-item {
   margin-bottom: 2rem;
   padding: 1.5rem;
   border: 1px solid #eee;

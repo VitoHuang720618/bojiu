@@ -59,7 +59,18 @@ class CarouselService {
             default: processImageUrl(tool.default),
             hover: processImageUrl(tool.hover)
           } : null
-        )
+        ),
+        floatAdButtons: (config.floatAdButtons || []).map((button: any) => 
+          button ? { 
+            ...button, 
+            default: processImageUrl(button.default),
+            hover: processImageUrl(button.hover)
+          } : null
+        ),
+        routeLinks: config.routeLinks ? {
+          default: processImageUrl(config.routeLinks.default),
+          hover: processImageUrl(config.routeLinks.hover)
+        } : null
       }
     } catch (error) {
       console.error('Failed to fetch config from API:', error)

@@ -37,30 +37,10 @@
       "image": "http://localhost:3002/uploads/carousel-0.png",
       "href": "",
       "alt": "輪播圖 1"
-    },
-    {
-      "image": "",
-      "href": "https://www.yahoo.com.tw",
-      "alt": "輪播圖 2"
-    },
-    {
-      "image": "",
-      "href": "https://example.com/slide3",
-      "alt": "輪播圖 3"
-    },
-    {
-      "image": "",
-      "href": "https://example.com/slide4",
-      "alt": "輪播圖 4"
-    },
-    {
-      "image": "",
-      "href": "https://example.com/slide5",
-      "alt": "輪播圖 5"
     }
   ],
   "titles": {
-    "recommendedRoutes": "/assets/images/c526fd1a-8fdf-4892-8dd3-72c3ced9e82c.png",
+    "recommendedRoutes": "/assets/images/crown-icon.webp",
     "recommendedBrowsers": "/assets/images/tools-title.webp",
     "selectedVideos": "/assets/images/live-title.webp",
     "hotPrograms": "/assets/images/sport-title.webp"
@@ -185,22 +165,19 @@
   ],
   "floatAdButtons": [
     {
-      "id": "customer-service",
-      "default": "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
-      "hover": "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png",
-      "alt": "在线客服"
+      "href": "",
+      "default": "http://localhost:3002/uploads/float-0-default.png",
+      "hover": "http://localhost:3002/uploads/float-0-hover.png"
     },
     {
-      "id": "girl-douyin",
-      "default": "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
-      "hover": "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png",
-      "alt": "女孩抖音"
+      "href": "",
+      "default": "http://localhost:3002/uploads/float-1-default.png",
+      "hover": "http://localhost:3002/uploads/float-1-hover.png"
     },
     {
-      "id": "sports-douyin",
-      "default": "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
-      "hover": "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png",
-      "alt": "体育抖音"
+      "href": "",
+      "default": "http://localhost:3002/uploads/float-2-default.png",
+      "hover": "http://localhost:3002/uploads/float-2-hover.png"
     }
   ]
 }

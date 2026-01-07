@@ -24,6 +24,8 @@ const apiVideoThumbnails = ref<({image: string, href: string, alt: string, title
 const apiProgramThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
 const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
 const apiToolIcons = ref<({id: string, default: string, hover: string, alt: string} | null)[]>([])
+const apiFloatAdButtons = ref<({href: string, default: string, hover: string} | null)[]>([])
+const apiRouteLinks = ref<{default: string, hover: string} | null>(null)
 
 // 浮動按鈕收合狀態
 const isFloatAdCollapsed = ref(false)
@@ -97,6 +99,31 @@ const effectiveToolIcons = computed(() => {
   return result
 })
 
+const effectiveFloatAdButtons = computed(() => {
+  // 只使用API數據，和背景圖設置一樣
+  const floatAdButtonsData = apiFloatAdButtons.value
+  console.log('計算浮動廣告按鈕:', floatAdButtonsData)
+  return floatAdButtonsData.map((button, index) => ({
+    id: `api-floatad-${index}`,
+    href: button?.href || '#',
+    default: button?.default || '',
+    hover: button?.hover || ''
+  }))
+})
+
+const effectiveRouteLinks = computed(() => {
+  // 只使用API數據，和背景圖設置一樣
+  const routeLinksData = apiRouteLinks.value
+  console.log('計算推薦路線按鈕:', routeLinksData)
+  return routeLinksData ? {
+    default: routeLinksData.default,
+    hover: routeLinksData.hover
+  } : {
+    default: assetManifest.routeLinks.default,
+    hover: assetManifest.routeLinks.hover
+  }
+})
+
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % effectiveCarouselSlides.value.length
 }
@@ -125,6 +152,8 @@ const loadConfig = async () => {
     apiProgramThumbnails.value = config.programThumbnails
     apiButtonLinks.value = config.buttonLinks
     apiToolIcons.value = config.toolIcons
+    apiFloatAdButtons.value = config.floatAdButtons || []
+    apiRouteLinks.value = config.routeLinks || null
     console.log('背景圖設置為:', config.backgroundImage)
     console.log('effectiveBackgroundImage:', effectiveBackgroundImage.value)
     console.log('buttonLinks 設置為:', config.buttonLinks)
@@ -248,12 +277,13 @@ onUnmounted(() => {
 
             <!-- Recommended Routes -->
             <div class="recommend-links">
-              <div class="block-title">
-                <ImageComponent
-                  :src="assetManifest.titles.recommendedRoutes"
-                  alt="推荐线路标题"
-                  :lazy="false"
+              <div class="block-title recommend-routes-title">
+                <img 
+                  :src="assetManifest.titles.recommendedRoutes" 
+                  alt="皇冠圖標" 
+                  class="crown-icon"
                 />
+                <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
                 <div
@@ -262,8 +292,8 @@ onUnmounted(() => {
                   class="item"
                 >
                   <ImageButton
-                    :default-src="assetManifest.routeLinks.default"
-                    :hover-src="assetManifest.routeLinks.hover"
+                    :default-src="effectiveRouteLinks.default"
+                    :hover-src="effectiveRouteLinks.hover"
                     :alt="route.title"
                     :href="route.href"
                     :data-index="route.index"
@@ -393,14 +423,14 @@ onUnmounted(() => {
       
       <div class="links" v-show="!isFloatAdCollapsed">
         <div
-          v-for="(button, index) in floatAdButtons"
+          v-for="(button, index) in effectiveFloatAdButtons"
           :key="button.id"
           class="item"
         >
           <ImageButton
-            :default-src="assetManifest.floatAdButtons[index].default"
-            :hover-src="assetManifest.floatAdButtons[index].hover"
-            :alt="button.name"
+            :default-src="button.default"
+            :hover-src="button.hover"
+            :alt="`浮動廣告 ${index + 1}`"
             :href="button.href"
           />
         </div>
@@ -505,9 +535,44 @@ onUnmounted(() => {
   margin-bottom: 1.25rem;
 }
 
+/* 推薦線路標題特殊樣式 */
+.recommend-routes-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 40px;
+}
+
+.recommend-routes-title .crown-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.recommend-routes-title .title-text {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+}
+
 @media (max-width: 1280px) {
   .block-title {
     height: 30px;
+  }
+  
+  .recommend-routes-title {
+    height: 35px;
+  }
+  
+  .recommend-routes-title .crown-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .recommend-routes-title .title-text {
+    font-size: 1.3rem;
   }
   
   .programme-block .block-title {
@@ -525,6 +590,19 @@ onUnmounted(() => {
   .block-title {
     height: 28px;
     margin-bottom: 1rem;
+  }
+  
+  .recommend-routes-title {
+    height: 30px;
+  }
+  
+  .recommend-routes-title .crown-icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .recommend-routes-title .title-text {
+    font-size: 1.1rem;
   }
   
   .programme-block .block-title {
@@ -1069,7 +1147,7 @@ onUnmounted(() => {
 }
 
 .programme-wrap .list .item .img {
-  border: 2px solid #b3905b;
+  border: 3px solid rgba(248, 238, 201, 0.6);
   border-radius: 10px;
   margin-bottom: 0.5rem;
   overflow: hidden;
@@ -1096,6 +1174,11 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: fill; /* 強制填滿，可能變形 */
+  transition: transform 0.3s ease;
+}
+
+.programme-wrap .list .item:hover .img img {
+  transform: scale(1.1);
 }
 
 /* 空資料的處理 */
@@ -1107,7 +1190,7 @@ onUnmounted(() => {
   width: 100%;
   max-width: 187px;
   aspect-ratio: 187 / 105;
-  border: 2px dashed #b3905b;
+  border: 3px dashed rgba(248, 238, 201, 0.6);
   border-radius: 10px;
   margin-bottom: 0.5rem;
   background-color: transparent;
@@ -1118,13 +1201,13 @@ onUnmounted(() => {
   width: 100%;
   max-width: 612px;
   aspect-ratio: 612 / 353;
-  border: 2px dashed #b3905b;
+  border: 3px dashed rgba(248, 238, 201, 0.6);
   border-radius: 10px;
   background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b3905b;
+  color: rgba(248, 238, 201, 0.6);
   font-size: 16px;
   opacity: 0.5;
 }

@@ -69,10 +69,9 @@ export interface ToolIcon {
 }
 
 export interface FloatAdButton {
-  id: string
+  href: string
   default: string
   hover: string
-  alt: string
 }
 
 // API 請求/回應型別
