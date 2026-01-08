@@ -1070,11 +1070,15 @@ onUnmounted(() => {
 }
 
 .programme-wrap .list .item {
+  width: 220px;
+  margin: 0 auto;
+  /* 確保在 Grid 格子中居中 */
   cursor: pointer;
 }
 
 .programme-wrap .list .item .img {
-  width: 220px;
+  width: 100%;
+  /* 跟隨 item 寬度 */
   height: 120px;
   background-color: #350a0f;
   border-radius: 10px 10px 0 0;
@@ -1082,12 +1086,15 @@ onUnmounted(() => {
   position: relative;
   border: none;
   margin-bottom: 0;
+  display: flex;
+  /* 消除圖片下方的 inline 間隙 */
 }
 
 .programme-wrap .list .item .img :deep(img) {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .programme-wrap .list .item a {
@@ -1099,13 +1106,16 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 220px;
+  width: 100%;
+  /* 跟隨 item 寬度 */
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
   border-radius: 0 0 10px 10px;
   color: #fff;
   font-size: 1rem;
   font-weight: 500;
+  margin-top: -1px;
+  /* 微調以消除可能的渲染縫隙 */
 }
 
 .programme-wrap .list .item .img::before {
