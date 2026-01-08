@@ -413,16 +413,34 @@ onUnmounted(() => {
 
 .home-main__inner {
   margin: 0 auto;
-  max-width: 1280px;
+  max-width: 1520px;
   width: 100%;
 }
 
 /* Button Links */
+/* Button Links */
 .button-links {
   display: grid;
-  gap: 3rem;
-  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-between;
+  grid-template-columns: repeat(4, 352px);
+  width: 1501px;
   margin-bottom: 3rem;
+}
+
+@media (max-width: 1600px) {
+  .button-links {
+    width: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0 27px;
+    box-sizing: border-box;
+  }
+
+  .button-links .item {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 352/102;
+  }
 }
 
 @media (max-width: 1024px) {
