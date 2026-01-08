@@ -225,34 +225,26 @@ onUnmounted(() => {
 
         <!-- Recommend Section -->
         <div class="recommend">
-          <!-- Carousel and Routes -->
-          <div class="recommend-slider-links">
-            <!-- Carousel Slider -->
-            <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel">
-              <div class="carousel-container">
-                <!-- 隱藏的參考圖片，用來設定容器尺寸 -->
-                <img src="/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg" class="carousel-size-reference"
-                  alt="Size reference" />
-                <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
-                  :class="{ active: currentSlide === index }">
-                  <a :href="slide.href" target="_blank" rel="noopener noreferrer">
-                    <ImageComponent :src="slide.image || assetManifest.carouselSlides[index]" :alt="slide.alt" />
-                  </a>
-                </div>
-              </div>
+          <!-- Carousel Slider -->
+          <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel">
+            <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
+              :class="{ active: currentSlide === index }">
+              <a :href="slide.href" target="_blank" rel="noopener noreferrer">
+                <ImageComponent :src="slide.image || assetManifest.carouselSlides[index]" :alt="slide.alt" />
+              </a>
             </div>
+          </div>
 
-            <!-- Recommended Routes -->
-            <div class="recommend-links">
-              <div class="block-title recommend-routes-title">
-                <img :src="assetManifest.titles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
-                <span class="title-text">推荐优质线路</span>
-              </div>
-              <div class="links">
-                <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
-                  <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
-                    :hover-src="effectiveRouteLinks[index].hover" :alt="route.title" :href="route.href" />
-                </div>
+          <!-- Recommended Routes -->
+          <div class="recommend-links">
+            <div class="block-title recommend-routes-title">
+              <img :src="assetManifest.titles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
+              <span class="title-text">推荐优质线路</span>
+            </div>
+            <div class="links">
+              <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
+                <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
+                  :hover-src="effectiveRouteLinks[index].hover" :alt="route.title" :href="route.href" />
               </div>
             </div>
           </div>
@@ -423,7 +415,10 @@ onUnmounted(() => {
   display: grid;
   justify-content: space-between;
   grid-template-columns: repeat(4, 352px);
-  width: 1501px;
+  width: 100%;
+  max-width: 1501px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 3rem;
 }
 
@@ -578,73 +573,81 @@ onUnmounted(() => {
 
 /* Recommend Section */
 .recommend {
-  width: 1501px;
+  width: 100%;
+  max-width: 1501px;
   height: auto;
   background: rgba(41, 13, 16, 0.80);
   border: none;
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
-  margin-bottom: 0;
+  margin: 0 auto;
   padding: 45px 27px 44px 27px;
-}
-
-@media (max-width: 1024px) {
-  .recommend {
-    margin-bottom: 2.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .recommend {
-    margin-bottom: 2rem;
-  }
-}
-
-.recommend-slider-links {
-  box-sizing: border-box;
-  padding: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
 @media (max-width: 1024px) {
-  .recommend-slider-links {
+  .recommend {
+    margin-bottom: 2.5rem;
     padding: 1.5625rem 1.25rem;
   }
 }
 
-@media (max-width: 768px) {
-  .recommend-slider-links {
-    flex-direction: column;
-    padding: 1.75rem;
+@media (max-width: 820px) {
+  .recommend {
+    max-width: 789px !important;
+    height: 232px !important;
+    padding: 24px 20px !important;
+    margin: 0 auto !important;
+    border-radius: 12px 12px 0 0 !important;
   }
 }
 
-@media (max-width: 480px) {
-  .recommend-slider-links {
-    padding: 1.25rem 0.875rem;
+@media (max-width: 768px) {
+  .recommend {
+    flex-direction: column;
+    height: auto !important;
+    padding: 1.5rem 1rem !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .recommend {
+    padding: 1.25rem 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+    border-radius: 12px !important;
   }
 }
 
 .recommend-slider {
   margin-right: 30px;
-  width: 960px;
-  flex-shrink: 0;
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  aspect-ratio: 960 / 321;
+  flex: 1;
+  min-width: 0; /* 確保 flex 容器可以縮小 */
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 3px solid #f8eec9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 1024px) {
   .recommend-slider {
     margin-right: 0.9375rem;
-  }
-
-  .carousel-container {
     border-radius: 10px;
     border: 2px solid #f8eec9;
   }
+}
 
-  .carousel-slide img {
-    border-radius: 8px;
+@media (max-width: 820px) {
+  .recommend-slider {
+    width: 450px !important;
+    height: 183px !important;
+    margin-right: 24px !important;
   }
 }
 
@@ -653,48 +656,20 @@ onUnmounted(() => {
     margin-bottom: 1.25rem;
     margin-right: 0;
     width: 100%;
-  }
-
-  .carousel-container {
+    height: auto !important;
+    aspect-ratio: 960 / 321;
     border-radius: 8px;
     border: 2px solid #f8eec9;
   }
+}
 
-  .carousel-slide img {
-    border-radius: 6px;
+@media (max-width: 430px) {
+  .recommend-slider {
+    margin-bottom: 1rem;
+    aspect-ratio: 450 / 183;
   }
 }
 
-.carousel-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 12px;
-  border: 3px solid #f8eec9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-slide img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  /* 保持比例，裁切多餘部分 */
-}
-
-.carousel-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.carousel-size-reference {
-  width: 960px;
-  height: 321px;
-  display: block;
-  opacity: 0;
-  /* 完全透明，但佔據空間 */
-}
 
 .carousel-slide {
   position: absolute;
@@ -743,26 +718,58 @@ onUnmounted(() => {
 }
 
 .recommend-links .links .item {
-  width: 225px;
-  height: 66px;
+  width: 100%;
+  max-width: 225px;
+  height: auto;
+  aspect-ratio: 225 / 66;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 820px) {
   .recommend-links .links {
-    gap: 0.875rem;
+    gap: 13px 7px !important;
+  }
+
+  .recommend-links .links .item {
+    width: 143px !important;
+    height: 37px !important;
+  }
+
+  .recommend-routes-title {
+    margin-bottom: 12px !important;
+    height: 30px !important;
+  }
+
+  .recommend-routes-title .crown-icon {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .recommend-routes-title .title-text {
+    font-size: 1.1rem !important;
   }
 }
 
 @media (max-width: 768px) {
   .recommend-links .links {
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.625rem;
+    gap: 0.75rem;
+  }
+
+  .recommend-links .links .item {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 143 / 37;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .recommend-links .links {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+  }
+
+  .recommend-routes-title {
+    margin-bottom: 0.75rem !important;
   }
 }
 
@@ -772,37 +779,44 @@ onUnmounted(() => {
 
 /* Recommend Tools */
 .recommend-tools {
-  width: 1501px;
+  width: 100%;
+  max-width: 1501px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 3rem;
   box-sizing: border-box;
   padding: 0;
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 110px;
+  min-height: 110px;
+  height: auto;
   background-color: #0d0d0d;
   border-radius: 0 0 20px 20px;
+  overflow: hidden;
 }
 
 .recommend-tools .block-title {
   margin-right: 0;
   margin-bottom: 0;
   background-color: #550000;
-  padding: 0;
+  padding: 0 20px;
   border-radius: 0 0 0 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  flex: 0 0 260px;
-  min-width: 0;
+  height: auto;
+  flex: 0 0 17.3%; /* 260/1501 的比例 */
+  min-width: 150px;
 }
 
 .recommend-tools .block-title img {
-  width: 180px !important;
-  height: 45px !important;
-  object-fit: contain !important;
-  display: block !important;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  max-height: 45px;
+  object-fit: contain;
+  display: block;
 }
 
 .recommend-tools .tools {
@@ -812,6 +826,95 @@ onUnmounted(() => {
   height: 100%;
   padding: 0;
   background-color: transparent;
+}
+
+@media (max-width: 1280px) {
+  .recommend-tools {
+    flex-direction: column;
+    height: auto;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .recommend-tools .block-title {
+    flex: 0 0 40px;
+    width: 100%;
+    min-width: 100%;
+    height: 40px;
+    border-radius: 0;
+    justify-content: flex-start;
+    padding: 0 1.5rem;
+    background: linear-gradient(90deg, #8b0012 0%, #ba081f 100%);
+  }
+
+  .recommend-tools .block-title img {
+    width: auto;
+    height: 20px;
+    max-width: none;
+  }
+
+  .recommend-tools .tools {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    height: auto !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .recommend-tools .tools {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 820px) {
+  .recommend-tools {
+    width: 100% !important;
+    max-width: 789px !important;
+    height: auto !important;
+    margin: 0 auto 2rem auto !important;
+    overflow: hidden !important; /* 恢復 hidden 並依靠 auto height */
+    border-radius: 12px !important;
+  }
+
+  .recommend-tools .tools {
+    width: 100% !important;
+    height: auto !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    padding: 8px 0 !important;
+    grid-auto-rows: min-content !important;
+  }
+
+  .recommend-tools .tools .item {
+    height: auto !important;
+    min-height: 60px !important;
+    flex: none !important;
+  }
+
+  .recommend-tools .tools .item :deep(.img-button) {
+    width: 90px !important;
+    height: 78px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .recommend-tools .block-title {
+    height: 34px !important;
+    flex: 0 0 34px !important;
+  }
+
+  .recommend-tools .tools {
+    grid-template-columns: repeat(2, 1fr) !important;
+    padding: 5px 0 !important;
+  }
+
+  .recommend-tools .tools .item {
+    min-height: 54px !important;
+  }
+
+  .recommend-tools .tools .item :deep(.img-button) {
+    width: 80px !important;
+    height: 70px !important;
+  }
 }
 
 .recommend-tools .tools .item {
@@ -856,162 +959,33 @@ onUnmounted(() => {
   border-radius: 0 0 20px 0;
 }
 
-@media (max-width: 1024px) {
-  .recommend-tools {
-    height: auto;
-    grid-template-columns: 180px 1fr;
-    min-height: 70px;
-  }
 
-  .recommend-tools .block-title {
-    height: 70px;
-    padding: 0 12px;
-  }
 
-  .recommend-tools .block-title img {
-    width: 100px !important;
-    height: 20px !important;
-  }
+/* Programme Section */
+.programme-wrap {
+  width: 100%;
+  max-width: 1501px;
+  margin: 0 auto;
+  display: flex;
+  gap: 30px;
+}
 
-  .recommend-tools .tools {
-    height: 70px;
-    padding: 0.4rem;
-    gap: 0.08rem;
-  }
+.programme-block {
+  flex: 1;
+  min-width: 0;
+}
 
-  .recommend-tools .tools .item :deep(.img-button img) {
-    width: 100px !important;
-    height: 50px !important;
+@media (max-width: 1280px) {
+  .programme-wrap {
+    gap: 20px;
   }
 }
 
 @media (max-width: 768px) {
-  .recommend-tools {
-    grid-template-columns: 1fr;
-    height: auto;
-    gap: 0;
+  .programme-wrap {
+    flex-direction: column;
+    gap: 2rem;
   }
-
-  .recommend-tools .block-title {
-    height: 45px;
-    width: 100%;
-    justify-content: center;
-    padding: 0 15px;
-  }
-
-  .recommend-tools .block-title img {
-    width: 90px !important;
-    height: 18px !important;
-  }
-
-  .recommend-tools .tools {
-    height: 55px;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.05rem;
-    padding: 0.3rem;
-  }
-
-  .recommend-tools .tools .item {
-    height: 55px;
-  }
-
-  .recommend-tools .tools .item :deep(.img-button img) {
-    width: 80px !important;
-    height: 40px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .recommend-tools .block-title {
-    height: 40px;
-    padding: 0 10px;
-  }
-
-  .recommend-tools .block-title img {
-    width: 120px !important;
-    height: 22px !important;
-  }
-
-  .recommend-tools .tools {
-    height: 50px;
-  }
-
-  .recommend-tools .tools .item {
-    height: 50px;
-  }
-
-  .recommend-tools .tools .item :deep(.img-button img) {
-    width: 100px !important;
-    height: 50px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .recommend-tools .block-title {
-    height: 40px;
-    padding: 0 10px;
-  }
-
-  .recommend-tools .block-title img {
-    width: 120px !important;
-    height: 22px !important;
-  }
-
-  .recommend-tools .tools {
-    height: 50px;
-  }
-
-  .recommend-tools .tools .item {
-    height: 50px;
-  }
-
-  .recommend-tools .tools .item :deep(.img-button img) {
-    width: 100px !important;
-    height: 50px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .recommend-tools .block-title {
-    height: 35px;
-    padding: 0 8px;
-  }
-
-  .recommend-tools .block-title img {
-    width: 100px !important;
-    height: 18px !important;
-  }
-
-  .recommend-tools .tools {
-    height: 45px;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.03125rem;
-  }
-
-  .recommend-tools .tools .item {
-    height: 45px;
-  }
-
-  .recommend-tools .tools .item:nth-child(n+4) {
-    display: none;
-  }
-
-  .recommend-tools .tools .item :deep(.img-button img) {
-    width: 80px !important;
-    height: 40px !important;
-  }
-}
-
-/* Programme Sections */
-.programme-wrap {
-  display: flex;
-  justify-content: space-between;
-  width: 1501px;
-  margin: 0 auto;
-}
-
-.programme-block {
-  width: 709px;
 }
 
 @media (max-width: 1600px) {
@@ -1019,18 +993,6 @@ onUnmounted(() => {
     width: 100%;
     padding: 0 27px;
     box-sizing: border-box;
-  }
-}
-
-@media (max-width: 1024px) {
-  .programme-wrap {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .programme-block {
-    width: 100%;
-    max-width: 709px;
   }
 }
 
@@ -1063,8 +1025,22 @@ onUnmounted(() => {
 
 .programme-wrap .list {
   display: grid;
-  gap: 19px;
   grid-template-columns: repeat(3, 1fr);
+  gap: 20px 15px;
+}
+
+@media (max-width: 1501px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px 10px;
+  }
+}
+
+@media (max-width: 430px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px 10px;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -1111,23 +1087,18 @@ onUnmounted(() => {
 }
 
 .programme-wrap .list .item .img {
-  width: 220px;
-  height: 120px;
-  background-color: #350a0f;
-  border-radius: 10px 10px 0 0;
+  width: 100%;
+  aspect-ratio: 236 / 133;
   overflow: hidden;
-  position: relative;
-  border: none;
-  margin: 0;
-  display: block;
-  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  border: 1px solid rgba(223, 176, 130, 0.2);
 }
 
-.programme-wrap .list .item .img :deep(img) {
+.programme-wrap .list .item .img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .programme-wrap .list .item span {
