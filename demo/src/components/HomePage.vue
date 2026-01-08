@@ -549,9 +549,11 @@ onUnmounted(() => {
 
 /* Recommend Section */
 .recommend {
-  background-color: rgba(0, 0, 0, 0.3);
+  width: 1501px;
+  height: 410px;
+  background: rgba(41, 13, 16, 0.80);
   border: none;
-  border-radius: 8px;
+  border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
   margin-bottom: 3rem;
 }
