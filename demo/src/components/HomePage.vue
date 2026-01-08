@@ -17,28 +17,28 @@ const currentSlide = ref(0)
 let carouselInterval: number | null = null
 
 // 从API获取的轮播图数据
-const apiCarouselSlides = ref<{image: string, href: string, alt: string}[]>([])
+const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
 const apiBanner = ref<string>('')
 const apiBackgroundImage = ref<string>('')
-const apiVideoThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
-const apiProgramThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
+const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
+const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
 const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
-const apiToolIcons = ref<({id: string, default: string, hover: string, alt: string} | null)[]>([])
-const apiFloatAdButtons = ref<({href: string, default: string, hover: string} | null)[]>([])
-const apiRouteLinks = ref<{default: string, hover: string} | null>(null)
+const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string } | null)[]>([])
+const apiFloatAdButtons = ref<({ href: string, default: string, hover: string } | null)[]>([])
+const apiRouteLinks = ref<{ default: string, hover: string } | null>(null)
 
 // 浮動按鈕收合狀態
 const isFloatAdCollapsed = ref(false)
 
 // 计算属性：优先使用API数据，否则使用默认数据
 const effectiveCarouselSlides = computed(() => {
-  return apiCarouselSlides.value.length > 0 ? 
+  return apiCarouselSlides.value.length > 0 ?
     apiCarouselSlides.value.map((slide, index) => ({
       id: `api-slide-${index}`,
       alt: slide.alt,
       href: slide.href,
       image: slide.image
-    })) : 
+    })) :
     carouselSlides.map((slide, index) => ({
       id: slide.id,
       alt: slide.alt,
@@ -178,13 +178,13 @@ const toggleFloatAd = (event?: Event) => {
   console.log('toggleFloatAd clicked, current state:', isFloatAdCollapsed.value)
   console.log('Event:', event)
   console.log('Event target:', event?.target)
-  
+
   // 防止事件冒泡
   if (event) {
     event.preventDefault()
     event.stopPropagation()
   }
-  
+
   isFloatAdCollapsed.value = !isFloatAdCollapsed.value
   console.log('new state:', isFloatAdCollapsed.value)
 }
@@ -198,26 +198,17 @@ onUnmounted(() => {
   <div class="main-inner">
     <!-- Banner -->
     <div id="banner">
-      <ImageComponent
-        v-if="effectiveBanner"
-        :src="effectiveBanner"
-        alt="Banner"
-        :lazy="false"
-      />
+      <ImageComponent v-if="effectiveBanner" :src="effectiveBanner" alt="Banner" :lazy="false" />
       <div v-else class="banner-placeholder">
         <!-- 隱藏的原圖用來獲取尺寸 -->
-        <img 
-          :src="assetManifest.banner" 
-          alt="Banner placeholder" 
-          class="banner-size-reference"
-          @load="onBannerSizeLoaded"
-        />
+        <img :src="assetManifest.banner" alt="Banner placeholder" class="banner-size-reference"
+          @load="onBannerSizeLoaded" />
       </div>
     </div>
 
     <!-- Main Content -->
-    <div id="home-main" :style="{ 
-      backgroundImage: effectiveBackgroundImage ? `url('${effectiveBackgroundImage}')` : 
+    <div id="home-main" :style="{
+      backgroundImage: effectiveBackgroundImage ? `url('${effectiveBackgroundImage}')` :
         'radial-gradient(circle, rgba(80, 80, 80, 0.4) 1.5px, transparent 1.5px), radial-gradient(circle, rgba(60, 60, 60, 0.3) 1px, transparent 1px), linear-gradient(180deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px), linear-gradient(0deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px)',
       backgroundColor: effectiveBackgroundImage ? 'transparent' : '#0a0a0a',
       backgroundSize: effectiveBackgroundImage ? 'cover' : '16px 16px, 32px 32px, 100% 60px, 100% 60px',
@@ -227,18 +218,10 @@ onUnmounted(() => {
       <div class="home-main__inner">
         <!-- Top Button Links -->
         <div class="button-links">
-          <div
-            v-for="(item, index) in assetManifest.buttonLinks"
-            :key="item.id"
-            class="item"
-          >
-            <ImageButton
-              :default-src="effectiveButtonLinks[index]?.defaultImage || item.default"
-              :hover-src="effectiveButtonLinks[index]?.hoverImage || item.hover"
-              :alt="item.alt"
-              :href="effectiveButtonLinks[index]?.href"
-              :target="effectiveButtonLinks[index]?.target"
-            />
+          <div v-for="(item, index) in assetManifest.buttonLinks" :key="item.id" class="item">
+            <ImageButton :default-src="effectiveButtonLinks[index]?.defaultImage || item.default"
+              :hover-src="effectiveButtonLinks[index]?.hoverImage || item.hover" :alt="item.alt"
+              :href="effectiveButtonLinks[index]?.href" :target="effectiveButtonLinks[index]?.target" />
           </div>
         </div>
 
@@ -247,29 +230,15 @@ onUnmounted(() => {
           <!-- Carousel and Routes -->
           <div class="recommend-slider-links">
             <!-- Carousel Slider -->
-            <div 
-              class="recommend-slider"
-              @mouseenter="stopCarousel"
-              @mouseleave="startCarousel"
-            >
+            <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel">
               <div class="carousel-container">
                 <!-- 隱藏的參考圖片，用來設定容器尺寸 -->
-                <img 
-                  src="/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg" 
-                  class="carousel-size-reference"
-                  alt="Size reference"
-                />
-                <div
-                  v-for="(slide, index) in effectiveCarouselSlides"
-                  :key="slide.id"
-                  class="carousel-slide"
-                  :class="{ active: currentSlide === index }"
-                >
+                <img src="/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg" class="carousel-size-reference"
+                  alt="Size reference" />
+                <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
+                  :class="{ active: currentSlide === index }">
                   <a :href="slide.href" target="_blank" rel="noopener noreferrer">
-                    <ImageComponent
-                      :src="slide.image || assetManifest.carouselSlides[index]"
-                      :alt="slide.alt"
-                    />
+                    <ImageComponent :src="slide.image || assetManifest.carouselSlides[index]" :alt="slide.alt" />
                   </a>
                 </div>
               </div>
@@ -278,27 +247,13 @@ onUnmounted(() => {
             <!-- Recommended Routes -->
             <div class="recommend-links">
               <div class="block-title recommend-routes-title">
-                <img 
-                  :src="assetManifest.titles.recommendedRoutes" 
-                  alt="皇冠圖標" 
-                  class="crown-icon"
-                />
+                <img :src="assetManifest.titles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
                 <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
-                <div
-                  v-for="route in recommendedRoutes"
-                  :key="route.id"
-                  class="item"
-                >
-                  <ImageButton
-                    :default-src="effectiveRouteLinks.default"
-                    :hover-src="effectiveRouteLinks.hover"
-                    :alt="route.title"
-                    :href="route.href"
-                    :data-index="route.index"
-                    :data-title="route.title"
-                  />
+                <div v-for="route in recommendedRoutes" :key="route.id" class="item">
+                  <ImageButton :default-src="effectiveRouteLinks.default" :hover-src="effectiveRouteLinks.hover"
+                    :alt="route.title" :href="route.href" :data-index="route.index" :data-title="route.title" />
                 </div>
               </div>
             </div>
@@ -307,32 +262,16 @@ onUnmounted(() => {
           <!-- Recommended Tools -->
           <div class="recommend-tools">
             <div class="block-title">
-              <ImageComponent
-                :src="assetManifest.titles.recommendedBrowsers"
-                alt="推荐浏览器标题"
-                :lazy="false"
-              />
+              <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
             </div>
             <div class="tools">
-              <div
-                v-for="(tool, index) in recommendedTools"
-                :key="tool.id"
-                class="item"
-              >
-                <ImageButton
-                  v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
-                  :default-src="effectiveToolIcons[index].default"
-                  :hover-src="effectiveToolIcons[index].hover"
+              <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
+                <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
+                  :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
                   :alt="effectiveToolIcons[index].alt || tool.name"
-                  :href="effectiveToolIcons[index].href || tool.href"
-                />
-                <ImageButton
-                  v-else
-                  :default-src="assetManifest.toolIcons[index]?.default"
-                  :hover-src="assetManifest.toolIcons[index]?.hover"
-                  :alt="tool.name"
-                  :href="tool.href"
-                />
+                  :href="effectiveToolIcons[index].href || tool.href" />
+                <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
+                  :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
               </div>
             </div>
           </div>
@@ -343,26 +282,15 @@ onUnmounted(() => {
           <!-- Selected Videos -->
           <div class="programme-block">
             <div class="block-title">
-              <ImageComponent
-                :src="assetManifest.titles.selectedVideos"
-                alt="精选短视频標題圖"
-                :lazy="false"
-              />
+              <ImageComponent :src="assetManifest.titles.selectedVideos" alt="精选短视频標題圖" :lazy="false" />
             </div>
             <div class="list" v-if="effectiveVideoThumbnails.length > 0">
-              <div
-                v-for="(video, index) in effectiveVideoThumbnails"
-                :key="video ? `video-${index}` : `empty-${index}`"
-                class="item"
-                :class="{ 'empty-item': !video }"
-              >
+              <div v-for="(video, index) in effectiveVideoThumbnails" :key="video ? `video-${index}` : `empty-${index}`"
+                class="item" :class="{ 'empty-item': !video }">
                 <template v-if="video">
                   <a :href="video.href" target="_blank" rel="noopener noreferrer">
                     <div class="img">
-                      <ImageComponent
-                        :src="video.image"
-                        :alt="video.alt"
-                      />
+                      <ImageComponent :src="video.image" :alt="video.alt" />
                     </div>
                     <span>{{ video.title }}</span>
                   </a>
@@ -376,26 +304,16 @@ onUnmounted(() => {
           <!-- Hot Programs -->
           <div class="programme-block">
             <div class="block-title">
-              <ImageComponent
-                :src="assetManifest.titles.hotPrograms"
-                alt="火熱節目標題圖"
-                :lazy="false"
-              />
+              <ImageComponent :src="assetManifest.titles.hotPrograms" alt="火熱節目標題圖" :lazy="false" />
             </div>
             <div class="list" v-if="effectiveProgramThumbnails.length > 0">
-              <div
-                v-for="(program, index) in effectiveProgramThumbnails"
-                :key="program ? `program-${index}` : `empty-program-${index}`"
-                class="item"
-                :class="{ 'empty-item': !program }"
-              >
+              <div v-for="(program, index) in effectiveProgramThumbnails"
+                :key="program ? `program-${index}` : `empty-program-${index}`" class="item"
+                :class="{ 'empty-item': !program }">
                 <template v-if="program">
                   <a :href="program.href" target="_blank" rel="noopener noreferrer">
                     <div class="img">
-                      <ImageComponent
-                        :src="program.image"
-                        :alt="program.alt"
-                      />
+                      <ImageComponent :src="program.image" :alt="program.alt" />
                     </div>
                     <span>{{ program.title }}</span>
                   </a>
@@ -412,27 +330,15 @@ onUnmounted(() => {
     <!-- Float Ad Buttons -->
     <div id="float-ad" :class="{ collapsed: isFloatAdCollapsed }">
       <!-- 收合/展開按鈕 -->
-      <button 
-        class="float-ad-toggle" 
-        @click.stop="toggleFloatAd($event)"
-        @touchend.stop="toggleFloatAd($event)"
-        type="button"
-      >
+      <button class="float-ad-toggle" @click.stop="toggleFloatAd($event)" @touchend.stop="toggleFloatAd($event)"
+        type="button">
         <span class="toggle-icon">{{ isFloatAdCollapsed ? '▲' : '▼' }}</span>
       </button>
-      
+
       <div class="links" v-show="!isFloatAdCollapsed">
-        <div
-          v-for="(button, index) in effectiveFloatAdButtons"
-          :key="button.id"
-          class="item"
-        >
-          <ImageButton
-            :default-src="button.default"
-            :hover-src="button.hover"
-            :alt="`浮動廣告 ${index + 1}`"
-            :href="button.href"
-          />
+        <div v-for="(button, index) in effectiveFloatAdButtons" :key="button.id" class="item">
+          <ImageButton :default-src="button.default" :hover-src="button.hover" :alt="`浮動廣告 ${index + 1}`"
+            :href="button.href" />
         </div>
       </div>
     </div>
@@ -456,7 +362,8 @@ onUnmounted(() => {
 
 .banner-size-reference {
   width: 100%;
-  opacity: 0; /* 完全透明，但保持尺寸 */
+  opacity: 0;
+  /* 完全透明，但保持尺寸 */
   display: block;
 }
 
@@ -490,7 +397,8 @@ onUnmounted(() => {
   #home-main {
     border-width: 2px 0;
     padding: 1.5625rem 0.9375rem;
-    padding-bottom: 5rem; /* 為收合按鈕留出空間 */
+    padding-bottom: 5rem;
+    /* 為收合按鈕留出空間 */
   }
 }
 
@@ -529,6 +437,11 @@ onUnmounted(() => {
   }
 }
 
+.button-links .item {
+  width: 352px;
+  height: 102px;
+}
+
 /* Block Title */
 .block-title {
   height: 36px;
@@ -561,24 +474,24 @@ onUnmounted(() => {
   .block-title {
     height: 30px;
   }
-  
+
   .recommend-routes-title {
     height: 35px;
   }
-  
+
   .recommend-routes-title .crown-icon {
     width: 35px;
     height: 35px;
   }
-  
+
   .recommend-routes-title .title-text {
     font-size: 1.3rem;
   }
-  
+
   .programme-block .block-title {
     height: 35px;
   }
-  
+
   .programme-block .block-title img {
     width: 280px !important;
     height: 30px !important;
@@ -591,24 +504,24 @@ onUnmounted(() => {
     height: 28px;
     margin-bottom: 1rem;
   }
-  
+
   .recommend-routes-title {
     height: 30px;
   }
-  
+
   .recommend-routes-title .crown-icon {
     width: 30px;
     height: 30px;
   }
-  
+
   .recommend-routes-title .title-text {
     font-size: 1.1rem;
   }
-  
+
   .programme-block .block-title {
     height: 30px;
   }
-  
+
   .programme-block .block-title img {
     width: 220px !important;
     height: 25px !important;
@@ -692,12 +605,12 @@ onUnmounted(() => {
   .recommend-slider {
     margin-right: 0.9375rem;
   }
-  
+
   .carousel-container {
     border-radius: 10px;
     border: 2px solid #f8eec9;
   }
-  
+
   .carousel-slide img {
     border-radius: 8px;
   }
@@ -709,12 +622,12 @@ onUnmounted(() => {
     margin-right: 0;
     width: 100%;
   }
-  
+
   .carousel-container {
     border-radius: 8px;
     border: 2px solid #f8eec9;
   }
-  
+
   .carousel-slide img {
     border-radius: 6px;
   }
@@ -733,7 +646,8 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: auto;
-  object-fit: cover; /* 保持比例，裁切多餘部分 */
+  object-fit: cover;
+  /* 保持比例，裁切多餘部分 */
 }
 
 .carousel-container {
@@ -746,7 +660,8 @@ onUnmounted(() => {
   width: 100%;
   height: auto;
   display: block;
-  opacity: 0; /* 完全透明，但佔據空間 */
+  opacity: 0;
+  /* 完全透明，但佔據空間 */
 }
 
 .carousel-slide {
@@ -943,23 +858,23 @@ onUnmounted(() => {
     grid-template-columns: 180px 1fr;
     min-height: 70px;
   }
-  
+
   .recommend-tools .block-title {
     height: 70px;
     padding: 0 12px;
   }
-  
+
   .recommend-tools .block-title img {
     width: 100px !important;
     height: 20px !important;
   }
-  
+
   .recommend-tools .tools {
     height: 70px;
     padding: 0.4rem;
     gap: 0.08rem;
   }
-  
+
   .recommend-tools .tools .item :deep(.img-button img) {
     width: 100px !important;
     height: 50px !important;
@@ -972,30 +887,30 @@ onUnmounted(() => {
     height: auto;
     gap: 0;
   }
-  
+
   .recommend-tools .block-title {
     height: 45px;
     width: 100%;
     justify-content: center;
     padding: 0 15px;
   }
-  
+
   .recommend-tools .block-title img {
     width: 90px !important;
     height: 18px !important;
   }
-  
+
   .recommend-tools .tools {
     height: 55px;
     grid-template-columns: repeat(6, 1fr);
     gap: 0.05rem;
     padding: 0.3rem;
   }
-  
+
   .recommend-tools .tools .item {
     height: 55px;
   }
-  
+
   .recommend-tools .tools .item :deep(.img-button img) {
     width: 80px !important;
     height: 40px !important;
@@ -1007,45 +922,45 @@ onUnmounted(() => {
     height: 40px;
     padding: 0 10px;
   }
-  
+
   .recommend-tools .block-title img {
     width: 120px !important;
     height: 22px !important;
   }
-  
+
   .recommend-tools .tools {
     height: 50px;
   }
-  
+
   .recommend-tools .tools .item {
     height: 50px;
   }
-  
+
   .recommend-tools .tools .item :deep(.img-button img) {
     width: 100px !important;
     height: 50px !important;
   }
 }
-  
+
 @media (max-width: 640px) {
   .recommend-tools .block-title {
     height: 40px;
     padding: 0 10px;
   }
-  
+
   .recommend-tools .block-title img {
     width: 120px !important;
     height: 22px !important;
   }
-  
+
   .recommend-tools .tools {
     height: 50px;
   }
-  
+
   .recommend-tools .tools .item {
     height: 50px;
   }
-  
+
   .recommend-tools .tools .item :deep(.img-button img) {
     width: 100px !important;
     height: 50px !important;
@@ -1057,26 +972,26 @@ onUnmounted(() => {
     height: 35px;
     padding: 0 8px;
   }
-  
+
   .recommend-tools .block-title img {
     width: 100px !important;
     height: 18px !important;
   }
-  
+
   .recommend-tools .tools {
     height: 45px;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.03125rem;
   }
-  
+
   .recommend-tools .tools .item {
     height: 45px;
   }
-  
+
   .recommend-tools .tools .item:nth-child(n+4) {
     display: none;
   }
-  
+
   .recommend-tools .tools .item :deep(.img-button img) {
     width: 80px !important;
     height: 40px !important;
@@ -1112,7 +1027,8 @@ onUnmounted(() => {
 .programme-wrap .list {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 自適應網格 */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  /* 自適應網格 */
 }
 
 @media (max-width: 1024px) {
@@ -1138,7 +1054,8 @@ onUnmounted(() => {
 
 @media (max-width: 360px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(2, 1fr); /* 極窄螢幕強制 2 欄 */
+    grid-template-columns: repeat(2, 1fr);
+    /* 極窄螢幕強制 2 欄 */
   }
 }
 
@@ -1152,9 +1069,12 @@ onUnmounted(() => {
   margin-bottom: 0.5rem;
   overflow: hidden;
   position: relative;
-  width: 100%;  /* 改為彈性寬度 */
-  max-width: 187px; /* 最大寬度限制 */
-  aspect-ratio: 187 / 105; /* 保持寬高比 */
+  width: 100%;
+  /* 改為彈性寬度 */
+  max-width: 187px;
+  /* 最大寬度限制 */
+  aspect-ratio: 187 / 105;
+  /* 保持寬高比 */
 }
 
 .programme-wrap .list .item .img::before {
@@ -1173,7 +1093,8 @@ onUnmounted(() => {
 .programme-wrap .list .item .img img {
   width: 100%;
   height: 100%;
-  object-fit: fill; /* 強制填滿，可能變形 */
+  object-fit: fill;
+  /* 強制填滿，可能變形 */
   transition: transform 0.3s ease;
 }
 
@@ -1183,7 +1104,8 @@ onUnmounted(() => {
 
 /* 空資料的處理 */
 .programme-wrap .list .item.empty-item {
-  opacity: 0.3; /* 半透明顯示空位置 */
+  opacity: 0.3;
+  /* 半透明顯示空位置 */
 }
 
 .programme-wrap .list .item .empty-placeholder {
@@ -1268,7 +1190,7 @@ onUnmounted(() => {
     z-index: 999;
     position: fixed;
   }
-  
+
   #float-ad.collapsed {
     background-color: rgba(0, 0, 0, 0.7);
   }
@@ -1290,31 +1212,35 @@ onUnmounted(() => {
     border-radius: 12px 12px 0 0;
     transition: all 0.2s;
     position: relative;
-    z-index: 1001; /* 提高 z-index 確保可點擊 */
+    z-index: 1001;
+    /* 提高 z-index 確保可點擊 */
     border: none;
     width: 100%;
     outline: none;
-    -webkit-tap-highlight-color: transparent; /* 移除 iOS 點擊高亮 */
-    touch-action: manipulation; /* 優化觸控體驗 */
+    -webkit-tap-highlight-color: transparent;
+    /* 移除 iOS 點擊高亮 */
+    touch-action: manipulation;
+    /* 優化觸控體驗 */
   }
-  
+
   .float-ad-toggle:hover {
     background-color: rgba(223, 176, 130, 0.3);
   }
-  
+
   .float-ad-toggle:active {
     background-color: rgba(223, 176, 130, 0.4);
     transform: scale(0.98);
   }
-  
+
   .toggle-icon {
     color: #dfb082;
     font-size: 1.2rem;
     font-weight: bold;
     pointer-events: none;
-    user-select: none; /* 防止文字選取 */
+    user-select: none;
+    /* 防止文字選取 */
   }
-  
+
   #float-ad.collapsed .float-ad-toggle {
     border-radius: 12px;
   }
@@ -1339,12 +1265,13 @@ onUnmounted(() => {
     padding: 1rem;
     animation: slideDown 0.3s ease;
   }
-  
+
   @keyframes slideDown {
     from {
       opacity: 0;
       transform: translateY(-10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
