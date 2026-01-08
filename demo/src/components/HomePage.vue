@@ -223,46 +223,48 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Recommend Section -->
-        <div class="recommend">
-          <!-- Carousel Slider -->
-          <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel">
-            <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
-              :class="{ active: currentSlide === index }">
-              <a :href="slide.href" target="_blank" rel="noopener noreferrer">
-                <ImageComponent :src="slide.image || assetManifest.carouselSlides[index]" :alt="slide.alt" />
-              </a>
+        <!-- Recommend Section Container -->
+        <div class="recommend-section">
+          <!-- Top Content (Slider + Routes) -->
+          <div class="recommend-content">
+            <!-- Carousel Slider -->
+            <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel">
+              <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
+                :class="{ active: currentSlide === index }">
+                <a :href="slide.href" target="_blank" rel="noopener noreferrer">
+                  <ImageComponent :src="slide.image || assetManifest.carouselSlides[index]" :alt="slide.alt" />
+                </a>
+              </div>
             </div>
-          </div>
 
-          <!-- Recommended Routes -->
-          <div class="recommend-links">
-            <div class="block-title recommend-routes-title">
-              <img :src="assetManifest.titles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
-              <span class="title-text">推荐优质线路</span>
-            </div>
-            <div class="links">
-              <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
-                <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
-                  :hover-src="effectiveRouteLinks[index].hover" :alt="route.title" :href="route.href" />
+            <!-- Recommended Routes -->
+            <div class="recommend-links">
+              <div class="block-title recommend-routes-title">
+                <img :src="assetManifest.titles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
+                <span class="title-text">推荐优质线路</span>
+              </div>
+              <div class="links">
+                <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
+                  <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
+                    :hover-src="effectiveRouteLinks[index].hover" :alt="route.title" :href="route.href" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-
-        <!-- Recommended Tools -->
-        <div class="recommend-tools">
-          <div class="block-title">
-            <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
-          </div>
-          <div class="tools">
-            <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
-              <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
-                :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
-                :alt="effectiveToolIcons[index].alt || tool.name" :href="effectiveToolIcons[index].href || tool.href" />
-              <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
-                :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
+          <!-- Bottom Tools (Browsers) -->
+          <div class="recommend-footer">
+            <div class="block-title">
+              <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
+            </div>
+            <div class="tools">
+              <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
+                <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
+                  :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
+                  :alt="effectiveToolIcons[index].alt || tool.name" :href="effectiveToolIcons[index].href || tool.href" />
+                <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
+                  :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
+              </div>
             </div>
           </div>
         </div>
@@ -571,63 +573,58 @@ onUnmounted(() => {
   object-fit: fill;
 }
 
-/* Recommend Section */
-.recommend {
+/* Recommend Section Container */
+.recommend-section {
   width: 100%;
-  max-width: 1501px;
-  height: auto;
+  max-width: 1525px; /* 修正：925(圖) + 546(路) + 54(邊白) = 1525px */
+  margin: 0 auto 3rem auto;
+}
+
+/* Top Content Area */
+.recommend-content {
+  width: 100%;
+  height: 410px;
   background: rgba(41, 13, 16, 0.80);
-  border: none;
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
-  margin: 0 auto;
-  padding: 45px 27px 44px 27px;
+  padding: 45px 27px 44px 27px; /* 標註圖鎖定：上45, 下44, 左27 */
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between; /* 智慧推開，兩端貼齊 padding */
 }
 
-@media (max-width: 1024px) {
-  .recommend {
-    margin-bottom: 2.5rem;
-    padding: 1.5625rem 1.25rem;
+@media (max-width: 1550px) {
+  .recommend-content {
+    height: auto;
+    min-height: 232px;
   }
 }
 
 @media (max-width: 820px) {
-  .recommend {
+  .recommend-content {
     max-width: 789px !important;
-    height: 232px !important;
     padding: 24px 20px !important;
     margin: 0 auto !important;
     border-radius: 12px 12px 0 0 !important;
+    height: auto !important;
   }
 }
 
 @media (max-width: 768px) {
-  .recommend {
+  .recommend-content {
     flex-direction: column;
-    height: auto !important;
     padding: 1.5rem 1rem !important;
   }
 }
 
-@media (max-width: 430px) {
-  .recommend {
-    padding: 1.25rem 0.75rem !important;
-    margin-bottom: 1.5rem !important;
-    border-radius: 12px !important;
-  }
-}
-
 .recommend-slider {
-  margin-right: 30px;
   width: 100%;
-  max-width: 960px;
+  max-width: 925px;
   height: auto;
-  aspect-ratio: 960 / 321;
-  flex: 1;
-  min-width: 0; /* 確保 flex 容器可以縮小 */
+  aspect-ratio: 925 / 320;
+  flex: 0 1 925px; /* 優先佔據 925px，僅在寬度不足時收縮 */
+  min-width: 0;
   position: relative;
   overflow: hidden;
   border-radius: 12px;
@@ -702,7 +699,12 @@ onUnmounted(() => {
 }
 
 .recommend-links {
-  flex: 1;
+  flex: 0 1 546px; /* 優先佔據 546px */
+  max-width: 546px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20px; /* 依照標註圖給予足夠間隙 */
 }
 
 @media (max-width: 768px) {
@@ -719,9 +721,9 @@ onUnmounted(() => {
 
 .recommend-links .links .item {
   width: 100%;
-  max-width: 225px;
+  max-width: 250px;
   height: auto;
-  aspect-ratio: 225 / 66;
+  aspect-ratio: 250 / 65;
 }
 
 @media (max-width: 820px) {
@@ -777,13 +779,9 @@ onUnmounted(() => {
 
 
 
-/* Recommend Tools */
-.recommend-tools {
+/* Bottom Tools Area (Recommend Footer) */
+.recommend-footer {
   width: 100%;
-  max-width: 1501px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 3rem;
   box-sizing: border-box;
   padding: 0;
   display: flex;
@@ -796,7 +794,7 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.recommend-tools .block-title {
+.recommend-footer .block-title {
   margin-right: 0;
   margin-bottom: 0;
   background-color: #550000;
@@ -806,11 +804,11 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   height: auto;
-  flex: 0 0 17.3%; /* 260/1501 的比例 */
+  flex: 0 0 17.3%;
   min-width: 150px;
 }
 
-.recommend-tools .block-title img {
+.recommend-footer .block-title img {
   width: 100%;
   max-width: 180px;
   height: auto;
@@ -819,7 +817,7 @@ onUnmounted(() => {
   display: block;
 }
 
-.recommend-tools .tools {
+.recommend-footer .tools {
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -829,13 +827,13 @@ onUnmounted(() => {
 }
 
 @media (max-width: 1280px) {
-  .recommend-tools {
+  .recommend-footer {
     flex-direction: column;
     height: auto;
     border-radius: 0 0 12px 12px;
   }
 
-  .recommend-tools .block-title {
+  .recommend-footer .block-title {
     flex: 0 0 40px;
     width: 100%;
     min-width: 100%;
@@ -846,13 +844,13 @@ onUnmounted(() => {
     background: linear-gradient(90deg, #8b0012 0%, #ba081f 100%);
   }
 
-  .recommend-tools .block-title img {
+  .recommend-footer .block-title img {
     width: auto;
     height: 20px;
     max-width: none;
   }
 
-  .recommend-tools .tools {
+  .recommend-footer .tools {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -861,22 +859,21 @@ onUnmounted(() => {
 }
 
 @media (max-width: 1024px) {
-  .recommend-tools .tools {
+  .recommend-footer .tools {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 820px) {
-  .recommend-tools {
+  .recommend-footer {
     width: 100% !important;
     max-width: 789px !important;
     height: auto !important;
-    margin: 0 auto 2rem auto !important;
-    overflow: hidden !important; /* 恢復 hidden 並依靠 auto height */
-    border-radius: 12px !important;
+    margin: 0 auto !important;
+    border-radius: 0 0 12px 12px !important;
   }
 
-  .recommend-tools .tools {
+  .recommend-footer .tools {
     width: 100% !important;
     height: auto !important;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -884,40 +881,40 @@ onUnmounted(() => {
     grid-auto-rows: min-content !important;
   }
 
-  .recommend-tools .tools .item {
+  .recommend-footer .tools .item {
     height: auto !important;
     min-height: 60px !important;
     flex: none !important;
   }
 
-  .recommend-tools .tools .item :deep(.img-button) {
+  .recommend-footer .tools .item :deep(.img-button) {
     width: 90px !important;
     height: 78px !important;
   }
 }
 
 @media (max-width: 430px) {
-  .recommend-tools .block-title {
+  .recommend-footer .block-title {
     height: 34px !important;
     flex: 0 0 34px !important;
   }
 
-  .recommend-tools .tools {
+  .recommend-footer .tools {
     grid-template-columns: repeat(2, 1fr) !important;
     padding: 5px 0 !important;
   }
 
-  .recommend-tools .tools .item {
+  .recommend-footer .tools .item {
     min-height: 54px !important;
   }
 
-  .recommend-tools .tools .item :deep(.img-button) {
+  .recommend-footer .tools .item :deep(.img-button) {
     width: 80px !important;
     height: 70px !important;
   }
 }
 
-.recommend-tools .tools .item {
+.recommend-footer .tools .item {
   position: relative;
   display: flex;
   align-items: center;
@@ -928,11 +925,11 @@ onUnmounted(() => {
   transition: background-color 0.3s ease;
 }
 
-.recommend-tools .tools .item:hover {
+.recommend-footer .tools .item:hover {
   background-color: #a81c1c;
 }
 
-.recommend-tools .tools .item :deep(.img-button) {
+.recommend-footer .tools .item :deep(.img-button) {
   width: 123px !important;
   height: 107px !important;
   display: flex !important;
@@ -941,11 +938,11 @@ onUnmounted(() => {
   transition: none !important;
 }
 
-.recommend-tools .tools .item :deep(.img-button):hover {
+.recommend-footer .tools .item :deep(.img-button):hover {
   filter: none !important;
 }
 
-.recommend-tools .tools .item :deep(.img-button img) {
+.recommend-footer .tools .item :deep(.img-button img) {
   width: 100% !important;
   height: 100% !important;
   object-fit: contain !important;
@@ -955,7 +952,7 @@ onUnmounted(() => {
 }
 
 /* 確保最後一個圓角正確 */
-.recommend-tools .tools .item:last-child {
+.recommend-footer .tools .item:last-child {
   border-radius: 0 0 20px 0;
 }
 
