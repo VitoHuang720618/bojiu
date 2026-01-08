@@ -302,7 +302,7 @@ onUnmounted(() => {
           </div>
 
           <!-- Hot Programs -->
-          <div class="programme-block">
+          <div class="programme-block sport-block">
             <div class="block-title">
               <ImageComponent :src="assetManifest.titles.hotPrograms" alt="火熱節目標題圖" :lazy="false" />
             </div>
@@ -1117,6 +1117,11 @@ onUnmounted(() => {
   font-weight: 500;
   margin: 0;
   box-sizing: border-box;
+}
+
+/* Sport Block Specific Styles (Green) */
+.programme-wrap .programme-block.sport-block .list .item span {
+  background: linear-gradient(to right, #114b1f, #2c8a3c);
 }
 
 .programme-wrap .list .item .img::before {
