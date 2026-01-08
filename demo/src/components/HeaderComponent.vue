@@ -6,11 +6,7 @@ import { assetManifest } from '../config/assetManifest'
 <template>
   <header id="header">
     <div class="header__logo">
-      <ImageComponent
-        :src="assetManifest.logo"
-        alt="博九娱乐网"
-        :lazy="false"
-      />
+      <ImageComponent :src="assetManifest.logo" alt="博九娱乐网" :lazy="false" />
     </div>
   </header>
 </template>
@@ -18,10 +14,10 @@ import { assetManifest } from '../config/assetManifest'
 <style scoped>
 #header {
   align-items: flex-start;
-  background: linear-gradient(0deg, #ba081f, #8b0012) #000;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+  background: linear-gradient(0deg, #8b0012 0%, #ba081f 100%), #000000;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.30);
   display: flex;
-  height: 60px;
+  height: 75px;
   justify-content: center;
   position: relative;
   width: 100%;
