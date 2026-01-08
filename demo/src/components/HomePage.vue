@@ -601,7 +601,7 @@ onUnmounted(() => {
 
 .recommend-slider {
   margin-right: 30px;
-  width: 600px;
+  width: 928px;
   flex-shrink: 0;
 }
 
@@ -661,7 +661,7 @@ onUnmounted(() => {
 }
 
 .carousel-size-reference {
-  width: 594px;
+  width: 928px;
   height: 321px;
   display: block;
   opacity: 0;
