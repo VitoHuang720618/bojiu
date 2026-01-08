@@ -1072,22 +1072,29 @@ onUnmounted(() => {
 .programme-wrap .list .item {
   width: 220px;
   margin: 0 auto;
-  /* 確保在 Grid 格子中居中 */
   cursor: pointer;
+  box-sizing: border-box;
+}
+
+.programme-wrap .list .item a {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .programme-wrap .list .item .img {
-  width: 100%;
-  /* 跟隨 item 寬度 */
+  width: 220px;
   height: 120px;
   background-color: #350a0f;
   border-radius: 10px 10px 0 0;
   overflow: hidden;
   position: relative;
   border: none;
-  margin-bottom: 0;
-  display: flex;
-  /* 消除圖片下方的 inline 間隙 */
+  margin: 0;
+  display: block;
+  box-sizing: border-box;
 }
 
 .programme-wrap .list .item .img :deep(img) {
@@ -1097,25 +1104,19 @@ onUnmounted(() => {
   display: block;
 }
 
-.programme-wrap .list .item a {
-  display: block;
-  text-decoration: none;
-}
-
 .programme-wrap .list .item span {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  /* 跟隨 item 寬度 */
+  width: 220px;
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
   border-radius: 0 0 10px 10px;
   color: #fff;
   font-size: 1rem;
   font-weight: 500;
-  margin-top: -1px;
-  /* 微調以消除可能的渲染縫隙 */
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .programme-wrap .list .item .img::before {
