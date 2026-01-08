@@ -1108,14 +1108,15 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 220px;
+  width: 100%;
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
   border-radius: 0 0 10px 10px;
   color: #fff;
   font-size: 1rem;
   font-weight: 500;
-  margin: 0;
+  margin: 0 !important;
+  padding: 0;
   box-sizing: border-box;
 }
 
