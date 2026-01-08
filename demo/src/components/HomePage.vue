@@ -115,13 +115,13 @@ const effectiveRouteLinks = computed(() => {
   // 只使用API數據，和背景圖設置一樣
   const routeLinksData = apiRouteLinks.value
   console.log('計算推薦路線按鈕:', routeLinksData)
-  return routeLinksData ? {
-    default: routeLinksData.default,
-    hover: routeLinksData.hover
-  } : {
-    default: assetManifest.routeLinks.default,
-    hover: assetManifest.routeLinks.hover
+
+  if (Array.isArray(routeLinksData)) {
+    return routeLinksData
   }
+
+  // 確保 assetManifest.routeLinks 是數組
+  return Array.isArray(assetManifest.routeLinks) ? assetManifest.routeLinks : []
 })
 
 const nextSlide = () => {
@@ -251,9 +251,9 @@ onUnmounted(() => {
                 <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
-                <div v-for="route in recommendedRoutes" :key="route.id" class="item">
-                  <ImageButton :default-src="effectiveRouteLinks.default" :hover-src="effectiveRouteLinks.hover"
-                    :alt="route.title" :href="route.href" :data-index="route.index" :data-title="route.title" />
+                <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
+                  <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
+                    :hover-src="effectiveRouteLinks[index].hover" :alt="route.title" :href="route.href" />
                 </div>
               </div>
             </div>
@@ -747,45 +747,7 @@ onUnmounted(() => {
   z-index: 2;
 }
 
-.recommend-links .links .item :deep(.img-button)::before {
-  color: #880214;
-  content: attr(data-index);
-  font-size: 2.5em;
-  font-weight: 700;
-  left: 11.9%;
-}
 
-@media (max-width: 1280px) {
-  .recommend-links .links .item :deep(.img-button)::before {
-    font-size: 2.1875em;
-  }
-}
-
-@media (max-width: 768px) {
-  .recommend-links .links .item :deep(.img-button)::before {
-    font-size: 2em;
-  }
-}
-
-.recommend-links .links .item :deep(.img-button)::after {
-  color: #dfb082;
-  content: attr(data-title);
-  font-size: 1.5em;
-  left: 60%;
-  white-space: nowrap;
-}
-
-@media (max-width: 1280px) {
-  .recommend-links .links .item :deep(.img-button)::after {
-    font-size: 1.375em;
-  }
-}
-
-@media (max-width: 768px) {
-  .recommend-links .links .item :deep(.img-button)::after {
-    font-size: 1.25em;
-  }
-}
 
 /* Recommend Tools */
 .recommend-tools {

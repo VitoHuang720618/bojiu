@@ -2,10 +2,10 @@
 export const assetManifest = {
   // Logo
   logo: '/assets/images/logo.png',
-  
+
   // Banner
   banner: '/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png',
-  
+
   // Top button links (4 items)
   buttonLinks: [
     {
@@ -33,7 +33,7 @@ export const assetManifest = {
       alt: '合作夥伴'
     }
   ],
-  
+
   // Carousel slides
   carouselSlides: [
     '/assets/images/d11c3f6c-5c79-4260-907c-d85531d5b984.png',
@@ -42,7 +42,7 @@ export const assetManifest = {
     '/assets/images/8c95d0bb-99d5-40b2-bcd8-5db9503b8341.png',
     '/assets/images/39c91b7a-9464-4acc-85a5-8ac436268dd2.png'
   ],
-  
+
   // Section titles
   titles: {
     recommendedRoutes: '/assets/images/crown-icon.webp',
@@ -50,13 +50,18 @@ export const assetManifest = {
     selectedVideos: '/assets/images/live-title.webp',
     hotPrograms: '/assets/images/sport-title.webp'
   },
-  
+
   // Route links (6 items)
-  routeLinks: {
-    default: '/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png',
-    hover: '/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png'
-  },
-  
+  // Route links (6 items)
+  routeLinks: [
+    { default: '/assets/images/Lineweb-btn-1.webp', hover: '/assets/images/Lineweb-btn-1-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-2.webp', hover: '/assets/images/Lineweb-btn-2-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-3.webp', hover: '/assets/images/Lineweb-btn-3-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-4.webp', hover: '/assets/images/Lineweb-btn-4-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-5.webp', hover: '/assets/images/Lineweb-btn-5-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-6.webp', hover: '/assets/images/Lineweb-btn-6-hover.webp' }
+  ],
+
   // Browser/Tool icons (6 items)
   toolIcons: [
     {
@@ -96,7 +101,7 @@ export const assetManifest = {
       alt: 'X'
     }
   ],
-  
+
   // Video thumbnails (6 items)
   videoThumbnails: [
     '/assets/images/508f359d-7332-42f2-9181-565f7571e1af.png',
@@ -106,7 +111,7 @@ export const assetManifest = {
     '/assets/images/4e67c664-2a43-4ac2-9e09-dff556a007ce.png',
     '/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png'
   ],
-  
+
   // Program thumbnails (6 items)
   programThumbnails: [
     '/assets/images/29627d6a-6020-49ae-8625-44f0ec5f7999.jpg',
@@ -116,7 +121,7 @@ export const assetManifest = {
     '/assets/images/626e1c19-bf48-40ed-9a2f-8e2a8e4dce13.png',
     '/assets/images/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg'
   ],
-  
+
   // Float ad buttons (3 items)
   floatAdButtons: [
     {
