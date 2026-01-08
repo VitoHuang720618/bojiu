@@ -1037,7 +1037,7 @@ onUnmounted(() => {
 
 .programme-wrap .list {
   display: grid;
-  gap: 15px;
+  gap: 19px;
   grid-template-columns: repeat(3, 1fr);
 }
 
@@ -1074,17 +1074,38 @@ onUnmounted(() => {
 }
 
 .programme-wrap .list .item .img {
-  border: 3px solid rgba(248, 238, 201, 0.6);
-  border-radius: 10px;
-  margin-bottom: 0.5rem;
+  width: 220px;
+  height: 120px;
+  background-color: #350a0f;
+  border-radius: 10px 10px 0 0;
   overflow: hidden;
   position: relative;
+  border: none;
+  margin-bottom: 0;
+}
+
+.programme-wrap .list .item .img :deep(img) {
   width: 100%;
-  /* 改為彈性寬度 */
-  max-width: 187px;
-  /* 最大寬度限制 */
-  aspect-ratio: 187 / 105;
-  /* 保持寬高比 */
+  height: 100%;
+  object-fit: cover;
+}
+
+.programme-wrap .list .item a {
+  display: block;
+  text-decoration: none;
+}
+
+.programme-wrap .list .item span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 43px;
+  background: linear-gradient(to right, #4d176f, #671dbb);
+  border-radius: 0 0 10px 10px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .programme-wrap .list .item .img::before {
