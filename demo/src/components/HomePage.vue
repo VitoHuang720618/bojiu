@@ -826,10 +826,8 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
   height: 100%;
-  padding: 0 20px;
+  padding: 0;
   background-color: transparent;
 }
 
@@ -839,6 +837,14 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   height: 100%;
+  flex: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.recommend-tools .tools .item:hover {
+  background-color: #a81c1c;
+  /* 鮮豔的紅色背景 */
 }
 
 .recommend-tools .tools .item :deep(.img-button) {
@@ -853,7 +859,7 @@ onUnmounted(() => {
 
 .recommend-tools .tools .item :deep(.img-button):hover {
   transform: none !important;
-  filter: brightness(1.1);
+  filter: none !important;
 }
 
 .recommend-tools .tools .item :deep(.img-button img) {
@@ -863,6 +869,11 @@ onUnmounted(() => {
   display: block !important;
   transition: none !important;
   transform: none !important;
+}
+
+/* 確保最後一個圓角正確 */
+.recommend-tools .tools .item:last-child {
+  border-radius: 0 0 20px 0;
 }
 
 @media (max-width: 1024px) {
