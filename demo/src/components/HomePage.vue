@@ -843,7 +843,7 @@ onUnmounted(() => {
 }
 
 .recommend-tools .tools .item:hover {
-  background-color: transparent;
+  background-color: #a81c1c;
 }
 
 .recommend-tools .tools .item :deep(.img-button) {
