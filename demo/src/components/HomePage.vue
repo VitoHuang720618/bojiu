@@ -557,7 +557,7 @@ onUnmounted(() => {
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
   margin-bottom: 3rem;
-  padding: 30px 40px;
+  padding: 45px 27px 44px 27px;
 }
 
 @media (max-width: 1024px) {
@@ -574,7 +574,7 @@ onUnmounted(() => {
 
 .recommend-slider-links {
   box-sizing: border-box;
-  padding: 1.5625rem 2.125rem;
+  padding: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
