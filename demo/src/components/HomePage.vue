@@ -454,11 +454,12 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.5rem;
   height: 40px;
+  margin-bottom: 20px;
 }
 
 .recommend-routes-title .crown-icon {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   object-fit: contain;
 }
 
@@ -550,12 +551,13 @@ onUnmounted(() => {
 /* Recommend Section */
 .recommend {
   width: 1501px;
-  height: 410px;
+  height: auto;
   background: rgba(41, 13, 16, 0.80);
   border: none;
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
   margin-bottom: 3rem;
+  padding: 30px 40px;
 }
 
 @media (max-width: 1024px) {
@@ -598,8 +600,8 @@ onUnmounted(() => {
 }
 
 .recommend-slider {
-  margin-right: 2.25rem;
-  width: 410px;
+  margin-right: 30px;
+  width: 600px;
   flex-shrink: 0;
 }
 
