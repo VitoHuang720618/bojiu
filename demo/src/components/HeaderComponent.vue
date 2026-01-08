@@ -31,7 +31,8 @@ import { assetManifest } from '../config/assetManifest'
 }
 
 .header__logo {
-  height: 86px;
+  width: 304px;
+  height: 84px;
 }
 
 @media (max-width: 1024px) {
