@@ -823,13 +823,14 @@ onUnmounted(() => {
 }
 
 .recommend-tools .tools {
-  display: grid;
-  gap: 0.1rem;
-  grid-template-columns: repeat(6, 1fr);
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
   height: 100%;
-  align-items: stretch;
-  padding: 0.5rem;
-  background-color: #000000;
+  padding: 0 20px;
+  background-color: transparent;
 }
 
 .recommend-tools .tools .item {
