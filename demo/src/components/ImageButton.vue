@@ -57,21 +57,10 @@ const handleClick = (event: MouseEvent) => {
   left: 0;
   opacity: 0;
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 100%;
-  /* 確保寬度佔滿 */
-  height: 100%;
-  /* 確保高度佔滿容器，與 default 圖片一致 */
   transition: opacity 0.1s ease-in-out;
-}
-
-/* 強制 hover 圖片內容適應容器，防止溢出或偏移 */
-.img-button .img-button--hover :deep(img) {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  /* 確保居中 */
 }
 
 .img-button:hover .img-button--default {
