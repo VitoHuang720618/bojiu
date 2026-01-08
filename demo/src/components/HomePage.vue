@@ -816,8 +816,8 @@ onUnmounted(() => {
 }
 
 .recommend-tools .block-title img {
-  width: 120px !important;
-  height: 25px !important;
+  width: 180px !important;
+  height: 45px !important;
   object-fit: contain !important;
   display: block !important;
 }
