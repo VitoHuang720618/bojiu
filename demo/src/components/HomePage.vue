@@ -830,27 +830,25 @@ onUnmounted(() => {
 }
 
 .recommend-tools .tools .item :deep(.img-button) {
-  width: 100% !important;
-  height: 100% !important;
+  width: 123px !important;
+  height: 107px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   transition: none !important;
-  transform: none !important;
 }
 
 .recommend-tools .tools .item :deep(.img-button):hover {
-  transform: none !important;
   filter: none !important;
 }
 
 .recommend-tools .tools .item :deep(.img-button img) {
-  width: 140px !important;
-  height: 37px !important;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: contain !important;
   display: block !important;
   transition: none !important;
-  transform: none !important;
+  margin: 0 auto !important;
 }
 
 /* 確保最後一個圓角正確 */
