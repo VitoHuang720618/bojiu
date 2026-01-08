@@ -258,21 +258,21 @@ onUnmounted(() => {
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Recommended Tools -->
-          <div class="recommend-tools">
-            <div class="block-title">
-              <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
-            </div>
-            <div class="tools">
-              <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
-                <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
-                  :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
-                  :alt="effectiveToolIcons[index].alt || tool.name"
-                  :href="effectiveToolIcons[index].href || tool.href" />
-                <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
-                  :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
-              </div>
+
+        <!-- Recommended Tools -->
+        <div class="recommend-tools">
+          <div class="block-title">
+            <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
+          </div>
+          <div class="tools">
+            <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
+              <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
+                :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
+                :alt="effectiveToolIcons[index].alt || tool.name" :href="effectiveToolIcons[index].href || tool.href" />
+              <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
+                :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
             </div>
           </div>
         </div>
@@ -556,7 +556,7 @@ onUnmounted(() => {
   border: none;
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
-  margin-bottom: 3rem;
+  margin-bottom: 0;
   padding: 45px 27px 44px 27px;
 }
 
@@ -789,27 +789,30 @@ onUnmounted(() => {
 
 /* Recommend Tools */
 .recommend-tools {
-  border-top: 2px solid #dfb082;
+  width: 1500px;
+  margin-bottom: 3rem;
   box-sizing: border-box;
   padding: 0;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  height: 80px;
-  background-color: #000000;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 94px;
+  background-color: #0d0d0d;
+  border-radius: 0 0 20px 20px;
 }
 
 .recommend-tools .block-title {
   margin-right: 0;
   margin-bottom: 0;
-  background-color: #8B0000;
-  padding: 0 15px;
-  border-radius: 0;
+  background-color: #550000;
+  padding: 0;
+  border-radius: 0 0 0 20px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   height: 100%;
-  min-width: 150px;
-  max-width: 200px;
+  flex: 0 0 260px;
+  min-width: 0;
 }
 
 .recommend-tools .block-title img {
