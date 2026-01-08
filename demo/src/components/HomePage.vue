@@ -550,8 +550,8 @@ onUnmounted(() => {
 
 /* Recommend Section */
 .recommend {
-  width: 1501px;
-  height: 410px;
+  width: 1500px;
+  height: auto;
   background: rgba(41, 13, 16, 0.80);
   border: none;
   border-radius: 20px 20px 0px 0px;
