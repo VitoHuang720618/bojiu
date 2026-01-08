@@ -659,8 +659,8 @@ onUnmounted(() => {
 }
 
 .carousel-size-reference {
-  width: 100%;
-  height: auto;
+  width: 928px;
+  height: 321px;
   display: block;
   opacity: 0;
   /* 完全透明，但佔據空間 */
