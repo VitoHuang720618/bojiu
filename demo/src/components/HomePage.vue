@@ -469,6 +469,20 @@ onUnmounted(() => {
   height: 102px;
 }
 
+/* 移除按鈕懸停時的位移特效 */
+.button-links .item :deep(.img-button),
+.button-links .item :deep(.img-button):hover,
+.button-links .item :deep(img) {
+  transform: none !important;
+}
+
+/* 確保推薦線路也沒有位移 */
+.recommend-links .links .item :deep(.img-button),
+.recommend-links .links .item :deep(.img-button):hover,
+.recommend-links .links .item :deep(img) {
+  transform: none !important;
+}
+
 /* Block Title */
 .block-title {
   height: 36px;
