@@ -494,9 +494,9 @@ onUnmounted(() => {
   }
 
   .programme-block .block-title img {
-    width: 280px !important;
-    height: 30px !important;
-    object-fit: fill;
+    /* 讓它在小一點的螢幕上稍微自適應，或者如果空間足夠就保持 */
+    max-width: 100%;
+    object-fit: contain;
   }
 }
 
@@ -987,6 +987,20 @@ onUnmounted(() => {
   .programme-wrap {
     gap: 2.25rem;
   }
+}
+
+/* Programme Block Title Styles */
+.programme-block .block-title {
+  height: 70px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.programme-block .block-title :deep(img) {
+  width: 427px !important;
+  height: 70px !important;
+  object-fit: contain;
 }
 
 @media (max-width: 768px) {
