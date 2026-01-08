@@ -661,7 +661,7 @@ onUnmounted(() => {
 }
 
 .carousel-size-reference {
-  width: 928px;
+  width: 594px;
   height: 321px;
   display: block;
   opacity: 0;
