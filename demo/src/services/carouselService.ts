@@ -11,23 +11,25 @@ class CarouselService {
   }
 
   async getConfig(): Promise<{
-    carouselSlides: {image: string, href: string, alt: string}[], 
+    carouselSlides: { image: string, href: string, alt: string }[],
     banner: string,
     backgroundImage: string,
-    videoThumbnails: ({image: string, href: string, alt: string, title: string} | null)[],
-    programThumbnails: ({image: string, href: string, alt: string, title: string} | null)[],
-    buttonLinks: ({text: string, href: string, target: string, defaultImage?: string, hoverImage?: string} | null)[],
-    toolIcons: ({id: string, default: string, hover: string, alt: string} | null)[]
+    videoThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
+    programThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
+    buttonLinks: ({ text: string, href: string, target: string, defaultImage?: string, hoverImage?: string } | null)[],
+    toolIcons: ({ id: string, default: string, hover: string, alt: string, href: string } | null)[],
+    floatAdButtons?: ({ default: string, hover: string, href: string, alt: string } | null)[],
+    routeLinks?: { default: string, hover: string } | null
   }> {
     try {
       const response = await fetch(`${this.baseUrl}/public/config`)
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch config: ${response.statusText}`)
       }
 
       const config = await response.json()
-      
+
       // Process image URLs to ensure they work in container environment
       const processImageUrl = (url: string) => {
         if (!url) return ''
@@ -44,25 +46,25 @@ class CarouselService {
         })),
         banner: processImageUrl(config.banner || ''),
         backgroundImage: processImageUrl(config.backgroundImage || ''),
-        videoThumbnails: (config.videoThumbnails || []).map((video: any) => 
+        videoThumbnails: (config.videoThumbnails || []).map((video: any) =>
           video ? { ...video, image: processImageUrl(video.image) } : null
         ),
-        programThumbnails: (config.programThumbnails || []).map((program: any) => 
+        programThumbnails: (config.programThumbnails || []).map((program: any) =>
           program ? { ...program, image: processImageUrl(program.image) } : null
         ),
-        buttonLinks: (config.buttonLinks || []).map((button: any) => 
+        buttonLinks: (config.buttonLinks || []).map((button: any) =>
           button ? { ...button } : null
         ),
-        toolIcons: (config.toolIcons || []).map((tool: any) => 
-          tool ? { 
-            ...tool, 
+        toolIcons: (config.toolIcons || []).map((tool: any) =>
+          tool ? {
+            ...tool,
             default: processImageUrl(tool.default),
             hover: processImageUrl(tool.hover)
           } : null
         ),
-        floatAdButtons: (config.floatAdButtons || []).map((button: any) => 
-          button ? { 
-            ...button, 
+        floatAdButtons: (config.floatAdButtons || []).map((button: any) =>
+          button ? {
+            ...button,
             default: processImageUrl(button.default),
             hover: processImageUrl(button.hover)
           } : null
@@ -74,7 +76,7 @@ class CarouselService {
       }
     } catch (error) {
       console.error('Failed to fetch config from API:', error)
-      
+
       // 返回默认数据作为后备
       return {
         carouselSlides: [

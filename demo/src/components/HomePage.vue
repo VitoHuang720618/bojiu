@@ -4,11 +4,9 @@ import ImageComponent from './ImageComponent.vue'
 import ImageButton from './ImageButton.vue'
 import { assetManifest } from '../config/assetManifest'
 import {
-  siteConfig,
   recommendedRoutes,
   recommendedTools,
-  carouselSlides,
-  floatAdButtons
+  carouselSlides
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
 import type { ButtonLinkConfig } from '../types'
@@ -23,7 +21,7 @@ const apiBackgroundImage = ref<string>('')
 const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
 const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
 const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
-const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string } | null)[]>([])
+const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
 const apiFloatAdButtons = ref<({ href: string, default: string, hover: string } | null)[]>([])
 const apiRouteLinks = ref<{ default: string, hover: string } | null>(null)
 
