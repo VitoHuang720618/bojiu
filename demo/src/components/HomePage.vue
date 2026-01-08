@@ -710,8 +710,13 @@ onUnmounted(() => {
 
 .recommend-links .links {
   display: grid;
-  gap: 1.5rem;
+  gap: 15px;
   grid-template-columns: repeat(2, 1fr);
+}
+
+.recommend-links .links .item {
+  width: 250px;
+  height: 66px;
 }
 
 @media (max-width: 1024px) {
