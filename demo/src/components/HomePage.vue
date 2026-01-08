@@ -550,7 +550,7 @@ onUnmounted(() => {
 
 /* Recommend Section */
 .recommend {
-  width: 1500px;
+  width: 1501px;
   height: auto;
   background: rgba(41, 13, 16, 0.80);
   border: none;
@@ -789,14 +789,14 @@ onUnmounted(() => {
 
 /* Recommend Tools */
 .recommend-tools {
-  width: 1500px;
+  width: 1501px;
   margin-bottom: 3rem;
   box-sizing: border-box;
   padding: 0;
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 94px;
+  height: 110px;
   background-color: #0d0d0d;
   border-radius: 0 0 20px 20px;
 }
