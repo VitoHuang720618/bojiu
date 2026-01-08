@@ -597,7 +597,7 @@ onUnmounted(() => {
 
 .recommend-slider {
   margin-right: 2.25rem;
-  width: 50.4%;
+  width: 410px;
   flex-shrink: 0;
 }
 
