@@ -843,8 +843,7 @@ onUnmounted(() => {
 }
 
 .recommend-tools .tools .item:hover {
-  background-color: #a81c1c;
-  /* 鮮豔的紅色背景 */
+  background-color: transparent;
 }
 
 .recommend-tools .tools .item :deep(.img-button) {
@@ -863,8 +862,8 @@ onUnmounted(() => {
 }
 
 .recommend-tools .tools .item :deep(.img-button img) {
-  width: 120px !important;
-  height: 60px !important;
+  width: 140px !important;
+  height: 37px !important;
   object-fit: contain !important;
   display: block !important;
   transition: none !important;
