@@ -601,7 +601,7 @@ onUnmounted(() => {
 
 .recommend-slider {
   margin-right: 30px;
-  width: 928px;
+  width: 960px;
   flex-shrink: 0;
 }
 
@@ -661,7 +661,7 @@ onUnmounted(() => {
 }
 
 .carousel-size-reference {
-  width: 928px;
+  width: 960px;
   height: 321px;
   display: block;
   opacity: 0;
@@ -710,12 +710,12 @@ onUnmounted(() => {
 
 .recommend-links .links {
   display: grid;
-  gap: 15px;
+  gap: 17px 7px;
   grid-template-columns: repeat(2, 1fr);
 }
 
 .recommend-links .links .item {
-  width: 250px;
+  width: 225px;
   height: 66px;
 }
 
@@ -738,14 +738,7 @@ onUnmounted(() => {
   }
 }
 
-.recommend-links .links .item :deep(.img-button)::after,
-.recommend-links .links .item :deep(.img-button)::before {
-  display: block;
-  position: absolute;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  z-index: 2;
-}
+
 
 
 
