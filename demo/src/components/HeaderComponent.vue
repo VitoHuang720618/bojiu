@@ -43,7 +43,8 @@ import { assetManifest } from '../config/assetManifest'
 
 .header__logo img {
   display: block;
+  width: 100%;
   height: 100%;
-  width: auto;
+  object-fit: contain;
 }
 </style>
