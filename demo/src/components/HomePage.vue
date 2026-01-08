@@ -350,9 +350,20 @@ onUnmounted(() => {
   width: 100%;
 }
 
-#banner img {
+#banner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #000;
+}
+
+#banner :deep(img) {
   display: block;
   width: 100%;
+  max-width: 1920px;
+  height: auto;
+  aspect-ratio: 1920 / 500;
+  object-fit: cover;
 }
 
 .banner-placeholder {
