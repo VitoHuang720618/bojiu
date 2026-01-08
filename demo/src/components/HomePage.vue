@@ -978,14 +978,33 @@ onUnmounted(() => {
 
 /* Programme Sections */
 .programme-wrap {
-  display: grid;
-  gap: 3.5rem;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  justify-content: space-between;
+  width: 1501px;
+  margin: 0 auto;
+}
+
+.programme-block {
+  width: 709px;
+}
+
+@media (max-width: 1600px) {
+  .programme-wrap {
+    width: 100%;
+    padding: 0 27px;
+    box-sizing: border-box;
+  }
 }
 
 @media (max-width: 1024px) {
   .programme-wrap {
-    gap: 2.25rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .programme-block {
+    width: 100%;
+    max-width: 709px;
   }
 }
 
@@ -1018,9 +1037,8 @@ onUnmounted(() => {
 
 .programme-wrap .list {
   display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  /* 自適應網格 */
+  gap: 15px;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 @media (max-width: 1024px) {
