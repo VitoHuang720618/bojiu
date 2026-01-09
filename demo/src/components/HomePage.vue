@@ -930,8 +930,8 @@ onUnmounted(() => {
 }
 
 .recommend-footer .tools .item :deep(.img-button) {
-  width: 123px !important;
-  height: 107px !important;
+  width: 120px !important;
+  height: 105px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -1201,11 +1201,11 @@ onUnmounted(() => {
 /* Float Ad */
 #float-ad {
   bottom: 1rem;
-  max-width: 110px;
+  max-width: 120px; /* 依照要求調整為 120px */
   min-width: 75px;
   position: fixed;
   right: 2.5rem;
-  width: 5.7%;
+  width: auto; /* 從百分比改為 auto 以便受 max-width 控制 */
   z-index: 99;
   transition: all 0.3s ease;
 }
@@ -1292,6 +1292,13 @@ onUnmounted(() => {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: 1fr;
+}
+
+#float-ad .links .item {
+  width: 100%;
+  max-width: 120px;
+  height: auto;
+  aspect-ratio: 120 / 105;
 }
 
 @media (max-width: 1440px) {
