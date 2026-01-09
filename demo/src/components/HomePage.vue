@@ -1134,18 +1134,7 @@ onUnmounted(() => {
   background: linear-gradient(to right, #114b1f, #2c8a3c);
 }
 
-.programme-wrap .list .item .img::before {
-  background-color: hsla(0, 0%, 100%, 0.5);
-  content: '';
-  display: block;
-  height: 100%;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  transition: all 0.1s ease-in-out;
-  width: 100%;
-}
+
 
 .programme-wrap .list .item .img img {
   width: 100%;
@@ -1209,9 +1198,7 @@ onUnmounted(() => {
   }
 }
 
-.programme-wrap .list .item:hover .img::before {
-  opacity: 1;
-}
+
 
 /* Float Ad */
 #float-ad {
