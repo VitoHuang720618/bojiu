@@ -609,10 +609,17 @@ onUnmounted(() => {
   align-items: center;
 }
 
-.programme-block .block-title img {
-  width: 330px !important;
-  height: 35px !important;
-  object-fit: fill;
+@media (max-width: 820px) {
+  .programme-block .block-title {
+    width: 270px !important;
+    height: 45px !important;
+    margin-bottom: 1rem !important;
+  }
+  .programme-block .block-title img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+  }
 }
 
 /* Recommend Section Container */
@@ -1062,6 +1069,19 @@ onUnmounted(() => {
   margin-bottom: 2rem;
   display: flex;
   align-items: center;
+}
+
+@media (max-width: 820px) {
+  .programme-block .block-title {
+    width: 270px !important;
+    height: 45px !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .programme-block .block-title :deep(img) {
+    width: 100% !important;
+    height: 100% !important;
+  }
 }
 
 .programme-block .block-title :deep(img) {
