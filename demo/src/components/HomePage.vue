@@ -741,7 +741,7 @@ onUnmounted(() => {
 }
 
 .recommend-links {
-  flex: 0 1 546px; /* 優先佔據 546px */
+  flex: 0 1 546px; /* 恢復：優先佔據 546px */
   max-width: 546px;
   display: flex;
   flex-direction: column;
@@ -757,16 +757,15 @@ onUnmounted(() => {
 
 .recommend-links .links {
   display: grid;
-  gap: 12px 10px; /* 稍微縮小間距以適應更小的按鈕 */
-  grid-template-columns: repeat(2, 145px); /* 鎖定兩列 145px */
-  justify-content: flex-start;
+  gap: 17px 7px;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .recommend-links .links .item {
   width: 100%;
-  max-width: 145px; /* 依照要求修正為 145px */
+  max-width: 250px;
   height: auto;
-  aspect-ratio: 145 / 35;
+  aspect-ratio: 250 / 65;
 }
 
 @media (max-width: 820px) {
