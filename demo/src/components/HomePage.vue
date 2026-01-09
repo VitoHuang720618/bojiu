@@ -388,6 +388,12 @@ onUnmounted(() => {
   display: block;
 }
 
+.main-inner {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
 #home-main {
   border-color: #dfb082;
   border-style: solid;
@@ -1081,14 +1087,16 @@ onUnmounted(() => {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    gap: 30px !important;
-    padding: 0 15px !important;
+    gap: 20px !important; /* 縮減間距防止溢出 (30px -> 20px) */
+    padding: 0 10px !important;
     justify-content: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .programme-block {
-    flex: 0 0 auto !important;
-    width: 360px !important; /* 173*2 + gap(14) ~= 360 */
+    flex: 0 1 360px !important; /* 改為 0 1，允許在極窄時微縮 */
+    max-width: 360px !important;
   }
 
   .programme-block .block-title {
