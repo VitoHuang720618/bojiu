@@ -1214,7 +1214,7 @@ onUnmounted(() => {
 
 @media (max-width: 820px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(2, 173px) !important; /* 平板下每個區塊改為 2 欄 */
+    grid-template-columns: repeat(2, 173px) !important;
     gap: 14px 14px !important;
     justify-content: flex-start !important;
     width: fit-content !important;
@@ -1222,18 +1222,25 @@ onUnmounted(() => {
 
   .programme-wrap .list .item {
     width: 173px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important; /* 確保內部內容不溢出 */
+    border-radius: 10px !important; /* 統一圓角 */
   }
 
   .programme-wrap .list .item .img {
-    width: 173px !important;
-    height: 94px !important; /* 指定高度 94px */
+    width: 100% !important; /* 跟隨父容器 */
+    height: 94px !important;
     aspect-ratio: auto !important;
+    border-radius: 10px 10px 0 0 !important;
   }
 
   .programme-wrap .list .item span {
-    width: 173px !important;
-    height: 34px !important; /* 指定高度 34px */
+    width: 100% !important; /* 跟隨父容器，絕對對齊 */
+    height: 34px !important;
     font-size: 0.85rem !important;
+    border-radius: 0 0 10px 10px !important;
+    margin: 0 !important;
   }
 }
 
