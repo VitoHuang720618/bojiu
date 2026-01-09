@@ -477,24 +477,35 @@ onUnmounted(() => {
 .recommend-routes-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  height: 40px;
+  gap: 15px; /* 增加間距以匹配更大圖標 */
+  height: auto;
   margin-bottom: 20px;
 }
 
 .recommend-routes-title .crown-icon {
-  width: 35px;
-  height: 35px;
+  width: 42px;
+  height: 39px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
 .recommend-routes-title .title-text {
-  color: #ffffff;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  width: 203px;
+  height: 32px;
+  /* background: #fffdda;  暫時註釋，因為文字背景通常指的是 background-clip 或者只是單純色塊，如果 user 是要色塊則開啟 */
+  font-size: 32px;
+  font-family: "Microsoft YaHei UI", "Microsoft YaHei UI-Bold", sans-serif;
+  font-weight: 700;
+  text-align: left;
+  color: #ffd08c;
+  letter-spacing: 6.39px;
+  white-space: nowrap;
 }
+
+/* 如果 user 真的要背後有個淡黃色塊，可以取消註釋下面這行 */
+/* .recommend-routes-title .title-text { background: #fffdda; } */
 
 @media (max-width: 1280px) {
   .block-title {
@@ -738,16 +749,20 @@ onUnmounted(() => {
 
   .recommend-routes-title {
     margin-bottom: 12px !important;
-    height: 30px !important;
+    height: auto !important;
+    gap: 8px !important;
   }
 
   .recommend-routes-title .crown-icon {
-    width: 25px !important;
-    height: 25px !important;
+    width: 30px !important;
+    height: 28px !important;
   }
 
   .recommend-routes-title .title-text {
-    font-size: 1.1rem !important;
+    width: auto !important;
+    height: auto !important;
+    font-size: 1.25rem !important;
+    letter-spacing: 2px !important;
   }
 }
 
