@@ -703,7 +703,7 @@ onUnmounted(() => {
 
 @media (max-width: 820px) {
   .recommend-slider {
-    width: 450px !important;
+    width: 432px !important; /* 微調以適應 789px 容器 */
     height: 183px !important;
     margin-right: 24px !important;
   }
@@ -930,8 +930,8 @@ onUnmounted(() => {
 
 @media (max-width: 820px) {
   .recommend-footer {
-    width: 740px !important; /* 對齊下方並排區塊的總寬度 360*2 + 20 */
-    max-width: 95% !important;
+    width: 100% !important;
+    max-width: 789px !important; /* 統一為 789px */
     height: auto !important;
     margin: 0 auto 2rem auto !important;
     border-radius: 12px !important;
@@ -1090,15 +1090,17 @@ onUnmounted(() => {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    gap: 20px !important; /* 20px 間距配合 360px 區塊正好對齊工具欄 */
+    gap: 20px !important;
     padding: 0 !important;
     justify-content: center !important;
     width: 100% !important;
+    max-width: 789px !important; /* 統一為 789px */
+    margin: 0 auto !important;
   }
 
   .programme-block {
-    flex: 0 0 360px !important;
-    width: 360px !important;
+    flex: 1 !important; /* 彈性佔滿空間 */
+    max-width: calc((100% - 20px) / 2) !important;
   }
 
   .programme-block .block-title {
