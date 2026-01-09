@@ -362,16 +362,16 @@ onUnmounted(() => {
   #banner {
     width: 100%;
     height: 340px;
-    background: #000;
+    background: #8b0012; /* 使用與 Banner 邊緣相近的深紅色，防止視覺斷層 */
     overflow: hidden;
-    position: relative;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   #banner :deep(img) {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 關鍵：裁切左右邊緣以維持 340px 高度下的視覺比例，防止內容被擠壓變形 */
-    object-position: center;
+    object-fit: contain; /* 關鍵：完整顯示圖片，絕不變形，絕不截斷 */
     display: block;
   }
 }
