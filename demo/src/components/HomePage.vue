@@ -1181,20 +1181,28 @@ onUnmounted(() => {
   object-fit: cover;
 }
 
-.programme-wrap .list .item span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 43px;
-  background: linear-gradient(to right, #4d176f, #671dbb);
-  border-radius: 0 0 10px 10px;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
-  margin: 0 !important;
-  padding: 0;
-  box-sizing: border-box;
+@media (max-width: 820px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(4, 173px) !important; /* 依照標註圖改為每項 173px */
+    gap: 15px 12px !important;
+    justify-content: center !important;
+  }
+
+  .programme-wrap .list .item {
+    width: 173px !important;
+  }
+
+  .programme-wrap .list .item .img {
+    width: 173px !important;
+    height: 94px !important; /* 指定高度 94px */
+    aspect-ratio: auto !important;
+  }
+
+  .programme-wrap .list .item span {
+    width: 173px !important;
+    height: 34px !important; /* 指定高度 34px */
+    font-size: 0.85rem !important;
+  }
 }
 
 /* Sport Block Specific Styles (Green) */
