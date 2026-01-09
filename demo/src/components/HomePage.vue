@@ -726,15 +726,16 @@ onUnmounted(() => {
 
 .recommend-links .links {
   display: grid;
-  gap: 17px 7px;
-  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 10px; /* 稍微縮小間距以適應更小的按鈕 */
+  grid-template-columns: repeat(2, 145px); /* 鎖定兩列 145px */
+  justify-content: flex-start;
 }
 
 .recommend-links .links .item {
   width: 100%;
-  max-width: 250px;
+  max-width: 145px; /* 依照要求修正為 145px */
   height: auto;
-  aspect-ratio: 250 / 65;
+  aspect-ratio: 145 / 35;
 }
 
 @media (max-width: 820px) {
