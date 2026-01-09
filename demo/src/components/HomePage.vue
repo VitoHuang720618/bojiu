@@ -916,25 +916,36 @@ onUnmounted(() => {
     height: auto !important;
     margin: 0 auto !important;
     border-radius: 0 0 12px 12px !important;
+    flex-direction: column !important; /* 確保標題與內容上下分開 */
+  }
+
+  .recommend-footer .block-title {
+    height: 48px !important; /* 指定高度 48px */
+    flex: 0 0 48px !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+    padding: 0 20px !important;
+    background: linear-gradient(90deg, #8b0012 0%, #ba081f 100%) !important;
   }
 
   .recommend-footer .tools {
     width: 100% !important;
     height: auto !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    padding: 8px 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important; /* 恢復一排 6 顆 */
+    padding: 0 !important;
     grid-auto-rows: min-content !important;
   }
 
   .recommend-footer .tools .item {
-    height: auto !important;
-    min-height: 60px !important;
-    flex: none !important;
+    height: 60px !important; /* 縮小程序以便在一排內顯示 */
+    min-height: 0 !important;
   }
 
   .recommend-footer .tools .item :deep(.img-button) {
-    width: 90px !important;
-    height: 78px !important;
+    width: 100% !important;
+    max-width: 90px !important;
+    height: 50px !important;
   }
 }
 
