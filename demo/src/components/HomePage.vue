@@ -1212,6 +1212,22 @@ onUnmounted(() => {
   object-fit: cover;
 }
 
+.programme-wrap .list .item span {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* PC 版置中 */
+  width: 100%;
+  height: 43px;
+  background: linear-gradient(to right, #4d176f, #671dbb);
+  border-radius: 0 0 10px 10px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 !important;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 @media (max-width: 820px) {
   .programme-wrap .list {
     grid-template-columns: repeat(2, 173px) !important;
@@ -1297,14 +1313,6 @@ onUnmounted(() => {
 
 .empty-section-placeholder::after {
   content: "暫無內容";
-}
-
-.programme-wrap .list .item span {
-  color: #ffd08c;
-  font-size: 1.25em;
-  letter-spacing: 2px;
-  line-height: 1.25;
-  margin-left: 0.5rem;
 }
 
 @media (max-width: 1280px) {
