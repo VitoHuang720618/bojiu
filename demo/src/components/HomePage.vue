@@ -358,7 +358,7 @@ onUnmounted(() => {
   object-fit: cover;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   #banner {
     width: 100%;
     height: 340px;
@@ -485,7 +485,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .button-links {
     width: 100% !important;
     max-width: 780px !important;
@@ -621,7 +621,7 @@ onUnmounted(() => {
   align-items: center;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .programme-block .block-title {
     width: 270px !important;
     height: 45px !important;
@@ -662,7 +662,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .recommend-content {
     max-width: 789px !important;
     padding: 24px 20px !important;
@@ -701,7 +701,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .recommend-slider {
     width: 432px !important; /* 微調以適應 789px 容器 */
     height: 183px !important;
@@ -787,7 +787,7 @@ onUnmounted(() => {
   aspect-ratio: 250 / 65;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .recommend-links .links {
     gap: 13px 7px !important;
   }
@@ -928,7 +928,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .recommend-footer {
     width: 100% !important;
     max-width: 789px !important; /* 統一為 789px */
@@ -1087,7 +1087,7 @@ onUnmounted(() => {
   align-items: center;
 }
 
-@media (max-width: 1500px) and (min-width: 821px) {
+@media (max-width: 1500px) and (min-width: 1280px) {
   .programme-wrap {
     flex-wrap: wrap !important;
     justify-content: center !important;
@@ -1100,7 +1100,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .programme-wrap {
     display: flex !important;
     flex-direction: row !important;
@@ -1155,7 +1155,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 1500px) and (min-width: 821px) {
+@media (max-width: 1500px) and (min-width: 1280px) {
   .programme-wrap .list {
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
     gap: 15px 10px;
@@ -1243,7 +1243,7 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1279px) {
   .programme-wrap .list {
     grid-template-columns: repeat(2, 173px) !important;
     gap: 14px 14px !important;
