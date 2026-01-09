@@ -801,8 +801,7 @@ onUnmounted(() => {
   padding: 0;
   display: flex;
   flex-direction: row;
-  align-items: stretch;
-  min-height: 110px;
+  align-items: stretch; /* 關鍵：確保所有子元件齊高 */
   height: auto;
   background-color: #0d0d0d;
   border-radius: 0 0 20px 20px;
@@ -836,7 +835,7 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   flex-direction: row;
-  height: 100%;
+  align-items: stretch;
   padding: 0;
   background-color: transparent;
 }
@@ -934,10 +933,10 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
   flex: 1;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  align-self: stretch; /* 確保背景填滿高度 */
 }
 
 .recommend-footer .tools .item:hover {
