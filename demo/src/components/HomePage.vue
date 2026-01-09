@@ -1052,10 +1052,8 @@ onUnmounted(() => {
 }
 
 .programme-block {
-  flex: 1; /* 讓兩個區塊平分寬度 */
+  flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 @media (max-width: 1280px) {
@@ -1076,6 +1074,28 @@ onUnmounted(() => {
     width: 100%;
     padding: 0 27px;
     box-sizing: border-box;
+  }
+}
+
+/* --- 新增：PC 到平板的過渡區間 (821px - 1500px) --- */
+@media (min-width: 821px) and (max-width: 1500px) {
+  .programme-wrap {
+    gap: 20px !important;
+  }
+  
+  .programme-block {
+    flex: 1 !important;
+  }
+
+  /* 關鍵修正：在中間尺寸改為 2 欄排列，避免 3 欄太擠導致變形 */
+  .programme-wrap .list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+  }
+
+  .programme-block .block-title :deep(img) {
+    max-width: 80% !important; /* 讓標題也隨之縮小 */
+    height: auto !important;
   }
 }
 
@@ -1136,23 +1156,17 @@ onUnmounted(() => {
   }
 }
 
-.programme-wrap .list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px 15px;
-}
-
-@media (max-width: 1501px) {
+@media (min-width: 1501px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(2, 1fr) !important; /* 提前改為雙欄，防止三欄太擠 */
-    gap: 15px 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 15px;
   }
 }
 
-@media (max-width: 1400px) {
-  .programme-wrap {
-    gap: 40px !important; /* 加大兩大區塊間距，產生視覺邊界 */
-    padding: 0 40px !important;
+@media (max-width: 1500px) and (min-width: 821px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px 10px;
   }
 }
 
