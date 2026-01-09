@@ -344,17 +344,18 @@ onUnmounted(() => {
 
 #banner {
   width: 100%;
+  height: 340px; /* PC 版鎖定高度 */
   display: flex;
   justify-content: center;
   background-color: #000;
+  overflow: hidden;
 }
 
 #banner :deep(img) {
   display: block;
   width: 100%;
   max-width: 1920px;
-  height: auto;
-  aspect-ratio: 1920 / 500;
+  height: 340px; /* 圖標也要鎖定高度 */
   object-fit: cover;
 }
 
@@ -415,10 +416,11 @@ onUnmounted(() => {
 /* Button Links */
 .button-links {
   display: grid;
-  justify-content: space-between;
-  grid-template-columns: repeat(4, 352px);
+  justify-content: center;
+  grid-template-columns: repeat(4, 187px); /* 鎖定 PC 版寬度 */
+  gap: 1.5rem;
   width: 100%;
-  max-width: 1501px;
+  max-width: 1525px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 3rem;
@@ -436,7 +438,7 @@ onUnmounted(() => {
   .button-links .item {
     width: 100% !important;
     height: auto !important;
-    aspect-ratio: 352/102;
+    aspect-ratio: 187/54;
   }
 }
 
@@ -462,8 +464,8 @@ onUnmounted(() => {
 }
 
 .button-links .item {
-  width: 352px;
-  height: 102px;
+  width: 187px;
+  height: 54px;
 }
 
 

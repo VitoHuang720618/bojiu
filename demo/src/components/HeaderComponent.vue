@@ -13,11 +13,11 @@ import { assetManifest } from '../config/assetManifest'
 
 <style scoped>
 #header {
-  align-items: flex-start;
+  align-items: center; /* 改為置中對齊 */
   background: linear-gradient(0deg, #8b0012 0%, #ba081f 100%), #000000;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.30);
   display: flex;
-  height: 75px;
+  height: 60px; /* 調整高度以配合 50px logo */
   justify-content: center;
   position: relative;
   width: 100%;
@@ -31,13 +31,14 @@ import { assetManifest } from '../config/assetManifest'
 }
 
 .header__logo {
-  width: 304px;
-  height: 84px;
+  width: 180px;
+  height: 50px;
 }
 
 @media (max-width: 1024px) {
   .header__logo {
-    height: 56px;
+    width: 140px; /* 小螢幕自動縮小 */
+    height: 40px;
   }
 }
 
