@@ -1072,6 +1072,20 @@ onUnmounted(() => {
 }
 
 @media (max-width: 820px) {
+  .programme-wrap {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 30px !important;
+    padding: 0 15px !important;
+    justify-content: center !important;
+  }
+
+  .programme-block {
+    flex: 0 0 auto !important;
+    width: 360px !important; /* 173*2 + gap(14) ~= 360 */
+  }
+
   .programme-block .block-title {
     width: 270px !important;
     height: 45px !important;
@@ -1183,9 +1197,10 @@ onUnmounted(() => {
 
 @media (max-width: 820px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(4, 173px) !important; /* 依照標註圖改為每項 173px */
-    gap: 15px 12px !important;
-    justify-content: center !important;
+    grid-template-columns: repeat(2, 173px) !important; /* 平板下每個區塊改為 2 欄 */
+    gap: 14px 14px !important;
+    justify-content: flex-start !important;
+    width: fit-content !important;
   }
 
   .programme-wrap .list .item {
