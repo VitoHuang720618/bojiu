@@ -958,11 +958,6 @@ onUnmounted(() => {
 
   .recommend-footer .tools .item {
     height: 60px !important;
-  }
-}
-
-  .recommend-footer .tools .item {
-    height: 60px !important; /* 縮小程序以便在一排內顯示 */
     min-height: 0 !important;
   }
 
