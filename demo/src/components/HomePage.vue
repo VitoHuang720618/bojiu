@@ -1077,8 +1077,7 @@ onUnmounted(() => {
   }
 }
 
-/* --- 新增：PC 到平板的過渡區間 (821px - 1500px) --- */
-@media (min-width: 821px) and (max-width: 1500px) {
+@media (min-width: 1001px) and (max-width: 1500px) {
   .programme-wrap {
     gap: 20px !important;
   }
@@ -1087,14 +1086,13 @@ onUnmounted(() => {
     flex: 1 !important;
   }
 
-  /* 關鍵修正：在中間尺寸改為 2 欄排列，避免 3 欄太擠導致變形 */
+  /* 1000px 以上維持三欄，但寬度自動彈性 */
   .programme-wrap .list {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 15px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 
   .programme-block .block-title :deep(img) {
-    max-width: 80% !important; /* 讓標題也隨之縮小 */
+    max-width: 100% !important;
     height: auto !important;
   }
 }
@@ -1162,10 +1160,10 @@ onUnmounted(() => {
   gap: 20px 15px;
 }
 
-@media (max-width: 1500px) and (min-width: 821px) {
+@media (max-width: 1000px) and (min-width: 821px) {
   .programme-wrap .list {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 15px 10px;
+    gap: 12px 10px;
   }
 }
 
