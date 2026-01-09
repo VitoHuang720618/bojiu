@@ -1052,8 +1052,10 @@ onUnmounted(() => {
 }
 
 .programme-block {
-  flex: 1;
+  flex: 1; /* 讓兩個區塊平分寬度 */
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 1280px) {
@@ -1142,8 +1144,15 @@ onUnmounted(() => {
 
 @media (max-width: 1501px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px 10px;
+    grid-template-columns: repeat(2, 1fr) !important; /* 提前改為雙欄，防止三欄太擠 */
+    gap: 15px 12px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .programme-wrap {
+    gap: 40px !important; /* 加大兩大區塊間距，產生視覺邊界 */
+    padding: 0 40px !important;
   }
 }
 
