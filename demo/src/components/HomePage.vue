@@ -361,25 +361,17 @@ onUnmounted(() => {
 @media (max-width: 820px) {
   #banner {
     width: 100%;
-    max-width: 820px;
-    height: auto;
-    /* 移除固定高度，改為自動 */
-    aspect-ratio: 820 / 340;
-    /* 鎖定比例，實現自由縮放 */
-    margin: 0 auto;
+    height: 340px;
     background: #7d7d7d;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-
   #banner :deep(img) {
     width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-    /* 改回 cover 以防縮放時產生輕微拉伸感 */
-    max-width: none;
-    transform: none;
-    left: 0;
+    height: 100%;
+    object-fit: cover; /* 保持比例填滿，取代會導致變形的 fill */
   }
 }
 
