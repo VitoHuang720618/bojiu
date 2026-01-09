@@ -1077,27 +1077,7 @@ onUnmounted(() => {
   }
 }
 
-/* --- 新增：PC 到平板的過渡區間 (821px - 1500px) --- */
-@media (min-width: 821px) and (max-width: 1500px) {
-  .programme-wrap {
-    gap: 20px !important;
-  }
-  
-  .programme-block {
-    flex: 1 !important;
-  }
-
-  /* 關鍵修正：在中間尺寸改為 2 欄排列，避免 3 欄太擠導致變形 */
-  .programme-wrap .list {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 15px !important;
-  }
-
-  .programme-block .block-title :deep(img) {
-    max-width: 80% !important; /* 讓標題也隨之縮小 */
-    height: auto !important;
-  }
-}
+/* --- 清理重複開發區塊 --- */
 
 /* Programme Block Title Styles */
 .programme-block .block-title {
@@ -1107,15 +1087,15 @@ onUnmounted(() => {
   align-items: center;
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1500px) and (min-width: 821px) {
   .programme-wrap {
     flex-wrap: wrap !important;
     justify-content: center !important;
-    gap: 3rem 2rem !important; /* 增加上下間距使換行更優雅 */
+    gap: 3rem 2rem !important;
   }
 
   .programme-block {
-    flex: 1 1 420px !important; /* 提高基礎寬度，讓它在大約 900px 以下就主動換行 */
+    flex: 1 1 420px !important;
     max-width: 100% !important;
   }
 }
@@ -1165,14 +1145,19 @@ onUnmounted(() => {
 }
 
 .programme-wrap .list {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; /* 更早觸發換行，維持大圖體感 */
+  display: grid;
   gap: 20px 15px;
+}
+
+@media (min-width: 1501px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(3, 1fr) !important; /* PC 版鎖定 3 欄 */
+  }
 }
 
 @media (max-width: 1500px) and (min-width: 821px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important; /* 調整基準值實現優雅換行 */
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
     gap: 15px 10px;
   }
 }
