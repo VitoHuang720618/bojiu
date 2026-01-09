@@ -1109,13 +1109,13 @@ onUnmounted(() => {
 
 @media (max-width: 1500px) {
   .programme-wrap {
-    flex-wrap: wrap !important; /* 關鍵：空間不足時自動換行 */
+    flex-wrap: wrap !important;
     justify-content: center !important;
-    gap: 2rem !important;
+    gap: 3rem 2rem !important; /* 增加上下間距使換行更優雅 */
   }
 
   .programme-block {
-    flex: 1 1 360px !important; /* 最小維持 360px，不足則換行 */
+    flex: 1 1 420px !important; /* 提高基礎寬度，讓它在大約 900px 以下就主動換行 */
     max-width: 100% !important;
   }
 }
@@ -1166,13 +1166,13 @@ onUnmounted(() => {
 
 .programme-wrap .list {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important; /* 智慧擠壓：最小 180px，不足則自動換行/減少欄數 */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; /* 更早觸發換行，維持大圖體感 */
   gap: 20px 15px;
 }
 
 @media (max-width: 1500px) and (min-width: 821px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important; /* 調整基準值實現優雅換行 */
     gap: 15px 10px;
   }
 }
