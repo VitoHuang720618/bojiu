@@ -360,16 +360,26 @@ onUnmounted(() => {
 
 @media (max-width: 820px) {
   #banner {
-    height: 340px;
+    width: 100%;
+    max-width: 820px;
+    height: auto;
+    /* 移除固定高度，改為自動 */
+    aspect-ratio: 820 / 340;
+    /* 鎖定比例，實現自由縮放 */
+    margin: 0 auto;
+    background: #7d7d7d;
     overflow: hidden;
   }
+
   #banner :deep(img) {
-    height: 340px;
-    width: auto;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    /* 改回 cover 以防縮放時產生輕微拉伸感 */
     max-width: none;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    transform: none;
+    left: 0;
   }
 }
 
