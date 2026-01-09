@@ -481,17 +481,20 @@ onUnmounted(() => {
 
 @media (max-width: 820px) {
   .button-links {
-    width: 789px !important;
-    grid-template-columns: repeat(4, 187px) !important;
-    gap: 13px !important;
+    width: 100% !important;
+    max-width: 780px !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10px !important;
     padding: 0 !important;
     margin: 0 auto 3rem auto !important;
+    justify-content: center !important;
   }
 
   .button-links .item {
-    width: 187px !important;
-    height: 54px !important;
-    aspect-ratio: auto !important;
+    width: 100% !important;
+    max-width: 187px;
+    height: auto !important;
+    aspect-ratio: 187 / 54;
   }
 }
 
@@ -926,18 +929,17 @@ onUnmounted(() => {
     height: auto !important;
     margin: 0 auto !important;
     border-radius: 0 0 12px 12px !important;
-    flex-direction: row !important; /* 恢復左右佈局以適應 270px 標題 */
-    align-items: stretch !important;
+    flex-direction: column !important; /* 改為上下佈局，解決工具消失問題 */
   }
 
   .recommend-footer .block-title {
-    width: 270px !important; /* 指定寬度 270px */
-    height: 45px !important;  /* 指定高度 45px */
-    flex: 0 0 270px !important;
+    width: 270px !important;
+    height: 45px !important;
+    flex: 0 0 45px !important; /* 固定高度 */
     justify-content: center !important;
     padding: 0 !important;
-    background: #550000 !important; /* 恢復深紅背景 */
-    border-radius: 0 0 0 12px !important;
+    background: #550000 !important;
+    border-radius: 0 !important; /* 標題在上方，不給圓角以免穿幫 */
   }
 
   .recommend-footer .block-title img {
@@ -949,10 +951,15 @@ onUnmounted(() => {
     width: 100% !important;
     height: auto !important;
     display: grid !important;
-    grid-template-columns: repeat(6, 1fr) !important; /* 恢復一排 6 顆 */
-    padding: 0 !important;
-    grid-auto-rows: min-content !important;
+    grid-template-columns: repeat(6, 1fr) !important; /* 下方一排顯示 6 個 */
+    padding: 10px 0 !important;
+    background-color: #0d0d0d !important;
   }
+
+  .recommend-footer .tools .item {
+    height: 60px !important;
+  }
+}
 
   .recommend-footer .tools .item {
     height: 60px !important; /* 縮小程序以便在一排內顯示 */
