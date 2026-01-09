@@ -1077,7 +1077,8 @@ onUnmounted(() => {
   }
 }
 
-@media (min-width: 1001px) and (max-width: 1500px) {
+/* --- 新增：PC 到平板的過渡區間 (821px - 1500px) --- */
+@media (min-width: 821px) and (max-width: 1500px) {
   .programme-wrap {
     gap: 20px !important;
   }
@@ -1086,13 +1087,14 @@ onUnmounted(() => {
     flex: 1 !important;
   }
 
-  /* 1000px 以上維持三欄，但寬度自動彈性 */
+  /* 關鍵修正：在中間尺寸改為 2 欄排列，避免 3 欄太擠導致變形 */
   .programme-wrap .list {
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
   }
 
   .programme-block .block-title :deep(img) {
-    max-width: 100% !important;
+    max-width: 80% !important; /* 讓標題也隨之縮小 */
     height: auto !important;
   }
 }
@@ -1105,6 +1107,19 @@ onUnmounted(() => {
   align-items: center;
 }
 
+@media (max-width: 1500px) {
+  .programme-wrap {
+    flex-wrap: wrap !important; /* 關鍵：空間不足時自動換行 */
+    justify-content: center !important;
+    gap: 2rem !important;
+  }
+
+  .programme-block {
+    flex: 1 1 360px !important; /* 最小維持 360px，不足則換行 */
+    max-width: 100% !important;
+  }
+}
+
 @media (max-width: 820px) {
   .programme-wrap {
     display: flex !important;
@@ -1114,13 +1129,8 @@ onUnmounted(() => {
     padding: 0 !important;
     justify-content: center !important;
     width: 100% !important;
-    max-width: 789px !important; /* 統一為 789px */
+    max-width: 789px !important;
     margin: 0 auto !important;
-  }
-
-  .programme-block {
-    flex: 1 !important; /* 彈性佔滿空間 */
-    max-width: calc((100% - 20px) / 2) !important;
   }
 
   .programme-block .block-title {
@@ -1156,14 +1166,14 @@ onUnmounted(() => {
 
 .programme-wrap .list {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important; /* 智慧擠壓：最小 180px，不足則自動換行/減少欄數 */
   gap: 20px 15px;
 }
 
-@media (max-width: 1000px) and (min-width: 821px) {
+@media (max-width: 1500px) and (min-width: 821px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px 10px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+    gap: 15px 10px;
   }
 }
 
