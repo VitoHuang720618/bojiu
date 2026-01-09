@@ -916,16 +916,23 @@ onUnmounted(() => {
     height: auto !important;
     margin: 0 auto !important;
     border-radius: 0 0 12px 12px !important;
-    flex-direction: column !important; /* 確保標題與內容上下分開 */
+    flex-direction: row !important; /* 恢復左右佈局以適應 270px 標題 */
+    align-items: stretch !important;
   }
 
   .recommend-footer .block-title {
-    height: 48px !important; /* 指定高度 48px */
-    flex: 0 0 48px !important;
-    width: 100% !important;
-    justify-content: flex-start !important;
-    padding: 0 20px !important;
-    background: linear-gradient(90deg, #8b0012 0%, #ba081f 100%) !important;
+    width: 270px !important; /* 指定寬度 270px */
+    height: 45px !important;  /* 指定高度 45px */
+    flex: 0 0 270px !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    background: #550000 !important; /* 恢復深紅背景 */
+    border-radius: 0 0 0 12px !important;
+  }
+
+  .recommend-footer .block-title img {
+    width: auto !important;
+    height: 20px !important;
   }
 
   .recommend-footer .tools {
