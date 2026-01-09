@@ -930,22 +930,24 @@ onUnmounted(() => {
 
 @media (max-width: 820px) {
   .recommend-footer {
-    width: 100% !important;
-    max-width: 789px !important;
+    width: 740px !important; /* 對齊下方並排區塊的總寬度 360*2 + 20 */
+    max-width: 95% !important;
     height: auto !important;
-    margin: 0 auto !important;
-    border-radius: 0 0 12px 12px !important;
-    flex-direction: column !important; /* 改為上下佈局，解決工具消失問題 */
+    margin: 0 auto 2rem auto !important;
+    border-radius: 12px !important;
+    flex-direction: column !important;
+    background: #1a1a1a !important;
+    overflow: hidden !important;
   }
 
   .recommend-footer .block-title {
-    width: 270px !important;
+    width: 100% !important;
     height: 45px !important;
-    flex: 0 0 45px !important; /* 固定高度 */
-    justify-content: center !important;
-    padding: 0 !important;
+    flex: 0 0 45px !important;
+    justify-content: flex-start !important;
+    padding: 0 15px !important;
     background: #550000 !important;
-    border-radius: 0 !important; /* 標題在上方，不給圓角以免穿幫 */
+    border-radius: 0 !important;
   }
 
   .recommend-footer .block-title img {
@@ -957,14 +959,15 @@ onUnmounted(() => {
     width: 100% !important;
     height: auto !important;
     display: grid !important;
-    grid-template-columns: repeat(6, 1fr) !important; /* 下方一排顯示 6 個 */
-    padding: 10px 0 !important;
-    background-color: #0d0d0d !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    padding: 0 !important;
+    background-color: transparent !important;
   }
 
   .recommend-footer .tools .item {
-    height: 60px !important;
+    height: 65px !important;
     min-height: 0 !important;
+    border-right: 1px solid rgba(255,255,255,0.05);
   }
 
   .recommend-footer .tools .item :deep(.img-button) {
@@ -1087,16 +1090,15 @@ onUnmounted(() => {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    gap: 20px !important; /* 縮減間距防止溢出 (30px -> 20px) */
-    padding: 0 10px !important;
+    gap: 20px !important; /* 20px 間距配合 360px 區塊正好對齊工具欄 */
+    padding: 0 !important;
     justify-content: center !important;
     width: 100% !important;
-    box-sizing: border-box !important;
   }
 
   .programme-block {
-    flex: 0 1 360px !important; /* 改為 0 1，允許在極窄時微縮 */
-    max-width: 360px !important;
+    flex: 0 0 360px !important;
+    width: 360px !important;
   }
 
   .programme-block .block-title {
