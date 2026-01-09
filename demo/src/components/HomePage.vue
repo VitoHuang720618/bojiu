@@ -362,16 +362,17 @@ onUnmounted(() => {
   #banner {
     width: 100%;
     height: 340px;
-    background: #7d7d7d;
+    background: #000;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    display: block;
   }
   #banner :deep(img) {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 保持比例填滿，取代會導致變形的 fill */
+    object-fit: cover; /* 關鍵：裁切左右邊緣以維持 340px 高度下的視覺比例，防止內容被擠壓變形 */
+    object-position: center;
+    display: block;
   }
 }
 
