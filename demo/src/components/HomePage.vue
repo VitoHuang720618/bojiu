@@ -1502,10 +1502,16 @@ onUnmounted(() => {
   }
 
   #float-ad .links .item {
-    width: 250px !important;
-    max-width: 30% !important;
-    height: auto !important;
-    aspect-ratio: 250 / 65 !important;
+    width: auto !important;
+    height: 55px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #float-ad .links .item :deep(img) {
+    height: 55px !important;
+    width: auto !important;
+    max-width: none !important;
   }
 }
 
