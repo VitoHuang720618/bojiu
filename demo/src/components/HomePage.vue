@@ -362,7 +362,7 @@ onUnmounted(() => {
   #banner {
     width: 100%;
     height: 340px;
-    background: #8b0012; /* 使用與 Banner 邊緣相近的深紅色，防止視覺斷層 */
+    background: #8b0012; 
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -371,7 +371,8 @@ onUnmounted(() => {
   #banner :deep(img) {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* 關鍵：完整顯示圖片，絕不變形，絕不截斷 */
+    object-fit: cover; /* 關鍵：強制充滿容器高度與寬度，不留黑邊 */
+    object-position: center; /* 確保「博九送彩金」永遠在中央 */
     display: block;
   }
 }
