@@ -382,7 +382,14 @@ onUnmounted(() => {
 
 @media (max-width: 430px) {
   #banner {
-    height: 180px !important;
+    width: 100%;
+    max-width: 430px;
+    height: 340px !important;
+  }
+
+  #banner :deep(img) {
+    object-fit: fill !important;
+    /* 使圖片展開填滿 430x340 區域 */
   }
 }
 
@@ -433,8 +440,8 @@ onUnmounted(() => {
 @media (max-width: 430px) {
   #home-main {
     border-width: 2px 0;
-    padding: 1.5625rem 0.625rem;
-    padding-bottom: 5rem;
+    padding: 1.5rem 0.625rem;
+    padding-bottom: 3rem;
   }
 }
 
@@ -486,16 +493,6 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 430px) {
-  .button-links {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    padding: 0 10px !important;
-    max-width: 100% !important;
-    margin-bottom: 2rem !important;
-  }
-}
-
 @media (max-width: 1279px) {
   .button-links {
     width: 100% !important;
@@ -507,11 +504,34 @@ onUnmounted(() => {
     justify-content: center !important;
   }
 
+  /* 過渡期處理：調降斷點，確保平板 (如 820px) 維持橫排，直到 640px 以下才切換為 2x2 */
+  @media (max-width: 640px) {
+    .button-links {
+      grid-template-columns: repeat(2, 1fr) !important;
+      max-width: 430px !important;
+    }
+  }
+
   .button-links .item {
     width: 100% !important;
-    max-width: 187px;
+    max-width: none;
+    /* 移除平板下的最大寬度限制，讓按鈕跟隨 Grid 縮放 */
     height: auto !important;
     aspect-ratio: 187 / 54;
+  }
+}
+
+@media (max-width: 430px) {
+  .button-links {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .button-links .item {
+    max-width: none !important;
   }
 }
 
@@ -591,7 +611,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .block-title {
     height: 28px;
     margin-bottom: 1rem;
@@ -599,15 +619,17 @@ onUnmounted(() => {
 
   .recommend-routes-title {
     height: 30px;
+    margin-bottom: 0.75rem !important;
   }
 
   .recommend-routes-title .crown-icon {
-    width: 30px;
-    height: 30px;
+    width: 28px !important;
+    height: 28px !important;
   }
 
   .recommend-routes-title .title-text {
-    font-size: 1.1rem;
+    font-size: 1.1rem !important;
+    letter-spacing: 1px !important;
   }
 
   .programme-block .block-title {
@@ -720,22 +742,24 @@ onUnmounted(() => {
 
 @media (max-width: 1279px) {
   .recommend-slider {
-    width: 432px !important;
-    /* 微調以適應 789px 容器 */
-    height: 183px !important;
-    margin-right: 24px !important;
+    width: 100% !important;
+    max-width: 432px !important;
+    height: auto !important;
+    aspect-ratio: 432 / 183 !important;
+    margin-right: 0 !important;
+    margin-bottom: 20px !important;
+    flex: none !important;
   }
 }
 
 @media (max-width: 768px) {
   .recommend-slider {
-    margin-bottom: 1.25rem;
-    margin-right: 0;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
     height: auto !important;
-    aspect-ratio: 960 / 321;
-    border-radius: 8px;
-    border: 2px solid #f8eec9;
+    aspect-ratio: 432 / 183 !important;
+    margin-right: 0 !important;
+    margin-bottom: 20px !important;
   }
 }
 
@@ -748,17 +772,35 @@ onUnmounted(() => {
 
   .recommend-slider {
     width: 100% !important;
-    margin-right: 0 !important;
+    max-width: 376px !important;
+    height: auto !important;
+    aspect-ratio: 376 / 153 !important;
+    margin: 0 auto 20px auto !important;
+  }
+
+  .carousel-slide img {
+    object-fit: fill !important;
+    height: 100% !important;
   }
 
   .recommend-links {
     width: 100% !important;
+    max-width: none !important;
     margin-left: 0 !important;
+    /* 已在 768px 處理 flex: none */
   }
 
   .recommend-links .links {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .recommend-links .links .item {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    aspect-ratio: 143 / 37 !important;
   }
 }
 
@@ -806,7 +848,10 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .recommend-links {
-    width: 100%;
+    width: 100% !important;
+    margin-left: 0 !important;
+    flex: none !important;
+    /* 在 iPad Mini 等垂直狀態下解鎖高度 */
   }
 }
 
@@ -829,8 +874,12 @@ onUnmounted(() => {
   }
 
   .recommend-links .links .item {
-    width: 143px !important;
-    height: 37px !important;
+    width: 100% !important;
+    /* 改為流體寬度 */
+    max-width: 143px;
+    /* 限制最大寬度但不鎖死 */
+    height: auto !important;
+    aspect-ratio: 143 / 37 !important;
   }
 
   .recommend-routes-title {
@@ -867,12 +916,27 @@ onUnmounted(() => {
 
 @media (max-width: 430px) {
   .recommend-links .links {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.625rem;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
 
   .recommend-routes-title {
     margin-bottom: 0.75rem !important;
+    justify-content: flex-start !important;
+    /* 改為左靠 */
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .recommend-routes-title .crown-icon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .recommend-routes-title .title-text {
+    font-size: 1.1rem !important;
+    letter-spacing: 1px !important;
+    width: auto !important;
   }
 }
 
@@ -969,28 +1033,30 @@ onUnmounted(() => {
   .recommend-footer {
     width: 100% !important;
     max-width: 789px !important;
-    /* 統一為 789px */
     height: auto !important;
     margin: 0 auto 2rem auto !important;
-    border-radius: 12px !important;
+    border-radius: 0 0 20px 20px !important;
+    /* 修正：回歸與 PC 一致的大圓角 */
     flex-direction: column !important;
-    background: #1a1a1a !important;
+    background: #0d0d0d !important;
+    /* 修正：回歸與 PC 一致的深黑色 */
     overflow: hidden !important;
   }
 
   .recommend-footer .block-title {
     width: 100% !important;
-    height: 45px !important;
-    flex: 0 0 45px !important;
+    height: 48px !important;
+    flex: 0 0 48px !important;
     justify-content: flex-start !important;
     padding: 0 15px !important;
     background: #550000 !important;
+    /* 平板下標題欄維持深紅 */
     border-radius: 0 !important;
   }
 
   .recommend-footer .block-title img {
     width: auto !important;
-    height: 20px !important;
+    height: 26px !important;
   }
 
   .recommend-footer .tools {
@@ -1002,25 +1068,49 @@ onUnmounted(() => {
     background-color: transparent !important;
   }
 
+  /* 過渡期處理：在 820px 以下提早將 6 欄切為 3 欄，解決擠壓問題 */
+  @media (max-width: 820px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+  }
+
   @media (max-width: 430px) {
     .recommend-footer .tools {
       grid-template-columns: repeat(3, 1fr) !important;
+      padding: 10px 0 !important;
     }
   }
 
   .recommend-footer .tools .item {
     height: 65px !important;
     min-height: 0 !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  @media (max-width: 430px) {
-    .recommend-footer .tools .item {
-      height: 55px !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  .recommend-footer .tools .item:nth-child(6n) {
+    border-right: none !important;
+  }
+
+  /* 過渡期處理：在 820px 以下提早將 6 欄切為 3 欄，解決擠壓問題 */
+  @media (max-width: 820px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(3, 1fr) !important;
     }
 
     .recommend-footer .tools .item:nth-child(3n) {
+      border-right: none !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(2, 1fr) !important;
+      padding: 0 !important;
+    }
+
+    .recommend-footer .tools .item:nth-child(2n) {
       border-right: none !important;
     }
   }
@@ -1034,22 +1124,18 @@ onUnmounted(() => {
 
 @media (max-width: 430px) {
   .recommend-footer .block-title {
-    height: 34px !important;
-    flex: 0 0 34px !important;
-  }
-
-  .recommend-footer .tools {
-    grid-template-columns: repeat(2, 1fr) !important;
-    padding: 5px 0 !important;
+    height: 48px !important;
+    flex: 0 0 48px !important;
   }
 
   .recommend-footer .tools .item {
-    min-height: 54px !important;
+    height: 65px !important;
+    min-height: 65px !important;
   }
 
   .recommend-footer .tools .item :deep(.img-button) {
-    width: 80px !important;
-    height: 70px !important;
+    width: 90px !important;
+    height: 55px !important;
   }
 }
 
@@ -1288,37 +1374,47 @@ onUnmounted(() => {
 
 @media (max-width: 1279px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(2, 173px) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 14px 14px !important;
-    justify-content: flex-start !important;
-    width: fit-content !important;
+    width: 100% !important;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   .programme-wrap .list .item {
-    width: 173px !important;
+    width: 100% !important;
+    max-width: 180px;
+    margin: 0 auto;
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
-    /* 確保內部內容不溢出 */
     border-radius: 10px !important;
-    /* 統一圓角 */
   }
 
   .programme-wrap .list .item .img {
     width: 100% !important;
-    /* 跟隨父容器 */
-    height: 94px !important;
-    aspect-ratio: auto !important;
+    height: auto !important;
+    aspect-ratio: 173 / 94 !important;
     border-radius: 10px 10px 0 0 !important;
   }
 
   .programme-wrap .list .item span {
     width: 100% !important;
-    /* 跟隨父容器，絕對對齊 */
     height: 34px !important;
     font-size: 0.85rem !important;
     border-radius: 0 0 10px 10px !important;
     margin: 0 !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .programme-wrap .list {
+    max-width: 100% !important;
+    gap: 10px 8px !important;
+  }
+
+  .programme-wrap .list .item {
+    max-width: none !important;
   }
 }
 
@@ -1414,34 +1510,22 @@ onUnmounted(() => {
     left: auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    margin: 40px 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 10px 0 !important;
+    /* 微調內距，確保不裁切且看起來細緻 */
+    /* 豐富背景細節：深紅漸層 + 內陰影 + 細微點狀紋理 */
+    background-color: #5b0202 !important;
+    background-image:
+      radial-gradient(circle, rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 15%, transparent 85%, rgba(0, 0, 0, 0.4) 100%) !important;
+    background-size: 20px 20px, 100% 100% !important;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5), inset 0 -2px 10px rgba(0, 0, 0, 0.5) !important;
     backdrop-filter: none !important;
+    border-top: 1px solid rgba(223, 176, 130, 0.4);
+    border-bottom: 2px solid #000;
   }
 }
 
-@media (max-width: 480px) {
-  #float-ad {
-    background-color: rgba(0, 0, 0, 0.9);
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
-    max-width: none;
-    min-width: auto;
-    padding: 0;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    z-index: 999;
-    position: fixed;
-  }
-
-  #float-ad.collapsed {
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-}
 
 @media (max-width: 1279px) {
   .float-ad-toggle {
@@ -1449,50 +1533,6 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
-  .float-ad-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem;
-    cursor: pointer;
-    background-color: rgba(223, 176, 130, 0.2);
-    border-radius: 12px 12px 0 0;
-    transition: all 0.2s;
-    position: relative;
-    z-index: 1001;
-    /* 提高 z-index 確保可點擊 */
-    border: none;
-    width: 100%;
-    outline: none;
-    -webkit-tap-highlight-color: transparent;
-    /* 移除 iOS 點擊高亮 */
-    touch-action: manipulation;
-    /* 優化觸控體驗 */
-  }
-
-  .float-ad-toggle:hover {
-    background-color: rgba(223, 176, 130, 0.3);
-  }
-
-  .float-ad-toggle:active {
-    background-color: rgba(223, 176, 130, 0.4);
-    transform: scale(0.98);
-  }
-
-  .toggle-icon {
-    color: #dfb082;
-    font-size: 1.2rem;
-    font-weight: bold;
-    pointer-events: none;
-    user-select: none;
-    /* 防止文字選取 */
-  }
-
-  #float-ad.collapsed .float-ad-toggle {
-    border-radius: 12px;
-  }
-}
 
 #float-ad .links {
   display: grid;
@@ -1528,20 +1568,21 @@ onUnmounted(() => {
 
   #float-ad .links .item {
     width: auto !important;
-    height: 65px !important;
-    /* 容器高度 65px */
+    height: 48px !important;
+    /* 調降至 48px，更細緻且不擁擠 */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     flex: 1 !important;
-    max-width: 200px !important;
+    max-width: 130px !important;
   }
 
   #float-ad .links .item :deep(img) {
-    width: 151px !important;
-    /* 圖片寬度 151px */
-    height: 55px !important;
-    /* 圖片高度 55px */
+    width: auto !important;
+    /* 寬度自動，避免拉伸 */
+    height: 48px !important;
+    /* 鎖定高度 48px */
+    max-width: 125px !important;
     object-fit: contain !important;
   }
 }
@@ -1549,26 +1590,33 @@ onUnmounted(() => {
 @media (max-width: 430px) {
   #float-ad {
     position: relative !important;
-    margin: 20px 0 !important;
-    background: transparent !important;
+    margin: 0 !important;
+    /* 與平板一致 */
+    /* 繼承平板背景，不需特別屬性覆蓋則背景會維持 */
   }
 
   #float-ad .links {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-evenly !important;
-    gap: 5px !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    /* 縮減間距更細緻 */
     padding: 0 5px !important;
   }
 
   #float-ad .links .item {
-    width: 32% !important;
-    height: auto !important;
+    width: 31% !important;
+    height: 48px !important;
+    /* 鎖死高度與圖片一致 */
+    aspect-ratio: auto !important;
+    /* 移除強制比例，讓高度驅動 */
+    flex: none !important;
   }
 
   #float-ad .links .item :deep(img) {
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
+    object-fit: contain !important;
   }
 }
 </style>

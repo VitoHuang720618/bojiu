@@ -43,8 +43,17 @@ import { assetManifest } from '../config/assetManifest'
 
 @media (max-width: 820px) {
   #header {
-    height: 40px; /* 確保 820px 時高度正確 */
+    height: 40px;
+    /* 確保 820px 時高度正確 */
   }
+
+  .header__logo {
+    width: 180px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 430px) {
   .header__logo {
     width: 180px;
     height: 50px;
