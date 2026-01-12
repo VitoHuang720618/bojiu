@@ -261,7 +261,8 @@ onUnmounted(() => {
               <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
                 <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
                   :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
-                  :alt="effectiveToolIcons[index].alt || tool.name" :href="effectiveToolIcons[index].href || tool.href" />
+                  :alt="effectiveToolIcons[index].alt || tool.name"
+                  :href="effectiveToolIcons[index].href || tool.href" />
                 <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
                   :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
               </div>
@@ -361,18 +362,20 @@ onUnmounted(() => {
 @media (max-width: 1279px) {
   #banner {
     width: 100%;
-    height: 340px;
-    background: #8b0012; 
+    height: auto !important;
+    /* 高度隨比例縮放 */
+    aspect-ratio: 1920 / 340;
+    /* 鎖定原圖比例 */
+    background: #8b0012;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
   }
+
   #banner :deep(img) {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 關鍵：強制充滿容器高度與寬度，不留黑邊 */
-    object-position: center; /* 確保「博九送彩金」永遠在中央 */
+    object-fit: contain;
+    /* 完整顯示，絕不裁切，絕不變形 */
     display: block;
   }
 }
@@ -521,7 +524,8 @@ onUnmounted(() => {
 .recommend-routes-title {
   display: flex;
   align-items: center;
-  gap: 15px; /* 增加間距以匹配更大圖標 */
+  gap: 15px;
+  /* 增加間距以匹配更大圖標 */
   height: auto;
   margin-bottom: 20px;
 }
@@ -628,6 +632,7 @@ onUnmounted(() => {
     height: 45px !important;
     margin-bottom: 1rem !important;
   }
+
   .programme-block .block-title img {
     width: 100% !important;
     height: 100% !important;
@@ -638,7 +643,8 @@ onUnmounted(() => {
 /* Recommend Section Container */
 .recommend-section {
   width: 100%;
-  max-width: 1525px; /* 修正：925(圖) + 546(路) + 54(邊白) = 1525px */
+  max-width: 1525px;
+  /* 修正：925(圖) + 546(路) + 54(邊白) = 1525px */
   margin: 0 auto 3rem auto;
 }
 
@@ -649,11 +655,13 @@ onUnmounted(() => {
   background: rgba(41, 13, 16, 0.80);
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
-  padding: 45px 27px 44px 27px; /* 標註圖鎖定：上45, 下44, 左27 */
+  padding: 45px 27px 44px 27px;
+  /* 標註圖鎖定：上45, 下44, 左27 */
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between; /* 智慧推開，兩端貼齊 padding */
+  justify-content: space-between;
+  /* 智慧推開，兩端貼齊 padding */
 }
 
 @media (max-width: 1550px) {
@@ -685,7 +693,8 @@ onUnmounted(() => {
   max-width: 925px;
   height: auto;
   aspect-ratio: 925 / 320;
-  flex: 0 1 925px; /* 優先佔據 925px，僅在寬度不足時收縮 */
+  flex: 0 1 925px;
+  /* 優先佔據 925px，僅在寬度不足時收縮 */
   min-width: 0;
   position: relative;
   overflow: hidden;
@@ -704,7 +713,8 @@ onUnmounted(() => {
 
 @media (max-width: 1279px) {
   .recommend-slider {
-    width: 432px !important; /* 微調以適應 789px 容器 */
+    width: 432px !important;
+    /* 微調以適應 789px 容器 */
     height: 183px !important;
     margin-right: 24px !important;
   }
@@ -761,12 +771,14 @@ onUnmounted(() => {
 }
 
 .recommend-links {
-  flex: 0 1 546px; /* 恢復：優先佔據 546px */
+  flex: 0 1 546px;
+  /* 恢復：優先佔據 546px */
   max-width: 546px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 20px; /* 依照標註圖給予足夠間隙 */
+  margin-left: 20px;
+  /* 依照標註圖給予足夠間隙 */
 }
 
 @media (max-width: 768px) {
@@ -852,7 +864,8 @@ onUnmounted(() => {
   padding: 0;
   display: flex;
   flex-direction: row;
-  align-items: stretch; /* 關鍵：確保所有子元件齊高 */
+  align-items: stretch;
+  /* 關鍵：確保所有子元件齊高 */
   height: auto;
   background-color: #0d0d0d;
   border-radius: 0 0 20px 20px;
@@ -932,7 +945,8 @@ onUnmounted(() => {
 @media (max-width: 1279px) {
   .recommend-footer {
     width: 100% !important;
-    max-width: 789px !important; /* 統一為 789px */
+    max-width: 789px !important;
+    /* 統一為 789px */
     height: auto !important;
     margin: 0 auto 2rem auto !important;
     border-radius: 12px !important;
@@ -968,7 +982,7 @@ onUnmounted(() => {
   .recommend-footer .tools .item {
     height: 65px !important;
     min-height: 0 !important;
-    border-right: 1px solid rgba(255,255,255,0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .recommend-footer .tools .item :deep(.img-button) {
@@ -1007,7 +1021,8 @@ onUnmounted(() => {
   flex: 1;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  align-self: stretch; /* 確保背景填滿高度 */
+  align-self: stretch;
+  /* 確保背景填滿高度 */
 }
 
 .recommend-footer .tools .item:hover {
@@ -1152,7 +1167,8 @@ onUnmounted(() => {
 
 @media (min-width: 1501px) {
   .programme-wrap .list {
-    grid-template-columns: repeat(3, 1fr) !important; /* PC 版鎖定 3 欄 */
+    grid-template-columns: repeat(3, 1fr) !important;
+    /* PC 版鎖定 3 欄 */
   }
 }
 
@@ -1231,7 +1247,8 @@ onUnmounted(() => {
 .programme-wrap .list .item span {
   display: flex;
   align-items: center;
-  justify-content: center; /* PC 版置中 */
+  justify-content: center;
+  /* PC 版置中 */
   width: 100%;
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
@@ -1256,19 +1273,23 @@ onUnmounted(() => {
     width: 173px !important;
     display: flex !important;
     flex-direction: column !important;
-    overflow: hidden !important; /* 確保內部內容不溢出 */
-    border-radius: 10px !important; /* 統一圓角 */
+    overflow: hidden !important;
+    /* 確保內部內容不溢出 */
+    border-radius: 10px !important;
+    /* 統一圓角 */
   }
 
   .programme-wrap .list .item .img {
-    width: 100% !important; /* 跟隨父容器 */
+    width: 100% !important;
+    /* 跟隨父容器 */
     height: 94px !important;
     aspect-ratio: auto !important;
     border-radius: 10px 10px 0 0 !important;
   }
 
   .programme-wrap .list .item span {
-    width: 100% !important; /* 跟隨父容器，絕對對齊 */
+    width: 100% !important;
+    /* 跟隨父容器，絕對對齊 */
     height: 34px !important;
     font-size: 0.85rem !important;
     border-radius: 0 0 10px 10px !important;
@@ -1342,11 +1363,13 @@ onUnmounted(() => {
 /* Float Ad */
 #float-ad {
   bottom: 1rem;
-  max-width: 120px; /* 依照要求調整為 120px */
+  max-width: 120px;
+  /* 依照要求調整為 120px */
   min-width: 75px;
   position: fixed;
   right: 2.5rem;
-  width: auto; /* 從百分比改為 auto 以便受 max-width 控制 */
+  width: auto;
+  /* 從百分比改為 auto 以便受 max-width 控制 */
   z-index: 99;
   transition: all 0.3s ease;
 }
