@@ -362,20 +362,20 @@ onUnmounted(() => {
 @media (max-width: 1279px) {
   #banner {
     width: 100%;
-    height: auto !important;
-    /* 高度隨比例縮放 */
-    aspect-ratio: 1920 / 340;
-    /* 鎖定原圖比例 */
+    height: 340px;
     background: #8b0012;
+    /* 使用與 Banner 邊緣相近的深紅色，防止視覺斷層 */
     overflow: hidden;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   #banner :deep(img) {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    /* 完整顯示，絕不裁切，絕不變形 */
+    /* 關鍵：完整顯示圖片，絕不變形，絕不截斷 */
     display: block;
   }
 }
@@ -1374,10 +1374,26 @@ onUnmounted(() => {
   transition: all 0.3s ease;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1440px) and (min-width: 1280px) {
   #float-ad {
     max-width: 75px;
     right: 1rem;
+  }
+}
+
+@media (max-width: 1279px) {
+  #float-ad {
+    position: relative !important;
+    bottom: 0 !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 40px 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
   }
 }
 
@@ -1402,9 +1418,10 @@ onUnmounted(() => {
   }
 }
 
-/* 收合/展開按鈕 */
-.float-ad-toggle {
-  display: none;
+@media (max-width: 1279px) {
+  .float-ad-toggle {
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1465,9 +1482,30 @@ onUnmounted(() => {
   aspect-ratio: 120 / 105;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1440px) and (min-width: 1280px) {
   #float-ad .links {
     gap: 0.875rem;
+  }
+}
+
+@media (max-width: 1279px) {
+  #float-ad .links {
+    display: flex !important;
+    /* 強制在 1279px 以下顯示，無視 Vue 的 v-show */
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 20px !important;
+    width: 100% !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  #float-ad .links .item {
+    width: 250px !important;
+    max-width: 30% !important;
+    height: auto !important;
+    aspect-ratio: 250 / 65 !important;
   }
 }
 
