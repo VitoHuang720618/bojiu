@@ -1503,15 +1503,21 @@ onUnmounted(() => {
 
   #float-ad .links .item {
     width: auto !important;
-    height: 55px !important;
+    height: 65px !important;
+    /* 容器高度 65px */
     display: flex !important;
     align-items: center !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    max-width: 200px !important;
   }
 
   #float-ad .links .item :deep(img) {
+    width: 151px !important;
+    /* 圖片寬度 151px */
     height: 55px !important;
-    width: auto !important;
-    max-width: none !important;
+    /* 圖片高度 55px */
+    object-fit: contain !important;
   }
 }
 
