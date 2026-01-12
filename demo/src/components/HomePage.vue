@@ -380,6 +380,12 @@ onUnmounted(() => {
   }
 }
 
+@media (max-width: 430px) {
+  #banner {
+    height: 180px !important;
+  }
+}
+
 .banner-placeholder {
   width: 100%;
   position: relative;
@@ -424,12 +430,11 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   #home-main {
     border-width: 2px 0;
-    padding: 1.5625rem 0.9375rem;
+    padding: 1.5625rem 0.625rem;
     padding-bottom: 5rem;
-    /* 為收合按鈕留出空間 */
   }
 }
 
@@ -481,11 +486,13 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .button-links {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1.5625rem;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 10px !important;
+    max-width: 100% !important;
+    margin-bottom: 2rem !important;
   }
 }
 
@@ -733,9 +740,25 @@ onUnmounted(() => {
 }
 
 @media (max-width: 430px) {
+  .recommend-content {
+    flex-direction: column !important;
+    padding: 15px !important;
+    gap: 20px !important;
+  }
+
   .recommend-slider {
-    margin-bottom: 1rem;
-    aspect-ratio: 450 / 183;
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+
+  .recommend-links {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .recommend-links .links {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
 }
 
@@ -979,10 +1002,27 @@ onUnmounted(() => {
     background-color: transparent !important;
   }
 
+  @media (max-width: 430px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+  }
+
   .recommend-footer .tools .item {
     height: 65px !important;
     min-height: 0 !important;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  @media (max-width: 430px) {
+    .recommend-footer .tools .item {
+      height: 55px !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .recommend-footer .tools .item:nth-child(3n) {
+      border-right: none !important;
+    }
   }
 
   .recommend-footer .tools .item :deep(.img-button) {
@@ -1078,17 +1118,11 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
-  .programme-wrap {
-    flex-direction: column;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 1600px) {
+@media (max-width: 1279px) {
   .programme-wrap {
     width: 100%;
-    padding: 0 27px;
+    padding: 0 15px;
+    /* 統一手機與平板內距 */
     box-sizing: border-box;
   }
 }
@@ -1154,9 +1188,15 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .programme-wrap {
-    gap: 2rem;
+    flex-direction: column !important;
+    gap: 30px !important;
+    padding: 0 15px !important;
+  }
+
+  .programme-block {
+    max-width: 100% !important;
   }
 }
 
@@ -1193,24 +1233,9 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
-  .programme-wrap .list {
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .programme-wrap .list {
-    gap: 0.625rem;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  }
-}
-
-@media (max-width: 360px) {
-  .programme-wrap .list {
-    grid-template-columns: repeat(2, 1fr);
-    /* 極窄螢幕強制 2 欄 */
+@media (max-width: 430px) {
+  .programme-wrap .list .item {
+    width: 100% !important;
   }
 }
 
@@ -1521,24 +1546,29 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
-  #float-ad .links {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    padding: 1rem;
-    animation: slideDown 0.3s ease;
+@media (max-width: 430px) {
+  #float-ad {
+    position: relative !important;
+    margin: 20px 0 !important;
+    background: transparent !important;
   }
 
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
+  #float-ad .links {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-evenly !important;
+    gap: 5px !important;
+    padding: 0 5px !important;
+  }
 
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  #float-ad .links .item {
+    width: 32% !important;
+    height: auto !important;
+  }
+
+  #float-ad .links .item :deep(img) {
+    width: 100% !important;
+    height: auto !important;
   }
 }
 </style>
