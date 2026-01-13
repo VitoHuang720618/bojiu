@@ -13,7 +13,7 @@ export const siteConfig: SiteConfig = {
   title: '博九娱乐网',
   description: 'B9 Entertainment Website',
   baseUrl: getBaseUrl(),
-  useApi: true,
+  useApi: false,
 
   navigation: [
     // Top navigation buttons
@@ -165,11 +165,11 @@ export const programContent = [
 
 // Carousel slides data
 export const carouselSlides = [
-  {
-    id: 'slide-1',
-    alt: '輪播圖 1',
-    href: ''
-  }
+  { id: 'slide-1', alt: '輪播圖 1', href: '' },
+  { id: 'slide-2', alt: '輪播圖 2', href: '' },
+  { id: 'slide-3', alt: '輪播圖 3', href: '' },
+  { id: 'slide-4', alt: '輪播圖 4', href: '' },
+  { id: 'slide-5', alt: '輪播圖 5', href: '' }
 ]
 
 // Float ad buttons data

@@ -36,7 +36,11 @@ export const assetManifest = {
 
   // Carousel slides
   carouselSlides: [
-    '/assets/images/carousel-0.png'
+    '/assets/images/carousel-0.png',
+    '/assets/images/carousel-1.png',
+    '/assets/images/carousel-2.png',
+    '/assets/images/carousel-3.png',
+    '/assets/images/carousel-4.png'
   ],
 
   // Section titles
@@ -49,7 +53,12 @@ export const assetManifest = {
 
   // Route links (6 items)
   routeLinks: [
-    { default: '/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png', hover: '/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png' }
+    { default: '/assets/images/Lineweb-btn-1.webp', hover: '/assets/images/Lineweb-btn-1-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-2.webp', hover: '/assets/images/Lineweb-btn-2-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-3.webp', hover: '/assets/images/Lineweb-btn-3-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-4.webp', hover: '/assets/images/Lineweb-btn-4-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-5.webp', hover: '/assets/images/Lineweb-btn-5-hover.webp' },
+    { default: '/assets/images/Lineweb-btn-6.webp', hover: '/assets/images/Lineweb-btn-6-hover.webp' }
   ],
 
   // Browser/Tool icons (6 items)
@@ -94,22 +103,22 @@ export const assetManifest = {
 
   // Video thumbnails (6 items)
   videoThumbnails: [
-    '/assets/images/videoThumbnails-0-image.png',
-    '/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png',
-    '/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png',
-    '/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png',
-    '/assets/images/4e67c664-2a43-4ac2-9e09-dff556a007ce.png',
-    '/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png'
+    '/assets/images/video-0.png',
+    '/assets/images/video-1.png',
+    '/assets/images/video-2.png',
+    '/assets/images/video-3.png',
+    '/assets/images/video-4.png',
+    '/assets/images/video-5.png'
   ],
 
   // Program thumbnails (6 items)
   programThumbnails: [
-    '/assets/images/29627d6a-6020-49ae-8625-44f0ec5f7999.jpg',
-    '/assets/images/c67bb6cc-e00c-4811-a62a-38604bda41f7.png',
-    '/assets/images/391bcfda-fff2-4a55-b3d2-444884ddf87f.png',
-    '/assets/images/a1d2e390-0a0f-4dde-8d9b-6de5bb9f4de0.jpg',
-    '/assets/images/626e1c19-bf48-40ed-9a2f-8e2a8e4dce13.png',
-    '/assets/images/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg'
+    '/assets/images/program-0.png',
+    '/assets/images/program-1.png',
+    '/assets/images/program-2.png',
+    '/assets/images/program-3.png',
+    '/assets/images/program-4.png',
+    '/assets/images/program-5.png'
   ],
 
   // Float ad buttons (3 items)
