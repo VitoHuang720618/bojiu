@@ -4,43 +4,39 @@ export const assetManifest = {
   logo: '/assets/images/logo.png',
 
   // Banner
-  banner: '/assets/images/4e2e22f3-2d06-4dbf-9d3a-4e83431010fd.png',
+  banner: 'http://localhost:3002/uploads/banner.png',
 
   // Top button links (4 items)
   buttonLinks: [
     {
       id: 'universal-browser',
-      default: '/assets/images/2d60d632-004e-4b69-ac84-8fc1817ce52e.png',
-      hover: '/assets/images/6ef6554f-4b80-4cd0-9bbf-782dc066c330.png',
+      default: 'http://localhost:3002/uploads/button-0-defaultImage.png',
+      hover: 'http://localhost:3002/uploads/button-0-hoverImage.png',
       alt: '寰宇瀏覽器'
     },
     {
       id: 'app',
-      default: '/assets/images/1630a76f-f7e7-4af7-8099-082bc201512c.png',
-      hover: '/assets/images/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png',
+      default: 'http://localhost:3002/uploads/button-1-defaultImage.png',
+      hover: 'http://localhost:3002/uploads/button-1-hoverImage.png',
       alt: 'APP'
     },
     {
       id: 'fun-park',
-      default: '/assets/images/64e1d47d-537d-45d0-bfd4-801e473bb525.png',
-      hover: '/assets/images/87fe8990-8297-4e70-9693-e37c665ee087.png',
+      default: 'http://localhost:3002/uploads/button-2-defaultImage.png',
+      hover: 'http://localhost:3002/uploads/button-2-hoverImage.png',
       alt: 'FUN乐园'
     },
     {
       id: 'partners',
-      default: '/assets/images/95e17bec-043c-49ea-a438-e8057a39f4ad.png',
-      hover: '/assets/images/e9df8ef5-cd97-4c06-b051-a894e67f0935.png',
+      default: 'http://localhost:3002/uploads/button-3-defaultImage.png',
+      hover: 'http://localhost:3002/uploads/button-3-hoverImage.png',
       alt: '合作夥伴'
     }
   ],
 
   // Carousel slides
   carouselSlides: [
-    '/assets/images/d11c3f6c-5c79-4260-907c-d85531d5b984.png',
-    '/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg',
-    '/assets/images/8778ae33-e80b-4bfa-9d38-169e54cd558d.png',
-    '/assets/images/8c95d0bb-99d5-40b2-bcd8-5db9503b8341.png',
-    '/assets/images/39c91b7a-9464-4acc-85a5-8ac436268dd2.png'
+    'http://localhost:3002/uploads/carousel-0.png'
   ],
 
   // Section titles
@@ -52,59 +48,53 @@ export const assetManifest = {
   },
 
   // Route links (6 items)
-  // Route links (6 items)
   routeLinks: [
-    { default: '/assets/images/Lineweb-btn-1.webp', hover: '/assets/images/Lineweb-btn-1-hover.webp' },
-    { default: '/assets/images/Lineweb-btn-2.webp', hover: '/assets/images/Lineweb-btn-2-hover.webp' },
-    { default: '/assets/images/Lineweb-btn-3.webp', hover: '/assets/images/Lineweb-btn-3-hover.webp' },
-    { default: '/assets/images/Lineweb-btn-4.webp', hover: '/assets/images/Lineweb-btn-4-hover.webp' },
-    { default: '/assets/images/Lineweb-btn-5.webp', hover: '/assets/images/Lineweb-btn-5-hover.webp' },
-    { default: '/assets/images/Lineweb-btn-6.webp', hover: '/assets/images/Lineweb-btn-6-hover.webp' }
+    { default: '/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png', hover: '/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png' }
   ],
 
   // Browser/Tool icons (6 items)
   toolIcons: [
     {
       id: 'xiaohongshu',
-      default: '/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png',
-      hover: '/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png',
+      default: 'http://localhost:3002/uploads/tool-0-default.png',
+      hover: 'http://localhost:3002/uploads/tool-0-hover.png',
       alt: '小紅書'
     },
     {
       id: 'douyin',
-      default: '/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png',
-      hover: '/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png',
+      default: 'http://localhost:3002/uploads/tool-1-default.png',
+      hover: 'http://localhost:3002/uploads/tool-1-hover.png',
       alt: '抖音'
     },
     {
       id: 'baidu',
-      default: '/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png',
-      hover: '/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png',
+      default: 'http://localhost:3002/uploads/tool-2-default.png',
+      hover: 'http://localhost:3002/uploads/tool-2-hover.png',
       alt: '百度'
     },
     {
       id: 'youku',
-      default: '/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png',
-      hover: '/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png',
+      default: 'http://localhost:3002/uploads/tool-3-default.png',
+      hover: 'http://localhost:3002/uploads/tool-3-hover.png',
       alt: 'YOUKU'
     },
     {
       id: 'iqiyi',
-      default: '/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png',
-      hover: '/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png',
+      default: 'http://localhost:3002/uploads/tool-4-default.png',
+      hover: 'http://localhost:3002/uploads/tool-4-hover.png',
       alt: 'iQIYI'
     },
     {
       id: 'x',
-      default: '/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png',
-      hover: '/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png',
+      default: 'http://localhost:3002/uploads/tool-5-default.png',
+      hover: 'http://localhost:3002/uploads/tool-5-hover.png',
       alt: 'X'
     }
   ],
 
   // Video thumbnails (6 items)
   videoThumbnails: [
-    '/assets/images/508f359d-7332-42f2-9181-565f7571e1af.png',
+    'http://localhost:3002/uploads/videoThumbnails-0-image.png',
     '/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png',
     '/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png',
     '/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png',
@@ -126,20 +116,20 @@ export const assetManifest = {
   floatAdButtons: [
     {
       id: 'customer-service',
-      default: '/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png',
-      hover: '/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png',
+      default: 'http://localhost:3002/uploads/float-0-default.png',
+      hover: 'http://localhost:3002/uploads/float-0-hover.png',
       alt: '在线客服'
     },
     {
       id: 'girl-douyin',
-      default: '/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png',
-      hover: '/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png',
+      default: 'http://localhost:3002/uploads/float-1-default.png',
+      hover: 'http://localhost:3002/uploads/float-1-hover.png',
       alt: '女孩抖音'
     },
     {
       id: 'sports-douyin',
-      default: '/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png',
-      hover: '/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png',
+      default: 'http://localhost:3002/uploads/float-2-default.png',
+      hover: 'http://localhost:3002/uploads/float-2-hover.png',
       alt: '体育抖音'
     }
   ]

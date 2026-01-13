@@ -6,7 +6,9 @@ import { assetManifest } from '../config/assetManifest'
 import {
   recommendedRoutes,
   recommendedTools,
-  carouselSlides
+  carouselSlides,
+  videoContent,
+  programContent
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
 import type { ButtonLinkConfig } from '../types'
@@ -58,13 +60,29 @@ const effectiveBackgroundImage = computed(() => {
 })
 
 const effectiveVideoThumbnails = computed(() => {
-  // 只使用API數據，不使用預設資料
-  return apiVideoThumbnails.value
+  if (apiVideoThumbnails.value.length > 0) {
+    return apiVideoThumbnails.value
+  }
+  // 回退到預設資料
+  return videoContent.map((video, index) => ({
+    image: assetManifest.videoThumbnails[index] || '',
+    href: '#',
+    alt: video.title,
+    title: video.title
+  }))
 })
 
 const effectiveProgramThumbnails = computed(() => {
-  // 只使用API數據，不使用預設資料
-  return apiProgramThumbnails.value
+  if (apiProgramThumbnails.value.length > 0) {
+    return apiProgramThumbnails.value
+  }
+  // 回退到預設資料
+  return programContent.map((program, index) => ({
+    image: assetManifest.programThumbnails[index] || '',
+    href: '#',
+    alt: program.title,
+    title: program.title
+  }))
 })
 
 const effectiveButtonLinks = computed(() => {
