@@ -50,13 +50,13 @@ const effectiveCarouselSlides = computed(() => {
 const effectiveBanner = computed(() => {
   const bannerImage = apiBanner.value
   console.log('計算 Banner:', bannerImage)
-  return bannerImage
+  return bannerImage || assetManifest.banner
 })
 
 const effectiveBackgroundImage = computed(() => {
   const bgImage = apiBackgroundImage.value
   console.log('計算背景圖:', bgImage)
-  return bgImage
+  return bgImage || (assetManifest as any).backgroundImage
 })
 
 const effectiveVideoThumbnails = computed(() => {

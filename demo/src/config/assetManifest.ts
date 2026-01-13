@@ -5,6 +5,7 @@ export const assetManifest = {
 
   // Banner
   banner: '/assets/images/banner.png',
+  backgroundImage: '/assets/images/backgroundImage.png',
 
   // Top button links (4 items)
   buttonLinks: [
