@@ -49,13 +49,11 @@ const effectiveCarouselSlides = computed(() => {
 
 const effectiveBanner = computed(() => {
   const bannerImage = apiBanner.value
-  console.log('計算 Banner:', bannerImage)
   return bannerImage || assetManifest.banner
 })
 
 const effectiveBackgroundImage = computed(() => {
   const bgImage = apiBackgroundImage.value
-  console.log('計算背景圖:', bgImage)
   return bgImage || (assetManifest as any).backgroundImage
 })
 
@@ -87,7 +85,6 @@ const effectiveProgramThumbnails = computed(() => {
 
 const effectiveButtonLinks = computed(() => {
   const buttonLinksData = apiButtonLinks.value
-  console.log('計算按鈕鏈接:', buttonLinksData)
 
   if (buttonLinksData.length > 0) {
     return buttonLinksData.map((button, index) => ({
@@ -113,7 +110,6 @@ const effectiveButtonLinks = computed(() => {
 
 const effectiveToolIcons = computed(() => {
   const toolIconsData = apiToolIcons.value
-  console.log('計算工具圖標:', toolIconsData)
 
   if (toolIconsData.length > 0) {
     return toolIconsData.map((tool, index) => ({
@@ -137,7 +133,6 @@ const effectiveToolIcons = computed(() => {
 
 const effectiveFloatAdButtons = computed(() => {
   const floatAdButtonsData = apiFloatAdButtons.value
-  console.log('計算浮動廣告按鈕:', floatAdButtonsData)
 
   if (floatAdButtonsData.length > 0) {
     return floatAdButtonsData.map((button, index) => ({
@@ -160,7 +155,6 @@ const effectiveFloatAdButtons = computed(() => {
 const effectiveRouteLinks = computed(() => {
   // 只使用API數據，和背景圖設置一樣
   const routeLinksData = apiRouteLinks.value
-  console.log('計算推薦路線按鈕:', routeLinksData)
 
   if (Array.isArray(routeLinksData)) {
     return routeLinksData
@@ -188,9 +182,7 @@ const stopCarousel = () => {
 // 加载轮播图和banner数据
 const loadConfig = async () => {
   try {
-    console.log('開始加載配置...')
     const config = await carouselService.getConfig()
-    console.log('從 API 加載的配置:', config)
     apiCarouselSlides.value = config.carouselSlides
     apiBanner.value = config.banner
     apiBackgroundImage.value = config.backgroundImage
@@ -200,13 +192,10 @@ const loadConfig = async () => {
     apiToolIcons.value = config.toolIcons
     apiFloatAdButtons.value = config.floatAdButtons || []
     apiRouteLinks.value = config.routeLinks || null
-    console.log('背景圖設置為:', config.backgroundImage)
-    console.log('effectiveBackgroundImage:', effectiveBackgroundImage.value)
-    console.log('buttonLinks 設置為:', config.buttonLinks)
-    console.log('toolIcons 設置為:', config.toolIcons)
-    console.log('effectiveToolIcons:', effectiveToolIcons.value)
-  } catch (error) {
-    console.error('Failed to load config:', error)
+  } catch (error: any) {
+    if (error?.message !== 'API is disabled via config') {
+      console.error('Failed to load config:', error)
+    }
   }
 }
 
@@ -221,10 +210,6 @@ const onBannerSizeLoaded = () => {
 
 // 切換浮動按鈕收合狀態
 const toggleFloatAd = (event?: Event) => {
-  console.log('toggleFloatAd clicked, current state:', isFloatAdCollapsed.value)
-  console.log('Event:', event)
-  console.log('Event target:', event?.target)
-
   // 防止事件冒泡
   if (event) {
     event.preventDefault()
@@ -232,7 +217,6 @@ const toggleFloatAd = (event?: Event) => {
   }
 
   isFloatAdCollapsed.value = !isFloatAdCollapsed.value
-  console.log('new state:', isFloatAdCollapsed.value)
 }
 
 onUnmounted(() => {

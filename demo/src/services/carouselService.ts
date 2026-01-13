@@ -80,8 +80,11 @@ class CarouselService {
           hover: processImageUrl(config.routeLinks.hover)
         } : null
       }
-    } catch (error) {
-      console.error('Failed to fetch config from API:', error)
+    } catch (error: any) {
+      // 這裡不再打印 Error，保持主控台乾淨
+      if (error?.message !== 'API is disabled via config') {
+        console.error('Failed to fetch config from API:', error)
+      }
 
       // 返回默认数据作为后备
       return {
