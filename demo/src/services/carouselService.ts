@@ -22,6 +22,12 @@ class CarouselService {
     routeLinks?: { default: string, hover: string } | null
   }> {
     try {
+      // 檢查是否啟用了 API
+      const { siteConfig } = await import('../config/siteConfig')
+      if (siteConfig.useApi === false) {
+        throw new Error('API is disabled via config')
+      }
+
       const response = await fetch(`${this.baseUrl}/public/config`)
 
       if (!response.ok) {

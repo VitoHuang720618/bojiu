@@ -61,6 +61,7 @@ export interface SiteConfig {
   title: string
   description: string
   baseUrl: string
+  useApi: boolean
   navigation: NavigationItem[]
   footer: FooterConfig
   theme: ThemeConfig

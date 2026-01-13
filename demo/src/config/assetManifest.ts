@@ -4,39 +4,39 @@ export const assetManifest = {
   logo: '/assets/images/logo.png',
 
   // Banner
-  banner: 'http://localhost:3002/uploads/banner.png',
+  banner: '/assets/images/banner.png',
 
   // Top button links (4 items)
   buttonLinks: [
     {
       id: 'universal-browser',
-      default: 'http://localhost:3002/uploads/button-0-defaultImage.png',
-      hover: 'http://localhost:3002/uploads/button-0-hoverImage.png',
+      default: '/assets/images/button-0-defaultImage.png',
+      hover: '/assets/images/button-0-hoverImage.png',
       alt: '寰宇瀏覽器'
     },
     {
       id: 'app',
-      default: 'http://localhost:3002/uploads/button-1-defaultImage.png',
-      hover: 'http://localhost:3002/uploads/button-1-hoverImage.png',
+      default: '/assets/images/button-1-defaultImage.png',
+      hover: '/assets/images/button-1-hoverImage.png',
       alt: 'APP'
     },
     {
       id: 'fun-park',
-      default: 'http://localhost:3002/uploads/button-2-defaultImage.png',
-      hover: 'http://localhost:3002/uploads/button-2-hoverImage.png',
+      default: '/assets/images/button-2-defaultImage.png',
+      hover: '/assets/images/button-2-hoverImage.png',
       alt: 'FUN乐园'
     },
     {
       id: 'partners',
-      default: 'http://localhost:3002/uploads/button-3-defaultImage.png',
-      hover: 'http://localhost:3002/uploads/button-3-hoverImage.png',
+      default: '/assets/images/button-3-defaultImage.png',
+      hover: '/assets/images/button-3-hoverImage.png',
       alt: '合作夥伴'
     }
   ],
 
   // Carousel slides
   carouselSlides: [
-    'http://localhost:3002/uploads/carousel-0.png'
+    '/assets/images/carousel-0.png'
   ],
 
   // Section titles
@@ -56,45 +56,45 @@ export const assetManifest = {
   toolIcons: [
     {
       id: 'xiaohongshu',
-      default: 'http://localhost:3002/uploads/tool-0-default.png',
-      hover: 'http://localhost:3002/uploads/tool-0-hover.png',
+      default: '/assets/images/tool-0-default.png',
+      hover: '/assets/images/tool-0-hover.png',
       alt: '小紅書'
     },
     {
       id: 'douyin',
-      default: 'http://localhost:3002/uploads/tool-1-default.png',
-      hover: 'http://localhost:3002/uploads/tool-1-hover.png',
+      default: '/assets/images/tool-1-default.png',
+      hover: '/assets/images/tool-1-hover.png',
       alt: '抖音'
     },
     {
       id: 'baidu',
-      default: 'http://localhost:3002/uploads/tool-2-default.png',
-      hover: 'http://localhost:3002/uploads/tool-2-hover.png',
+      default: '/assets/images/tool-2-default.png',
+      hover: '/assets/images/tool-2-hover.png',
       alt: '百度'
     },
     {
       id: 'youku',
-      default: 'http://localhost:3002/uploads/tool-3-default.png',
-      hover: 'http://localhost:3002/uploads/tool-3-hover.png',
+      default: '/assets/images/tool-3-default.png',
+      hover: '/assets/images/tool-3-hover.png',
       alt: 'YOUKU'
     },
     {
       id: 'iqiyi',
-      default: 'http://localhost:3002/uploads/tool-4-default.png',
-      hover: 'http://localhost:3002/uploads/tool-4-hover.png',
+      default: '/assets/images/tool-4-default.png',
+      hover: '/assets/images/tool-4-hover.png',
       alt: 'iQIYI'
     },
     {
       id: 'x',
-      default: 'http://localhost:3002/uploads/tool-5-default.png',
-      hover: 'http://localhost:3002/uploads/tool-5-hover.png',
+      default: '/assets/images/tool-5-default.png',
+      hover: '/assets/images/tool-5-hover.png',
       alt: 'X'
     }
   ],
 
   // Video thumbnails (6 items)
   videoThumbnails: [
-    'http://localhost:3002/uploads/videoThumbnails-0-image.png',
+    '/assets/images/videoThumbnails-0-image.png',
     '/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png',
     '/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png',
     '/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png',
@@ -116,20 +116,20 @@ export const assetManifest = {
   floatAdButtons: [
     {
       id: 'customer-service',
-      default: 'http://localhost:3002/uploads/float-0-default.png',
-      hover: 'http://localhost:3002/uploads/float-0-hover.png',
+      default: '/assets/images/float-0-default.png',
+      hover: '/assets/images/float-0-hover.png',
       alt: '在线客服'
     },
     {
       id: 'girl-douyin',
-      default: 'http://localhost:3002/uploads/float-1-default.png',
-      hover: 'http://localhost:3002/uploads/float-1-hover.png',
+      default: '/assets/images/float-1-default.png',
+      hover: '/assets/images/float-1-hover.png',
       alt: '女孩抖音'
     },
     {
       id: 'sports-douyin',
-      default: 'http://localhost:3002/uploads/float-2-default.png',
-      hover: 'http://localhost:3002/uploads/float-2-hover.png',
+      default: '/assets/images/float-2-default.png',
+      hover: '/assets/images/float-2-hover.png',
       alt: '体育抖音'
     }
   ]
