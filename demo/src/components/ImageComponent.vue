@@ -30,13 +30,23 @@ const handleLoad = () => {
 }
 
 const handleError = () => {
+  // 如果還沒進入視窗（src 是空的），有些瀏覽器會觸發 error，這時不應計入錯誤
+  if (props.lazy && !isIntersecting.value) return
+
   hasError.value = true
   if (props.fallback && currentSrc.value !== props.fallback) {
     currentSrc.value = props.fallback
     hasLoggedError.value = false // 重置，允許對 fallback 報錯一次
   } else if (!hasLoggedError.value && currentSrc.value) {
-    console.error(`Failed to load image: ${currentSrc.value}`)
-    hasLoggedError.value = true
+    // 檢查 resolved src 是否只是根路徑（代表沒載入成功或路徑為空）
+    const resolvedSrc = imgRef.value?.src || ''
+    const isRootUrl = resolvedSrc === window.location.origin + '/'
+
+    if (!isRootUrl) {
+      const errorMsg = `Failed to load image: ${resolvedSrc || currentSrc.value}`
+      console.error(errorMsg)
+      hasLoggedError.value = true
+    }
   }
 }
 
