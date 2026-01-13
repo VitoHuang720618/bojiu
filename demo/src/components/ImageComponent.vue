@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import type { ImageProps } from '../types'
 
 const props = withDefaults(defineProps<ImageProps>(), {
@@ -10,22 +10,33 @@ const props = withDefaults(defineProps<ImageProps>(), {
 const imgRef = ref<HTMLImageElement | null>(null)
 const isLoaded = ref(false)
 const hasError = ref(false)
+const hasLoggedError = ref(false)
 const currentSrc = ref(props.src)
 const isIntersecting = ref(false)
+
+watch(() => props.src, (newSrc) => {
+  currentSrc.value = newSrc
+  isLoaded.value = false
+  hasError.value = false
+  hasLoggedError.value = false
+})
 
 let observer: IntersectionObserver | null = null
 
 const handleLoad = () => {
   isLoaded.value = true
   hasError.value = false
+  hasLoggedError.value = false
 }
 
 const handleError = () => {
   hasError.value = true
   if (props.fallback && currentSrc.value !== props.fallback) {
     currentSrc.value = props.fallback
-  } else {
+    hasLoggedError.value = false // 重置，允許對 fallback 報錯一次
+  } else if (!hasLoggedError.value && currentSrc.value) {
     console.error(`Failed to load image: ${currentSrc.value}`)
+    hasLoggedError.value = true
   }
 }
 
@@ -48,7 +59,7 @@ onMounted(() => {
         threshold: 0.01
       }
     )
-    
+
     observer.observe(imgRef.value)
   } else {
     // Load immediately if not lazy
@@ -65,16 +76,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <img
-    ref="imgRef"
-    :src="isIntersecting || !lazy ? currentSrc : ''"
-    :alt="alt"
-    :width="width"
-    :height="height"
-    :class="{ 'is-loaded': isLoaded, 'has-error': hasError }"
-    @load="handleLoad"
-    @error="handleError"
-  />
+  <img ref="imgRef" :src="isIntersecting || !lazy ? currentSrc : ''" :alt="alt" :width="width" :height="height"
+    :class="{ 'is-loaded': isLoaded, 'has-error': hasError }" @load="handleLoad" @error="handleError" />
 </template>
 
 <style scoped>
