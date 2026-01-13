@@ -329,9 +329,28 @@ onUnmounted(() => {
       </button>
 
       <div class="links" v-show="!isFloatAdCollapsed">
-        <div v-for="(button, index) in effectiveFloatAdButtons" :key="button.id" class="item">
-          <ImageButton :default-src="button.default" :hover-src="button.hover" :alt="`浮動廣告 ${index + 1}`"
-            :href="button.href" />
+        <div v-for="(button, index) in effectiveFloatAdButtons" :key="button.id" class="item" :class="{
+          'rwd-first-button': index === 0,
+          'rwd-second-button': index === 1,
+          'rwd-third-button': index === 2
+        }">
+          <!-- 桌面版圖片 -->
+          <ImageButton class="desktop-image" :default-src="button.default" :hover-src="button.hover"
+            :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
+          <!-- 平板版圖片 -->
+          <ImageButton v-if="index === 0" class="tablet-image" default-src="/images/rwd/gm.webp"
+            hover-src="/images/rwd/gm.webp" alt="浮動廣告 1" :href="button.href" />
+          <ImageButton v-if="index === 1" class="tablet-image" default-src="/images/rwd/diuying.webp"
+            hover-src="/images/rwd/diuying.webp" alt="浮動廣告 2" :href="button.href" />
+          <ImageButton v-if="index === 2" class="tablet-image" default-src="/images/rwd/fun.webp"
+            hover-src="/images/rwd/fun.webp" alt="浮動廣告 3" :href="button.href" />
+          <!-- 手機版圖片 -->
+          <ImageButton v-if="index === 0" class="mobile-image" default-src="/images/rwd/mobile-gm.webp"
+            hover-src="/images/rwd/mobile-gm.webp" alt="浮動廣告 1" :href="button.href" />
+          <ImageButton v-if="index === 1" class="mobile-image" default-src="/images/rwd/mobile-diuying.webp"
+            hover-src="/images/rwd/mobile-diuying.webp" alt="浮動廣告 2" :href="button.href" />
+          <ImageButton v-if="index === 2" class="mobile-image" default-src="/images/rwd/mobile-fun.webp"
+            hover-src="/images/rwd/mobile-fun.webp" alt="浮動廣告 3" :href="button.href" />
         </div>
       </div>
     </div>
@@ -374,8 +393,8 @@ onUnmounted(() => {
   #banner :deep(img) {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    /* 關鍵：完整顯示圖片，絕不變形，絕不截斷 */
+    object-fit: cover;
+    /* 使用 cover 確保圖片填滿整個容器 */
     display: block;
   }
 }
@@ -523,15 +542,25 @@ onUnmounted(() => {
 
 @media (max-width: 430px) {
   .button-links {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    padding: 0 !important;
+    grid-template-columns: repeat(2, 185px) !important;
+    gap: 15px 10px !important;
+    padding: 0 10px !important;
     max-width: 100% !important;
     margin-bottom: 1.5rem !important;
+    justify-content: center !important;
   }
 
   .button-links .item {
+    width: 185px !important;
+    height: 50px !important;
     max-width: none !important;
+    aspect-ratio: auto !important;
+  }
+
+  .button-links .item :deep(img) {
+    width: 185px !important;
+    height: 50px !important;
+    object-fit: fill !important;
   }
 }
 
@@ -700,13 +729,24 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 1279px) {
+@media (min-width: 768px) and (max-width: 1279px) {
+  #home-main {
+    padding: 3rem 1rem !important;
+    /* 減少左右 padding，確保 785px 內容可以容納 */
+  }
+
+  .home-main__inner {
+    max-width: 100% !important;
+    /* 移除寬度限制，讓內部元素可以自由設定寬度 */
+  }
+
   .recommend-content {
-    max-width: 789px !important;
+    width: 785px !important;
+    max-width: 785px !important;
+    height: 230px !important;
     padding: 24px 20px !important;
     margin: 0 auto !important;
     border-radius: 12px 12px 0 0 !important;
-    height: auto !important;
   }
 }
 
@@ -797,10 +837,16 @@ onUnmounted(() => {
   }
 
   .recommend-links .links .item {
-    width: 100% !important;
+    width: 166px !important;
+    height: 43px !important;
     max-width: none !important;
-    height: auto !important;
-    aspect-ratio: 143 / 37 !important;
+    aspect-ratio: auto !important;
+  }
+
+  .recommend-links .links .item :deep(img) {
+    width: 166px !important;
+    height: 43px !important;
+    object-fit: fill !important;
   }
 }
 
@@ -916,8 +962,10 @@ onUnmounted(() => {
 
 @media (max-width: 430px) {
   .recommend-links .links {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    grid-template-columns: repeat(2, 166px) !important;
+    gap: 15px 10px !important;
+    justify-content: center !important;
+    width: 100% !important;
   }
 
   .recommend-routes-title {
@@ -934,9 +982,26 @@ onUnmounted(() => {
   }
 
   .recommend-routes-title .title-text {
-    font-size: 1.1rem !important;
-    letter-spacing: 1px !important;
+    /* 移除固定寬高與實心背景，避免產生色塊與裁切 */
     width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+
+    /* 使用您提供的顏色進行文字渲染 */
+    font-size: 21px !important;
+    font-family: "Microsoft YaHei UI", "Microsoft YaHei UI-Bold", sans-serif !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+
+    /* 將背景色與文字色結合成漸層文字，這通常是設計稿的本意 */
+    background: linear-gradient(180deg, #fffdda 0%, #ffd08c 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+
+    letter-spacing: 4.17px !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
   }
 }
 
@@ -1023,11 +1088,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 1024px) {
-  .recommend-footer .tools {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
+
 
 @media (max-width: 1279px) {
   .recommend-footer {
@@ -1093,8 +1154,8 @@ onUnmounted(() => {
     border-right: none !important;
   }
 
-  /* 過渡期處理：在 820px 以下提早將 6 欄切為 3 欄，解決擠壓問題 */
-  @media (max-width: 820px) {
+  /* 手機版：改為 3 欄 */
+  @media (max-width: 767px) {
     .recommend-footer .tools {
       grid-template-columns: repeat(3, 1fr) !important;
     }
@@ -1512,17 +1573,22 @@ onUnmounted(() => {
     max-width: 100% !important;
     margin: 0 !important;
     padding: 10px 0 !important;
-    /* 微調內距，確保不裁切且看起來細緻 */
-    /* 豐富背景細節：深紅漸層 + 內陰影 + 細微點狀紋理 */
-    background-color: #5b0202 !important;
-    background-image:
-      radial-gradient(circle, rgba(0, 0, 0, 0.2) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 15%, transparent 85%, rgba(0, 0, 0, 0.4) 100%) !important;
-    background-size: 20px 20px, 100% 100% !important;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5), inset 0 -2px 10px rgba(0, 0, 0, 0.5) !important;
-    backdrop-filter: none !important;
     border-top: 1px solid rgba(223, 176, 130, 0.4);
     border-bottom: 2px solid #000;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  #float-ad {
+    width: 820px !important;
+    height: 95px !important;
+    opacity: 0.6;
+    background: #3e080f !important;
+    background: linear-gradient(0deg, #000000 0%, #232323 100%), #000000 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    margin: 0 auto !important;
+    /* 水平置中 */
   }
 }
 
@@ -1547,6 +1613,22 @@ onUnmounted(() => {
   aspect-ratio: 120 / 105;
 }
 
+/* 桌面版：顯示桌面圖片，隱藏所有 RWD 圖片 */
+#float-ad .links .item.rwd-first-button .desktop-image,
+#float-ad .links .item.rwd-second-button .desktop-image,
+#float-ad .links .item.rwd-third-button .desktop-image {
+  display: block;
+}
+
+#float-ad .links .item.rwd-first-button .tablet-image,
+#float-ad .links .item.rwd-second-button .tablet-image,
+#float-ad .links .item.rwd-third-button .tablet-image,
+#float-ad .links .item.rwd-first-button .mobile-image,
+#float-ad .links .item.rwd-second-button .mobile-image,
+#float-ad .links .item.rwd-third-button .mobile-image {
+  display: none;
+}
+
 @media (max-width: 1440px) and (min-width: 1280px) {
   #float-ad .links {
     gap: 0.875rem;
@@ -1560,30 +1642,64 @@ onUnmounted(() => {
     flex-direction: row !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 20px !important;
+    gap: 80px !important;
+    /* 增加間距讓按鈕更分散 */
     width: 100% !important;
     padding: 0 10px !important;
     box-sizing: border-box !important;
   }
 
   #float-ad .links .item {
-    width: auto !important;
-    height: 48px !important;
-    /* 調降至 48px，更細緻且不擁擠 */
+    width: 151px !important;
+    height: 58px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex: 1 !important;
-    max-width: 130px !important;
+    flex: none !important;
+    /* 改為 flex: none，確保固定寬度 */
   }
 
   #float-ad .links .item :deep(img) {
-    width: auto !important;
-    /* 寬度自動，避免拉伸 */
-    height: 48px !important;
-    /* 鎖定高度 48px */
-    max-width: 125px !important;
-    object-fit: contain !important;
+    width: 151px !important;
+    height: 58px !important;
+    max-width: 151px !important;
+    object-fit: fill !important;
+    /* 使用 fill 確保圖片完全填滿容器 */
+  }
+
+  /* 平板版：隱藏桌面和手機圖片，顯示平板圖片 */
+  #float-ad .links .item.rwd-first-button .desktop-image,
+  #float-ad .links .item.rwd-second-button .desktop-image,
+  #float-ad .links .item.rwd-third-button .desktop-image,
+  #float-ad .links .item.rwd-first-button .mobile-image,
+  #float-ad .links .item.rwd-second-button .mobile-image,
+  #float-ad .links .item.rwd-third-button .mobile-image {
+    display: none !important;
+  }
+
+  #float-ad .links .item.rwd-first-button .tablet-image,
+  #float-ad .links .item.rwd-second-button .tablet-image,
+  #float-ad .links .item.rwd-third-button .tablet-image {
+    display: block !important;
+  }
+}
+
+@media (max-width: 767px) {
+
+  /* 手機版：隱藏桌面和平板圖片，顯示手機圖片 */
+  #float-ad .links .item.rwd-first-button .desktop-image,
+  #float-ad .links .item.rwd-second-button .desktop-image,
+  #float-ad .links .item.rwd-third-button .desktop-image,
+  #float-ad .links .item.rwd-first-button .tablet-image,
+  #float-ad .links .item.rwd-second-button .tablet-image,
+  #float-ad .links .item.rwd-third-button .tablet-image {
+    display: none !important;
+  }
+
+  #float-ad .links .item.rwd-first-button .mobile-image,
+  #float-ad .links .item.rwd-second-button .mobile-image,
+  #float-ad .links .item.rwd-third-button .mobile-image {
+    display: block !important;
   }
 }
 
