@@ -86,44 +86,74 @@ const effectiveProgramThumbnails = computed(() => {
 })
 
 const effectiveButtonLinks = computed(() => {
-  // 只使用API數據，和背景圖設置一樣
   const buttonLinksData = apiButtonLinks.value
   console.log('計算按鈕鏈接:', buttonLinksData)
-  return buttonLinksData.map((button, index) => ({
-    id: `api-button-${index}`,
-    text: button?.text || '',
-    href: button?.href || '#',
-    target: button?.target || '_blank',
-    defaultImage: button?.defaultImage || '',
-    hoverImage: button?.hoverImage || ''
+
+  if (buttonLinksData.length > 0) {
+    return buttonLinksData.map((button, index) => ({
+      id: `api-button-${index}`,
+      text: button?.text || '',
+      href: button?.href || '#',
+      target: button?.target || '_blank',
+      defaultImage: button?.defaultImage || '',
+      hoverImage: button?.hoverImage || ''
+    }))
+  }
+
+  // 回退到預設資料
+  return assetManifest.buttonLinks.map((button) => ({
+    id: button.id,
+    text: button.alt,
+    href: '#',
+    target: '_blank',
+    defaultImage: button.default,
+    hoverImage: button.hover
   }))
 })
 
 const effectiveToolIcons = computed(() => {
-  // 只使用API數據，和背景圖設置一樣
   const toolIconsData = apiToolIcons.value
   console.log('計算工具圖標:', toolIconsData)
-  console.log('toolIconsData 長度:', toolIconsData.length)
-  const result = toolIconsData.map((tool, index) => ({
-    id: tool?.id || `api-tool-${index}`,
-    default: tool?.default || '',
-    hover: tool?.hover || '',
-    alt: tool?.alt || '',
-    href: tool?.href || ''
+
+  if (toolIconsData.length > 0) {
+    return toolIconsData.map((tool, index) => ({
+      id: tool?.id || `api-tool-${index}`,
+      default: tool?.default || '',
+      hover: tool?.hover || '',
+      alt: tool?.alt || '',
+      href: tool?.href || ''
+    }))
+  }
+
+  // 回退到預設資料
+  return assetManifest.toolIcons.map((tool) => ({
+    id: tool.id,
+    default: tool.default,
+    hover: tool.hover,
+    alt: tool.alt,
+    href: '#'
   }))
-  console.log('effectiveToolIcons 結果:', result)
-  return result
 })
 
 const effectiveFloatAdButtons = computed(() => {
-  // 只使用API數據，和背景圖設置一樣
   const floatAdButtonsData = apiFloatAdButtons.value
   console.log('計算浮動廣告按鈕:', floatAdButtonsData)
-  return floatAdButtonsData.map((button, index) => ({
-    id: `api-floatad-${index}`,
-    href: button?.href || '#',
-    default: button?.default || '',
-    hover: button?.hover || ''
+
+  if (floatAdButtonsData.length > 0) {
+    return floatAdButtonsData.map((button, index) => ({
+      id: `api-floatad-${index}`,
+      href: button?.href || '#',
+      default: button?.default || '',
+      hover: button?.hover || ''
+    }))
+  }
+
+  // 回退到預設資料
+  return assetManifest.floatAdButtons.map((button) => ({
+    id: button.id,
+    href: '#',
+    default: button.default,
+    hover: button.hover
   }))
 })
 
