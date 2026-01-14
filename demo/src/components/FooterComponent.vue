@@ -19,4 +19,12 @@ import { siteConfig } from '../config/siteConfig'
   color: #fff;
   font-size: 14px;
 }
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  #footer {
+    height: 40px;
+    background: #3e080f;
+    background: linear-gradient(0deg, #000000 0%, #232323 100%), #000000;
+  }
+}
 </style>

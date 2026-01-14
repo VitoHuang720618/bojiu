@@ -1,69 +1,31 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import ImageComponent from './ImageComponent.vue'
 
-interface ImageButtonProps {
+const props = defineProps<{
   defaultSrc: string
   hoverSrc: string
-  alt: string
+  alt?: string
   href?: string
   target?: string
-  dataIndex?: string | number
+  dataIndex?: number
   dataTitle?: string
-}
-
-withDefaults(defineProps<ImageButtonProps>(), {
-  target: '_blank'
-})
-
-const emit = defineEmits<{
-  click: [event: MouseEvent]
 }>()
 
-const handleClick = (event: MouseEvent) => {
-  emit('click', event)
+const handleClick = (e: MouseEvent) => {
+  if (!props.href) {
+    e.preventDefault()
+  }
 }
 </script>
 
 <template>
-  <a
-    v-if="href"
-    :href="href"
-    :target="target"
-    :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-    class="img-button"
-    :data-index="dataIndex"
-    :data-title="dataTitle"
-    @click="handleClick"
-  >
-    <ImageComponent
-      :src="defaultSrc"
-      :alt="alt"
-      class="img-button--default"
-    />
-    <ImageComponent
-      :src="hoverSrc"
-      :alt="alt"
-      class="img-button--hover"
-    />
-  </a>
-  <div
-    v-else
-    class="img-button"
-    :data-index="dataIndex"
-    :data-title="dataTitle"
-    @click="handleClick"
-  >
-    <ImageComponent
-      :src="defaultSrc"
-      :alt="alt"
-      class="img-button--default"
-    />
-    <ImageComponent
-      :src="hoverSrc"
-      :alt="alt"
-      class="img-button--hover"
-    />
-  </div>
+  <component :is="href ? 'a' : 'div'" class="img-button" :href="href" :target="href ? target : undefined"
+    :rel="href && target === '_blank' ? 'noopener noreferrer' : undefined" :data-index="dataIndex"
+    :data-title="dataTitle" @click="handleClick">
+    <ImageComponent :src="defaultSrc" :alt="alt" class="img-button--default" />
+    <ImageComponent :src="hoverSrc" :alt="alt" class="img-button--hover" />
+  </component>
 </template>
 
 <style scoped>
@@ -73,7 +35,7 @@ const handleClick = (event: MouseEvent) => {
   cursor: pointer;
 }
 
-.img-button img {
+.img-button :deep(img) {
   display: block;
   width: 100%;
 }
@@ -87,7 +49,9 @@ const handleClick = (event: MouseEvent) => {
   left: 0;
   opacity: 0;
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
   transition: opacity 0.1s ease-in-out;
 }
 

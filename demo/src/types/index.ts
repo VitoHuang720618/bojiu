@@ -7,6 +7,14 @@ export interface NavigationItem {
   isExternal: boolean
 }
 
+export interface ButtonLinkConfig {
+  text: string
+  href: string
+  target: string
+  defaultImage?: string
+  hoverImage?: string
+}
+
 export interface CallToAction {
   text: string
   href: string
@@ -53,6 +61,7 @@ export interface SiteConfig {
   title: string
   description: string
   baseUrl: string
+  useApi: boolean
   navigation: NavigationItem[]
   footer: FooterConfig
   theme: ThemeConfig

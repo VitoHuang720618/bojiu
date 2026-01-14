@@ -4,15 +4,18 @@ export interface ConfigData {
   banner: string
   backgroundImage: string
   buttonLinks: Array<{
-    id: string
-    default: string
-    hover: string
-    alt: string
+    text: string
+    href: string
+    target: string
+    image?: string
+    defaultImage?: string
+    hoverImage?: string
   }>
   carouselSlides: Array<{
     image: string
+    title: string
+    description: string
     href: string
-    alt: string
   }>
   titles: {
     recommendedRoutes: string
@@ -25,28 +28,26 @@ export interface ConfigData {
     hover: string
   }
   toolIcons: Array<{
-    id: string
+    href: string
     default: string
     hover: string
-    alt: string
   }>
   videoThumbnails: Array<{
     image: string
     href: string
-    alt: string
     title: string
+    alt: string
   }>
   programThumbnails: Array<{
     image: string
     href: string
-    alt: string
     title: string
+    alt: string
   }>
   floatAdButtons: Array<{
-    id: string
+    href: string
     default: string
     hover: string
-    alt: string
   }>
 }
 

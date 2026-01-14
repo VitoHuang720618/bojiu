@@ -4,36 +4,41 @@ import ImageComponent from './ImageComponent.vue'
 import ImageButton from './ImageButton.vue'
 import { assetManifest } from '../config/assetManifest'
 import {
-  siteConfig,
   recommendedRoutes,
   recommendedTools,
   carouselSlides,
-  floatAdButtons
+  videoContent,
+  programContent
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
+import type { ButtonLinkConfig } from '../types'
 
 const currentSlide = ref(0)
 let carouselInterval: number | null = null
 
 // 从API获取的轮播图数据
-const apiCarouselSlides = ref<{image: string, href: string, alt: string}[]>([])
+const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
 const apiBanner = ref<string>('')
 const apiBackgroundImage = ref<string>('')
-const apiVideoThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
-const apiProgramThumbnails = ref<({image: string, href: string, alt: string, title: string} | null)[]>([])
+const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
+const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
+const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
+const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
+const apiFloatAdButtons = ref<({ href: string, default: string, hover: string } | null)[]>([])
+const apiRouteLinks = ref<{ default: string, hover: string } | null>(null)
 
 // 浮動按鈕收合狀態
 const isFloatAdCollapsed = ref(false)
 
 // 计算属性：优先使用API数据，否则使用默认数据
 const effectiveCarouselSlides = computed(() => {
-  return apiCarouselSlides.value.length > 0 ? 
+  return apiCarouselSlides.value.length > 0 ?
     apiCarouselSlides.value.map((slide, index) => ({
       id: `api-slide-${index}`,
       alt: slide.alt,
       href: slide.href,
       image: slide.image
-    })) : 
+    })) :
     carouselSlides.map((slide, index) => ({
       id: slide.id,
       alt: slide.alt,
@@ -43,23 +48,120 @@ const effectiveCarouselSlides = computed(() => {
 })
 
 const effectiveBanner = computed(() => {
-  return apiBanner.value || assetManifest.banner
+  const bannerImage = apiBanner.value
+  return bannerImage || assetManifest.banner
 })
 
 const effectiveBackgroundImage = computed(() => {
   const bgImage = apiBackgroundImage.value
-  console.log('計算背景圖:', bgImage)
-  return bgImage
+  return bgImage || (assetManifest as any).backgroundImage
 })
 
 const effectiveVideoThumbnails = computed(() => {
-  // 只使用API數據，不使用預設資料
-  return apiVideoThumbnails.value
+  if (apiVideoThumbnails.value.length > 0) {
+    return apiVideoThumbnails.value
+  }
+  // 回退到預設資料
+  return videoContent.map((video, index) => ({
+    image: assetManifest.videoThumbnails[index] || '',
+    href: '#',
+    alt: video.title,
+    title: video.title
+  }))
 })
 
 const effectiveProgramThumbnails = computed(() => {
-  // 只使用API數據，不使用預設資料
-  return apiProgramThumbnails.value
+  if (apiProgramThumbnails.value.length > 0) {
+    return apiProgramThumbnails.value
+  }
+  // 回退到預設資料
+  return programContent.map((program, index) => ({
+    image: assetManifest.programThumbnails[index] || '',
+    href: '#',
+    alt: program.title,
+    title: program.title
+  }))
+})
+
+const effectiveButtonLinks = computed(() => {
+  const buttonLinksData = apiButtonLinks.value
+
+  if (buttonLinksData.length > 0) {
+    return buttonLinksData.map((button, index) => ({
+      id: `api-button-${index}`,
+      text: button?.text || '',
+      href: button?.href || '#',
+      target: button?.target || '_blank',
+      defaultImage: button?.defaultImage || '',
+      hoverImage: button?.hoverImage || ''
+    }))
+  }
+
+  // 回退到預設資料
+  return assetManifest.buttonLinks.map((button) => ({
+    id: button.id,
+    text: button.alt,
+    href: '#',
+    target: '_blank',
+    defaultImage: button.default,
+    hoverImage: button.hover
+  }))
+})
+
+const effectiveToolIcons = computed(() => {
+  const toolIconsData = apiToolIcons.value
+
+  if (toolIconsData.length > 0) {
+    return toolIconsData.map((tool, index) => ({
+      id: tool?.id || `api-tool-${index}`,
+      default: tool?.default || '',
+      hover: tool?.hover || '',
+      alt: tool?.alt || '',
+      href: tool?.href || ''
+    }))
+  }
+
+  // 回退到預設資料
+  return assetManifest.toolIcons.map((tool) => ({
+    id: tool.id,
+    default: tool.default,
+    hover: tool.hover,
+    alt: tool.alt,
+    href: '#'
+  }))
+})
+
+const effectiveFloatAdButtons = computed(() => {
+  const floatAdButtonsData = apiFloatAdButtons.value
+
+  if (floatAdButtonsData.length > 0) {
+    return floatAdButtonsData.map((button, index) => ({
+      id: `api-floatad-${index}`,
+      href: button?.href || '#',
+      default: button?.default || '',
+      hover: button?.hover || ''
+    }))
+  }
+
+  // 回退到預設資料
+  return assetManifest.floatAdButtons.map((button) => ({
+    id: button.id,
+    href: '#',
+    default: button.default,
+    hover: button.hover
+  }))
+})
+
+const effectiveRouteLinks = computed(() => {
+  // 只使用API數據，和背景圖設置一樣
+  const routeLinksData = apiRouteLinks.value
+
+  if (Array.isArray(routeLinksData)) {
+    return routeLinksData
+  }
+
+  // 確保 assetManifest.routeLinks 是數組
+  return Array.isArray(assetManifest.routeLinks) ? assetManifest.routeLinks : []
 })
 
 // Dynamic grid configuration for video sections
@@ -128,18 +230,20 @@ const stopCarousel = () => {
 // 加载轮播图和banner数据
 const loadConfig = async () => {
   try {
-    console.log('開始加載配置...')
     const config = await carouselService.getConfig()
-    console.log('從 API 加載的配置:', config)
     apiCarouselSlides.value = config.carouselSlides
     apiBanner.value = config.banner
     apiBackgroundImage.value = config.backgroundImage
     apiVideoThumbnails.value = config.videoThumbnails
     apiProgramThumbnails.value = config.programThumbnails
-    console.log('背景圖設置為:', config.backgroundImage)
-    console.log('effectiveBackgroundImage:', effectiveBackgroundImage.value)
-  } catch (error) {
-    console.error('Failed to load config:', error)
+    apiButtonLinks.value = config.buttonLinks
+    apiToolIcons.value = config.toolIcons
+    apiFloatAdButtons.value = config.floatAdButtons || []
+    apiRouteLinks.value = config.routeLinks || null
+  } catch (error: any) {
+    if (error?.message !== 'API is disabled via config') {
+      console.error('Failed to load config:', error)
+    }
   }
 }
 
@@ -154,18 +258,13 @@ const onBannerSizeLoaded = () => {
 
 // 切換浮動按鈕收合狀態
 const toggleFloatAd = (event?: Event) => {
-  console.log('toggleFloatAd clicked, current state:', isFloatAdCollapsed.value)
-  console.log('Event:', event)
-  console.log('Event target:', event?.target)
-  
   // 防止事件冒泡
   if (event) {
     event.preventDefault()
     event.stopPropagation()
   }
-  
+
   isFloatAdCollapsed.value = !isFloatAdCollapsed.value
-  console.log('new state:', isFloatAdCollapsed.value)
 }
 
 onUnmounted(() => {
@@ -177,26 +276,17 @@ onUnmounted(() => {
   <div class="main-inner">
     <!-- Banner -->
     <div id="banner">
-      <ImageComponent
-        v-if="effectiveBanner"
-        :src="effectiveBanner"
-        alt="Banner"
-        :lazy="false"
-      />
+      <ImageComponent v-if="effectiveBanner" :src="effectiveBanner" alt="Banner" :lazy="false" />
       <div v-else class="banner-placeholder">
         <!-- 隱藏的原圖用來獲取尺寸 -->
-        <img 
-          :src="assetManifest.banner" 
-          alt="Banner placeholder" 
-          class="banner-size-reference"
-          @load="onBannerSizeLoaded"
-        />
+        <img :src="assetManifest.banner" alt="Banner placeholder" class="banner-size-reference"
+          @load="onBannerSizeLoaded" />
       </div>
     </div>
 
     <!-- Main Content -->
-    <div id="home-main" :style="{ 
-      backgroundImage: effectiveBackgroundImage ? `url('${effectiveBackgroundImage}')` : 
+    <div id="home-main" :style="{
+      backgroundImage: effectiveBackgroundImage ? `url('${effectiveBackgroundImage}')` :
         'radial-gradient(circle, rgba(80, 80, 80, 0.4) 1.5px, transparent 1.5px), radial-gradient(circle, rgba(60, 60, 60, 0.3) 1px, transparent 1px), linear-gradient(180deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px), linear-gradient(0deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px)',
       backgroundColor: effectiveBackgroundImage ? 'transparent' : '#0a0a0a',
       backgroundSize: effectiveBackgroundImage ? 'cover' : '16px 16px, 32px 32px, 100% 60px, 100% 60px',
@@ -206,102 +296,55 @@ onUnmounted(() => {
       <div class="home-main__inner">
         <!-- Top Button Links -->
         <div class="button-links">
-          <div
-            v-for="(item, index) in assetManifest.buttonLinks"
-            :key="item.id"
-            class="item"
-          >
-            <ImageButton
-              :default-src="item.default"
-              :hover-src="item.hover"
-              :alt="item.alt"
-              :href="siteConfig.navigation[index]?.href"
-            />
+          <div v-for="(item, index) in assetManifest.buttonLinks" :key="item.id" class="item">
+            <ImageButton :default-src="effectiveButtonLinks[index]?.defaultImage || item.default"
+              :hover-src="effectiveButtonLinks[index]?.hoverImage || item.hover" :alt="item.alt"
+              :href="effectiveButtonLinks[index]?.href" :target="effectiveButtonLinks[index]?.target" />
           </div>
         </div>
 
-        <!-- Recommend Section -->
-        <div class="recommend">
-          <!-- Carousel and Routes -->
-          <div class="recommend-slider-links">
+        <!-- Recommend Section Container -->
+        <div class="recommend-section">
+          <!-- Top Content (Slider + Routes) -->
+          <div class="recommend-content">
             <!-- Carousel Slider -->
-            <div 
-              class="recommend-slider"
-              @mouseenter="stopCarousel"
-              @mouseleave="startCarousel"
-            >
-              <div class="carousel-container">
-                <!-- 隱藏的參考圖片，用來設定容器尺寸 -->
-                <img 
-                  src="/assets/images/fdf67cd6-2e20-4f52-9368-8460b71f641c.jpg" 
-                  class="carousel-size-reference"
-                  alt="Size reference"
-                />
-                <div
-                  v-for="(slide, index) in effectiveCarouselSlides"
-                  :key="slide.id"
-                  class="carousel-slide"
-                  :class="{ active: currentSlide === index }"
-                >
-                  <a :href="slide.href" target="_blank" rel="noopener noreferrer">
-                    <ImageComponent
-                      :src="slide.image || assetManifest.carouselSlides[index]"
-                      :alt="slide.alt"
-                    />
-                  </a>
-                </div>
+            <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel">
+              <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
+                :class="{ active: currentSlide === index }">
+                <a :href="slide.href" target="_blank" rel="noopener noreferrer">
+                  <ImageComponent :src="slide.image || assetManifest.carouselSlides[index]" :alt="slide.alt" />
+                </a>
               </div>
             </div>
 
             <!-- Recommended Routes -->
             <div class="recommend-links">
-              <div class="block-title">
-                <ImageComponent
-                  :src="assetManifest.titles.recommendedRoutes"
-                  alt="推荐线路标题"
-                  :lazy="false"
-                />
+              <div class="block-title recommend-routes-title">
+                <img :src="assetManifest.titles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
+                <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
-                <div
-                  v-for="route in recommendedRoutes"
-                  :key="route.id"
-                  class="item"
-                >
-                  <ImageButton
-                    :default-src="assetManifest.routeLinks.default"
-                    :hover-src="assetManifest.routeLinks.hover"
-                    :alt="route.title"
-                    :href="route.href"
-                    :data-index="route.index"
-                    :data-title="route.title"
-                  />
+                <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
+                  <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
+                    :hover-src="effectiveRouteLinks[index].hover" :alt="route.title" :href="route.href" />
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Recommended Tools -->
-          <div class="recommend-tools">
+          <!-- Bottom Tools (Browsers) -->
+          <div class="recommend-footer">
             <div class="block-title">
-              <ImageComponent
-                :src="assetManifest.titles.recommendedBrowsers"
-                alt="推荐浏览器标题"
-                :lazy="false"
-              />
+              <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
             </div>
             <div class="tools">
-              <div
-                v-for="(tool, index) in recommendedTools"
-                :key="tool.id"
-                class="item"
-              >
-                <ImageButton
-                  :default-src="assetManifest.toolIcons[index].default"
-                  :hover-src="assetManifest.toolIcons[index].hover"
-                  :alt="tool.name"
-                  :href="tool.href"
-                />
+              <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
+                <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
+                  :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
+                  :alt="effectiveToolIcons[index].alt || tool.name"
+                  :href="effectiveToolIcons[index].href || tool.href" />
+                <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
+                  :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
               </div>
             </div>
           </div>
@@ -312,12 +355,9 @@ onUnmounted(() => {
           <!-- Selected Videos -->
           <div class="programme-block">
             <div class="block-title">
-              <ImageComponent
-                :src="assetManifest.titles.selectedVideos"
-                alt="精选短视频標題圖"
-                :lazy="false"
-              />
+              <ImageComponent :src="assetManifest.titles.selectedVideos" alt="精选短视频標題圖" :lazy="false" />
             </div>
+<<<<<<< HEAD
             <div 
               class="list" 
               :class="videoGridConfig.cssClass"
@@ -337,20 +377,31 @@ onUnmounted(() => {
                   </div>
                   <span>{{ video.title }}</span>
                 </a>
+=======
+            <div class="list" v-if="effectiveVideoThumbnails.length > 0">
+              <div v-for="(video, index) in effectiveVideoThumbnails" :key="video ? `video-${index}` : `empty-${index}`"
+                class="item" :class="{ 'empty-item': !video }">
+                <template v-if="video">
+                  <a :href="video.href" target="_blank" rel="noopener noreferrer">
+                    <div class="img">
+                      <ImageComponent :src="video.image" :alt="video.alt" />
+                    </div>
+                    <span>{{ video.title }}</span>
+                  </a>
+                </template>
+                <div v-else class="empty-placeholder"></div>
+>>>>>>> 63949ae
               </div>
             </div>
             <div v-else class="empty-section-placeholder"></div>
           </div>
 
           <!-- Hot Programs -->
-          <div class="programme-block">
+          <div class="programme-block sport-block">
             <div class="block-title">
-              <ImageComponent
-                :src="assetManifest.titles.hotPrograms"
-                alt="火熱節目標題圖"
-                :lazy="false"
-              />
+              <ImageComponent :src="assetManifest.titles.hotPrograms" alt="火熱節目標題圖" :lazy="false" />
             </div>
+<<<<<<< HEAD
             <div 
               class="list" 
               :class="programGridConfig.cssClass"
@@ -370,6 +421,21 @@ onUnmounted(() => {
                   </div>
                   <span>{{ program.title }}</span>
                 </a>
+=======
+            <div class="list" v-if="effectiveProgramThumbnails.length > 0">
+              <div v-for="(program, index) in effectiveProgramThumbnails"
+                :key="program ? `program-${index}` : `empty-program-${index}`" class="item"
+                :class="{ 'empty-item': !program }">
+                <template v-if="program">
+                  <a :href="program.href" target="_blank" rel="noopener noreferrer">
+                    <div class="img">
+                      <ImageComponent :src="program.image" :alt="program.alt" />
+                    </div>
+                    <span>{{ program.title }}</span>
+                  </a>
+                </template>
+                <div v-else class="empty-placeholder"></div>
+>>>>>>> 63949ae
               </div>
             </div>
             <div v-else class="empty-section-placeholder"></div>
@@ -381,27 +447,34 @@ onUnmounted(() => {
     <!-- Float Ad Buttons -->
     <div id="float-ad" :class="{ collapsed: isFloatAdCollapsed }">
       <!-- 收合/展開按鈕 -->
-      <button 
-        class="float-ad-toggle" 
-        @click.stop="toggleFloatAd($event)"
-        @touchend.stop="toggleFloatAd($event)"
-        type="button"
-      >
+      <button class="float-ad-toggle" @click.stop="toggleFloatAd($event)" @touchend.stop="toggleFloatAd($event)"
+        type="button">
         <span class="toggle-icon">{{ isFloatAdCollapsed ? '▲' : '▼' }}</span>
       </button>
-      
+
       <div class="links" v-show="!isFloatAdCollapsed">
-        <div
-          v-for="(button, index) in floatAdButtons"
-          :key="button.id"
-          class="item"
-        >
-          <ImageButton
-            :default-src="assetManifest.floatAdButtons[index].default"
-            :hover-src="assetManifest.floatAdButtons[index].hover"
-            :alt="button.name"
-            :href="button.href"
-          />
+        <div v-for="(button, index) in effectiveFloatAdButtons" :key="button.id" class="item" :class="{
+          'rwd-first-button': index === 0,
+          'rwd-second-button': index === 1,
+          'rwd-third-button': index === 2
+        }">
+          <!-- 桌面版圖片 -->
+          <ImageButton class="desktop-image" :default-src="button.default" :hover-src="button.hover"
+            :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
+          <!-- 平板版圖片 -->
+          <ImageButton v-if="index === 0" class="tablet-image" default-src="/images/rwd/gm.webp"
+            hover-src="/images/rwd/gm.webp" alt="浮動廣告 1" :href="button.href" />
+          <ImageButton v-if="index === 1" class="tablet-image" default-src="/images/rwd/diuying.webp"
+            hover-src="/images/rwd/diuying.webp" alt="浮動廣告 2" :href="button.href" />
+          <ImageButton v-if="index === 2" class="tablet-image" default-src="/images/rwd/fun.webp"
+            hover-src="/images/rwd/fun.webp" alt="浮動廣告 3" :href="button.href" />
+          <!-- 手機版圖片 -->
+          <ImageButton v-if="index === 0" class="mobile-image" default-src="/images/rwd/mobile-gm.webp"
+            hover-src="/images/rwd/mobile-gm.webp" alt="浮動廣告 1" :href="button.href" />
+          <ImageButton v-if="index === 1" class="mobile-image" default-src="/images/rwd/mobile-diuying.webp"
+            hover-src="/images/rwd/mobile-diuying.webp" alt="浮動廣告 2" :href="button.href" />
+          <ImageButton v-if="index === 2" class="mobile-image" default-src="/images/rwd/mobile-fun.webp"
+            hover-src="/images/rwd/mobile-fun.webp" alt="浮動廣告 3" :href="button.href" />
         </div>
       </div>
     </div>
@@ -413,9 +486,54 @@ onUnmounted(() => {
   width: 100%;
 }
 
-#banner img {
+#banner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #000;
+}
+
+#banner :deep(img) {
   display: block;
   width: 100%;
+  max-width: 1920px;
+  height: auto;
+  aspect-ratio: 1920 / 500;
+  object-fit: cover;
+}
+
+@media (max-width: 1279px) {
+  #banner {
+    width: 100%;
+    height: 340px;
+    background: #8b0012;
+    /* 使用與 Banner 邊緣相近的深紅色，防止視覺斷層 */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #banner :deep(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 使用 cover 確保圖片填滿整個容器 */
+    display: block;
+  }
+}
+
+@media (max-width: 430px) {
+  #banner {
+    width: 100%;
+    max-width: 430px;
+    height: 340px !important;
+  }
+
+  #banner :deep(img) {
+    object-fit: fill !important;
+    /* 使圖片展開填滿 430x340 區域 */
+  }
 }
 
 .banner-placeholder {
@@ -425,8 +543,15 @@ onUnmounted(() => {
 
 .banner-size-reference {
   width: 100%;
-  opacity: 0; /* 完全透明，但保持尺寸 */
+  opacity: 0;
+  /* 完全透明，但保持尺寸 */
   display: block;
+}
+
+.main-inner {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
 }
 
 #home-main {
@@ -455,26 +580,47 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   #home-main {
     border-width: 2px 0;
-    padding: 1.5625rem 0.9375rem;
-    padding-bottom: 5rem; /* 為收合按鈕留出空間 */
+    padding: 1.5rem 0.625rem;
+    padding-bottom: 3rem;
   }
 }
 
 .home-main__inner {
   margin: 0 auto;
-  max-width: 1280px;
+  max-width: 1520px;
   width: 100%;
 }
 
 /* Button Links */
+/* Button Links */
 .button-links {
   display: grid;
-  gap: 3rem;
-  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-between;
+  grid-template-columns: repeat(4, 352px);
+  width: 100%;
+  max-width: 1501px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 3rem;
+}
+
+@media (max-width: 1600px) {
+  .button-links {
+    width: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0 27px;
+    box-sizing: border-box;
+  }
+
+  .button-links .item {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 352/102;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -490,13 +636,63 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1279px) {
   .button-links {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1.5625rem;
+    width: 100% !important;
+    max-width: 780px !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    margin: 0 auto 3rem auto !important;
+    justify-content: center !important;
+  }
+
+  /* 過渡期處理：調降斷點，確保平板 (如 820px) 維持橫排，直到 640px 以下才切換為 2x2 */
+  @media (max-width: 640px) {
+    .button-links {
+      grid-template-columns: repeat(2, 1fr) !important;
+      max-width: 430px !important;
+    }
+  }
+
+  .button-links .item {
+    width: 100% !important;
+    max-width: none;
+    /* 移除平板下的最大寬度限制，讓按鈕跟隨 Grid 縮放 */
+    height: auto !important;
+    aspect-ratio: 187 / 54;
   }
 }
+
+@media (max-width: 430px) {
+  .button-links {
+    grid-template-columns: repeat(2, 185px) !important;
+    gap: 15px 10px !important;
+    padding: 0 10px !important;
+    max-width: 100% !important;
+    margin-bottom: 1.5rem !important;
+    justify-content: center !important;
+  }
+
+  .button-links .item {
+    width: 185px !important;
+    height: 50px !important;
+    max-width: none !important;
+    aspect-ratio: auto !important;
+  }
+
+  .button-links .item :deep(img) {
+    width: 185px !important;
+    height: 50px !important;
+    object-fit: fill !important;
+  }
+}
+
+.button-links .item {
+  width: 352px;
+  height: 102px;
+}
+
 
 /* Block Title */
 .block-title {
@@ -504,16 +700,99 @@ onUnmounted(() => {
   margin-bottom: 1.25rem;
 }
 
+/* 推薦線路標題特殊樣式 */
+.recommend-routes-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  /* 增加間距以匹配更大圖標 */
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.recommend-routes-title .crown-icon {
+  width: 42px;
+  height: 39px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.recommend-routes-title .title-text {
+  display: inline-flex;
+  align-items: center;
+  width: 203px;
+  height: 32px;
+  /* background: #fffdda;  暫時註釋，因為文字背景通常指的是 background-clip 或者只是單純色塊，如果 user 是要色塊則開啟 */
+  font-size: 32px;
+  font-family: "Microsoft YaHei UI", "Microsoft YaHei UI-Bold", sans-serif;
+  font-weight: 700;
+  text-align: left;
+  color: #ffd08c;
+  letter-spacing: 6.39px;
+  white-space: nowrap;
+}
+
+/* 如果 user 真的要背後有個淡黃色塊，可以取消註釋下面這行 */
+/* .recommend-routes-title .title-text { background: #fffdda; } */
+
 @media (max-width: 1280px) {
   .block-title {
     height: 30px;
   }
+
+  .recommend-routes-title {
+    height: 35px;
+  }
+
+  .recommend-routes-title .crown-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .recommend-routes-title .title-text {
+    font-size: 1.3rem;
+  }
+
+  .programme-block .block-title {
+    height: 35px;
+  }
+
+  .programme-block .block-title img {
+    /* 讓它在小一點的螢幕上稍微自適應，或者如果空間足夠就保持 */
+    max-width: 100%;
+    object-fit: contain;
+  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .block-title {
     height: 28px;
     margin-bottom: 1rem;
+  }
+
+  .recommend-routes-title {
+    height: 30px;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .recommend-routes-title .crown-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .recommend-routes-title .title-text {
+    font-size: 1.1rem !important;
+    letter-spacing: 1px !important;
+  }
+
+  .programme-block .block-title {
+    height: 30px;
+  }
+
+  .programme-block .block-title img {
+    width: 220px !important;
+    height: 25px !important;
+    object-fit: fill;
   }
 }
 
@@ -522,99 +801,179 @@ onUnmounted(() => {
   width: auto;
 }
 
-/* Recommend Section */
-.recommend {
-  background-color: rgba(0, 0, 0, 0.8);
-  border: 2px solid #dfb082;
-  border-radius: 2px;
-  box-sizing: border-box;
-  margin-bottom: 3rem;
-}
-
-@media (max-width: 1024px) {
-  .recommend {
-    margin-bottom: 2.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .recommend {
-    margin-bottom: 2rem;
-  }
-}
-
-.recommend-slider-links {
-  box-sizing: border-box;
-  padding: 1.5625rem 2.125rem;
+/* 精選短視頻標題特定樣式 */
+.programme-block .block-title {
+  height: 40px;
   display: flex;
-  flex-direction: row;
   align-items: center;
 }
 
-@media (max-width: 1024px) {
-  .recommend-slider-links {
-    padding: 1.5625rem 1.25rem;
+@media (max-width: 1279px) {
+  .programme-block .block-title {
+    width: 270px !important;
+    height: 45px !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .programme-block .block-title img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+  }
+}
+
+/* Recommend Section Container */
+.recommend-section {
+  width: 100%;
+  max-width: 1525px;
+  /* 修正：925(圖) + 546(路) + 54(邊白) = 1525px */
+  margin: 0 auto 3rem auto;
+}
+
+/* Top Content Area */
+.recommend-content {
+  width: 100%;
+  height: 410px;
+  background: rgba(41, 13, 16, 0.80);
+  border-radius: 20px 20px 0px 0px;
+  box-sizing: border-box;
+  padding: 45px 27px 44px 27px;
+  /* 標註圖鎖定：上45, 下44, 左27 */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  /* 智慧推開，兩端貼齊 padding */
+}
+
+@media (max-width: 1550px) {
+  .recommend-content {
+    height: auto;
+    min-height: 232px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  #home-main {
+    padding: 3rem 1rem !important;
+    /* 減少左右 padding，確保 785px 內容可以容納 */
+  }
+
+  .home-main__inner {
+    max-width: 100% !important;
+    /* 移除寬度限制，讓內部元素可以自由設定寬度 */
+  }
+
+  .recommend-content {
+    width: 785px !important;
+    max-width: 785px !important;
+    height: 230px !important;
+    padding: 24px 20px !important;
+    margin: 0 auto !important;
+    border-radius: 12px 12px 0 0 !important;
   }
 }
 
 @media (max-width: 768px) {
-  .recommend-slider-links {
+  .recommend-content {
     flex-direction: column;
-    padding: 1.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .recommend-slider-links {
-    padding: 1.25rem 0.875rem;
+    padding: 1.5rem 1rem !important;
   }
 }
 
 .recommend-slider {
-  margin-right: 2.25rem;
-  width: 50.4%;
-  flex-shrink: 0;
+  width: 100%;
+  max-width: 925px;
+  height: auto;
+  aspect-ratio: 925 / 320;
+  flex: 0 1 925px;
+  /* 優先佔據 925px，僅在寬度不足時收縮 */
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 3px solid #f8eec9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 1024px) {
   .recommend-slider {
     margin-right: 0.9375rem;
+    border-radius: 10px;
+    border: 2px solid #f8eec9;
+  }
+}
+
+@media (max-width: 1279px) {
+  .recommend-slider {
+    width: 100% !important;
+    max-width: 432px !important;
+    height: auto !important;
+    aspect-ratio: 432 / 183 !important;
+    margin-right: 0 !important;
+    margin-bottom: 20px !important;
+    flex: none !important;
   }
 }
 
 @media (max-width: 768px) {
   .recommend-slider {
-    margin-bottom: 1.25rem;
-    margin-right: 0;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 432 / 183 !important;
+    margin-right: 0 !important;
+    margin-bottom: 20px !important;
   }
 }
 
-.carousel-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+@media (max-width: 430px) {
+  .recommend-content {
+    flex-direction: column !important;
+    padding: 15px !important;
+    gap: 20px !important;
+  }
+
+  .recommend-slider {
+    width: 100% !important;
+    max-width: 376px !important;
+    height: auto !important;
+    aspect-ratio: 376 / 153 !important;
+    margin: 0 auto 20px auto !important;
+  }
+
+  .carousel-slide img {
+    object-fit: fill !important;
+    height: 100% !important;
+  }
+
+  .recommend-links {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    /* 已在 768px 處理 flex: none */
+  }
+
+  .recommend-links .links {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .recommend-links .links .item {
+    width: 166px !important;
+    height: 43px !important;
+    max-width: none !important;
+    aspect-ratio: auto !important;
+  }
+
+  .recommend-links .links .item :deep(img) {
+    width: 166px !important;
+    height: 43px !important;
+    object-fit: fill !important;
+  }
 }
 
-.carousel-slide img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover; /* 保持比例，裁切多餘部分 */
-}
-
-.carousel-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.carousel-size-reference {
-  width: 100%;
-  height: auto;
-  display: block;
-  opacity: 0; /* 完全透明，但佔據空間 */
-}
 
 .carousel-slide {
   position: absolute;
@@ -642,217 +1001,455 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: fill; /* 強制填滿容器，可能會變形 */
+  object-fit: cover;
+  border-radius: 9px;
 }
 
 .recommend-links {
-  flex: 1;
+  flex: 0 1 546px;
+  /* 恢復：優先佔據 546px */
+  max-width: 546px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20px;
+  /* 依照標註圖給予足夠間隙 */
 }
 
 @media (max-width: 768px) {
   .recommend-links {
-    width: 100%;
+    width: 100% !important;
+    margin-left: 0 !important;
+    flex: none !important;
+    /* 在 iPad Mini 等垂直狀態下解鎖高度 */
   }
 }
 
 .recommend-links .links {
   display: grid;
-  gap: 1.5rem;
+  gap: 17px 7px;
   grid-template-columns: repeat(2, 1fr);
 }
 
-@media (max-width: 1024px) {
+.recommend-links .links .item {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  aspect-ratio: 250 / 65;
+}
+
+@media (max-width: 1279px) {
   .recommend-links .links {
-    gap: 0.875rem;
+    gap: 13px 7px !important;
+  }
+
+  .recommend-links .links .item {
+    width: 100% !important;
+    /* 改為流體寬度 */
+    max-width: 143px;
+    /* 限制最大寬度但不鎖死 */
+    height: auto !important;
+    aspect-ratio: 143 / 37 !important;
+  }
+
+  .recommend-routes-title {
+    margin-bottom: 12px !important;
+    height: auto !important;
+    gap: 8px !important;
+  }
+
+  .recommend-routes-title .crown-icon {
+    width: 30px !important;
+    height: 28px !important;
+  }
+
+  .recommend-routes-title .title-text {
+    width: auto !important;
+    height: auto !important;
+    font-size: 1.25rem !important;
+    letter-spacing: 2px !important;
   }
 }
 
 @media (max-width: 768px) {
   .recommend-links .links {
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.625rem;
+    gap: 0.75rem;
+  }
+
+  .recommend-links .links .item {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 143 / 37;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .recommend-links .links {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 166px) !important;
+    gap: 15px 10px !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .recommend-routes-title {
+    margin-bottom: 0.75rem !important;
+    justify-content: flex-start !important;
+    /* 改為左靠 */
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .recommend-routes-title .crown-icon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .recommend-routes-title .title-text {
+    /* 移除固定寬高與實心背景，避免產生色塊與裁切 */
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+
+    /* 使用您提供的顏色進行文字渲染 */
+    font-size: 21px !important;
+    font-family: "Microsoft YaHei UI", "Microsoft YaHei UI-Bold", sans-serif !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+
+    /* 將背景色與文字色結合成漸層文字，這通常是設計稿的本意 */
+    background: linear-gradient(180deg, #fffdda 0%, #ffd08c 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+
+    letter-spacing: 4.17px !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
   }
 }
 
-.recommend-links .links .item :deep(.img-button)::after,
-.recommend-links .links .item :deep(.img-button)::before {
-  display: block;
-  position: absolute;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  z-index: 2;
-}
 
-.recommend-links .links .item :deep(.img-button)::before {
-  color: #880214;
-  content: attr(data-index);
-  font-size: 2.5em;
-  font-weight: 700;
-  left: 11.9%;
-}
 
-@media (max-width: 1280px) {
-  .recommend-links .links .item :deep(.img-button)::before {
-    font-size: 2.1875em;
-  }
-}
 
-@media (max-width: 768px) {
-  .recommend-links .links .item :deep(.img-button)::before {
-    font-size: 2em;
-  }
-}
 
-.recommend-links .links .item :deep(.img-button)::after {
-  color: #dfb082;
-  content: attr(data-title);
-  font-size: 1.5em;
-  left: 60%;
-  white-space: nowrap;
-}
-
-@media (max-width: 1280px) {
-  .recommend-links .links .item :deep(.img-button)::after {
-    font-size: 1.375em;
-  }
-}
-
-@media (max-width: 768px) {
-  .recommend-links .links .item :deep(.img-button)::after {
-    font-size: 1.25em;
-  }
-}
-
-/* Recommend Tools */
-.recommend-tools {
-  border-top: 2px solid #dfb082;
+/* Bottom Tools Area (Recommend Footer) */
+.recommend-footer {
+  width: 100%;
   box-sizing: border-box;
-  padding: 1rem 2.125rem;
+  padding: 0;
   display: flex;
   flex-direction: row;
+  align-items: stretch;
+  /* 關鍵：確保所有子元件齊高 */
+  height: auto;
+  background-color: #0d0d0d;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+}
+
+.recommend-footer .block-title {
+  margin-right: 0;
+  margin-bottom: 0;
+  background-color: #550000;
+  padding: 0;
+  border-radius: 0 0 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  flex: 0 0 17.3%;
+  min-width: 150px;
+}
+
+.recommend-footer .block-title img {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  max-height: 45px;
+  object-fit: contain;
+  display: block;
+}
+
+.recommend-footer .tools {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 0;
+  background-color: transparent;
+}
+
+@media (max-width: 1280px) {
+  .recommend-footer {
+    flex-direction: column;
+    height: auto;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .recommend-footer .block-title {
+    flex: 0 0 40px;
+    width: 100%;
+    min-width: 100%;
+    height: 40px;
+    border-radius: 0;
+    justify-content: flex-start;
+    padding: 0;
+    background: linear-gradient(90deg, #8b0012 0%, #ba081f 100%);
+  }
+
+  .recommend-footer .block-title img {
+    width: auto;
+    height: 20px;
+    max-width: none;
+  }
+
+  .recommend-footer .tools {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    height: auto !important;
+  }
+}
+
+
+
+@media (max-width: 1279px) {
+  .recommend-footer {
+    width: 100% !important;
+    max-width: 789px !important;
+    height: auto !important;
+    margin: 0 auto 2rem auto !important;
+    border-radius: 0 0 20px 20px !important;
+    /* 修正：回歸與 PC 一致的大圓角 */
+    flex-direction: column !important;
+    background: #0d0d0d !important;
+    /* 修正：回歸與 PC 一致的深黑色 */
+    overflow: hidden !important;
+  }
+
+  .recommend-footer .block-title {
+    width: 100% !important;
+    height: 48px !important;
+    flex: 0 0 48px !important;
+    justify-content: flex-start !important;
+    padding: 0 15px !important;
+    background: #550000 !important;
+    /* 平板下標題欄維持深紅 */
+    border-radius: 0 !important;
+  }
+
+  .recommend-footer .block-title img {
+    width: auto !important;
+    height: 26px !important;
+  }
+
+  .recommend-footer .tools {
+    width: 100% !important;
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+  }
+
+  /* 過渡期處理：在 820px 以下提早將 6 欄切為 3 欄，解決擠壓問題 */
+  @media (max-width: 820px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(3, 1fr) !important;
+      padding: 10px 0 !important;
+    }
+  }
+
+  .recommend-footer .tools .item {
+    height: 65px !important;
+    min-height: 0 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .recommend-footer .tools .item:nth-child(6n) {
+    border-right: none !important;
+  }
+
+  /* 手機版：改為 3 欄 */
+  @media (max-width: 767px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .recommend-footer .tools .item:nth-child(3n) {
+      border-right: none !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .recommend-footer .tools {
+      grid-template-columns: repeat(2, 1fr) !important;
+      padding: 0 !important;
+    }
+
+    .recommend-footer .tools .item:nth-child(2n) {
+      border-right: none !important;
+    }
+  }
+
+  .recommend-footer .tools .item :deep(.img-button) {
+    width: 100% !important;
+    max-width: 90px !important;
+    height: 50px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .recommend-footer .block-title {
+    height: 48px !important;
+    flex: 0 0 48px !important;
+  }
+
+  .recommend-footer .tools .item {
+    height: 65px !important;
+    min-height: 65px !important;
+  }
+
+  .recommend-footer .tools .item :deep(.img-button) {
+    width: 90px !important;
+    height: 55px !important;
+  }
+}
+
+.recommend-footer .tools .item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: stretch;
+  /* 確保背景填滿高度 */
+}
+
+.recommend-footer .tools .item:hover {
+  background-color: #a81c1c;
+}
+
+.recommend-footer .tools .item :deep(.img-button) {
+  width: 120px !important;
+  height: 105px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: none !important;
+}
+
+.recommend-footer .tools .item :deep(.img-button):hover {
+  filter: none !important;
+}
+
+.recommend-footer .tools .item :deep(.img-button img) {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  transition: none !important;
+  margin: 0 auto !important;
+}
+
+/* 確保最後一個圓角正確 */
+.recommend-footer .tools .item:last-child {
+  border-radius: 0 0 20px 0;
+}
+
+
+
+/* Programme Section */
+.programme-wrap {
+  width: 100%;
+  max-width: 1501px;
+  margin: 0 auto;
+  display: flex;
+  gap: 30px;
+}
+
+.programme-block {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 1280px) {
+  .programme-wrap {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 1279px) {
+  .programme-wrap {
+    width: 100%;
+    padding: 0 15px;
+    /* 統一手機與平板內距 */
+    box-sizing: border-box;
+  }
+}
+
+/* --- 清理重複開發區塊 --- */
+
+/* Programme Block Title Styles */
+.programme-block .block-title {
+  height: 70px;
+  margin-bottom: 2rem;
+  display: flex;
   align-items: center;
 }
 
-@media (max-width: 1024px) {
-  .recommend-tools {
-    padding: 1rem 1.25rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 768px) {
-  .recommend-tools {
-    padding: 1.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .recommend-tools {
-    padding: 1.25rem 0.875rem;
-  }
-}
-
-.recommend-tools .block-title {
-  margin-right: 1.5rem;
-  margin-bottom: 0;
-}
-
-@media (max-width: 1024px) {
-  .recommend-tools .block-title {
-    margin-bottom: 0.5rem;
-    margin-right: 0;
-  }
-}
-
-.recommend-tools .tools {
-  display: grid;
-  gap: 0.0625rem;
-  grid-template-columns: repeat(6, 1fr);
-  flex: 1;
-}
-
-@media (max-width: 1024px) {
-  .recommend-tools .tools {
-    gap: 1rem;
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .recommend-tools .tools {
-    gap: 0.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .recommend-tools .tools {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem 1rem;
-  }
-}
-
-.recommend-tools .tools .item {
-  position: relative;
-}
-
-.recommend-tools .tools .item::after {
-  background-color: #ffc990;
-  content: '';
-  display: block;
-  height: 60px;
-  position: absolute;
-  right: -1.5px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-}
-
-@media (max-width: 1024px) {
-  .recommend-tools .tools .item::after {
-    height: 42px;
-    right: -6.5px;
-  }
-}
-
-@media (max-width: 768px) {
-  .recommend-tools .tools .item::after {
-    height: 32px;
-    right: -8.5px;
-  }
-}
-
-@media (max-width: 480px) {
-  .recommend-tools .tools .item::after {
-    height: 40px;
-  }
-  
-  .recommend-tools .tools .item:nth-child(3n+3)::after {
-    display: none;
-  }
-}
-
-.recommend-tools .tools .item:last-child::after {
-  display: none;
-}
-
-/* Programme Sections */
-.programme-wrap {
-  display: grid;
-  gap: 3.5rem;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1500px) and (min-width: 1280px) {
   .programme-wrap {
-    gap: 2.25rem;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 3rem 2rem !important;
   }
+
+  .programme-block {
+    flex: 1 1 420px !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 1279px) {
+  .programme-wrap {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 20px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 789px !important;
+    margin: 0 auto !important;
+  }
+
+  .programme-block .block-title {
+    width: 270px !important;
+    height: 45px !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .programme-block .block-title :deep(img) {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.programme-block .block-title :deep(img) {
+  width: 427px !important;
+  height: 70px !important;
+  object-fit: contain;
 }
 
 @media (max-width: 768px) {
@@ -862,15 +1459,22 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .programme-wrap {
-    gap: 2rem;
+    flex-direction: column !important;
+    gap: 30px !important;
+    padding: 0 15px !important;
+  }
+
+  .programme-block {
+    max-width: 100% !important;
   }
 }
 
 /* Programme Sections - Dynamic Grid Classes */
 .programme-wrap .list {
   display: grid;
+<<<<<<< HEAD
   gap: 1.25rem;
 }
 
@@ -902,6 +1506,30 @@ onUnmounted(() => {
 
 .programme-wrap .list.grid-empty {
   display: none;
+=======
+  gap: 20px 15px;
+}
+
+@media (min-width: 1501px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(3, 1fr) !important;
+    /* PC 版鎖定 3 欄 */
+  }
+}
+
+@media (max-width: 1500px) and (min-width: 1280px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+    gap: 15px 10px;
+  }
+}
+
+@media (max-width: 430px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px 10px;
+  }
+>>>>>>> 63949ae
 }
 
 @media (max-width: 1024px) {
@@ -931,6 +1559,7 @@ onUnmounted(() => {
   }
 }
 
+<<<<<<< HEAD
 @media (max-width: 768px) {
   .programme-wrap .list {
     gap: 1rem;
@@ -987,53 +1616,137 @@ onUnmounted(() => {
   .programme-wrap .list.grid-8-items,
   .programme-wrap .list.grid-many-items {
     grid-template-columns: repeat(2, 1fr); /* 極窄螢幕強制 2 欄 */
+=======
+@media (max-width: 430px) {
+  .programme-wrap .list .item {
+    width: 100% !important;
+>>>>>>> 63949ae
   }
 }
 
 .programme-wrap .list .item {
+  width: 220px;
+  margin: 0 auto;
   cursor: pointer;
+  box-sizing: border-box;
+}
+
+.programme-wrap .list .item a {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .programme-wrap .list .item .img {
-  border: 2px solid #b3905b;
-  border-radius: 10px;
-  margin-bottom: 0.5rem;
-  overflow: hidden;
-  position: relative;
-  width: 100%;  /* 改為彈性寬度 */
-  max-width: 187px; /* 最大寬度限制 */
-  aspect-ratio: 187 / 105; /* 保持寬高比 */
-}
-
-.programme-wrap .list .item .img::before {
-  background-color: hsla(0, 0%, 100%, 0.5);
-  content: '';
-  display: block;
-  height: 100%;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  transition: all 0.1s ease-in-out;
   width: 100%;
+  aspect-ratio: 236 / 133;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  border: 1px solid rgba(223, 176, 130, 0.2);
 }
 
 .programme-wrap .list .item .img img {
   width: 100%;
   height: 100%;
-  object-fit: fill; /* 強制填滿，可能變形 */
+  object-fit: cover;
+}
+
+.programme-wrap .list .item span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* PC 版置中 */
+  width: 100%;
+  height: 43px;
+  background: linear-gradient(to right, #4d176f, #671dbb);
+  border-radius: 0 0 10px 10px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 !important;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1279px) {
+  .programme-wrap .list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px 14px !important;
+    width: 100% !important;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .programme-wrap .list .item {
+    width: 100% !important;
+    max-width: 180px;
+    margin: 0 auto;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+  }
+
+  .programme-wrap .list .item .img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 173 / 94 !important;
+    border-radius: 10px 10px 0 0 !important;
+  }
+
+  .programme-wrap .list .item span {
+    width: 100% !important;
+    height: 34px !important;
+    font-size: 0.85rem !important;
+    border-radius: 0 0 10px 10px !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .programme-wrap .list {
+    max-width: 100% !important;
+    gap: 10px 8px !important;
+  }
+
+  .programme-wrap .list .item {
+    max-width: none !important;
+  }
+}
+
+/* Sport Block Specific Styles (Green) */
+.programme-wrap .programme-block.sport-block .list .item span {
+  background: linear-gradient(to right, #114b1f, #2c8a3c);
+}
+
+
+
+.programme-wrap .list .item .img img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  /* 強制填滿，可能變形 */
+  transition: transform 0.3s ease;
+}
+
+.programme-wrap .list .item:hover .img img {
+  transform: scale(1.1);
 }
 
 /* 空資料的處理 */
 .programme-wrap .list .item.empty-item {
-  opacity: 0.3; /* 半透明顯示空位置 */
+  opacity: 0.3;
+  /* 半透明顯示空位置 */
 }
 
 .programme-wrap .list .item .empty-placeholder {
   width: 100%;
   max-width: 187px;
   aspect-ratio: 187 / 105;
-  border: 2px dashed #b3905b;
+  border: 3px dashed rgba(248, 238, 201, 0.6);
   border-radius: 10px;
   margin-bottom: 0.5rem;
   background-color: transparent;
@@ -1044,13 +1757,13 @@ onUnmounted(() => {
   width: 100%;
   max-width: 612px;
   aspect-ratio: 612 / 353;
-  border: 2px dashed #b3905b;
+  border: 3px dashed rgba(248, 238, 201, 0.6);
   border-radius: 10px;
   background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b3905b;
+  color: rgba(248, 238, 201, 0.6);
   font-size: 16px;
   opacity: 0.5;
 }
@@ -1059,109 +1772,71 @@ onUnmounted(() => {
   content: "暫無內容";
 }
 
-.programme-wrap .list .item span {
-  color: #ffd08c;
-  font-size: 1.25em;
-  letter-spacing: 2px;
-  line-height: 1.25;
-  margin-left: 0.5rem;
-}
-
 @media (max-width: 1280px) {
   .programme-wrap .list .item span {
     font-size: 1em;
   }
 }
 
-.programme-wrap .list .item:hover .img::before {
-  opacity: 1;
-}
+
 
 /* Float Ad */
 #float-ad {
   bottom: 1rem;
-  max-width: 110px;
+  max-width: 120px;
+  /* 依照要求調整為 120px */
   min-width: 75px;
   position: fixed;
   right: 2.5rem;
-  width: 5.7%;
+  width: auto;
+  /* 從百分比改為 auto 以便受 max-width 控制 */
   z-index: 99;
   transition: all 0.3s ease;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1440px) and (min-width: 1280px) {
   #float-ad {
     max-width: 75px;
     right: 1rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1279px) {
   #float-ad {
-    background-color: rgba(0, 0, 0, 0.9);
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
-    max-width: none;
-    min-width: auto;
-    padding: 0;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    z-index: 999;
-    position: fixed;
-  }
-  
-  #float-ad.collapsed {
-    background-color: rgba(0, 0, 0, 0.7);
+    position: relative !important;
+    bottom: 0 !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 0 !important;
+    border-top: 1px solid rgba(223, 176, 130, 0.4);
+    border-bottom: 2px solid #000;
   }
 }
 
-/* 收合/展開按鈕 */
-.float-ad-toggle {
-  display: none;
+@media (min-width: 768px) and (max-width: 1279px) {
+  #float-ad {
+    width: 820px !important;
+    height: 95px !important;
+    opacity: 0.6;
+    background: #3e080f !important;
+    background: linear-gradient(0deg, #000000 0%, #232323 100%), #000000 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    margin: 0 auto !important;
+    /* 水平置中 */
+  }
 }
 
-@media (max-width: 480px) {
+
+@media (max-width: 1279px) {
   .float-ad-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem;
-    cursor: pointer;
-    background-color: rgba(223, 176, 130, 0.2);
-    border-radius: 12px 12px 0 0;
-    transition: all 0.2s;
-    position: relative;
-    z-index: 1001; /* 提高 z-index 確保可點擊 */
-    border: none;
-    width: 100%;
-    outline: none;
-    -webkit-tap-highlight-color: transparent; /* 移除 iOS 點擊高亮 */
-    touch-action: manipulation; /* 優化觸控體驗 */
-  }
-  
-  .float-ad-toggle:hover {
-    background-color: rgba(223, 176, 130, 0.3);
-  }
-  
-  .float-ad-toggle:active {
-    background-color: rgba(223, 176, 130, 0.4);
-    transform: scale(0.98);
-  }
-  
-  .toggle-icon {
-    color: #dfb082;
-    font-size: 1.2rem;
-    font-weight: bold;
-    pointer-events: none;
-    user-select: none; /* 防止文字選取 */
-  }
-  
-  #float-ad.collapsed .float-ad-toggle {
-    border-radius: 12px;
+    display: none !important;
   }
 }
+
 
 #float-ad .links {
   display: grid;
@@ -1169,29 +1844,133 @@ onUnmounted(() => {
   grid-template-columns: 1fr;
 }
 
-@media (max-width: 1440px) {
+#float-ad .links .item {
+  width: 100%;
+  max-width: 120px;
+  height: auto;
+  aspect-ratio: 120 / 105;
+}
+
+/* 桌面版：顯示桌面圖片，隱藏所有 RWD 圖片 */
+#float-ad .links .item.rwd-first-button .desktop-image,
+#float-ad .links .item.rwd-second-button .desktop-image,
+#float-ad .links .item.rwd-third-button .desktop-image {
+  display: block;
+}
+
+#float-ad .links .item.rwd-first-button .tablet-image,
+#float-ad .links .item.rwd-second-button .tablet-image,
+#float-ad .links .item.rwd-third-button .tablet-image,
+#float-ad .links .item.rwd-first-button .mobile-image,
+#float-ad .links .item.rwd-second-button .mobile-image,
+#float-ad .links .item.rwd-third-button .mobile-image {
+  display: none;
+}
+
+@media (max-width: 1440px) and (min-width: 1280px) {
   #float-ad .links {
     gap: 0.875rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1279px) {
   #float-ad .links {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    padding: 1rem;
-    animation: slideDown 0.3s ease;
+    display: flex !important;
+    /* 強制在 1279px 以下顯示，無視 Vue 的 v-show */
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 80px !important;
+    /* 增加間距讓按鈕更分散 */
+    width: 100% !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
   }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+
+  #float-ad .links .item {
+    width: 151px !important;
+    height: 58px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: none !important;
+    /* 改為 flex: none，確保固定寬度 */
+  }
+
+  #float-ad .links .item :deep(img) {
+    width: 151px !important;
+    height: 58px !important;
+    max-width: 151px !important;
+    object-fit: fill !important;
+    /* 使用 fill 確保圖片完全填滿容器 */
+  }
+
+  /* 平板版：隱藏桌面和手機圖片，顯示平板圖片 */
+  #float-ad .links .item.rwd-first-button .desktop-image,
+  #float-ad .links .item.rwd-second-button .desktop-image,
+  #float-ad .links .item.rwd-third-button .desktop-image,
+  #float-ad .links .item.rwd-first-button .mobile-image,
+  #float-ad .links .item.rwd-second-button .mobile-image,
+  #float-ad .links .item.rwd-third-button .mobile-image {
+    display: none !important;
+  }
+
+  #float-ad .links .item.rwd-first-button .tablet-image,
+  #float-ad .links .item.rwd-second-button .tablet-image,
+  #float-ad .links .item.rwd-third-button .tablet-image {
+    display: block !important;
+  }
+}
+
+@media (max-width: 767px) {
+
+  /* 手機版：隱藏桌面和平板圖片，顯示手機圖片 */
+  #float-ad .links .item.rwd-first-button .desktop-image,
+  #float-ad .links .item.rwd-second-button .desktop-image,
+  #float-ad .links .item.rwd-third-button .desktop-image,
+  #float-ad .links .item.rwd-first-button .tablet-image,
+  #float-ad .links .item.rwd-second-button .tablet-image,
+  #float-ad .links .item.rwd-third-button .tablet-image {
+    display: none !important;
+  }
+
+  #float-ad .links .item.rwd-first-button .mobile-image,
+  #float-ad .links .item.rwd-second-button .mobile-image,
+  #float-ad .links .item.rwd-third-button .mobile-image {
+    display: block !important;
+  }
+}
+
+@media (max-width: 430px) {
+  #float-ad {
+    position: relative !important;
+    margin: 0 !important;
+    /* 與平板一致 */
+    /* 繼承平板背景，不需特別屬性覆蓋則背景會維持 */
+  }
+
+  #float-ad .links {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    /* 縮減間距更細緻 */
+    padding: 0 5px !important;
+  }
+
+  #float-ad .links .item {
+    width: 31% !important;
+    height: 48px !important;
+    /* 鎖死高度與圖片一致 */
+    aspect-ratio: auto !important;
+    /* 移除強制比例，讓高度驅動 */
+    flex: none !important;
+  }
+
+  #float-ad .links .item :deep(img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
   }
 }
 </style>

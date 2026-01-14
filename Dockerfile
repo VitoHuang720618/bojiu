@@ -15,7 +15,7 @@ WORKDIR /build/manager/front
 COPY manager/front/package.json manager/front/yarn.lock ./
 RUN yarn install --production=false
 COPY manager/front/ ./
-RUN yarn build
+RUN npx vite build
 
 # Production stage
 FROM nginx:alpine
@@ -34,12 +34,11 @@ COPY manager/backend/package*.json ./
 # Install all dependencies for building
 RUN npm install
 
-# Copy backend source and try to build TypeScript
+# Copy backend source and build TypeScript
 COPY manager/backend/ ./
-RUN npm list typescript || echo "TypeScript not found"
-RUN ls -la node_modules/.bin/ | grep tsc || echo "tsc binary not found"
-RUN node --version && npm --version
-RUN npm run build || echo "Build failed, continuing without compilation"
+
+# Install TypeScript globally and compile
+RUN npm install -g typescript && tsc
 
 # Remove dev dependencies to reduce image size
 RUN npm prune --production

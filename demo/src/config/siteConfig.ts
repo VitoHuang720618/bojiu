@@ -13,7 +13,8 @@ export const siteConfig: SiteConfig = {
   title: '博九娱乐网',
   description: 'B9 Entertainment Website',
   baseUrl: getBaseUrl(),
-  
+  useApi: true,
+
   navigation: [
     // Top navigation buttons
     {
@@ -41,13 +42,13 @@ export const siteConfig: SiteConfig = {
       isExternal: true
     }
   ],
-  
+
   footer: {
     links: [],
     socialMedia: [],
     copyright: 'Copyright © 博九娱乐网 Reserved'
   },
-  
+
   theme: {
     colors: {
       primary: '#ba081f',
@@ -113,27 +114,27 @@ export const recommendedTools = [
   {
     id: 'xiaohongshu',
     name: '小紅書',
-    href: 'https://www.xiaohongshu.com/explore'
+    href: 'https://live.titan007.com/oldIndexall.aspx'
   },
   {
     id: 'douyin',
     name: '抖音',
-    href: 'https://www.douyin.com/'
+    href: 'https://live.leisu.com/'
   },
   {
     id: 'baidu',
     name: '百度',
-    href: 'https://www.baidu.com/'
+    href: 'https://live.nowscore.com/2in1.aspx'
   },
   {
     id: 'youku',
     name: 'YOUKU',
-    href: 'https://youku.com/'
+    href: 'https://v.douyin.com/KZUpEUBUIlI/'
   },
   {
     id: 'iqiyi',
     name: 'iQIYI',
-    href: 'https://www.iq.com/'
+    href: 'https://www.baidu.com/'
   },
   {
     id: 'x',
@@ -144,51 +145,31 @@ export const recommendedTools = [
 
 // Video content data
 export const videoContent = [
-  { id: 'video-1', title: '甜美Aura' },
-  { id: 'video-2', title: '变态马洛' },
-  { id: 'video-3', title: '蹦蹦冲啊' },
-  { id: 'video-4', title: '阳光Hank' },
-  { id: 'video-5', title: '专属福利' },
-  { id: 'video-6', title: '撩人双飞闺蜜秀' }
+  { id: 'video-1', title: 'Fun乐园圣典直播', href: 'https://example.com/video1' },
+  { id: 'video-2', title: '馬洛', href: 'https://example.com/video2' },
+  { id: 'video-3', title: '熱門影片 3', href: 'https://example.com/video3' },
+  { id: 'video-4', title: '熱門影片 4', href: 'https://example.com/video4' },
+  { id: 'video-5', title: '熱門影片 5', href: 'https://example.com/video5' },
+  { id: 'video-6', title: '熱門影片 6', href: 'https://example.com/video6' }
 ]
 
 // Program content data
 export const programContent = [
-  { id: 'program-1', title: '十二月粉丝见面会' },
-  { id: 'program-2', title: '十一月粉丝见面会' },
-  { id: 'program-3', title: '特别节目' },
-  { id: 'program-4', title: '特别节目' },
-  { id: 'program-5', title: 'NBA赛事' },
-  { id: 'program-6', title: '英超赛事' }
+  { id: 'program-1', title: '熱門節目 1', href: 'https://example.com/program1' },
+  { id: 'program-2', title: '熱門節目 2', href: 'https://example.com/program2' },
+  { id: 'program-3', title: '熱門節目 3', href: 'https://example.com/program3' },
+  { id: 'program-4', title: '熱門節目 4', href: 'https://example.com/program4' },
+  { id: 'program-5', title: '熱門節目 5', href: 'https://example.com/program5' },
+  { id: 'program-6', title: '熱門節目 6', href: 'https://example.com/program6' }
 ]
 
 // Carousel slides data
 export const carouselSlides = [
-  {
-    id: 'slide-1',
-    alt: '登入享签到金',
-    href: 'https://be9522.com:9900/web/#/promotion/home?focusTab=copy&statusTab=all&tagTab=1'
-  },
-  {
-    id: 'slide-2',
-    alt: '日日存·日日抽·最高1888！',
-    href: 'https://be9522.com:9900/web/#/promotion/home?focusTab=copy&statusTab=all&tagTab=1'
-  },
-  {
-    id: 'slide-3',
-    alt: '日享存款回馈',
-    href: 'https://be9522.com:9900/web/#/promotion/home?focusTab=copy&statusTab=all&tagTab=1'
-  },
-  {
-    id: 'slide-4',
-    alt: 'VIP特权盛典',
-    href: 'https://be9522.com:9900/web/#/promotion/home?focusTab=copy&statusTab=all&tagTab=1'
-  },
-  {
-    id: 'slide-5',
-    alt: '诚邀加盟',
-    href: 'https://be9522.com:9900/web/#/promotion/home?focusTab=copy&statusTab=all&tagTab=1'
-  }
+  { id: 'slide-1', alt: '輪播圖 1', href: '' },
+  { id: 'slide-2', alt: '輪播圖 2', href: '' },
+  { id: 'slide-3', alt: '輪播圖 3', href: '' },
+  { id: 'slide-4', alt: '輪播圖 4', href: '' },
+  { id: 'slide-5', alt: '輪播圖 5', href: '' }
 ]
 
 // Float ad buttons data
@@ -196,16 +177,16 @@ export const floatAdButtons = [
   {
     id: 'customer-service',
     name: '在线客服',
-    href: 'https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777'
+    href: ''
   },
   {
     id: 'girl-douyin',
     name: '女孩抖音',
-    href: 'https://v.douyin.com/i5spY9ux/'
+    href: ''
   },
   {
     id: 'sports-douyin',
     name: '体育抖音',
-    href: 'https://www.fun99666.com/'
+    href: ''
   }
 ]

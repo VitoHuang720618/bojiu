@@ -5,27 +5,37 @@ class CarouselService {
   constructor() {
     // In development with proxy, use relative path
     // In production container, use environment variable or default
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:3002/api' : '/api')
     // Remove trailing slash if present
     this.baseUrl = this.baseUrl.replace(/\/$/, '')
   }
 
   async getConfig(): Promise<{
-    carouselSlides: {image: string, href: string, alt: string}[], 
+    carouselSlides: { image: string, href: string, alt: string }[],
     banner: string,
     backgroundImage: string,
-    videoThumbnails: ({image: string, href: string, alt: string, title: string} | null)[],
-    programThumbnails: ({image: string, href: string, alt: string, title: string} | null)[]
+    videoThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
+    programThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
+    buttonLinks: ({ text: string, href: string, target: string, defaultImage?: string, hoverImage?: string } | null)[],
+    toolIcons: ({ id: string, default: string, hover: string, alt: string, href: string } | null)[],
+    floatAdButtons?: ({ default: string, hover: string, href: string, alt: string } | null)[],
+    routeLinks?: { default: string, hover: string } | null
   }> {
     try {
+      // 檢查是否啟用了 API
+      const { siteConfig } = await import('../config/siteConfig')
+      if (siteConfig.useApi === false) {
+        throw new Error('API is disabled via config')
+      }
+
       const response = await fetch(`${this.baseUrl}/public/config`)
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch config: ${response.statusText}`)
       }
 
       const config = await response.json()
-      
+
       // Process image URLs to ensure they work in container environment
       const processImageUrl = (url: string) => {
         if (!url) return ''
@@ -42,16 +52,40 @@ class CarouselService {
         })),
         banner: processImageUrl(config.banner || ''),
         backgroundImage: processImageUrl(config.backgroundImage || ''),
-        videoThumbnails: (config.videoThumbnails || []).map((video: any) => 
+        videoThumbnails: (config.videoThumbnails || []).map((video: any) =>
           video ? { ...video, image: processImageUrl(video.image) } : null
         ),
-        programThumbnails: (config.programThumbnails || []).map((program: any) => 
+        programThumbnails: (config.programThumbnails || []).map((program: any) =>
           program ? { ...program, image: processImageUrl(program.image) } : null
-        )
+        ),
+        buttonLinks: (config.buttonLinks || []).map((button: any) =>
+          button ? { ...button } : null
+        ),
+        toolIcons: (config.toolIcons || []).map((tool: any) =>
+          tool ? {
+            ...tool,
+            default: processImageUrl(tool.default),
+            hover: processImageUrl(tool.hover)
+          } : null
+        ),
+        floatAdButtons: (config.floatAdButtons || []).map((button: any) =>
+          button ? {
+            ...button,
+            default: processImageUrl(button.default),
+            hover: processImageUrl(button.hover)
+          } : null
+        ),
+        routeLinks: config.routeLinks ? {
+          default: processImageUrl(config.routeLinks.default),
+          hover: processImageUrl(config.routeLinks.hover)
+        } : null
       }
-    } catch (error) {
-      console.error('Failed to fetch config from API:', error)
-      
+    } catch (error: any) {
+      // 這裡不再打印 Error，保持主控台乾淨
+      if (error?.message !== 'API is disabled via config') {
+        console.error('Failed to fetch config from API:', error)
+      }
+
       // 返回默认数据作为后备
       return {
         carouselSlides: [
@@ -61,7 +95,7 @@ class CarouselService {
             alt: '輪播圖 1'
           },
           {
-            image: '/assets/images/3f553531-765d-40fb-80ac-78f33c9897cd.png',
+            image: '/assets/images/tools-title.webp',
             href: '#',
             alt: '輪播圖 2'
           },
@@ -84,7 +118,9 @@ class CarouselService {
         banner: '',
         backgroundImage: '',
         videoThumbnails: [],
-        programThumbnails: []
+        programThumbnails: [],
+        buttonLinks: [],
+        toolIcons: []
       }
     }
   }
