@@ -177,7 +177,7 @@
     {
       "href": "",
       "default": "http://localhost:3002/uploads/float-2-default.png",
-      "hover": "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png"
+      "hover": "http://localhost:3002/uploads/float-2-hover.png"
     }
   ]
 }
