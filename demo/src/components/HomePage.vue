@@ -11,14 +11,14 @@ import {
   programContent
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
-import type { ButtonLinkConfig } from '../types'
+import type { ButtonLinkConfig, BannerConfig } from '../types'
 
 const currentSlide = ref(0)
 let carouselInterval: number | null = null
 
 // 从API获取的轮播图数据
 const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
-const apiBanner = ref<string>('')
+const apiBanner = ref<string | BannerConfig>('')
 const apiBackgroundImage = ref<string>('')
 const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
 const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
@@ -48,8 +48,7 @@ const effectiveCarouselSlides = computed(() => {
 })
 
 const effectiveBanner = computed(() => {
-  const bannerImage = apiBanner.value
-  return bannerImage || assetManifest.banner
+  return apiBanner.value || assetManifest.banner
 })
 
 const effectiveBackgroundImage = computed(() => {
@@ -406,28 +405,32 @@ onUnmounted(() => {
   width: 100%;
   max-width: 1920px;
   height: auto;
-  aspect-ratio: 1920 / 500;
   object-fit: cover;
 }
 
 @media (max-width: 1279px) {
   #banner {
     width: 100%;
-    height: 340px;
+    /* RWD: Allow height to adapt to image */
+    height: auto;
+    min-height: 100px;
+    /* Prevent collapse if image missing */
     background: #8b0012;
-    /* 使用與 Banner 邊緣相近的深紅色，防止視覺斷層 */
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  #banner :deep(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* 使用 cover 確保圖片填滿整個容器 */
-    display: block;
+  #banner :deep(img),
+  #banner :deep(picture) {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    /* contain or cover? If height is auto, cover and contain are similar but cover is safer for width fill */
+    display: block !important;
+    max-height: 600px;
+    /* Optional cap */
   }
 }
 
@@ -435,12 +438,14 @@ onUnmounted(() => {
   #banner {
     width: 100%;
     max-width: 430px;
-    height: 340px !important;
+    height: auto !important;
   }
 
-  #banner :deep(img) {
-    object-fit: fill !important;
-    /* 使圖片展開填滿 430x340 區域 */
+  #banner :deep(img),
+  #banner :deep(picture) {
+    object-fit: contain !important;
+    height: auto !important;
+    width: 100% !important;
   }
 }
 
@@ -473,6 +478,7 @@ onUnmounted(() => {
 @media (max-width: 1280px) {
   #home-main {
     padding: 3rem 2.5rem;
+    border-bottom: none !important;
   }
 }
 
@@ -490,7 +496,8 @@ onUnmounted(() => {
 
 @media (max-width: 430px) {
   #home-main {
-    border-width: 2px 0;
+    border-top: 2px solid #dfb082;
+    border-bottom: none !important;
     padding: 1.5rem 0.625rem;
     padding-bottom: 3rem;
   }
@@ -1028,6 +1035,7 @@ onUnmounted(() => {
     /* 將背景色與文字色結合成漸層文字，這通常是設計稿的本意 */
     background: linear-gradient(180deg, #fffdda 0%, #ffd08c 100%) !important;
     -webkit-background-clip: text !important;
+    background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
 
     letter-spacing: 4.17px !important;
@@ -1605,8 +1613,7 @@ onUnmounted(() => {
     max-width: 100% !important;
     margin: 0 !important;
     padding: 10px 0 !important;
-    border-top: 1px solid rgba(223, 176, 130, 0.4);
-    border-bottom: 2px solid #000;
+    background: #3e080f !important;
   }
 }
 
@@ -1614,13 +1621,9 @@ onUnmounted(() => {
   #float-ad {
     width: 820px !important;
     height: 95px !important;
-    opacity: 0.6;
-    background: #3e080f !important;
-    background: linear-gradient(0deg, #000000 0%, #232323 100%), #000000 !important;
+    margin: 0 auto !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
-    margin: 0 auto !important;
-    /* 水平置中 */
   }
 }
 

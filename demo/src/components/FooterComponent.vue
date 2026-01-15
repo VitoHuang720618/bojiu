@@ -20,11 +20,28 @@ import { siteConfig } from '../config/siteConfig'
   font-size: 14px;
 }
 
-@media (min-width: 768px) and (max-width: 1279px) {
+@media (max-width: 1279px) {
   #footer {
-    height: 40px;
-    background: #3e080f;
-    background: linear-gradient(0deg, #000000 0%, #232323 100%), #000000;
+    height: 48px;
+    background: #1a0305 !important;
+    border-top: 1px solid #dfb082 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #footer span {
+    width: 232px;
+    height: 16px;
+    font-size: 14px;
+    font-family: "Microsoft YaHei UI", "Microsoft YaHei UI-Light", sans-serif;
+    font-weight: 300;
+    text-align: left;
+    color: #fefefe;
+    letter-spacing: 0.69px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
   }
 }
 </style>

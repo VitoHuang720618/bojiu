@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
-import type { ImageProps } from '../types'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
+import type { ImageProps, BannerConfig } from '../types'
 
 const props = withDefaults(defineProps<ImageProps>(), {
   lazy: true,
@@ -11,11 +11,21 @@ const imgRef = ref<HTMLImageElement | null>(null)
 const isLoaded = ref(false)
 const hasError = ref(false)
 const hasLoggedError = ref(false)
-const currentSrc = ref(props.src)
 const isIntersecting = ref(false)
 
+const isObjectSrc = computed(() => typeof props.src === 'object' && props.src !== null)
+
+const displaySrc = computed(() => {
+  if (isObjectSrc.value) {
+    return (props.src as BannerConfig).pc
+  }
+  return props.src as string
+})
+
+const currentSrc = ref(displaySrc.value)
+
 watch(() => props.src, (newSrc) => {
-  currentSrc.value = newSrc
+  currentSrc.value = isObjectSrc.value ? (newSrc as BannerConfig).pc : newSrc as string
   isLoaded.value = false
   hasError.value = false
   hasLoggedError.value = false
@@ -86,7 +96,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <img ref="imgRef" :src="isIntersecting || !lazy ? currentSrc : ''" :alt="alt" :width="width" :height="height"
+  <picture v-if="isObjectSrc">
+    <source media="(max-width: 430px)" :srcset="(src as BannerConfig).mobile || (src as BannerConfig).pc">
+    <source media="(max-width: 1279px)" :srcset="(src as BannerConfig).tablet || (src as BannerConfig).pc">
+    <img ref="imgRef" :src="isIntersecting || !lazy ? (src as BannerConfig).pc : ''" :alt="alt" :width="width"
+      :height="height" :class="{ 'is-loaded': isLoaded, 'has-error': hasError }" @load="handleLoad"
+      @error="handleError" />
+  </picture>
+  <img v-else ref="imgRef" :src="isIntersecting || !lazy ? currentSrc : ''" :alt="alt" :width="width" :height="height"
     :class="{ 'is-loaded': isLoaded, 'has-error': hasError }" @load="handleLoad" @error="handleError" />
 </template>
 

@@ -92,8 +92,10 @@ class ApiService {
   private refreshPromise: Promise<boolean> | null = null;
 
   constructor() {
-    // Use environment variable or default to backend API
-    this.baseUrl = import.meta.env.VITE_API_URL || '/api';
+    // Use environment variable or default to relative path for container deployment
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
+    // Remove trailing slash if present
+    this.baseUrl = this.baseUrl.replace(/\/$/, '')
   }
 
   private async request<T>(
@@ -102,7 +104,7 @@ class ApiService {
     skipTokenRefresh = false
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
@@ -122,7 +124,7 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
-      
+
       // Handle token expiration
       if (response.status === 401 && !skipTokenRefresh && endpoint !== '/auth/refresh') {
         const refreshed = await this.handleTokenRefresh();
@@ -135,7 +137,7 @@ class ApiService {
           throw new Error('Authentication failed');
         }
       }
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
@@ -185,7 +187,7 @@ class ApiService {
           return true;
         }
       }
-      
+
       return false;
     } catch (error) {
       console.error('Token refresh failed:', error);
@@ -198,7 +200,7 @@ class ApiService {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_data');
-    
+
     // Redirect to login page
     if (window.location.pathname !== '/login') {
       window.location.href = '/login';

@@ -1,3 +1,5 @@
+import type { BannerConfig } from '../types'
+
 // 简单的轮播图和banner API服务
 class CarouselService {
   private baseUrl: string
@@ -12,7 +14,7 @@ class CarouselService {
 
   async getConfig(): Promise<{
     carouselSlides: { image: string, href: string, alt: string }[],
-    banner: string,
+    banner: string | BannerConfig,
     backgroundImage: string,
     videoThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
     programThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
@@ -50,7 +52,11 @@ class CarouselService {
           ...slide,
           image: processImageUrl(slide.image)
         })),
-        banner: processImageUrl(config.banner || ''),
+        banner: typeof config.banner === 'object' ? {
+          pc: processImageUrl(config.banner.pc || ''),
+          tablet: processImageUrl(config.banner.tablet || ''),
+          mobile: processImageUrl(config.banner.mobile || '')
+        } : processImageUrl(config.banner || ''),
         backgroundImage: processImageUrl(config.backgroundImage || ''),
         videoThumbnails: (config.videoThumbnails || []).map((video: any) =>
           video ? { ...video, image: processImageUrl(video.image) } : null
@@ -131,7 +137,7 @@ class CarouselService {
     return config.carouselSlides.map(slide => slide.image)
   }
 
-  async getBanner(): Promise<string> {
+  async getBanner(): Promise<string | BannerConfig> {
     const config = await this.getConfig()
     return config.banner
   }

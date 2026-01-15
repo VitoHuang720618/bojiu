@@ -44,6 +44,8 @@ export default defineConfig({
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000
   },
+  // Base path for root deployment
+  base: '/',
   // Define environment variables for container deployment
   define: {
     __API_BASE_URL__: JSON.stringify(process.env.VITE_API_BASE_URL || '/api'),

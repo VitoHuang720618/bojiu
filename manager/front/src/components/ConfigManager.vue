@@ -51,447 +51,89 @@
 
         <div class="tab-content">
           <!-- Banner 配置 -->
-          <div v-if="activeTab === 'banner'" class="config-panel">
-            <h3>Banner 設置</h3>
-            <div class="form-group">
-              <label>Banner 圖片</label>
-              <div class="image-upload">
-                <img v-if="config.banner" :src="config.banner" alt="Banner" class="preview-img" />
-                <div v-else class="placeholder">無圖片</div>
-                <input type="file" @change="(e) => handleImageUpload(e, 'banner')" accept="image/*"
-                  class="file-input" />
-                <button @click="clearImage('banner')" class="btn btn-danger btn-sm">清除</button>
-              </div>
-            </div>
-          </div>
+          <BannerConfigPanel v-if="activeTab === 'banner'" :banner="config.banner" :getImageUrl="getImageUrl"
+            @upload="handleBannerUpload" @batch-upload="handleBatchBannerUpload" @crop="openCropper"
+            @clear="clearBanner" />
 
           <!-- Background 配置 -->
-          <div v-if="activeTab === 'background'" class="config-panel">
-            <h3>背景圖設置</h3>
-            <div class="form-group">
-              <label>背景圖片</label>
-              <div class="image-upload">
-                <img v-if="config.backgroundImage" :src="config.backgroundImage" alt="Background" class="preview-img" />
-                <div v-else class="placeholder">無背景圖（顯示預設圖案）</div>
-                <input type="file" @change="(e) => handleImageUpload(e, 'backgroundImage')" accept="image/*"
-                  class="file-input" />
-                <button @click="clearImage('backgroundImage')" class="btn btn-danger btn-sm">清除</button>
-              </div>
-            </div>
-          </div>
+          <BackgroundConfigPanel v-if="activeTab === 'background'" :backgroundImage="config.backgroundImage"
+            @upload="(e) => handleImageUpload(e, 'backgroundImage')" @clear="clearImage('backgroundImage')" />
 
           <!-- Button Links 配置 -->
-          <div v-if="activeTab === 'buttonlinks'" class="config-panel">
-            <div class="panel-header">
-              <h3>按鈕鏈接設置</h3>
-              <div class="button-actions">
-                <button @click="resetButtonLinks" class="btn btn-secondary">重置為預設</button>
-                <button @click="addButtonLink" class="btn btn-primary">新增按鈕</button>
-              </div>
-            </div>
-
-            <div class="button-links-info">
-              <p class="info-text">
-                <strong>說明：</strong>這裡配置的按鈕會替換前端頁面頂部的按鈕。
-                可以上傳自定義的按鈕圖片（默認圖和懸停圖），並設置鏈接地址和顯示文字。
-                所有鏈接都會在新視窗中打開。
-              </p>
-            </div>
-
-            <!-- 如果沒有按鈕鏈接，顯示提示 -->
-            <div v-if="config.buttonLinks.length === 0" class="empty-state">
-              <p>目前沒有按鈕鏈接配置，將使用預設配置</p>
-              <button @click="addButtonLink" class="btn btn-primary btn-lg">新增第一個按鈕鏈接</button>
-            </div>
-
-            <div v-for="(button, index) in config.buttonLinks" :key="index" class="button-link-item">
-              <div class="item-header">
-                <h4>按鈕 {{ index + 1 }}</h4>
-                <button @click="removeButtonLink(index)" class="btn btn-danger btn-sm">刪除</button>
-              </div>
-              <div class="button-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>顯示文字</label>
-                    <input v-model="button.text" type="text" class="form-control" placeholder="例如：官方網站"
-                      @input="hasChanges = true" />
-                  </div>
-                  <div class="form-group">
-                    <label>鏈接地址</label>
-                    <input v-model="button.href" type="url" class="form-control" placeholder="https://example.com"
-                      @input="hasChanges = true" />
-                  </div>
-                </div>
-                <div class="image-row">
-                  <div class="form-group">
-                    <label>默認圖片</label>
-                    <div class="image-upload">
-                      <img v-if="button.defaultImage" :src="getImageUrl(button.defaultImage)" alt="Default"
-                        class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleButtonImageUpload(e, index, 'defaultImage')"
-                        accept="image/*" class="file-input" />
-                      <button @click="removeButtonImage(index, 'defaultImage')"
-                        class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>懸停圖片</label>
-                    <div class="image-upload">
-                      <img v-if="button.hoverImage" :src="getImageUrl(button.hoverImage)" alt="Hover"
-                        class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleButtonImageUpload(e, index, 'hoverImage')"
-                        accept="image/*" class="file-input" />
-                      <button @click="removeButtonImage(index, 'hoverImage')"
-                        class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ButtonLinksConfigPanel v-if="activeTab === 'buttonlinks'" :buttonLinks="config.buttonLinks"
+            :getImageUrl="getImageUrl" @reset="resetButtonLinks" @add="addButtonLink" @remove="removeButtonLink"
+            @upload="handleButtonImageUpload" @removeImage="removeButtonImage" @change="hasChanges = true" />
 
           <!-- Tool Icons 配置 -->
-          <div v-if="activeTab === 'toolicons'" class="config-panel">
-            <div class="panel-header">
-              <h3>工具圖標設置</h3>
-              <div class="button-actions">
-                <button @click="resetToolIcons" class="btn btn-secondary">重置為預設</button>
-                <button @click="addToolIcon" class="btn btn-primary">新增圖標</button>
-              </div>
-            </div>
-
-            <div class="button-links-info">
-              <p class="info-text">
-                <strong>說明：</strong>這裡配置的工具圖標會替換前端頁面推薦瀏覽器區域的圖標。
-                可以上傳自定義的圖標（默認圖和懸停圖），並設置圖標名稱。
-                所有圖標都會在新視窗中打開。
-              </p>
-            </div>
-
-            <!-- 如果沒有工具圖標，顯示提示 -->
-            <div v-if="config.toolIcons.length === 0" class="empty-state">
-              <p>目前沒有工具圖標配置，將使用預設配置</p>
-              <button @click="addToolIcon" class="btn btn-primary btn-lg">新增第一個工具圖標</button>
-            </div>
-
-            <div v-for="(tool, index) in config.toolIcons" :key="index" class="button-link-item">
-              <div class="item-header">
-                <h4>工具圖標 {{ index + 1 }}</h4>
-                <button @click="removeToolIcon(index)" class="btn btn-danger btn-sm">刪除</button>
-              </div>
-              <div class="button-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>連結網址</label>
-                    <input v-model="tool.href" type="url" class="form-control" placeholder="https://example.com"
-                      @input="hasChanges = true" />
-                  </div>
-                </div>
-                <div class="image-row">
-                  <div class="form-group">
-                    <label>默認圖標</label>
-                    <div class="image-upload">
-                      <img v-if="tool.default" :src="getImageUrl(tool.default)" alt="Default"
-                        class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleToolIconImageUpload(e, index, 'default')"
-                        accept="image/*" class="file-input" />
-                      <button @click="removeToolIconImage(index, 'default')" class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>懸停圖標</label>
-                    <div class="image-upload">
-                      <img v-if="tool.hover" :src="getImageUrl(tool.hover)" alt="Hover" class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleToolIconImageUpload(e, index, 'hover')" accept="image/*"
-                        class="file-input" />
-                      <button @click="removeToolIconImage(index, 'hover')" class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ToolIconsConfigPanel v-if="activeTab === 'toolicons'" :toolIcons="config.toolIcons"
+            :getImageUrl="getImageUrl" @reset="resetToolIcons" @add="addToolIcon" @remove="removeToolIcon"
+            @upload="handleToolIconImageUpload" @removeImage="removeToolIconImage" @change="hasChanges = true" />
 
           <!-- Route Links 配置 -->
-          <div v-if="activeTab === 'routelinks'" class="config-panel">
-            <div class="panel-header">
-              <h3>推薦路線設置</h3>
-              <div class="button-actions">
-                <button @click="resetRouteLinks" class="btn btn-secondary">重置為預設</button>
-              </div>
-            </div>
-
-            <div class="button-links-info">
-              <p class="info-text">
-                <strong>說明：</strong>這裡配置推薦優質線路區域的按鈕圖片。
-                可以上傳自定義的圖片（默認圖和懸停圖）。
-                這個按鈕會顯示在推薦優質線路標題下方。
-              </p>
-            </div>
-
-            <div class="route-links-item">
-              <div class="item-header">
-                <h4>推薦路線按鈕</h4>
-              </div>
-              <div class="button-form">
-                <div class="image-row">
-                  <div class="form-group">
-                    <label>默認圖片</label>
-                    <div class="image-upload">
-                      <img v-if="config.routeLinks.default" :src="getImageUrl(config.routeLinks.default)" alt="Default"
-                        class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleRouteLinksImageUpload(e, 'default')" accept="image/*"
-                        class="file-input" />
-                      <button @click="removeRouteLinksImage('default')" class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>懸停圖片</label>
-                    <div class="image-upload">
-                      <img v-if="config.routeLinks.hover" :src="getImageUrl(config.routeLinks.hover)" alt="Hover"
-                        class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleRouteLinksImageUpload(e, 'hover')" accept="image/*"
-                        class="file-input" />
-                      <button @click="removeRouteLinksImage('hover')" class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <RouteLinksConfigPanel v-if="activeTab === 'routelinks'" :routeLinks="config.routeLinks"
+            :getImageUrl="getImageUrl" @reset="resetRouteLinks" @upload="handleRouteLinksImageUpload"
+            @removeImage="removeRouteLinksImage" />
 
           <!-- Carousel 配置 -->
-          <div v-if="activeTab === 'carousel'" class="config-panel">
-            <div class="panel-header">
-              <h3>輪播圖設置</h3>
-              <div class="button-actions">
-                <button @click="addCarouselSlide" class="btn btn-primary">新增輪播圖</button>
-              </div>
-            </div>
-
-            <!-- 如果沒有輪播圖，顯示提示 -->
-            <div v-if="config.carouselSlides.length === 0" class="empty-state">
-              <p>目前沒有輪播圖配置</p>
-              <button @click="addCarouselSlide" class="btn btn-primary btn-lg">新增第一張輪播圖</button>
-            </div>
-
-            <div v-for="(slide, index) in config.carouselSlides" :key="index" class="carousel-item">
-              <div class="item-header">
-                <h4>輪播圖 {{ index + 1 }}</h4>
-                <button @click="removeCarouselSlide(index)" class="btn btn-danger btn-sm">刪除</button>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>圖片</label>
-                  <div class="image-upload">
-                    <img v-if="slide.image" :src="slide.image" alt="Carousel" class="preview-img small" />
-                    <div v-else class="placeholder small">無圖片</div>
-                    <input type="file" @change="(e) => handleCarouselImageUpload(e, index)" accept="image/*"
-                      class="file-input" />
-                    <button @click="clearCarouselImage(index)" class="btn btn-danger btn-sm">刪除</button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>連結</label>
-                  <input v-model="slide.href" type="url" class="form-control" placeholder="https://example.com"
-                    @input="hasChanges = true" />
-                </div>
-                <div class="form-group">
-                  <label>描述</label>
-                  <input v-model="slide.description" type="text" class="form-control" placeholder="圖片描述"
-                    @input="hasChanges = true" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <CarouselConfigPanel v-if="activeTab === 'carousel'" :carouselSlides="config.carouselSlides"
+            @add="addCarouselSlide" @remove="removeCarouselSlide" @upload="handleCarouselImageUpload"
+            @clearImage="clearCarouselImage" @change="hasChanges = true" />
 
           <!-- Video Thumbnails 配置 -->
-          <div v-if="activeTab === 'videos'" class="config-panel">
-            <div class="panel-header">
-              <h3>精選短視頻設置</h3>
-              <button @click="addVideo" class="btn btn-primary">新增視頻</button>
-            </div>
-
-            <!-- 如果沒有視頻，顯示提示和新增按鈕 -->
-            <div v-if="config.videoThumbnails.length === 0" class="empty-state">
-              <p>目前沒有視頻項目</p>
-              <button @click="addVideo" class="btn btn-primary btn-lg">新增第一個視頻</button>
-            </div>
-
-            <div v-for="(video, index) in config.videoThumbnails" :key="index" class="thumbnail-item">
-              <div class="item-header">
-                <h4>視頻 {{ index + 1 }}</h4>
-                <button @click="removeVideo(index)" class="btn btn-danger btn-sm">刪除項目</button>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>縮圖</label>
-                  <div class="image-upload">
-                    <img v-if="video.image" :src="video.image" alt="Video" class="preview-img small" />
-                    <div v-else class="placeholder small">無圖片</div>
-                    <input type="file" @change="(e) => handleVideoImageUpload(e, index)" accept="image/*"
-                      class="file-input" />
-                    <button @click="removeVideoImage(index)" class="btn btn-danger btn-sm">刪除圖片</button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>連結</label>
-                  <input v-model="video.href" type="url" class="form-control" placeholder="https://example.com"
-                    @input="hasChanges = true" />
-                </div>
-                <div class="form-group">
-                  <label>標題</label>
-                  <input v-model="video.title" type="text" class="form-control" placeholder="視頻標題"
-                    @input="hasChanges = true" />
-                </div>
-                <div class="form-group">
-                  <label>描述</label>
-                  <input v-model="video.alt" type="text" class="form-control" placeholder="圖片描述"
-                    @input="hasChanges = true" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="精選短視頻設置" itemLabel="視頻"
+            :items="config.videoThumbnails" @add="addVideo" @remove="removeVideo" @upload="handleVideoImageUpload"
+            @removeImage="removeVideoImage" @change="hasChanges = true" />
 
           <!-- Program Thumbnails 配置 -->
-          <div v-if="activeTab === 'programs'" class="config-panel">
-            <div class="panel-header">
-              <h3>火熱節目設置</h3>
-              <button @click="addProgram" class="btn btn-primary">新增節目</button>
-            </div>
-
-            <!-- 如果沒有節目，顯示提示和新增按鈕 -->
-            <div v-if="config.programThumbnails.length === 0" class="empty-state">
-              <p>目前沒有節目項目</p>
-              <button @click="addProgram" class="btn btn-primary btn-lg">新增第一個節目</button>
-            </div>
-
-            <div v-for="(program, index) in config.programThumbnails" :key="index" class="thumbnail-item">
-              <div class="item-header">
-                <h4>節目 {{ index + 1 }}</h4>
-                <button @click="removeProgram(index)" class="btn btn-danger btn-sm">刪除項目</button>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>縮圖</label>
-                  <div class="image-upload">
-                    <img v-if="program.image" :src="program.image" alt="Program" class="preview-img small" />
-                    <div v-else class="placeholder small">無圖片</div>
-                    <input type="file" @change="(e) => handleProgramImageUpload(e, index)" accept="image/*"
-                      class="file-input" />
-                    <button @click="removeProgramImage(index)" class="btn btn-danger btn-sm">刪除圖片</button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>連結</label>
-                  <input v-model="program.href" type="url" class="form-control" placeholder="https://example.com"
-                    @input="hasChanges = true" />
-                </div>
-                <div class="form-group">
-                  <label>標題</label>
-                  <input v-model="program.title" type="text" class="form-control" placeholder="節目標題"
-                    @input="hasChanges = true" />
-                </div>
-                <div class="form-group">
-                  <label>描述</label>
-                  <input v-model="program.alt" type="text" class="form-control" placeholder="圖片描述"
-                    @input="hasChanges = true" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <ThumbnailConfigPanel v-if="activeTab === 'programs'" title="火熱節目設置" itemLabel="節目"
+            :items="config.programThumbnails" @add="addProgram" @remove="removeProgram"
+            @upload="handleProgramImageUpload" @removeImage="removeProgramImage" @change="hasChanges = true" />
 
           <!-- Float Ad Buttons 配置 -->
-          <div v-if="activeTab === 'floatads'" class="config-panel">
-            <div class="panel-header">
-              <h3>浮動廣告設置</h3>
-              <div class="button-actions">
-                <button @click="resetFloatAdButtons" class="btn btn-secondary">重置為預設</button>
-                <button @click="addFloatAdButton" class="btn btn-primary">新增廣告</button>
-              </div>
-            </div>
-
-            <div class="button-links-info">
-              <p class="info-text">
-                <strong>說明：</strong>這裡配置的浮動廣告按鈕會顯示在頁面右下角。
-                可以上傳自定義的圖標（默認圖和懸停圖），並設置點擊連結。
-                所有按鈕都會在新視窗中打開。
-              </p>
-            </div>
-
-            <!-- 如果沒有浮動廣告，顯示提示 -->
-            <div v-if="config.floatAdButtons.length === 0" class="empty-state">
-              <p>目前沒有浮動廣告配置，將使用預設配置</p>
-              <button @click="addFloatAdButton" class="btn btn-primary btn-lg">新增第一個浮動廣告</button>
-            </div>
-
-            <div v-for="(button, index) in config.floatAdButtons" :key="index" class="button-link-item">
-              <div class="item-header">
-                <h4>浮動廣告 {{ index + 1 }}</h4>
-                <button @click="removeFloatAdButton(index)" class="btn btn-danger btn-sm">刪除</button>
-              </div>
-              <div class="button-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>連結網址</label>
-                    <input v-model="button.href" type="url" class="form-control" placeholder="https://example.com"
-                      @input="hasChanges = true" />
-                  </div>
-                </div>
-                <div class="image-row">
-                  <div class="form-group">
-                    <label>默認圖標</label>
-                    <div class="image-upload">
-                      <img v-if="button.default" :src="getImageUrl(button.default)" alt="Default"
-                        class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleFloatAdImageUpload(e, index, 'default')" accept="image/*"
-                        class="file-input" />
-                      <button @click="removeFloatAdImage(index, 'default')" class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>懸停圖標</label>
-                    <div class="image-upload">
-                      <img v-if="button.hover" :src="getImageUrl(button.hover)" alt="Hover" class="preview-img small" />
-                      <div v-else class="placeholder small">無圖片</div>
-                      <input type="file" @change="(e) => handleFloatAdImageUpload(e, index, 'hover')" accept="image/*"
-                        class="file-input" />
-                      <button @click="removeFloatAdImage(index, 'hover')" class="btn btn-danger btn-sm">刪除圖片</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FloatAdConfigPanel v-if="activeTab === 'floatads'" :floatAdButtons="config.floatAdButtons"
+            :getImageUrl="getImageUrl" @reset="resetFloatAdButtons" @add="addFloatAdButton"
+            @remove="removeFloatAdButton" @upload="handleFloatAdImageUpload" @removeImage="removeFloatAdImage"
+            @change="hasChanges = true" />
         </div>
       </div>
     </div>
-
     <!-- Loading 狀態 -->
     <div v-if="loading" class="loading-overlay">
       <div class="loading-spinner">載入中...</div>
     </div>
+    <!-- Image Cropper Modal -->
+    <ImageCropper :show="cropperState.show" :imageUrl="cropperState.imageUrl" :device="cropperState.device"
+      @close="cropperState.show = false" @confirm="handleCropConfirm" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
+import ImageCropper from './ImageCropper.vue'
+import BannerConfigPanel from './config-panels/BannerConfigPanel.vue'
+import BackgroundConfigPanel from './config-panels/BackgroundConfigPanel.vue'
+import ButtonLinksConfigPanel from './config-panels/ButtonLinksConfigPanel.vue'
+import ToolIconsConfigPanel from './config-panels/ToolIconsConfigPanel.vue'
+import RouteLinksConfigPanel from './config-panels/RouteLinksConfigPanel.vue'
+import CarouselConfigPanel from './config-panels/CarouselConfigPanel.vue'
+import ThumbnailConfigPanel from './config-panels/ThumbnailConfigPanel.vue'
+import FloatAdConfigPanel from './config-panels/FloatAdConfigPanel.vue'
 import { configService, type ConfigData } from '../services/configService'
+
+// Cropper State
+const cropperState = reactive({
+  show: false,
+  imageUrl: '',
+  device: 'pc' as 'pc' | 'tablet' | 'mobile'
+})
 
 const loading = ref(false)
 const hasChanges = ref(false)
 const mainActiveTab = ref('preview') // 主要 tab，預設顯示預覽
+
 const activeTab = ref('banner')
 const previewFrame = ref<HTMLIFrameElement>()
 const previewDevice = ref('pc')
-
 const devices = [
   { id: 'pc', label: '電腦 (PC)', icon: '💻', width: '100%', height: '100%' },
   { id: 'tablet', label: '平板 (Tablet)', icon: '📱', width: '820', height: '1180' },
@@ -541,7 +183,13 @@ const tabs = [
 
 const config = reactive<ConfigData>({
   logo: '',
-  banner: '',
+  banner: {
+    pc: '',
+    tablet: '',
+    mobile: ''
+  }
+
+  ,
   backgroundImage: '',
   buttonLinks: [],
   carouselSlides: [],
@@ -550,22 +198,35 @@ const config = reactive<ConfigData>({
     recommendedBrowsers: '',
     selectedVideos: '',
     hotPrograms: ''
-  },
+  }
+
+  ,
   routeLinks: {
     default: '',
     hover: ''
-  },
+  }
+
+  ,
   toolIcons: [],
   videoThumbnails: [],
   programThumbnails: [],
   floatAdButtons: []
-})
+}) // 載入配置
 
-// 載入配置
 const loadConfig = async () => {
   loading.value = true
   try {
     const data = await configService.getConfig()
+
+    // Normalize banner if it's still a string
+    if (typeof data.banner === 'string') {
+      data.banner = {
+        pc: data.banner,
+        tablet: data.banner,
+        mobile: data.banner
+      }
+    }
+
     Object.assign(config, data)
 
     // 如果 buttonLinks 為空或不完整，初始化預設值
@@ -708,17 +369,180 @@ const saveConfig = async () => {
   }
 }
 
-// 處理圖片上傳
-const handleImageUpload = async (event: Event, field: keyof ConfigData) => {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
+// Banner 管理方法
+const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
+  if (typeof config.banner === 'string') {
+    return config.banner
+  }
+  return (config.banner as any)?.[device] || ''
+}
+
+const openCropper = (device: 'pc' | 'tablet' | 'mobile') => {
+  const url = getBannerUrl(device)
+  if (url) {
+    cropperState.imageUrl = getImageUrl(url)
+    cropperState.device = device
+    cropperState.show = true
+  }
+}
+
+const handleCropConfirm = async (file: File) => {
+  cropperState.show = false
+  loading.value = true
+  try {
+    const response = await configService.uploadImage(file, `banner.${cropperState.device}`, 'single')
+    if (response.success && response.data) {
+      if (typeof config.banner === 'string') {
+        config.banner = {
+          pc: config.banner,
+          tablet: config.banner,
+          mobile: config.banner
+        }
+      }
+      (config.banner as any)[cropperState.device] = response.data.path
+      hasChanges.value = true
+      // 立即保存並重新載入預覽
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    }
+  } catch (error) {
+    console.error('Failed to upload cropped image:', error)
+    alert('裁切上傳失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleBatchBannerUpload = async (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
 
   loading.value = true
   try {
+    // 讀取圖片並獲取尺寸
+    const img = new Image()
+    const reader = new FileReader()
+
+    const loadImage = () => new Promise<HTMLImageElement>((resolve, reject) => {
+      reader.onload = (e) => {
+        img.onload = () => resolve(img)
+        img.onerror = reject
+        img.src = e.target?.result as string
+      }
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+
+    const sourceImg = await loadImage()
+    const devices = [
+      { id: 'pc', width: 1920, height: 500 },
+      { id: 'tablet', width: 820, height: 340 },
+      { id: 'mobile', width: 430, height: 340 }
+    ] as const
+
+    for (const device of devices) {
+      // 進行中心裁切
+      const canvas = document.createElement('canvas')
+      canvas.width = device.width
+      canvas.height = device.height
+      const ctx = canvas.getContext('2d')
+
+      if (ctx) {
+        const targetRatio = device.width / device.height
+        const sourceRatio = sourceImg.width / sourceImg.height
+
+        let drawW, drawH, curX, curY
+
+        if (sourceRatio > targetRatio) {
+          // 來源比較寬，以高度為準，裁左兩側
+          drawH = sourceImg.height
+          drawW = sourceImg.height * targetRatio
+          curX = (sourceImg.width - drawW) / 2
+          curY = 0
+        } else {
+          // 來源比較窄，以寬度為準，裁上下
+          drawW = sourceImg.width
+          drawH = sourceImg.width / targetRatio
+          curX = 0
+          curY = (sourceImg.height - drawH) / 2
+        }
+
+        ctx.drawImage(sourceImg, curX, curY, drawW, drawH, 0, 0, device.width, device.height)
+
+        const blob = await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), 'image/png'))
+        const croppedFile = new File([blob], `banner-${device.id}.png`, { type: 'image/png' })
+
+        const response = await configService.uploadImage(croppedFile, `banner.${device.id}`, 'single')
+        if (response.success && response.data) {
+          if (typeof config.banner === 'string') {
+            config.banner = { pc: '', tablet: '', mobile: '' }
+          }
+          (config.banner as any)[device.id] = response.data.path
+        }
+      }
+    }
+
+    hasChanges.value = true
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    reloadPreview()
+    alert('自動生成成功！已套用至所有裝置。')
+  } catch (error) {
+    console.error('Batch banner upload failed:', error)
+    alert('批量處理失敗，請檢查圖片格式')
+  } finally {
+    loading.value = false
+      ; (event.target as HTMLInputElement).value = ''
+  }
+}
+
+const handleBannerUpload = async (event: Event, device: 'pc' | 'tablet' | 'mobile') => {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  // 讀取本地檔案並開啟裁切器
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    cropperState.imageUrl = e.target?.result as string
+    cropperState.device = device
+    cropperState.show = true
+  }
+  reader.readAsDataURL(file)
+
+    // 清除 input 值，以便下次選取相同檔案也能觸發 change
+    ; (event.target as HTMLInputElement).value = ''
+}
+
+const clearBanner = async (device: 'pc' | 'tablet' | 'mobile') => {
+  if (typeof config.banner === 'object') {
+    (config.banner as any)[device] = ''
+    hasChanges.value = true
+    // 立即保存並重新載入預覽
+    loading.value = true
+    try {
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+    } catch (error) {
+      console.error('清除 Banner 失敗:', error)
+      alert('清除失敗')
+    } finally {
+      loading.value = false
+    }
+  }
+}
+
+
+const handleImageUpload = async (event: Event, field: keyof ConfigData) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+  loading.value = true
+  try {
     const response = await configService.uploadImage(file, field as string)
     if (response.success && response.data) {
-      ; (config as any)[field] = response.data.path
+      (config as any)[field] = response.data.path
       hasChanges.value = true
       // 立即保存並重新載入預覽
       await configService.updateConfig(config)
@@ -740,7 +564,6 @@ const handleCarouselImageUpload = async (event: Event, index: number) => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
-
   loading.value = true
   try {
     const response = await configService.uploadImage(file, `carouselSlides.${index}.image`)
@@ -767,7 +590,6 @@ const handleVideoImageUpload = async (event: Event, index: number) => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
-
   loading.value = true
   try {
     const response = await configService.uploadImage(file, `videoThumbnails.${index}.image`)
@@ -794,7 +616,6 @@ const handleProgramImageUpload = async (event: Event, index: number) => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
-
   loading.value = true
   try {
     const response = await configService.uploadImage(file, `programThumbnails.${index}.image`)
@@ -818,9 +639,8 @@ const handleProgramImageUpload = async (event: Event, index: number) => {
 
 // 清除圖片
 const clearImage = async (field: keyof ConfigData) => {
-  ; (config as any)[field] = ''
+  (config as any)[field] = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -839,7 +659,6 @@ const clearImage = async (field: keyof ConfigData) => {
 const clearCarouselImage = async (index: number) => {
   config.carouselSlides[index].image = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -870,7 +689,6 @@ const removeCarouselSlide = async (index: number) => {
   if (confirm('確定要刪除這張輪播圖嗎？')) {
     config.carouselSlides.splice(index, 1)
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -890,7 +708,6 @@ const removeCarouselSlide = async (index: number) => {
 const removeVideoImage = async (index: number) => {
   config.videoThumbnails[index].image = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -909,7 +726,6 @@ const removeVideoImage = async (index: number) => {
 const removeProgramImage = async (index: number) => {
   config.programThumbnails[index].image = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -940,7 +756,6 @@ const removeVideo = async (index: number) => {
   if (confirm('確定要刪除這個視頻嗎？')) {
     config.videoThumbnails.splice(index, 1)
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -955,6 +770,7 @@ const removeVideo = async (index: number) => {
     }
   }
 }
+
 
 // 新增節目
 const addProgram = () => {
@@ -972,7 +788,6 @@ const removeProgram = async (index: number) => {
   if (confirm('確定要刪除這個節目嗎？')) {
     config.programThumbnails.splice(index, 1)
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1006,7 +821,6 @@ const handleButtonImageUpload = async (event: Event, index: number, imageType: '
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
-
   loading.value = true
   try {
     const response = await configService.uploadImage(file, `buttonLinks.${index}.${imageType}`)
@@ -1032,7 +846,6 @@ const handleButtonImageUpload = async (event: Event, index: number, imageType: '
 const removeButtonImage = async (index: number, imageType: 'defaultImage' | 'hoverImage') => {
   config.buttonLinks[index][imageType] = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -1052,7 +865,6 @@ const removeButtonLink = async (index: number) => {
   if (confirm('確定要刪除這個按鈕鏈接嗎？')) {
     config.buttonLinks.splice(index, 1)
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1103,7 +915,6 @@ const resetButtonLinks = async () => {
       }
     ]
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1135,7 +946,6 @@ const handleToolIconImageUpload = async (event: Event, index: number, imageType:
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
-
   loading.value = true
   try {
     const response = await configService.uploadImage(file, `toolIcons.${index}.${imageType}`)
@@ -1161,7 +971,6 @@ const handleToolIconImageUpload = async (event: Event, index: number, imageType:
 const removeToolIconImage = async (index: number, imageType: 'default' | 'hover') => {
   config.toolIcons[index][imageType] = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -1181,7 +990,6 @@ const removeToolIcon = async (index: number) => {
   if (confirm('確定要刪除這個工具圖標嗎？')) {
     config.toolIcons.splice(index, 1)
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1234,7 +1042,6 @@ const resetToolIcons = async () => {
       }
     ]
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1266,11 +1073,9 @@ const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
-
   loading.value = true
   try {
     const response = await configService.uploadImage(file, `floatAdButtons.${index}.${imageType}`)
-
     if (response.success && response.data) {
       config.floatAdButtons[index][imageType] = response.data.path
       hasChanges.value = true
@@ -1293,7 +1098,6 @@ const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 
 const removeFloatAdImage = async (index: number, imageType: 'default' | 'hover') => {
   config.floatAdButtons[index][imageType] = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -1313,7 +1117,6 @@ const removeFloatAdButton = async (index: number) => {
   if (confirm('確定要刪除這個浮動廣告按鈕嗎？')) {
     config.floatAdButtons.splice(index, 1)
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1351,7 +1154,6 @@ const resetFloatAdButtons = async () => {
       }
     ]
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1373,11 +1175,9 @@ const handleRouteLinksImageUpload = async (event: Event, imageType: 'default' | 
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
-
   loading.value = true
   try {
     const response = await configService.uploadImage(file, `routeLinks.${imageType}`)
-
     if (response.success && response.data) {
       config.routeLinks[imageType] = response.data.path
       hasChanges.value = true
@@ -1400,7 +1200,6 @@ const handleRouteLinksImageUpload = async (event: Event, imageType: 'default' | 
 const removeRouteLinksImage = async (imageType: 'default' | 'hover') => {
   config.routeLinks[imageType] = ''
   hasChanges.value = true
-
   // 立即保存並重新載入預覽
   loading.value = true
   try {
@@ -1424,7 +1223,6 @@ const resetRouteLinks = async () => {
       hover: "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png"
     }
     hasChanges.value = true
-
     // 立即保存並重新載入預覽
     loading.value = true
     try {
@@ -1468,12 +1266,10 @@ const onPreviewLoad = () => {
 // 處理圖片 URL，確保能正確顯示
 const getImageUrl = (imagePath: string) => {
   if (!imagePath) return ''
-
   // 如果是 /uploads/ 路徑，直接使用
   if (imagePath.startsWith('/uploads/')) {
     return imagePath
   }
-
   // 如果是 /assets/ 路徑，需要轉換為 demo 前端的路徑
   if (imagePath.startsWith('/assets/')) {
     // 在開發環境中，demo 運行在 localhost:3000
@@ -1483,16 +1279,14 @@ const getImageUrl = (imagePath: string) => {
     // 在生產環境中，假設 demo 在根路徑
     return imagePath
   }
-
   // 其他情況直接返回
   return imagePath
 }
 
 onMounted(() => {
   loadConfig()
-})
-</script>
 
+}) </script>
 <style scoped>
 .config-manager {
   height: 100vh;
@@ -1583,6 +1377,14 @@ onMounted(() => {
   padding: 2rem;
   position: relative;
   transition: all 0.3s ease;
+}
+
+.preview-container.mobile,
+.preview-container.tablet {
+  align-items: flex-start;
+  /* Prevent clipping when taller than container */
+  padding-top: 40px;
+  /* Add some top spacing for better look */
 }
 
 .preview-container.pc {
@@ -1850,160 +1652,7 @@ onMounted(() => {
   flex: 1;
 }
 
-.carousel-item,
-.thumbnail-item {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  background: #fafafa;
-}
-
-.carousel-item h4,
-.thumbnail-item h4 {
-  margin: 0 0 1rem 0;
-  color: #333;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.2s;
-}
-
-.btn-primary {
-  background: #007bff;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #0056b3;
-}
-
-.btn-primary:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #545b62;
-}
-
-.btn-danger {
-  background: #dc3545;
-  color: white;
-}
-
-.btn-danger:hover {
-  background: #c82333;
-}
-
-.btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-}
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.loading-spinner {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  font-size: 1.2rem;
-}
-
-/* Button Links 特定樣式 */
-.button-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.button-links-info {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: #e3f2fd;
-  border: 1px solid #bbdefb;
-  border-radius: 4px;
-}
-
-.info-text {
-  margin: 0;
-  color: #1565c0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.button-link-item {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  background: #fafafa;
-}
-
-.route-links-item {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  background: #fafafa;
-}
-
-.button-link-item h4 {
-  margin: 0 0 1rem 0;
-  color: #333;
-}
-
-.button-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 1rem;
-}
-
-.image-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
 @media (max-width: 768px) {
-
-  .form-row,
-  .image-row {
-    grid-template-columns: 1fr;
-  }
-
   .button-actions {
     flex-direction: column;
   }

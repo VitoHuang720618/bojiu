@@ -24,8 +24,8 @@ const app = express()
 const httpServer = createServer(app)
 
 // Environment configuration for container deployment
-const port = process.env.PORT ? parseInt(process.env.PORT) : 
-             process.env.API_PORT ? parseInt(process.env.API_PORT) : 3002
+const port = process.env.PORT ? parseInt(process.env.PORT) :
+  process.env.API_PORT ? parseInt(process.env.API_PORT) : 3002
 const uploadPath = process.env.UPLOAD_PATH || process.env.UPLOAD_DIR || path.join(__dirname, '../uploads')
 const configPath = process.env.CONFIG_PATH || process.env.CONFIG_DIR || path.join(__dirname, '../data')
 const maxFileSize = process.env.MAX_FILE_SIZE ? parseInt(process.env.MAX_FILE_SIZE) : 10 * 1024 * 1024 // 10MB default
@@ -43,10 +43,10 @@ const corsOptions = {
   origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
     // In container deployment, allow same-origin requests (no origin header)
     // and requests from the same host
-    if (!origin || 
-        origin.includes('localhost') || 
-        origin.includes('127.0.0.1') ||
-        nodeEnv === 'development') {
+    if (!origin ||
+      origin.includes('localhost') ||
+      origin.includes('127.0.0.1') ||
+      nodeEnv === 'development') {
       callback(null, true)
     } else {
       // In production container, allow requests from same host
@@ -59,6 +59,7 @@ const corsOptions = {
 }
 
 // 中介軟體設置
+app.set('trust proxy', true) // Trust proxy headers from Nginx
 app.use(cors(corsOptions))
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true, limit: '50mb' }))
@@ -98,7 +99,7 @@ const storage = multer.diskStorage({
   }
 })
 
-const upload = multer({ 
+const upload = multer({
   storage,
   limits: {
     fileSize: maxFileSize
@@ -132,7 +133,7 @@ app.get('/api/health', (req, res) => {
         config: fs.existsSync(CONFIG_PATH)
       }
     }
-    
+
     // 檢查配置文件是否可讀
     try {
       fs.accessSync(CONFIG_PATH, fs.constants.R_OK)
@@ -140,9 +141,9 @@ app.get('/api/health', (req, res) => {
     } catch (error) {
       healthStatus.services.config = false
     }
-    
+
     const allServicesHealthy = Object.values(healthStatus.services).every(service => service === 'running' || service === true)
-    
+
     if (allServicesHealthy) {
       res.status(200).json(healthStatus)
     } else {
@@ -203,9 +204,9 @@ async function startServer() {
         res.json(manifest)
       } catch (error) {
         console.error('讀取公開配置失敗:', error)
-        res.status(500).json({ 
+        res.status(500).json({
           success: false,
-          error: '讀取配置失敗' 
+          error: '讀取配置失敗'
         })
       }
     })
@@ -217,9 +218,9 @@ async function startServer() {
         res.json(manifest)
       } catch (error) {
         console.error('讀取配置失敗:', error)
-        res.status(500).json({ 
+        res.status(500).json({
           success: false,
-          error: '讀取配置失敗' 
+          error: '讀取配置失敗'
         })
       }
     })
@@ -228,23 +229,23 @@ async function startServer() {
       try {
         const config = req.body as AssetManifest
         await assetManager.writeManifest(config)
-        
+
         // 廣播配置更新
         const updateEvent = assetManager.createUpdateEvent(
           [{ path: 'full_config', oldValue: null, newValue: config }],
           config
         )
         wsManager.broadcastConfigUpdate(updateEvent)
-        
-        res.json({ 
+
+        res.json({
           success: true,
-          message: '配置更新成功' 
+          message: '配置更新成功'
         })
       } catch (error) {
         console.error('更新配置失敗:', error)
-        res.status(500).json({ 
+        res.status(500).json({
           success: false,
-          error: '更新配置失敗' 
+          error: '更新配置失敗'
         })
       }
     })
@@ -252,9 +253,9 @@ async function startServer() {
     app.post('/api/upload', authMiddleware, upload.single('file'), async (req: Request, res: Response) => {
       try {
         const { assetPath, assetType, position } = req.body
-        
+
         console.log('Upload request:', { assetPath, assetType, position })
-        
+
         if (!req.file) {
           return res.status(400).json({
             success: false,
@@ -264,15 +265,18 @@ async function startServer() {
 
         // 驗證檔案
         validateImageFileStrict(req.file)
-        
+
         // 根據 assetPath 生成正確的文件名並重命名文件
         let targetFilename = 'default.png'
-        
+
         if (assetPath) {
           if (assetPath === 'logo') {
             targetFilename = 'logo.png'
           } else if (assetPath === 'banner') {
             targetFilename = 'banner.png'
+          } else if (assetPath.startsWith('banner.')) {
+            const device = assetPath.split('.')[1]
+            targetFilename = `banner-${device}.png`
           } else if (assetPath.startsWith('carouselSlides.')) {
             const index = assetPath.split('.')[1]
             targetFilename = `carousel-${index}.png`
@@ -295,13 +299,13 @@ async function startServer() {
             targetFilename = assetPath.replace(/\./g, '-') + '.png'
           }
         }
-        
+
         // 重命名文件到目標文件名
         const targetPath = path.join(UPLOADS_DIR, targetFilename)
         fs.renameSync(req.file.path, targetPath)
-        
+
         console.log('File renamed to:', targetFilename)
-        
+
         // 建立圖片 URL - 容器部署使用相對路徑
         let imageUrl: string
         if (nodeEnv === 'production') {
@@ -311,7 +315,7 @@ async function startServer() {
           // 開發環境使用完整 URL
           imageUrl = `http://localhost:${port}/uploads/${targetFilename}`
         }
-        
+
         res.json({
           success: true,
           data: {
@@ -321,10 +325,10 @@ async function startServer() {
             mimetype: req.file.mimetype
           }
         } as ImageUploadResponse)
-        
+
       } catch (error) {
         console.error('上傳失敗:', error)
-        
+
         // 刪除已上傳的檔案（如果存在）
         if (req.file) {
           try {
@@ -333,17 +337,17 @@ async function startServer() {
             console.error('刪除檔案失敗:', deleteError)
           }
         }
-        
+
         let errorMessage = '上傳失敗'
         let statusCode = 500
-        
+
         if (error instanceof Error) {
           errorMessage = error.message
           if (error.name === 'UploadError') {
             statusCode = 400
           }
         }
-        
+
         res.status(statusCode).json({
           success: false,
           error: errorMessage
@@ -355,28 +359,28 @@ async function startServer() {
       try {
         const assetPath = req.params.path
         const { value } = req.body
-        
+
         if (!validateAssetPath(assetPath)) {
           return res.status(400).json({
             success: false,
             error: '無效的資產路徑格式'
           })
         }
-        
+
         const result = await assetManager.updateAssetPath(assetPath, value)
-        
+
         // 廣播配置更新
         const updateEvent = assetManager.createUpdateEvent(
           [{ path: assetPath, oldValue: result.oldValue, newValue: result.newValue }],
           result.manifest
         )
         wsManager.broadcastConfigUpdate(updateEvent)
-        
+
         res.json({
           success: true,
           data: result
         })
-        
+
       } catch (error) {
         console.error('更新資產失敗:', error)
         res.status(500).json({
@@ -389,29 +393,29 @@ async function startServer() {
     app.delete('/api/asset/:path', authMiddleware, async (req: Request, res: Response) => {
       try {
         const assetPath = req.params.path
-        
+
         if (!validateAssetPath(assetPath)) {
           return res.status(400).json({
             success: false,
             error: '無效的資產路徑格式'
           })
         }
-        
+
         const result = await assetManager.updateAssetPath(assetPath, null)
-        
+
         // 廣播配置更新
         const updateEvent = assetManager.createUpdateEvent(
           [{ path: assetPath, oldValue: result.oldValue, newValue: null }],
           result.manifest
         )
         wsManager.broadcastConfigUpdate(updateEvent)
-        
+
         res.json({
           success: true,
           message: '圖片映射已移除',
           data: result
         })
-        
+
       } catch (error) {
         console.error('刪除圖片映射失敗:', error)
         res.status(500).json({
@@ -424,7 +428,7 @@ async function startServer() {
     app.post('/api/assets/batch', authMiddleware, async (req: Request, res: Response) => {
       try {
         const { updates } = req.body as { updates: { path: string; value: any }[] }
-        
+
         // 驗證所有路徑
         for (const update of updates) {
           if (!validateAssetPath(update.path)) {
@@ -434,18 +438,18 @@ async function startServer() {
             })
           }
         }
-        
+
         const result = await assetManager.updateMultipleAssets(updates)
-        
+
         // 廣播配置更新
         const updateEvent = assetManager.createUpdateEvent(result.changes, result.manifest)
         wsManager.broadcastConfigUpdate(updateEvent)
-        
+
         res.json({
           success: true,
           data: result
         })
-        
+
       } catch (error) {
         console.error('批次更新失敗:', error)
         res.status(500).json({
@@ -487,7 +491,7 @@ startServer()
 // 錯誤處理中介軟體
 app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('未處理的錯誤:', error)
-  
+
   if (!res.headersSent) {
     res.status(500).json({
       success: false,

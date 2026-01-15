@@ -13,7 +13,7 @@ export const siteConfig: SiteConfig = {
   title: '博九娱乐网',
   description: 'B9 Entertainment Website',
   baseUrl: getBaseUrl(),
-  useApi: true,
+  useApi: false,
 
   navigation: [
     // Top navigation buttons

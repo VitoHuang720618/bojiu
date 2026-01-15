@@ -159,12 +159,18 @@ export interface FooterProps {
 }
 
 export interface ImageProps {
-  src: string
+  src: string | BannerConfig
   alt: string
   width?: number
   height?: number
   lazy?: boolean
   fallback?: string
+}
+
+export interface BannerConfig {
+  pc: string
+  tablet: string
+  mobile: string
 }
 
 export interface AppState {

@@ -1,6 +1,10 @@
 {
   "logo": "/assets/images/logo.png",
-  "banner": "http://localhost:3002/uploads/banner.png",
+  "banner": {
+    "pc": "http://localhost:3002/uploads/banner-pc.png",
+    "tablet": "http://localhost:3002/uploads/banner-tablet.png",
+    "mobile": ""
+  },
   "backgroundImage": "http://localhost:3002/uploads/backgroundImage.png",
   "buttonLinks": [
     {
@@ -84,50 +88,44 @@
   "videoThumbnails": [
     {
       "image": "http://localhost:3002/uploads/videoThumbnails-0-image.png",
-      "href": "https://example.com/video1",
-      "alt": "精選短視頻 1",
-      "title": "Fun乐园圣典直播"
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "甜美Aura"
     },
     {
-      "image": "/assets/images/f4c330ea-eac6-418d-a25d-450b22bad3f6.png",
-      "href": "https://example.com/video2",
-      "alt": "三小",
-      "title": "馬洛"
+      "image": "http://localhost:3002/uploads/videoThumbnails-1-image.png",
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "变态马洛"
     },
     {
       "image": "/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png",
-      "href": "https://example.com/video3",
-      "alt": "精選短視頻 3",
-      "title": "熱門影片 3"
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "蹦蹦冲啊"
     },
     {
       "image": "/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png",
-      "href": "https://example.com/video4",
-      "alt": "精選短視頻 4",
-      "title": "熱門影片 4"
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "阳光Hank"
     },
     {
       "image": "/assets/images/4e67c664-2a43-4ac2-9e09-dff556a007ce.png",
       "href": "https://example.com/video5",
-      "alt": "精選短視頻 5",
-      "title": "熱門影片 5"
+      "alt": "",
+      "title": "专属福利"
     },
     {
       "image": "/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png",
-      "href": "https://example.com/video6",
-      "alt": "精選短視頻 6",
-      "title": "熱門影片 6"
-    },
-    {
-      "image": "http://localhost:3002/uploads/videoThumbnails-6-image.png",
-      "href": "",
-      "title": "",
-      "alt": ""
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "撩人双飞闺蜜秀"
     }
   ],
   "programThumbnails": [
     {
-      "image": "/assets/images/29627d6a-6020-49ae-8625-44f0ec5f7999.jpg",
+      "image": "http://localhost:3002/uploads/programThumbnails-0-image.png",
       "href": "https://example.com/program1",
       "alt": "火熱節目 1",
       "title": "熱門節目 1"
@@ -165,17 +163,17 @@
   ],
   "floatAdButtons": [
     {
-      "href": "",
+      "href": "https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777",
       "default": "http://localhost:3002/uploads/float-0-default.png",
       "hover": "http://localhost:3002/uploads/float-0-hover.png"
     },
     {
-      "href": "",
+      "href": "https://v.douyin.com/KZUpEUBUIlI/",
       "default": "http://localhost:3002/uploads/float-1-default.png",
       "hover": "http://localhost:3002/uploads/float-1-hover.png"
     },
     {
-      "href": "",
+      "href": "https://www.fun99666.com/",
       "default": "http://localhost:3002/uploads/float-2-default.png",
       "hover": "http://localhost:3002/uploads/float-2-hover.png"
     }

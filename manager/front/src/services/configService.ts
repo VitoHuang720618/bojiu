@@ -1,7 +1,12 @@
-// 配置管理服務
+export interface BannerConfig {
+  pc: string
+  tablet: string
+  mobile: string
+}
+
 export interface ConfigData {
   logo: string
-  banner: string
+  banner: string | BannerConfig
   backgroundImage: string
   buttonLinks: Array<{
     text: string
@@ -78,11 +83,11 @@ class ConfigService {
     const headers: HeadersInit = {
       'Content-Type': 'application/json'
     }
-    
+
     if (token) {
       headers['Authorization'] = `Bearer ${token}`
     }
-    
+
     return headers
   }
 
@@ -104,7 +109,7 @@ class ConfigService {
       headers: this.getAuthHeaders(),
       body: JSON.stringify(config)
     })
-    
+
     if (!response.ok) {
       throw new Error(`Failed to update config: ${response.statusText}`)
     }
@@ -114,11 +119,11 @@ class ConfigService {
   private getAuthHeadersForFormData(): HeadersInit {
     const token = localStorage.getItem('auth_token')
     const headers: HeadersInit = {}
-    
+
     if (token) {
       headers['Authorization'] = `Bearer ${token}`
     }
-    
+
     return headers
   }
 
@@ -126,7 +131,7 @@ class ConfigService {
   async uploadImage(file: File, assetPath?: string, assetType?: string, position?: number): Promise<UploadResponse> {
     const formData = new FormData()
     formData.append('file', file)
-    
+
     if (assetPath) formData.append('assetPath', assetPath)
     if (assetType) formData.append('assetType', assetType)
     if (position !== undefined) formData.append('position', position.toString())
