@@ -5,6 +5,8 @@ export interface NavigationItem {
   label: string
   href: string
   isExternal: boolean
+  default?: string
+  hover?: string
 }
 
 export interface ButtonLinkConfig {

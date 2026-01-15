@@ -53,6 +53,7 @@ export interface ConfigData {
     href: string
     default: string
     hover: string
+    mobile: string
   }>
 }
 

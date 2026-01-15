@@ -24,8 +24,9 @@
                         <div v-else class="placeholder small">無圖片</div>
                         <input type="file" @change="(e) => $emit('upload', e, index)" accept="image/*"
                             class="file-input" />
-                        <button @click="$emit('removeImage', index)" class="btn btn-danger btn-sm">刪除圖片</button>
                     </div>
+                    <button v-if="item.image" @click="$emit('removeImage', index)"
+                        class="btn btn-danger btn-sm mt-2">刪除圖片</button>
                 </div>
                 <div class="form-group">
                     <label>連結</label>

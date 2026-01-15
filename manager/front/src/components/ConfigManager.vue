@@ -1,55 +1,33 @@
 <template>
-  <div class="config-manager">
-    <div class="config-header">
-      <h1>配置管理</h1>
-      <div class="actions">
-        <button @click="loadConfig" class="btn btn-secondary">重新載入</button>
-        <button @click="saveConfig" class="btn btn-primary" :disabled="!hasChanges">保存配置</button>
-      </div>
-    </div>
-
-    <!-- 主要 Tabs -->
-    <div class="main-tabs">
-      <button :class="['main-tab-btn', { active: mainActiveTab === 'preview' }]" @click="mainActiveTab = 'preview'">
-        預覽
-      </button>
-      <button :class="['main-tab-btn', { active: mainActiveTab === 'config' }]" @click="mainActiveTab = 'config'">
-        配置管理
-      </button>
-    </div>
-
-    <div class="config-content">
-      <!-- 預覽區域 -->
-      <div v-if="mainActiveTab === 'preview'" class="preview-section full-width">
-        <div class="preview-controls">
-          <div class="device-switcher">
-            <button v-for="device in devices" :key="device.id"
-              :class="['device-btn', { active: previewDevice === device.id }]" @click="previewDevice = device.id"
-              :title="device.label">
-              <span class="icon">{{ device.icon }}</span>
-              <span class="label">{{ device.label }}</span>
-            </button>
-          </div>
-          <div class="preview-info">
-            當前尺寸: {{ currentDeviceWidth }} x {{ currentDeviceHeight }}
-          </div>
-        </div>
-        <div class="preview-container" :class="previewDevice">
-          <iframe ref="previewFrame" :src="getPreviewUrl()" class="preview-frame" :style="previewFrameStyle"
-            @load="onPreviewLoad"></iframe>
-        </div>
+  <div class="config-manager-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>配置管理</h1>
       </div>
 
-      <!-- 配置區域 -->
-      <div v-if="mainActiveTab === 'config'" class="config-section full-width">
-        <div class="config-tabs">
-          <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
-            :class="['tab-btn', { active: activeTab === tab.id }]">
-            {{ tab.label }}
-          </button>
+      <nav class="nav-menu">
+        <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
+          :class="['nav-item', { active: activeTab === tab.id }]">
+          {{ tab.label }}
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button @click="loadConfig" class="btn btn-secondary btn-block mb-2">重新載入</button>
+        <button @click="saveConfig" class="btn btn-primary btn-block" :disabled="!hasChanges">保存配置</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Editor Pane (Middle) -->
+      <div class="editor-pane">
+        <div class="editor-header">
+          <h2>{{ currentTabLabel }}</h2>
         </div>
 
-        <div class="tab-content">
+        <div class="editor-body">
           <!-- Banner 配置 -->
           <BannerConfigPanel v-if="activeTab === 'banner'" :banner="config.banner" :getImageUrl="getImageUrl"
             @upload="handleBannerUpload" @batch-upload="handleBatchBannerUpload" @crop="openCropper"
@@ -80,12 +58,12 @@
             @clearImage="clearCarouselImage" @change="hasChanges = true" />
 
           <!-- Video Thumbnails 配置 -->
-          <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="精選短視頻設置" itemLabel="視頻"
+          <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="娛樂直播設置" itemLabel="視頻"
             :items="config.videoThumbnails" @add="addVideo" @remove="removeVideo" @upload="handleVideoImageUpload"
             @removeImage="removeVideoImage" @change="hasChanges = true" />
 
           <!-- Program Thumbnails 配置 -->
-          <ThumbnailConfigPanel v-if="activeTab === 'programs'" title="火熱節目設置" itemLabel="節目"
+          <ThumbnailConfigPanel v-if="activeTab === 'programs'" title="賽事精選設置" itemLabel="節目"
             :items="config.programThumbnails" @add="addProgram" @remove="removeProgram"
             @upload="handleProgramImageUpload" @removeImage="removeProgramImage" @change="hasChanges = true" />
 
@@ -96,12 +74,35 @@
             @change="hasChanges = true" />
         </div>
       </div>
-    </div>
-    <!-- Loading 狀態 -->
+
+      <!-- Preview Pane (Right) -->
+      <div class="preview-pane">
+        <div class="preview-header">
+          <div class="device-switcher">
+            <button v-for="device in devices" :key="device.id"
+              :class="['device-btn', { active: previewDevice === device.id }]" @click="previewDevice = device.id"
+              :title="device.label">
+              <span>{{ device.icon }}</span>
+            </button>
+          </div>
+          <div class="preview-dims">
+            {{ currentDeviceWidth }} x {{ currentDeviceHeight }}
+          </div>
+        </div>
+
+        <div class="preview-viewport-wrapper">
+          <div class="preview-viewport" :class="previewDevice">
+            <iframe ref="previewFrame" :src="getPreviewUrl()" class="preview-frame" :style="previewFrameStyle"
+              @load="onPreviewLoad"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Loading and Modals -->
     <div v-if="loading" class="loading-overlay">
       <div class="loading-spinner">載入中...</div>
     </div>
-    <!-- Image Cropper Modal -->
     <ImageCropper :show="cropperState.show" :imageUrl="cropperState.imageUrl" :device="cropperState.device"
       @close="cropperState.show = false" @confirm="handleCropConfirm" />
   </div>
@@ -129,15 +130,15 @@ const cropperState = reactive({
 
 const loading = ref(false)
 const hasChanges = ref(false)
-const mainActiveTab = ref('preview') // 主要 tab，預設顯示預覽
+// removed mainActiveTab logic
 
 const activeTab = ref('banner')
 const previewFrame = ref<HTMLIFrameElement>()
 const previewDevice = ref('pc')
 const devices = [
-  { id: 'pc', label: '電腦 (PC)', icon: '💻', width: '100%', height: '100%' },
-  { id: 'tablet', label: '平板 (Tablet)', icon: '📱', width: '820', height: '1180' },
-  { id: 'mobile', label: '手機 (Mobile)', icon: '📱', width: '430', height: '932' }
+  { id: 'pc', label: '電腦', icon: '💻', width: '100%', height: '100%' },
+  { id: 'tablet', label: '平板', icon: '📱', width: '820', height: '1180' },
+  { id: 'mobile', label: '手機', icon: '📱', width: '430', height: '932' }
 ]
 
 const currentDeviceWidth = computed(() => {
@@ -176,10 +177,15 @@ const tabs = [
   { id: 'toolicons', label: '工具圖標' },
   { id: 'routelinks', label: '推薦路線' },
   { id: 'carousel', label: '輪播圖' },
-  { id: 'videos', label: '精選視頻' },
-  { id: 'programs', label: '火熱節目' },
+  { id: 'videos', label: '娛樂直播' },
+  { id: 'programs', label: '賽事精選' },
   { id: 'floatads', label: '浮動廣告' }
 ]
+
+const currentTabLabel = computed(() => {
+  const tab = tabs.find(t => t.id === activeTab.value)
+  return tab?.label || '配置'
+})
 
 const config = reactive<ConfigData>({
   logo: '',
@@ -321,25 +327,29 @@ const loadConfig = async () => {
         {
           href: "https://example.com/customer-service",
           default: "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
-          hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png"
+          hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png",
+          mobile: ""
         },
         {
           href: "https://example.com/girl-douyin",
           default: "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
-          hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png"
+          hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png",
+          mobile: ""
         },
         {
           href: "https://example.com/sports-douyin",
           default: "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
-          hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png"
+          hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png",
+          mobile: ""
         }
       ]
     } else {
       // 確保現有的 floatAdButtons 有完整的字段
-      config.floatAdButtons = config.floatAdButtons.map((button) => ({
+      config.floatAdButtons = config.floatAdButtons.map((button: any) => ({
         href: button.href || '',
         default: button.default || '',
-        hover: button.hover || ''
+        hover: button.hover || '',
+        mobile: button.mobile || ''
       }))
     }
 
@@ -1063,13 +1073,14 @@ const addFloatAdButton = () => {
   config.floatAdButtons.push({
     href: '',
     default: '',
-    hover: ''
+    hover: '',
+    mobile: ''
   })
   hasChanges.value = true
 }
 
 // 處理浮動廣告按鈕圖片上傳
-const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 'default' | 'hover') => {
+const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 'default' | 'hover' | 'mobile') => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
@@ -1095,7 +1106,7 @@ const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 
 }
 
 // 刪除浮動廣告按鈕圖片
-const removeFloatAdImage = async (index: number, imageType: 'default' | 'hover') => {
+const removeFloatAdImage = async (index: number, imageType: 'default' | 'hover' | 'mobile') => {
   config.floatAdButtons[index][imageType] = ''
   hasChanges.value = true
   // 立即保存並重新載入預覽
@@ -1140,17 +1151,20 @@ const resetFloatAdButtons = async () => {
       {
         href: "https://example.com/customer-service",
         default: "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
-        hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png"
+        hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png",
+        mobile: ""
       },
       {
         href: "https://example.com/girl-douyin",
         default: "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
-        hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png"
+        hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png",
+        mobile: ""
       },
       {
         href: "https://example.com/sports-douyin",
         default: "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
-        hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png"
+        hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png",
+        mobile: ""
       }
     ]
     hasChanges.value = true
@@ -1288,213 +1302,297 @@ onMounted(() => {
 
 }) </script>
 <style scoped>
-.config-manager {
+.config-manager-layout {
+  display: flex;
   height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #f5f7fa;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #ffffff;
+  border-right: 1px solid #e1e4e8;
   display: flex;
   flex-direction: column;
-  background: #f5f5f5;
+  flex-shrink: 0;
+  z-index: 10;
 }
 
-.config-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: white;
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e1e4e8;
 }
 
-.config-header h1 {
+.sidebar-header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1f36;
   margin: 0;
-  color: #333;
 }
 
-.actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.config-content {
+.nav-menu {
   flex: 1;
-  padding: 0;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+.nav-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  color: #4f566b;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-item:hover {
+  background-color: #f7f9fc;
+  color: #1a1f36;
+}
+
+.nav-item.active {
+  background-color: #f0f5ff;
+  color: #007bff;
+  border-left-color: #007bff;
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e1e4e8;
+  background: #f8f9fa;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
   overflow: hidden;
 }
 
-.main-tabs {
-  display: flex;
-  background: white;
-  border-bottom: 1px solid #ddd;
-  padding: 0 2rem;
-}
-
-.main-tab-btn {
-  padding: 1rem 2rem;
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.main-tab-btn:hover {
-  background: #f8f9fa;
-}
-
-.main-tab-btn.active {
-  border-bottom-color: #007bff;
-  color: #007bff;
-}
-
-.preview-section {
-  background: white;
-  padding: 1.5rem 2rem;
-  height: calc(100vh - 140px);
+/* Editor Pane */
+.editor-pane {
+  flex: 0 0 500px;
   display: flex;
   flex-direction: column;
+  background: #fff;
+  border-right: 1px solid #e1e4e8;
+  transition: width 0.3s ease;
 }
 
-.preview-section.full-width {
-  width: 100%;
+.editor-header {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e1e4e8;
+  background: #fff;
 }
 
-.preview-section h2 {
-  margin: 0 0 1rem 0;
-  color: #333;
+.editor-header h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  color: #1a1f36;
 }
 
-.preview-container {
+.editor-body {
   flex: 1;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  overflow: auto;
-  background: #f8f9fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow-y: auto;
   padding: 2rem;
-  position: relative;
-  transition: all 0.3s ease;
+  background: #fff;
 }
 
-.preview-container.mobile,
-.preview-container.tablet {
-  align-items: flex-start;
-  /* Prevent clipping when taller than container */
-  padding-top: 40px;
-  /* Add some top spacing for better look */
+/* Preview Pane */
+.preview-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f0f2f5;
+  min-width: 0;
+  /* Prevent flex overflow */
 }
 
-.preview-container.pc {
-  padding: 0;
-  display: block;
-  overflow: auto;
-  align-items: flex-start;
-}
-
-.preview-frame {
-  background: white;
-  border: none;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  border-radius: 0;
-}
-
-/* PC 模式特殊處理：直接鋪滿並適度縮放 */
-.preview-container.pc .preview-frame {
-  width: 117.65%;
-  height: 117.65%;
-  transform: scale(0.85);
-  transform-origin: top left;
-  box-shadow: none;
-}
-
-/* 設備邊框設計 */
-.preview-container.tablet .preview-frame,
-.preview-container.mobile .preview-frame {
-  border: 12px solid #1a1a1a;
-  border-radius: 32px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-  position: relative;
-}
-
-.preview-container.mobile .preview-frame {
-  border-radius: 36px;
-  border-width: 14px;
-}
-
-/* 手機頂部聽筒效果元件 (示意) */
-.preview-container.mobile::after {
-  content: "";
-  position: absolute;
-  top: calc(50% - 333.5px + 10px);
-  /* 居中對齊手機高度一半 */
-  width: 60px;
-  height: 4px;
-  background: #333;
-  border-radius: 2px;
-  z-index: 10;
-  display: none;
-  /* 暫時隱藏，視情況開啟 */
-}
-
-.preview-controls {
+.preview-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  background: white;
-  padding: 10px 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e1e4e8;
 }
 
 .device-switcher {
   display: flex;
+  gap: 0.5rem;
   background: #f1f3f5;
-  padding: 4px;
-  border-radius: 10px;
-  gap: 2px;
+  padding: 0.25rem;
+  border-radius: 8px;
 }
 
 .device-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border: none;
-  background: transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #495057;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.device-btn .icon {
-  font-size: 1.1rem;
+  justify-content: center;
 }
 
 .device-btn:hover {
-  background: rgba(0, 0, 0, 0.03);
-  color: #212529;
+  background-color: #e9ecef;
+  color: #495057;
 }
 
 .device-btn.active {
-  background: white;
+  background-color: #fff;
   color: #007bff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.preview-info {
-  color: #adb5bd;
-  font-size: 0.85rem;
+.preview-dims {
   font-family: monospace;
+  color: #6c757d;
+  font-size: 0.9rem;
 }
 
+.preview-viewport-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
+  padding: 2rem;
+  background-image:
+    linear-gradient(45deg, #e4e6eb 25%, transparent 25%),
+    linear-gradient(-45deg, #e4e6eb 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e4e6eb 75%),
+    linear-gradient(-45deg, transparent 75%, #e4e6eb 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.preview-viewport {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background: white;
+}
+
+.preview-frame {
+  display: block;
+  border: none;
+  background: white;
+}
+
+/* Device Specific Styles for Preview Wrapper */
+.preview-viewport.mobile {
+  border-radius: 40px;
+  padding: 10px;
+  background: #1a1f36;
+}
+
+.preview-viewport.mobile .preview-frame {
+  border-radius: 30px;
+  width: 430px;
+  height: 932px;
+}
+
+.preview-viewport.tablet {
+  border-radius: 20px;
+  padding: 10px;
+  background: #1a1f36;
+}
+
+.preview-viewport.tablet .preview-frame {
+  border-radius: 12px;
+  width: 820px;
+  height: 1180px;
+}
+
+.preview-viewport.pc {
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* Utility buttons */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-primary:disabled {
+  background-color: #a0a0a0;
+  border-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: #e9ecef;
+  color: #495057;
+  border-color: #dde0e3;
+}
+
+.btn-secondary:hover {
+  background-color: #dde0e3;
+  color: #212529;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  padding: 1rem 2rem;
+  background: #333;
+  color: white;
+  border-radius: 4px;
+}
+
+/* Config Section */
 .config-section {
   background: white;
   display: flex;
@@ -1518,10 +1616,12 @@ onMounted(() => {
   cursor: pointer;
   border-bottom: 3px solid transparent;
   transition: all 0.2s;
+  color: #6c757d;
 }
 
 .tab-btn:hover {
   background: #f8f9fa;
+  color: #495057;
 }
 
 .tab-btn.active {

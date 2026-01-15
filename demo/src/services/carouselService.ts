@@ -25,9 +25,50 @@ class CarouselService {
   }> {
     try {
       // 檢查是否啟用了 API
-      const { siteConfig } = await import('../config/siteConfig')
+      const {
+        siteConfig,
+        carouselSlides,
+        banner,
+        backgroundImage,
+        videoThumbnails,
+        programThumbnails,
+        buttonLinks,
+        recommendedTools,
+        floatAdButtons,
+        routeLinksImages
+      } = await import('../config/siteConfig')
+
       if (siteConfig.useApi === false) {
-        throw new Error('API is disabled via config')
+        // Return static data from config
+        return {
+          carouselSlides,
+          banner,
+          backgroundImage,
+          videoThumbnails,
+          programThumbnails,
+          // Map structure for compatibility
+          buttonLinks: buttonLinks.map((b: any) => ({
+            text: b.label,
+            href: b.href,
+            target: b.isExternal ? '_blank' : '_self',
+            defaultImage: b.default,
+            hoverImage: b.hover
+          })),
+          toolIcons: recommendedTools.map((t: any) => ({
+            id: t.id,
+            default: t.default,
+            hover: t.hover,
+            alt: t.name,
+            href: t.href
+          })),
+          floatAdButtons: floatAdButtons.map((f: any) => ({
+            default: f.default,
+            hover: f.hover,
+            href: f.href,
+            alt: f.name
+          })),
+          routeLinks: routeLinksImages
+        }
       }
 
       const response = await fetch(`${this.baseUrl}/public/config`)

@@ -44,9 +44,9 @@
                             <div v-else class="placeholder small">無圖片</div>
                             <input type="file" @change="(e) => $emit('upload', e, index, 'default')" accept="image/*"
                                 class="file-input" />
-                            <button @click="$emit('removeImage', index, 'default')"
-                                class="btn btn-danger btn-sm">刪除圖片</button>
                         </div>
+                        <button v-if="button.default" @click="$emit('removeImage', index, 'default')"
+                            class="btn btn-danger btn-sm mt-1">刪除圖片</button>
                     </div>
                     <div class="form-group">
                         <label>懸停圖標</label>
@@ -56,9 +56,21 @@
                             <div v-else class="placeholder small">無圖片</div>
                             <input type="file" @change="(e) => $emit('upload', e, index, 'hover')" accept="image/*"
                                 class="file-input" />
-                            <button @click="$emit('removeImage', index, 'hover')"
-                                class="btn btn-danger btn-sm">刪除圖片</button>
                         </div>
+                        <button v-if="button.hover" @click="$emit('removeImage', index, 'hover')"
+                            class="btn btn-danger btn-sm mt-1">刪除圖片</button>
+                    </div>
+                    <div class="form-group">
+                        <label>手機端圖標</label>
+                        <div class="image-upload">
+                            <img v-if="button.mobile" :src="getImageUrl(button.mobile)" alt="Mobile"
+                                class="preview-img small" />
+                            <div v-else class="placeholder small">無圖片</div>
+                            <input type="file" @change="(e) => $emit('upload', e, index, 'mobile')" accept="image/*"
+                                class="file-input" />
+                        </div>
+                        <button v-if="button.mobile" @click="$emit('removeImage', index, 'mobile')"
+                            class="btn btn-danger btn-sm mt-1">刪除圖片</button>
                     </div>
                 </div>
             </div>
@@ -71,6 +83,7 @@ interface FloatAdButton {
     href: string
     default: string
     hover: string
+    mobile: string
 }
 
 defineProps<{
@@ -82,8 +95,8 @@ defineEmits<{
     (e: 'reset'): void
     (e: 'add'): void
     (e: 'remove', index: number): void
-    (e: 'upload', event: Event, index: number, type: 'default' | 'hover'): void
-    (e: 'removeImage', index: number, type: 'default' | 'hover'): void
+    (e: 'upload', event: Event, index: number, type: 'default' | 'hover' | 'mobile'): void
+    (e: 'removeImage', index: number, type: 'default' | 'hover' | 'mobile'): void
     (e: 'change'): void
 }>()
 </script>
