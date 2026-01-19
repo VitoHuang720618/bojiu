@@ -1,76 +1,83 @@
 <template>
     <div class="config-panel">
         <div class="panel-header">
-            <h3>浮動廣告設置</h3>
-            <div class="button-actions">
-                <button @click="$emit('reset')" class="btn btn-secondary">重置為預設</button>
+            <div class="header-info">
+                <h3>浮動廣告設置</h3>
+                <p class="subtitle">管理頁面右側的悬浮快捷入口</p>
+            </div>
+            <div class="header-actions">
+                <button @click="$emit('reset')" class="btn btn-outline-secondary">重置為預設</button>
                 <button @click="$emit('add')" class="btn btn-primary">新增廣告</button>
             </div>
         </div>
 
-        <div class="button-links-info">
-            <p class="info-text">
-                <strong>說明：</strong>這裡配置的浮動廣告按鈕會顯示在頁面右下角。
-                可以上傳自定義的圖標（默認圖和懸停圖），並設置點擊連結。
-                所有按鈕都會在新視窗中打開。
-            </p>
-        </div>
-
-        <!-- 如果沒有浮動廣告，顯示提示 -->
         <div v-if="floatAdButtons.length === 0" class="empty-state">
-            <p>目前沒有浮動廣告配置，將使用預設配置</p>
-            <button @click="$emit('add')" class="btn btn-primary btn-lg">新增第一個浮動廣告</button>
+            <div class="empty-icon">🛰️</div>
+            <p>目前沒有浮動廣告按鈕</p>
+            <button @click="$emit('add')" class="btn btn-outline-primary">新增第一個廣告</button>
         </div>
 
-        <div v-for="(button, index) in floatAdButtons" :key="index" class="button-link-item">
-            <div class="item-header">
-                <h4>浮動廣告 {{ index + 1 }}</h4>
-                <button @click="$emit('remove', index)" class="btn btn-danger btn-sm">刪除</button>
-            </div>
-            <div class="button-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>連結網址</label>
-                        <input v-model="button.href" type="url" class="form-control" placeholder="https://example.com"
+        <div class="items-list">
+            <div v-for="(button, index) in floatAdButtons" :key="index" class="item-card">
+                <div class="item-card-header">
+                    <span class="item-badge">廣告 {{ index + 1 }}</span>
+                    <button @click="$emit('remove', index)" class="btn btn-icon-danger" title="刪除廣告">
+                        <span class="icon">🗑️</span>
+                    </button>
+                </div>
+
+                <div class="item-card-body">
+                    <div class="field-group mb-4">
+                        <label>跳轉網址</label>
+                        <input v-model="button.href" type="url" class="form-control" placeholder="https://..."
                             @input="$emit('change')" />
                     </div>
-                </div>
-                <div class="image-row">
-                    <div class="form-group">
-                        <label>默認圖標</label>
-                        <div class="image-upload">
-                            <img v-if="button.default" :src="getImageUrl(button.default)" alt="Default"
-                                class="preview-img small" />
-                            <div v-else class="placeholder small">無圖片</div>
-                            <input type="file" @change="(e) => $emit('upload', e, index, 'default')" accept="image/*"
-                                class="file-input" />
+
+                    <div class="triple-upload-row">
+                        <div class="upload-slot">
+                            <label>PC 默認</label>
+                            <div class="image-preview-wrapper" :class="{ 'has-image': button.default }">
+                                <img v-if="button.default" :src="getImageUrl(button.default)" alt="Default"
+                                    class="preview-img" />
+                                <div v-else class="placeholder">
+                                    <span class="icon">🖼️</span>
+                                </div>
+                                <input type="file" @change="(e) => $emit('upload', e, index, 'default')"
+                                    accept="image/*" class="file-input" />
+                            </div>
+                            <button v-if="button.default" @click="$emit('removeImage', index, 'default')"
+                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
-                        <button v-if="button.default" @click="$emit('removeImage', index, 'default')"
-                            class="btn btn-danger btn-sm mt-1">刪除圖片</button>
-                    </div>
-                    <div class="form-group">
-                        <label>懸停圖標</label>
-                        <div class="image-upload">
-                            <img v-if="button.hover" :src="getImageUrl(button.hover)" alt="Hover"
-                                class="preview-img small" />
-                            <div v-else class="placeholder small">無圖片</div>
-                            <input type="file" @change="(e) => $emit('upload', e, index, 'hover')" accept="image/*"
-                                class="file-input" />
+
+                        <div class="upload-slot">
+                            <label>PC 懸停</label>
+                            <div class="image-preview-wrapper" :class="{ 'has-image': button.hover }">
+                                <img v-if="button.hover" :src="getImageUrl(button.hover)" alt="Hover"
+                                    class="preview-img" />
+                                <div v-else class="placeholder">
+                                    <span class="icon">✨</span>
+                                </div>
+                                <input type="file" @change="(e) => $emit('upload', e, index, 'hover')" accept="image/*"
+                                    class="file-input" />
+                            </div>
+                            <button v-if="button.hover" @click="$emit('removeImage', index, 'hover')"
+                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
-                        <button v-if="button.hover" @click="$emit('removeImage', index, 'hover')"
-                            class="btn btn-danger btn-sm mt-1">刪除圖片</button>
-                    </div>
-                    <div class="form-group">
-                        <label>手機端圖標</label>
-                        <div class="image-upload">
-                            <img v-if="button.mobile" :src="getImageUrl(button.mobile)" alt="Mobile"
-                                class="preview-img small" />
-                            <div v-else class="placeholder small">無圖片</div>
-                            <input type="file" @change="(e) => $emit('upload', e, index, 'mobile')" accept="image/*"
-                                class="file-input" />
+
+                        <div class="upload-slot">
+                            <label>手機端</label>
+                            <div class="image-preview-wrapper" :class="{ 'has-image': button.mobile }">
+                                <img v-if="button.mobile" :src="getImageUrl(button.mobile)" alt="Mobile"
+                                    class="preview-img" />
+                                <div v-else class="placeholder">
+                                    <span class="icon">📱</span>
+                                </div>
+                                <input type="file" @change="(e) => $emit('upload', e, index, 'mobile')" accept="image/*"
+                                    class="file-input" />
+                            </div>
+                            <button v-if="button.mobile" @click="$emit('removeImage', index, 'mobile')"
+                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
-                        <button v-if="button.mobile" @click="$emit('removeImage', index, 'mobile')"
-                            class="btn btn-danger btn-sm mt-1">刪除圖片</button>
                     </div>
                 </div>
             </div>
@@ -86,7 +93,7 @@ interface FloatAdButton {
     mobile: string
 }
 
-defineProps<{
+const props = defineProps<{
     floatAdButtons: FloatAdButton[]
     getImageUrl: (path: string) => string
 }>()
@@ -102,60 +109,147 @@ defineEmits<{
 </script>
 
 <style scoped>
-.button-link-item {
-    background: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
 }
 
-.item-header {
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.25rem 0 0 0;
+}
+
+.empty-state {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.items-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.item-card {
+    background: #fff;
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.item-card-header {
+    background: #fcfdfe;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #eef0f2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
 }
 
-.form-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 15px;
-}
-
-.form-group {
-    flex: 1;
-}
-
-.image-row {
-    display: flex;
-    gap: 20px;
-}
-
-.image-upload {
-    border: 1px dashed #ccc;
+.item-badge {
+    background: #e7f3ff;
+    color: #007bff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
     border-radius: 4px;
-    padding: 10px;
-    text-align: center;
+    text-transform: uppercase;
+}
+
+.item-card-body {
+    padding: 1.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.field-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.4rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.triple-upload-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f3f5;
+}
+
+.upload-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upload-slot label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #868e96;
+}
+
+.image-preview-wrapper {
+    width: 100%;
+    height: 70px;
     position: relative;
-    background: white;
-}
-
-.preview-img.small {
-    height: 60px;
-    object-fit: contain;
-}
-
-.placeholder.small {
-    height: 60px;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    background: #f8f9fa;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #999;
-    background: #f5f5f5;
-    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.image-preview-wrapper:hover {
+    border-color: #007bff;
+    background: #f0f7ff;
+}
+
+.image-preview-wrapper.has-image {
+    border-style: solid;
+}
+
+.preview-img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+}
+
+.placeholder .icon {
+    font-size: 1.2rem;
+    color: #adb5bd;
 }
 
 .file-input {
@@ -166,14 +260,33 @@ defineEmits<{
     height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 1;
 }
 
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border: 2px dashed #eee;
-    margin: 20px 0;
+.btn-icon-danger {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    padding: 0.25rem;
+    cursor: pointer;
+}
+
+.btn-link-danger {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.btn-link-danger:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .triple-upload-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
 }
 </style>

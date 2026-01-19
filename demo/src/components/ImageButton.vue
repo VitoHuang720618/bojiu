@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import ImageComponent from './ImageComponent.vue'
 
 const props = defineProps<{

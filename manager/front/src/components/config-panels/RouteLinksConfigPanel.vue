@@ -1,48 +1,52 @@
 <template>
     <div class="config-panel">
         <div class="panel-header">
-            <h3>推薦路線設置</h3>
-            <div class="button-actions">
-                <button @click="$emit('reset')" class="btn btn-secondary">重置為預設</button>
+            <div class="header-info">
+                <h3>推薦路線按鈕</h3>
+                <p class="subtitle">管理首頁推薦線路區域的入口按鈕</p>
+            </div>
+            <div class="header-actions">
+                <button @click="$emit('reset')" class="btn btn-outline-secondary">重置為預設</button>
             </div>
         </div>
 
-        <div class="button-links-info">
-            <p class="info-text">
-                <strong>說明：</strong>這裡配置推薦優質線路區域的按鈕圖片。
-                可以上傳自定義的圖片（默認圖和懸停圖）。
-                這個按鈕會顯示在推薦優質線路標題下方。
-            </p>
-        </div>
-
-        <div class="route-links-item">
-            <div class="item-header">
-                <h4>推薦路線按鈕</h4>
+        <div class="form-section">
+            <div class="section-title">
+                <h4>按鈕圖標</h4>
+                <p>配置推薦優質線路標題下方的入口按鈕（默認與懸停狀態）</p>
             </div>
-            <div class="button-form">
-                <div class="image-row">
-                    <div class="form-group">
-                        <label>默認圖片</label>
-                        <div class="image-upload">
-                            <img v-if="routeLinks.default" :src="getImageUrl(routeLinks.default)" alt="Default"
-                                class="preview-img small" />
-                            <div v-else class="placeholder small">無圖片</div>
-                            <input type="file" @change="(e) => $emit('upload', e, 'default')" accept="image/*"
-                                class="file-input" />
-                            <button @click="$emit('removeImage', 'default')" class="btn btn-danger btn-sm">刪除圖片</button>
+
+            <div class="dual-upload-row">
+                <div class="upload-slot">
+                    <label>默認圖片</label>
+                    <div class="image-preview-wrapper" :class="{ 'has-image': routeLinks.default }">
+                        <img v-if="routeLinks.default" :src="getImageUrl(routeLinks.default)" alt="Default"
+                            class="preview-img" />
+                        <div v-else class="placeholder">
+                            <span class="icon">🖼️</span>
+                            <span class="text">默認狀態</span>
                         </div>
+                        <input type="file" @change="(e) => $emit('upload', e, 'default')" accept="image/*"
+                            class="file-input" />
                     </div>
-                    <div class="form-group">
-                        <label>懸停圖片</label>
-                        <div class="image-upload">
-                            <img v-if="routeLinks.hover" :src="getImageUrl(routeLinks.hover)" alt="Hover"
-                                class="preview-img small" />
-                            <div v-else class="placeholder small">無圖片</div>
-                            <input type="file" @change="(e) => $emit('upload', e, 'hover')" accept="image/*"
-                                class="file-input" />
-                            <button @click="$emit('removeImage', 'hover')" class="btn btn-danger btn-sm">刪除圖片</button>
+                    <button v-if="routeLinks.default" @click="$emit('removeImage', 'default')"
+                        class="btn btn-link-danger btn-sm">移除圖片</button>
+                </div>
+
+                <div class="upload-slot">
+                    <label>懸停圖片</label>
+                    <div class="image-preview-wrapper" :class="{ 'has-image': routeLinks.hover }">
+                        <img v-if="routeLinks.hover" :src="getImageUrl(routeLinks.hover)" alt="Hover"
+                            class="preview-img" />
+                        <div v-else class="placeholder">
+                            <span class="icon">✨</span>
+                            <span class="text">懸停狀態</span>
                         </div>
+                        <input type="file" @change="(e) => $emit('upload', e, 'hover')" accept="image/*"
+                            class="file-input" />
                     </div>
+                    <button v-if="routeLinks.hover" @click="$emit('removeImage', 'hover')"
+                        class="btn btn-link-danger btn-sm">移除圖片</button>
                 </div>
             </div>
         </div>
@@ -55,7 +59,7 @@ interface RouteLinks {
     hover: string
 }
 
-defineProps<{
+const props = defineProps<{
     routeLinks: RouteLinks
     getImageUrl: (path: string) => string
 }>()
@@ -68,62 +72,103 @@ defineEmits<{
 </script>
 
 <style scoped>
-.route-links-item {
-    background: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 20px;
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
 }
 
-.item-header {
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+.subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.25rem 0 0 0;
 }
 
-.item-header h4 {
+.form-section {
+    background: #fff;
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.section-title {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f8f9fa;
+    padding-bottom: 1rem;
+}
+
+.section-title h4 {
     margin: 0;
     color: #333;
 }
 
-.image-row {
+.section-title p {
+    margin: 0.3rem 0 0 0;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.dual-upload-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.upload-slot {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.form-group {
-    flex: 1;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
+.upload-slot label {
     font-weight: 600;
-    color: #666;
+    font-size: 0.85rem;
+    color: #495057;
 }
 
-.image-upload {
-    border: 1px dashed #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    text-align: center;
+.image-preview-wrapper {
+    width: 100%;
+    height: 120px;
     position: relative;
-    background: white;
-}
-
-.preview-img.small {
-    height: 60px;
-    object-fit: contain;
-}
-
-.placeholder.small {
-    height: 60px;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    background: #f8f9fa;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #999;
-    background: #f5f5f5;
-    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.image-preview-wrapper:hover {
+    border-color: #007bff;
+    background: #f0f7ff;
+}
+
+.image-preview-wrapper.has-image {
+    border-style: solid;
+}
+
+.preview-img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.placeholder {
+    text-align: center;
+    color: #adb5bd;
+}
+
+.placeholder .icon {
+    font-size: 1.5rem;
+    display: block;
+}
+
+.placeholder .text {
+    font-size: 0.75rem;
 }
 
 .file-input {
@@ -134,5 +179,25 @@ defineEmits<{
     height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 1;
+}
+
+.btn-link-danger {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.btn-link-danger:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+    .dual-upload-row {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 }
 </style>

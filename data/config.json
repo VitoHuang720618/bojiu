@@ -1,115 +1,181 @@
 {
-  "logo": "/uploads/logo.png",
-  "banner": "/uploads/new_year_banner.png",
+  "logo": "/assets/images/logo.png",
+  "banner": {
+    "pc": "/uploads/banner-pc.png",
+    "tablet": "/uploads/banner-tablet.png",
+    "mobile": ""
+  },
   "backgroundImage": "/uploads/backgroundImage.png",
   "buttonLinks": [
     {
       "text": "寰宇瀏覽器",
       "href": "https://www.ub66.com/",
       "target": "_blank",
-      "defaultImage": "/assets/images/2d60d632-004e-4b69-ac84-8fc1817ce52e.png",
-      "hoverImage": "/assets/images/6ef6554f-4b80-4cd0-9bbf-782dc066c330.png"
+      "defaultImage": "/uploads/button-0-defaultImage.png",
+      "hoverImage": "/uploads/button-0-hoverImage.png"
     },
     {
       "text": "APP",
       "href": "https://haa68686.com:9900/web/simple.php#/aioDownload",
       "target": "_blank",
-      "defaultImage": "/assets/images/1630a76f-f7e7-4af7-8099-082bc201512c.png",
-      "hoverImage": "/assets/images/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png"
+      "defaultImage": "/uploads/button-1-defaultImage.png",
+      "hoverImage": "/uploads/button-1-hoverImage.png"
     },
     {
       "text": "FUN乐园",
       "href": "https://fun99666.com/",
       "target": "_blank",
-      "defaultImage": "/assets/images/64e1d47d-537d-45d0-bfd4-801e473bb525.png",
-      "hoverImage": "/assets/images/87fe8990-8297-4e70-9693-e37c665ee087.png"
+      "defaultImage": "/uploads/button-2-defaultImage.png",
+      "hoverImage": "/uploads/button-2-hoverImage.png"
     },
     {
       "text": "合作夥伴",
       "href": "https://haa68686.com:9900/web/#/article/at3",
       "target": "_blank",
-      "defaultImage": "/assets/images/95e17bec-043c-49ea-a438-e8057a39f4ad.png",
-      "hoverImage": "/assets/images/e9df8ef5-cd97-4c06-b051-a894e67f0935.png"
+      "defaultImage": "/uploads/button-3-defaultImage.png",
+      "hoverImage": "/uploads/button-3-hoverImage.png"
     }
   ],
   "carouselSlides": [
     {
-      "image": "/uploads/29627d6a-6020-49ae-8625-44f0ec5f7999.jpg",
-      "title": "最新消息",
-      "description": "歡迎來到我們的平台",
-      "href": "https://example.com"
-    },
-    {
-      "image": "/uploads/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg",
-      "title": "精彩內容",
-      "description": "探索更多精彩內容",
-      "href": "https://google.com"
-    },
-    {
-      "image": "/uploads/a1d2e390-0a0f-4dde-8d9b-6de5bb9f4de0.jpg",
-      "title": "熱門推薦",
-      "description": "不容錯過的熱門內容",
-      "href": "https://example.com"
+      "image": "/uploads/carousel-0.png",
+      "href": "",
+      "alt": "輪播圖 1"
     }
   ],
   "titles": {
-    "recommendedRoutes": "推薦路線",
-    "recommendedBrowsers": "推薦瀏覽器",
-    "selectedVideos": "精選視頻",
-    "hotPrograms": "火熱影片"
+    "recommendedRoutes": "/assets/images/crown-icon.webp",
+    "recommendedBrowsers": "/assets/images/tools-title.webp",
+    "selectedVideos": "/assets/images/live-title.webp",
+    "hotPrograms": "/assets/images/sport-title.webp"
   },
   "routeLinks": {
-    "default": "#007bff",
-    "hover": "#0056b3"
+    "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+    "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png"
   },
   "toolIcons": [
     {
-      "image": "/uploads/0bade21c-9e90-45bf-96d9-e531a926738a.png",
-      "href": "https://example.com",
-      "title": "工具A",
-      "alt": "工具圖標A"
+      "href": "https://live.titan007.com/oldIndexall.aspx",
+      "default": "/uploads/tool-0-default.png",
+      "hover": "/uploads/tool-0-hover.png"
     },
     {
-      "image": "/uploads/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
-      "href": "https://google.com",
-      "title": "工具B",
-      "alt": "工具圖標B"
+      "href": "https://live.leisu.com/",
+      "default": "/uploads/tool-1-default.png",
+      "hover": "/uploads/tool-1-hover.png"
     },
     {
-      "image": "/uploads/1630a76f-f7e7-4af7-8099-082bc201512c.png",
-      "href": "https://example.com",
-      "title": "工具C",
-      "alt": "工具圖標C"
+      "href": "https://live.nowscore.com/2in1.aspx",
+      "default": "/uploads/tool-2-default.png",
+      "hover": "/uploads/tool-2-hover.png"
     },
     {
-      "image": "/assets/images/live-title.webp",
-      "href": "https://google.com",
-      "title": "工具D",
-      "alt": "工具圖標D"
+      "href": "https://v.douyin.com/KZUpEUBUIlI/",
+      "default": "/uploads/tool-3-default.png",
+      "hover": "/uploads/tool-3-hover.png"
+    },
+    {
+      "href": "https://www.baidu.com/",
+      "default": "/uploads/tool-4-default.png",
+      "hover": "/uploads/tool-4-hover.png"
+    },
+    {
+      "href": "https://x.com/ezfun9527",
+      "default": "/uploads/tool-5-default.png",
+      "hover": "/uploads/tool-5-hover.png"
     }
   ],
   "videoThumbnails": [
     {
       "image": "/uploads/videoThumbnails-0-image.png",
-      "href": "https://www.youtube.com/watch?v=example1",
-      "title": "測試視頻1",
-      "alt": "測試視頻縮圖"
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "甜美Aura"
+    },
+    {
+      "image": "/uploads/videoThumbnails-1-image.png",
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "变态马洛"
+    },
+    {
+      "image": "/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png",
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "蹦蹦冲啊"
+    },
+    {
+      "image": "/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png",
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "阳光Hank"
+    },
+    {
+      "image": "/assets/images/4e67c664-2a43-4ac2-9e09-dff556a007ce.png",
+      "href": "https://example.com/video5",
+      "alt": "",
+      "title": "专属福利"
+    },
+    {
+      "image": "/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png",
+      "href": "https://fun99888.com/index.php/sport-information/",
+      "alt": "",
+      "title": "撩人双飞闺蜜秀"
     }
   ],
   "programThumbnails": [
     {
-      "image": "/uploads/391bcfda-fff2-4a55-b3d2-444884ddf87f.png",
-      "href": "https://example.com/program1",
-      "title": "測試節目1",
-      "alt": "測試節目縮圖"
+      "image": "/uploads/programThumbnails-0-image.png",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "alt": "",
+      "title": "Fun乐园圣典直播"
+    },
+    {
+      "image": "/assets/images/c67bb6cc-e00c-4811-a62a-38604bda41f7.png",
+      "href": "https://example.com/program2",
+      "alt": "火熱節目 2",
+      "title": "熱門節目 2"
+    },
+    {
+      "image": "/assets/images/391bcfda-fff2-4a55-b3d2-444884ddf87f.png",
+      "href": "https://example.com/program3",
+      "alt": "火熱節目 3",
+      "title": "熱門節目 3"
+    },
+    {
+      "image": "/assets/images/a1d2e390-0a0f-4dde-8d9b-6de5bb9f4de0.jpg",
+      "href": "https://example.com/program4",
+      "alt": "火熱節目 4",
+      "title": "熱門節目 4"
+    },
+    {
+      "image": "/assets/images/626e1c19-bf48-40ed-9a2f-8e2a8e4dce13.png",
+      "href": "https://example.com/program5",
+      "alt": "火熱節目 5",
+      "title": "熱門節目 5"
+    },
+    {
+      "image": "/assets/images/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg",
+      "href": "https://example.com/program6",
+      "alt": "火熱節目 6",
+      "title": "熱門節目 6"
     }
   ],
   "floatAdButtons": [
     {
-      "image": "/uploads/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png",
-      "href": "https://example.com/ad1",
-      "title": "特別優惠",
-      "alt": "特別優惠廣告"
+      "href": "https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777",
+      "default": "/uploads/float-0-default.png",
+      "hover": "/uploads/float-0-hover.png"
+    },
+    {
+      "href": "https://v.douyin.com/KZUpEUBUIlI/",
+      "default": "/uploads/float-1-default.png",
+      "hover": "/uploads/float-1-hover.png"
+    },
+    {
+      "href": "https://www.fun99666.com/",
+      "default": "/uploads/float-2-default.png",
+      "hover": "/uploads/float-2-hover.png"
     }
   ]
 }

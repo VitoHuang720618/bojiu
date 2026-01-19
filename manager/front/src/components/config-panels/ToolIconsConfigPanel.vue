@@ -1,63 +1,69 @@
 <template>
     <div class="config-panel">
         <div class="panel-header">
-            <h3>工具圖標設置</h3>
-            <div class="button-actions">
-                <button @click="$emit('reset')" class="btn btn-secondary">重置為預設</button>
+            <div class="header-info">
+                <h3>工具圖標設置</h3>
+                <p class="subtitle">管理頁面底部的外鏈工具與圖標</p>
+            </div>
+            <div class="header-actions">
+                <button @click="$emit('reset')" class="btn btn-outline-secondary">重置為預設</button>
                 <button @click="$emit('add')" class="btn btn-primary">新增圖標</button>
             </div>
         </div>
 
-        <div class="button-links-info">
-            <p class="info-text">
-                <strong>說明：</strong>這裡配置的工具圖標會替換前端頁面推薦瀏覽器區域的圖標。
-                可以上傳自定義的圖標（默認圖和懸停圖），並設置圖標名稱。
-                所有圖標都會在新視窗中打開。
-            </p>
-        </div>
-
-        <!-- 如果沒有工具圖標，顯示提示 -->
         <div v-if="toolIcons.length === 0" class="empty-state">
-            <p>目前沒有工具圖標配置，將使用預設配置</p>
-            <button @click="$emit('add')" class="btn btn-primary btn-lg">新增第一個工具圖標</button>
+            <div class="empty-icon">🛠️</div>
+            <p>目前沒有自定義工具圖標</p>
+            <button @click="$emit('add')" class="btn btn-outline-primary">新增第一個圖標</button>
         </div>
 
-        <div v-for="(tool, index) in toolIcons" :key="index" class="button-link-item">
-            <div class="item-header">
-                <h4>工具圖標 {{ index + 1 }}</h4>
-                <button @click="$emit('remove', index)" class="btn btn-danger btn-sm">刪除</button>
-            </div>
-            <div class="button-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>連結網址</label>
-                        <input v-model="tool.href" type="url" class="form-control" placeholder="https://example.com"
-                            @input="$emit('change')" />
-                    </div>
+        <div class="items-list">
+            <div v-for="(tool, index) in toolIcons" :key="index" class="item-card">
+                <div class="item-card-header">
+                    <span class="item-badge">工具 {{ index + 1 }}</span>
+                    <button @click="$emit('remove', index)" class="btn btn-icon-danger" title="刪除圖標">
+                        <span class="icon">🗑️</span>
+                    </button>
                 </div>
-                <div class="image-row">
-                    <div class="form-group">
-                        <label>默認圖標</label>
-                        <div class="image-upload">
-                            <img v-if="tool.default" :src="getImageUrl(tool.default)" alt="Default"
-                                class="preview-img small" />
-                            <div v-else class="placeholder small">無圖片</div>
-                            <input type="file" @change="(e) => $emit('upload', e, index, 'default')" accept="image/*"
-                                class="file-input" />
-                            <button @click="$emit('removeImage', index, 'default')"
-                                class="btn btn-danger btn-sm">刪除圖片</button>
+
+                <div class="item-card-body">
+                    <div class="form-main">
+                        <div class="field-group mb-4">
+                            <label>連結地址</label>
+                            <input v-model="tool.href" type="url" class="form-control" placeholder="https://..."
+                                @input="$emit('change')" />
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>懸停圖標</label>
-                        <div class="image-upload">
-                            <img v-if="tool.hover" :src="getImageUrl(tool.hover)" alt="Hover"
-                                class="preview-img small" />
-                            <div v-else class="placeholder small">無圖片</div>
-                            <input type="file" @change="(e) => $emit('upload', e, index, 'hover')" accept="image/*"
-                                class="file-input" />
-                            <button @click="$emit('removeImage', index, 'hover')"
-                                class="btn btn-danger btn-sm">刪除圖片</button>
+
+                        <div class="dual-upload-row">
+                            <div class="upload-slot">
+                                <label>默認狀態</label>
+                                <div class="image-preview-wrapper" :class="{ 'has-image': tool.default }">
+                                    <img v-if="tool.default" :src="getImageUrl(tool.default)" alt="Default"
+                                        class="preview-img" />
+                                    <div v-else class="placeholder">
+                                        <span class="icon">🖼️</span>
+                                    </div>
+                                    <input type="file" @change="(e) => $emit('upload', e, index, 'default')"
+                                        accept="image/*" class="file-input" />
+                                </div>
+                                <button v-if="tool.default" @click="$emit('removeImage', index, 'default')"
+                                    class="btn btn-link-danger btn-sm">移除</button>
+                            </div>
+
+                            <div class="upload-slot">
+                                <label>懸停狀態</label>
+                                <div class="image-preview-wrapper" :class="{ 'has-image': tool.hover }">
+                                    <img v-if="tool.hover" :src="getImageUrl(tool.hover)" alt="Hover"
+                                        class="preview-img" />
+                                    <div v-else class="placeholder">
+                                        <span class="icon">✨</span>
+                                    </div>
+                                    <input type="file" @change="(e) => $emit('upload', e, index, 'hover')"
+                                        accept="image/*" class="file-input" />
+                                </div>
+                                <button v-if="tool.hover" @click="$emit('removeImage', index, 'hover')"
+                                    class="btn btn-link-danger btn-sm">移除</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,7 +79,7 @@ interface ToolIcon {
     hover: string
 }
 
-defineProps<{
+const props = defineProps<{
     toolIcons: ToolIcon[]
     getImageUrl: (path: string) => string
 }>()
@@ -89,72 +95,156 @@ defineEmits<{
 </script>
 
 <style scoped>
-.button-link-item {
-    background: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
 }
 
-.item-header {
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.25rem 0 0 0;
+}
+
+.empty-state {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.items-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.item-card {
+    background: #fff;
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+}
+
+.item-card-header {
+    background: #fcfdfe;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #eef0f2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
 }
 
-.item-header h4 {
-    margin: 0;
-    color: #333;
+.item-badge {
+    background: #e7f3ff;
+    color: #007bff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
 }
 
-.form-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 15px;
-}
-
-.form-group {
+.item-card-body {
+    padding: 1.25rem;
     flex: 1;
 }
 
-.form-group label {
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.field-group label {
     display: block;
-    margin-bottom: 5px;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: #666;
+    color: #495057;
+    margin-bottom: 0.4rem;
 }
 
-.image-row {
+.form-control {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.dual-upload-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f3f5;
+}
+
+.upload-slot {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
 }
 
-.image-upload {
-    border: 1px dashed #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    text-align: center;
+.upload-slot label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #868e96;
+}
+
+.image-preview-wrapper {
+    width: 100%;
+    height: 60px;
     position: relative;
-    background: white;
-}
-
-.preview-img.small {
-    height: 60px;
-    object-fit: contain;
-}
-
-.placeholder.small {
-    height: 60px;
+    border: 2px dashed #dee2e6;
+    border-radius: 6px;
+    background: #f8f9fa;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #999;
-    background: #f5f5f5;
-    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.image-preview-wrapper:hover {
+    border-color: #007bff;
+    background: #f0f7ff;
+}
+
+.image-preview-wrapper.has-image {
+    border-style: solid;
+}
+
+.preview-img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+}
+
+.placeholder .icon {
+    font-size: 1rem;
+    color: #adb5bd;
 }
 
 .file-input {
@@ -165,19 +255,27 @@ defineEmits<{
     height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 1;
 }
 
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border: 2px dashed #eee;
-    margin: 20px 0;
+.btn-icon-danger {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    padding: 0.25rem;
+    cursor: pointer;
+    line-height: 1;
 }
 
-.button-actions {
-    display: flex;
-    gap: 10px;
+.btn-link-danger {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+.btn-link-danger:hover {
+    text-decoration: underline;
 }
 </style>

@@ -1,47 +1,60 @@
 <template>
     <div class="config-panel">
         <div class="panel-header">
-            <h3>{{ title }}</h3>
+            <div class="header-info">
+                <h3>{{ title }}</h3>
+                <p class="subtitle">管理{{ itemLabel }}列表與內容</p>
+            </div>
             <button @click="$emit('add')" class="btn btn-primary">新增{{ itemLabel }}</button>
         </div>
 
-        <!-- 如果沒有項目，顯示提示和新增按鈕 -->
         <div v-if="items.length === 0" class="empty-state">
+            <div class="empty-icon">📁</div>
             <p>目前沒有{{ itemLabel }}項目</p>
-            <button @click="$emit('add')" class="btn btn-primary btn-lg">新增第一個{{ itemLabel }}</button>
+            <button @click="$emit('add')" class="btn btn-outline-primary">新增第一個{{ itemLabel }}</button>
         </div>
 
-        <div v-for="(item, index) in items" :key="index" class="thumbnail-item">
-            <div class="item-header">
-                <h4>{{ itemLabel }} {{ index + 1 }}</h4>
-                <button @click="$emit('remove', index)" class="btn btn-danger btn-sm">刪除項目</button>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>縮圖</label>
-                    <div class="image-upload">
-                        <img v-if="item.image" :src="item.image" :alt="item.alt" class="preview-img small" />
-                        <div v-else class="placeholder small">無圖片</div>
-                        <input type="file" @change="(e) => $emit('upload', e, index)" accept="image/*"
-                            class="file-input" />
+        <div class="items-list">
+            <div v-for="(item, index) in items" :key="index" class="item-card">
+                <div class="item-card-header">
+                    <span class="item-badge">項目 {{ index + 1 }}</span>
+                    <button @click="$emit('remove', index)" class="btn btn-icon-danger" title="刪除項目">
+                        <span class="icon">🗑️</span>
+                    </button>
+                </div>
+
+                <div class="item-card-body">
+                    <div class="upload-column">
+                        <div class="image-preview-wrapper" :class="{ 'has-image': item.image }">
+                            <img v-if="item.image" :src="getImageUrl(item.image)" :alt="item.alt" class="preview-img" />
+                            <div v-else class="placeholder">
+                                <span class="icon">🖼️</span>
+                                <span class="text">上傳縮圖</span>
+                            </div>
+                            <input type="file" @change="(e) => $emit('upload', e, index)" accept="image/*"
+                                class="file-input" />
+                        </div>
+                        <button v-if="item.image" @click="$emit('removeImage', index)"
+                            class="btn btn-link-danger btn-sm">移除圖片</button>
                     </div>
-                    <button v-if="item.image" @click="$emit('removeImage', index)"
-                        class="btn btn-danger btn-sm mt-2">刪除圖片</button>
-                </div>
-                <div class="form-group">
-                    <label>連結</label>
-                    <input v-model="item.href" type="url" class="form-control" placeholder="https://example.com"
-                        @input="$emit('change')" />
-                </div>
-                <div class="form-group">
-                    <label>標題</label>
-                    <input v-model="item.title" type="text" class="form-control" :placeholder="`${itemLabel}標題`"
-                        @input="$emit('change')" />
-                </div>
-                <div class="form-group">
-                    <label>描述</label>
-                    <input v-model="item.alt" type="text" class="form-control" placeholder="圖片描述"
-                        @input="$emit('change')" />
+
+                    <div class="fields-column">
+                        <div class="field-group">
+                            <label>連結地址</label>
+                            <input v-model="item.href" type="url" class="form-control" placeholder="https://..."
+                                @input="$emit('change')" />
+                        </div>
+                        <div class="field-group">
+                            <label>顯示標題</label>
+                            <input v-model="item.title" type="text" class="form-control" :placeholder="`${itemLabel}標題`"
+                                @input="$emit('change')" />
+                        </div>
+                        <div class="field-group">
+                            <label>圖片描述 (ALT)</label>
+                            <input v-model="item.alt" type="text" class="form-control" placeholder="描述文字..."
+                                @input="$emit('change')" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,10 +69,11 @@ interface ThumbnailItem {
     alt: string
 }
 
-defineProps<{
+const props = defineProps<{
     title: string
     itemLabel: string
     items: ThumbnailItem[]
+    getImageUrl: (path: string) => string
 }>()
 
 defineEmits<{
@@ -72,56 +86,118 @@ defineEmits<{
 </script>
 
 <style scoped>
-.thumbnail-item {
-    background: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
 }
 
-.item-header {
+.subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.25rem 0 0 0;
+}
+
+.empty-state {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.item-card {
+    background: #fff;
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.item-card-header {
+    background: #fcfdfe;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #eef0f2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
 }
 
-.form-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.form-group {
-    flex: 1;
-    min-width: 200px;
-}
-
-.image-upload {
-    border: 1px dashed #ccc;
+.item-badge {
+    background: #e7f3ff;
+    color: #007bff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
     border-radius: 4px;
-    padding: 10px;
-    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.item-card-body {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.upload-column {
+    width: 140px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.image-preview-wrapper {
+    width: 140px;
+    height: 100px;
     position: relative;
-    background: white;
-}
-
-.preview-img.small {
-    height: 80px;
-    object-fit: contain;
-}
-
-.placeholder.small {
-    height: 80px;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #999;
-    background: #f5f5f5;
-    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.image-preview-wrapper:hover {
+    border-color: #007bff;
+    background: #f0f7ff;
+}
+
+.image-preview-wrapper.has-image {
+    border-style: solid;
+}
+
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.placeholder {
+    text-align: center;
+    color: #adb5bd;
+}
+
+.placeholder .icon {
+    font-size: 1.5rem;
+    display: block;
+}
+
+.placeholder .text {
+    font-size: 0.75rem;
 }
 
 .file-input {
@@ -132,14 +208,88 @@ defineEmits<{
     height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 1;
 }
 
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border: 2px dashed #eee;
-    margin: 20px 0;
+.fields-column {
+    flex: 1;
+}
+
+.field-group {
+    margin-bottom: 1rem;
+}
+
+.field-group:last-child {
+    margin-bottom: 0;
+}
+
+.field-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.4rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.btn-icon-danger {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    padding: 0.25rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon-danger:hover {
+    opacity: 1;
+    background: #fff5f5;
+    border-radius: 4px;
+}
+
+.btn-link-danger {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-link-danger:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .item-card-body {
+        flex-direction: column;
+    }
+
+    .upload-column {
+        width: 100%;
+    }
+
+    .image-preview-wrapper {
+        width: 100%;
+        height: 150px;
+    }
 }
 </style>

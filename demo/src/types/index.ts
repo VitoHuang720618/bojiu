@@ -162,7 +162,7 @@ export interface FooterProps {
 
 export interface ImageProps {
   src: string | BannerConfig
-  alt: string
+  alt?: string
   width?: number
   height?: number
   lazy?: boolean

@@ -35,14 +35,10 @@ else
 fi
 
 # Port validation with fallback
-if [ -n "$PORT" ]; then
-    API_PORT=$(validate_numeric "PORT" "$PORT" "3005")
-elif [ -n "$API_PORT" ]; then
-    API_PORT=$(validate_numeric "API_PORT" "$API_PORT" "3005")
-else
-    API_PORT=3005
-    log "No port specified, using default: 3005"
-fi
+# For Zeabur deployment, Zeabur provides PORT (e.g., 8080)
+# We want Nginx to listen on Zeabur's PORT, but keep internal API on 3005
+NGINX_LISTEN_PORT=${PORT:-80}
+API_PORT=3005
 export API_PORT
 
 # Upload path validation
@@ -76,10 +72,16 @@ export MAX_FILE_SIZE
 
 log "Final environment configuration:"
 log "  NODE_ENV: $NODE_ENV"
-log "  API_PORT: $API_PORT"
+log "  NGINX_LISTEN_PORT: $NGINX_LISTEN_PORT"
+log "  INTERNAL_API_PORT: $API_PORT"
 log "  UPLOAD_PATH: $UPLOAD_PATH"
 log "  CONFIG_PATH: $CONFIG_PATH"
 log "  MAX_FILE_SIZE: $MAX_FILE_SIZE bytes"
+
+# Process Nginx configuration to inject the dynamic port
+log "Configuring Nginx to listen on port $NGINX_LISTEN_PORT..."
+# Use sed to replace the placeholder with the actual port
+sed -i "s/\${LISTEN_PORT}/$NGINX_LISTEN_PORT/g" /etc/nginx/nginx.conf
 
 # Volume mount and directory validation
 log "Validating volume mounts and directories..."

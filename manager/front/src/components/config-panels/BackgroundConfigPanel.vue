@@ -1,62 +1,105 @@
 <template>
     <div class="config-panel">
-        <h3>背景圖設置</h3>
+        <div class="panel-header">
+            <h3>背景圖設置</h3>
+            <p class="subtitle">設定全站的背景圖片或底紋</p>
+        </div>
+
         <div class="form-group">
-            <label>背景圖片</label>
-            <div class="image-upload">
-                <img v-if="backgroundImage" :src="backgroundImage" alt="Background" class="preview-img" />
-                <div v-else class="placeholder">無背景圖（顯示預設圖案）</div>
-                <input type="file" @change="(e) => $emit('upload', e)" accept="image/*" class="file-input" />
-                <button @click="$emit('clear')" class="btn btn-danger btn-sm">清除</button>
+            <div class="image-upload-card">
+                <div class="image-preview-wrapper" :class="{ 'has-image': backgroundImage }">
+                    <img v-if="backgroundImage" :src="getImageUrl(backgroundImage)" alt="Background"
+                        class="preview-img" />
+                    <div v-else class="placeholder">
+                        <span class="icon">🖼️</span>
+                        <p>尚未設置背景圖</p>
+                    </div>
+                    <input type="file" @change="(e) => $emit('upload', e)" accept="image/*" class="file-input" />
+                </div>
+
+                <div class="upload-actions">
+                    <div class="info">
+                        <label>點擊區域上傳新圖片</label>
+                        <span v-if="backgroundImage" class="filename">{{ getFileName(backgroundImage) }}</span>
+                    </div>
+                    <button v-if="backgroundImage" @click="$emit('clear')" class="btn btn-danger btn-sm">清除圖片</button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
     backgroundImage: string | undefined
+    getImageUrl: (path: string) => string
 }>()
 
 defineEmits<{
     (e: 'upload', event: Event): void
     (e: 'clear'): void
 }>()
+
+const getFileName = (path: string) => {
+    return path.split('/').pop() || path
+}
 </script>
 
 <style scoped>
-.form-group {
-    margin-bottom: 20px;
+.panel-header {
+    margin-bottom: 2rem;
 }
 
-.image-upload {
-    border: 2px dashed #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
+.subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.25rem 0 0 0;
+}
+
+.image-upload-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.image-preview-wrapper {
     position: relative;
-    background: #fdfdfd;
-    transition: all 0.3s ease;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
 }
 
-.image-upload:hover {
-    border-color: #3498db;
+.image-preview-wrapper:hover {
+    border-color: #007bff;
     background: #f0f7ff;
 }
 
+.image-preview-wrapper.has-image {
+    border-style: solid;
+}
+
 .preview-img {
-    max-width: 100%;
-    max-height: 300px;
-    margin-bottom: 15px;
-    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .placeholder {
-    padding: 40px;
-    color: #999;
-    background: #f5f5f5;
-    border-radius: 4px;
-    margin-bottom: 15px;
+    text-align: center;
+    color: #adb5bd;
+}
+
+.placeholder .icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
 }
 
 .file-input {
@@ -67,9 +110,36 @@ defineEmits<{
     height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 1;
 }
 
-.btn {
+.upload-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.upload-actions .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-actions label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.filename {
+    font-size: 0.75rem;
+    color: #6c757d;
+    font-family: monospace;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
     position: relative;
     z-index: 2;
 }

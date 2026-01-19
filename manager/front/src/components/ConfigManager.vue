@@ -28,6 +28,10 @@
         </div>
 
         <div class="editor-body">
+          <!-- Basic 配置 -->
+          <BasicConfigPanel v-if="activeTab === 'basic'" :logo="config.logo" :getImageUrl="getImageUrl"
+            @upload="(e, field) => handleImageUpload(e, field as any)" @clear="(field) => clearImage(field as any)" />
+
           <!-- Banner 配置 -->
           <BannerConfigPanel v-if="activeTab === 'banner'" :banner="config.banner" :getImageUrl="getImageUrl"
             @upload="handleBannerUpload" @batch-upload="handleBatchBannerUpload" @crop="openCropper"
@@ -35,7 +39,8 @@
 
           <!-- Background 配置 -->
           <BackgroundConfigPanel v-if="activeTab === 'background'" :backgroundImage="config.backgroundImage"
-            @upload="(e) => handleImageUpload(e, 'backgroundImage')" @clear="clearImage('backgroundImage')" />
+            :getImageUrl="getImageUrl" @upload="(e) => handleImageUpload(e, 'backgroundImage')"
+            @clear="clearImage('backgroundImage')" />
 
           <!-- Button Links 配置 -->
           <ButtonLinksConfigPanel v-if="activeTab === 'buttonlinks'" :buttonLinks="config.buttonLinks"
@@ -54,18 +59,20 @@
 
           <!-- Carousel 配置 -->
           <CarouselConfigPanel v-if="activeTab === 'carousel'" :carouselSlides="config.carouselSlides"
-            @add="addCarouselSlide" @remove="removeCarouselSlide" @upload="handleCarouselImageUpload"
-            @clearImage="clearCarouselImage" @change="hasChanges = true" />
+            :getImageUrl="getImageUrl" @add="addCarouselSlide" @remove="removeCarouselSlide"
+            @upload="handleCarouselImageUpload" @clearImage="clearCarouselImage" @change="hasChanges = true" />
 
-          <!-- Video Thumbnails 配置 -->
-          <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="娛樂直播設置" itemLabel="視頻"
-            :items="config.videoThumbnails" @add="addVideo" @remove="removeVideo" @upload="handleVideoImageUpload"
-            @removeImage="removeVideoImage" @change="hasChanges = true" />
+          <!-- Videos 配置 -->
+          <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="娛樂直播設置" itemLabel="影片"
+            :items="config.videoThumbnails" :getImageUrl="getImageUrl" @add="addVideoThumbnail"
+            @remove="removeVideoThumbnail" @upload="handleVideoUpload" @removeImage="removeVideoImage"
+            @change="hasChanges = true" />
 
-          <!-- Program Thumbnails 配置 -->
+          <!-- Programs 配置 -->
           <ThumbnailConfigPanel v-if="activeTab === 'programs'" title="賽事精選設置" itemLabel="節目"
-            :items="config.programThumbnails" @add="addProgram" @remove="removeProgram"
-            @upload="handleProgramImageUpload" @removeImage="removeProgramImage" @change="hasChanges = true" />
+            :items="config.programThumbnails" :getImageUrl="getImageUrl" @add="addProgramThumbnail"
+            @remove="removeProgramThumbnail" @upload="handleProgramUpload" @removeImage="removeProgramImage"
+            @change="hasChanges = true" />
 
           <!-- Float Ad Buttons 配置 -->
           <FloatAdConfigPanel v-if="activeTab === 'floatads'" :floatAdButtons="config.floatAdButtons"
@@ -113,6 +120,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import ImageCropper from './ImageCropper.vue'
 import BannerConfigPanel from './config-panels/BannerConfigPanel.vue'
 import BackgroundConfigPanel from './config-panels/BackgroundConfigPanel.vue'
+import BasicConfigPanel from './config-panels/BasicConfigPanel.vue'
 import ButtonLinksConfigPanel from './config-panels/ButtonLinksConfigPanel.vue'
 import ToolIconsConfigPanel from './config-panels/ToolIconsConfigPanel.vue'
 import RouteLinksConfigPanel from './config-panels/RouteLinksConfigPanel.vue'
@@ -171,6 +179,7 @@ const previewFrameStyle = computed(() => {
 })
 
 const tabs = [
+  { id: 'basic', label: '基本設置' },
   { id: 'banner', label: 'Banner' },
   { id: 'background', label: '背景圖' },
   { id: 'buttonlinks', label: '按鈕鏈接' },
@@ -596,7 +605,7 @@ const handleCarouselImageUpload = async (event: Event, index: number) => {
 }
 
 // 處理視頻縮圖上傳
-const handleVideoImageUpload = async (event: Event, index: number) => {
+const handleVideoUpload = async (event: Event, index: number) => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
@@ -622,7 +631,7 @@ const handleVideoImageUpload = async (event: Event, index: number) => {
 }
 
 // 處理節目縮圖上傳
-const handleProgramImageUpload = async (event: Event, index: number) => {
+const handleProgramUpload = async (event: Event, index: number) => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
@@ -751,7 +760,7 @@ const removeProgramImage = async (index: number) => {
 }
 
 // 新增視頻
-const addVideo = () => {
+const addVideoThumbnail = () => {
   config.videoThumbnails.push({
     image: '',
     href: '',
@@ -762,7 +771,7 @@ const addVideo = () => {
 }
 
 // 刪除視頻
-const removeVideo = async (index: number) => {
+const removeVideoThumbnail = async (index: number) => {
   if (confirm('確定要刪除這個視頻嗎？')) {
     config.videoThumbnails.splice(index, 1)
     hasChanges.value = true
@@ -783,7 +792,7 @@ const removeVideo = async (index: number) => {
 
 
 // 新增節目
-const addProgram = () => {
+const addProgramThumbnail = () => {
   config.programThumbnails.push({
     image: '',
     href: '',
@@ -794,7 +803,7 @@ const addProgram = () => {
 }
 
 // 刪除節目
-const removeProgram = async (index: number) => {
+const removeProgramThumbnail = async (index: number) => {
   if (confirm('確定要刪除這個節目嗎？')) {
     config.programThumbnails.splice(index, 1)
     hasChanges.value = true
