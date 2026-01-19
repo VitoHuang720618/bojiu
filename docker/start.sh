@@ -378,7 +378,7 @@ fi
 log "Verifying Nginx is serving content..."
 NGINX_READY=false
 for i in $(seq 1 30); do
-    if curl -f -s http://localhost/health >/dev/null 2>&1; then
+    if curl -f -s http://localhost:$NGINX_LISTEN_PORT/health >/dev/null 2>&1; then
         log "Nginx is ready and serving content (attempt $i/30)"
         NGINX_READY=true
         break

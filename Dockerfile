@@ -60,10 +60,10 @@ RUN chmod +x /start.sh
 
 # Health check with comprehensive validation
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost/health && \
-      curl -f http://localhost/api/health && \
-      curl -f http://localhost/ >/dev/null && \
-      curl -f http://localhost/admin/ >/dev/null || exit 1
+    CMD curl -f http://localhost:${PORT:-80}/health && \
+    curl -f http://localhost:${PORT:-80}/api/health && \
+    curl -f http://localhost:${PORT:-80}/ >/dev/null && \
+    curl -f http://localhost:${PORT:-80}/admin/ >/dev/null || exit 1
 
 EXPOSE 80
 CMD ["/start.sh"]
