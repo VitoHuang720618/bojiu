@@ -1205,7 +1205,7 @@ onUnmounted(() => {
     }
   }
 
-  @media (max-width: 430px) {
+  @media (max-width: 480px) {
     .recommend-footer .tools {
       grid-template-columns: repeat(2, 1fr) !important;
       padding: 0 !important;
@@ -1223,7 +1223,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 480px) {
   .recommend-footer .block-title {
     height: 48px !important;
     flex: 0 0 48px !important;
@@ -1368,22 +1368,20 @@ onUnmounted(() => {
   object-fit: contain;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .programme-wrap {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-}
-
-@media (max-width: 840px) {
-  .programme-wrap {
+    display: flex !important;
     flex-direction: column !important;
+    align-items: center !important;
+    /* Ensure centered content */
     gap: 30px !important;
     padding: 0 15px !important;
+    width: 100% !important;
   }
 
   .programme-block {
     max-width: 100% !important;
+    width: 100% !important;
   }
 }
 
@@ -1406,7 +1404,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 480px) {
   .programme-wrap .list {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px 10px;
@@ -1420,7 +1418,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 480px) {
   .programme-wrap .list .item {
     width: 100% !important;
   }
@@ -1508,7 +1506,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 480px) {
   .programme-wrap .list {
     max-width: 100% !important;
     gap: 10px 8px !important;
@@ -1738,7 +1736,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 480px) {
   #float-ad {
     position: relative !important;
     margin: 0 !important;
