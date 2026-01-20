@@ -14,96 +14,98 @@
       </nav>
 
       <div class="sidebar-footer">
-        <button @click="loadConfig" class="btn btn-secondary btn-block mb-2">重新載入</button>
-        <button @click="saveConfig" class="btn btn-primary btn-block" :disabled="!hasChanges">保存配置</button>
+        <button @click="loadConfig" class="btn btn-secondary">重新載入</button>
+        <button @click="saveConfig" class="btn btn-primary" :disabled="!hasChanges">保存配置</button>
       </div>
     </aside>
 
     <!-- Main Content Area -->
     <main class="main-content">
-      <!-- Editor Pane (Middle) -->
-      <div class="editor-pane">
-        <div class="editor-header">
-          <h2>{{ currentTabLabel }}</h2>
-        </div>
-
-        <div class="editor-body">
-          <!-- Basic 配置 -->
-          <BasicConfigPanel v-if="activeTab === 'basic'" :logo="config.logo" :getImageUrl="getImageUrl"
-            @upload="(e, field) => handleImageUpload(e, field as any)" @clear="(field) => clearImage(field as any)" />
-
-          <!-- Banner 配置 -->
-          <BannerConfigPanel v-if="activeTab === 'banner'" :banner="config.banner" :getImageUrl="getImageUrl"
-            @upload="handleBannerUpload" @batch-upload="handleBatchBannerUpload" @crop="openCropper"
-            @clear="clearBanner" />
-
-          <!-- Background 配置 -->
-          <BackgroundConfigPanel v-if="activeTab === 'background'" :backgroundImage="config.backgroundImage"
-            :getImageUrl="getImageUrl" @upload="(e) => handleImageUpload(e, 'backgroundImage')"
-            @clear="clearImage('backgroundImage')" />
-
-          <!-- Button Links 配置 -->
-          <ButtonLinksConfigPanel v-if="activeTab === 'buttonlinks'" :buttonLinks="config.buttonLinks"
-            :getImageUrl="getImageUrl" @reset="resetButtonLinks" @add="addButtonLink" @remove="removeButtonLink"
-            @upload="handleButtonImageUpload" @removeImage="removeButtonImage" @change="hasChanges = true" />
-
-          <!-- Tool Icons 配置 -->
-          <ToolIconsConfigPanel v-if="activeTab === 'toolicons'" :toolIcons="config.toolIcons"
-            :getImageUrl="getImageUrl" @reset="resetToolIcons" @add="addToolIcon" @remove="removeToolIcon"
-            @upload="handleToolIconImageUpload" @removeImage="removeToolIconImage" @change="hasChanges = true" />
-
-          <!-- Route Links 配置 -->
-          <RouteLinksConfigPanel v-if="activeTab === 'routelinks'" :routeLinks="config.routeLinks"
-            :getImageUrl="getImageUrl" @reset="resetRouteLinks" @upload="handleRouteLinksImageUpload"
-            @removeImage="removeRouteLinksImage" />
-
-          <!-- Carousel 配置 -->
-          <CarouselConfigPanel v-if="activeTab === 'carousel'" :carouselSlides="config.carouselSlides"
-            :getImageUrl="getImageUrl" @add="addCarouselSlide" @remove="removeCarouselSlide"
-            @upload="handleCarouselImageUpload" @clearImage="clearCarouselImage" @change="hasChanges = true" />
-
-          <!-- Videos 配置 -->
-          <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="娛樂直播設置" itemLabel="影片"
-            :items="config.videoThumbnails" :getImageUrl="getImageUrl" @add="addVideoThumbnail"
-            @remove="removeVideoThumbnail" @upload="handleVideoUpload" @removeImage="removeVideoImage"
-            @change="hasChanges = true" />
-
-          <!-- Programs 配置 -->
-          <ThumbnailConfigPanel v-if="activeTab === 'programs'" title="賽事精選設置" itemLabel="節目"
-            :items="config.programThumbnails" :getImageUrl="getImageUrl" @add="addProgramThumbnail"
-            @remove="removeProgramThumbnail" @upload="handleProgramUpload" @removeImage="removeProgramImage"
-            @change="hasChanges = true" />
-
-          <!-- Float Ad Buttons 配置 -->
-          <FloatAdConfigPanel v-if="activeTab === 'floatads'" :floatAdButtons="config.floatAdButtons"
-            :getImageUrl="getImageUrl" @reset="resetFloatAdButtons" @add="addFloatAdButton"
-            @remove="removeFloatAdButton" @upload="handleFloatAdImageUpload" @removeImage="removeFloatAdImage"
-            @change="hasChanges = true" />
-        </div>
-      </div>
-
-      <!-- Preview Pane (Right) -->
-      <div class="preview-pane">
-        <div class="preview-header">
-          <div class="device-switcher">
-            <button v-for="device in devices" :key="device.id"
-              :class="['device-btn', { active: previewDevice === device.id }]" @click="previewDevice = device.id"
-              :title="device.label">
-              <span>{{ device.icon }}</span>
-            </button>
+      <div class="panels-container">
+        <!-- Editor Pane (Middle) -->
+        <div class="editor-pane" v-show="activeTab !== 'preview'">
+          <div class="editor-header">
+            <h2>{{ currentTabLabel }}</h2>
           </div>
-          <div class="preview-dims">
-            {{ currentDeviceWidth }} x {{ currentDeviceHeight }}
+
+          <div class="editor-body">
+            <!-- Basic 配置 -->
+            <BasicConfigPanel v-if="activeTab === 'basic'" :logo="config.logo" :getImageUrl="getImageUrl"
+              @upload="(e, field) => handleImageUpload(e, field as any)" @clear="(field) => clearImage(field as any)" />
+
+            <!-- Banner 配置 -->
+            <BannerConfigPanel v-if="activeTab === 'banner'" :banner="config.banner" :getImageUrl="getImageUrl"
+              @upload="handleBannerUpload" @batch-upload="handleBatchBannerUpload" @crop="openCropper"
+              @clear="clearBanner" />
+
+            <!-- Background 配置 -->
+            <BackgroundConfigPanel v-if="activeTab === 'background'" :backgroundImage="config.backgroundImage"
+              :getImageUrl="getImageUrl" @upload="(e) => handleImageUpload(e, 'backgroundImage')"
+              @clear="clearImage('backgroundImage')" />
+
+            <!-- Button Links 配置 -->
+            <ButtonLinksConfigPanel v-if="activeTab === 'buttonlinks'" :buttonLinks="config.buttonLinks"
+              :getImageUrl="getImageUrl" @reset="resetButtonLinks" @add="addButtonLink" @remove="removeButtonLink"
+              @upload="handleButtonImageUpload" @removeImage="removeButtonImage" @change="hasChanges = true" />
+
+            <!-- Tool Icons 配置 -->
+            <ToolIconsConfigPanel v-if="activeTab === 'toolicons'" :toolIcons="config.toolIcons"
+              :getImageUrl="getImageUrl" @reset="resetToolIcons" @add="addToolIcon" @remove="removeToolIcon"
+              @upload="handleToolIconImageUpload" @removeImage="removeToolIconImage" @change="hasChanges = true" />
+
+            <!-- Route Links 配置 -->
+            <RouteLinksConfigPanel v-if="activeTab === 'routelinks'" :routeLinks="config.routeLinks"
+              :getImageUrl="getImageUrl" @reset="resetRouteLinks" @upload="handleRouteLinksImageUpload"
+              @removeImage="removeRouteLinksImage" />
+
+            <!-- Carousel 配置 -->
+            <CarouselConfigPanel v-if="activeTab === 'carousel'" :carouselSlides="config.carouselSlides"
+              :getImageUrl="getImageUrl" @add="addCarouselSlide" @remove="removeCarouselSlide"
+              @upload="handleCarouselImageUpload" @clearImage="clearCarouselImage" @change="hasChanges = true" />
+
+            <!-- Videos 配置 -->
+            <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="娛樂直播設置" itemLabel="影片"
+              :items="config.videoThumbnails" :getImageUrl="getImageUrl" @add="addVideoThumbnail"
+              @remove="removeVideoThumbnail" @upload="handleVideoUpload" @removeImage="removeVideoImage"
+              @change="hasChanges = true" />
+
+            <!-- Programs 配置 -->
+            <ThumbnailConfigPanel v-if="activeTab === 'programs'" title="賽事精選設置" itemLabel="節目"
+              :items="config.programThumbnails" :getImageUrl="getImageUrl" @add="addProgramThumbnail"
+              @remove="removeProgramThumbnail" @upload="handleProgramUpload" @removeImage="removeProgramImage"
+              @change="hasChanges = true" />
+
+            <!-- Float Ad Buttons 配置 -->
+            <FloatAdConfigPanel v-if="activeTab === 'floatads'" :floatAdButtons="config.floatAdButtons"
+              :getImageUrl="getImageUrl" @reset="resetFloatAdButtons" @add="addFloatAdButton"
+              @remove="removeFloatAdButton" @upload="handleFloatAdImageUpload" @removeImage="removeFloatAdImage"
+              @change="hasChanges = true" />
           </div>
         </div>
 
-        <div class="preview-viewport-wrapper">
-          <div class="preview-viewport" :class="previewDevice">
-            <iframe ref="previewFrame" :src="getPreviewUrl()" class="preview-frame" :style="previewFrameStyle"
-              @load="onPreviewLoad"></iframe>
+        <!-- Preview Pane (Right) -->
+        <div class="preview-pane" v-show="activeTab === 'preview'">
+          <div class="preview-header">
+            <div class="device-switcher">
+              <button v-for="device in devices" :key="device.id"
+                :class="['device-btn', { active: previewDevice === device.id }]" @click="previewDevice = device.id"
+                :title="device.label">
+                <span>{{ device.icon }}</span>
+              </button>
+            </div>
+            <div class="preview-dims">
+              {{ currentDeviceWidth }} x {{ currentDeviceHeight }}
+            </div>
+          </div>
+
+          <div class="preview-viewport-wrapper">
+            <div class="preview-viewport" :class="previewDevice">
+              <iframe ref="previewFrame" :src="getPreviewUrl()" class="preview-frame" :style="previewFrameStyle"
+                @load="onPreviewLoad"></iframe>
+            </div>
           </div>
         </div>
-      </div>
+      </div> <!-- End of panels-container -->
     </main>
 
     <!-- Loading and Modals -->
@@ -188,7 +190,8 @@ const tabs = [
   { id: 'carousel', label: '輪播圖' },
   { id: 'videos', label: '娛樂直播' },
   { id: 'programs', label: '賽事精選' },
-  { id: 'floatads', label: '浮動廣告' }
+  { id: 'floatads', label: '浮動廣告' },
+  { id: 'preview', label: '預覽頁面' }
 ]
 
 const currentTabLabel = computed(() => {
@@ -1315,24 +1318,32 @@ onMounted(() => {
   display: flex;
   height: 100vh;
   width: 100vw;
+  height: 100vh;
   overflow: hidden;
   background-color: #f5f7fa;
+  flex-direction: column;
+  /* Change to column */
 }
 
-/* Sidebar */
+/* Top Navbar (Sidebar) */
 .sidebar {
-  width: 240px;
+  width: 100%;
+  height: auto;
   background: #ffffff;
-  border-right: 1px solid #e1e4e8;
+  border-bottom: 1px solid #e1e4e8;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   flex-shrink: 0;
   z-index: 10;
+  padding: 0 1rem;
 }
 
 .sidebar-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #e1e4e8;
+  padding: 1rem;
+  border-bottom: none;
+  flex-shrink: 0;
+  margin-right: 1rem;
 }
 
 .sidebar-header h1 {
@@ -1344,22 +1355,29 @@ onMounted(() => {
 
 .nav-menu {
   flex: 1;
-  overflow-y: auto;
-  padding: 1rem 0;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0;
+  height: 100%;
+  align-items: center;
 }
 
 .nav-item {
-  width: 100%;
-  text-align: left;
-  padding: 0.75rem 1.5rem;
+  width: auto;
+  text-align: center;
+  padding: 1rem 1.2rem;
   background: none;
   border: none;
-  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  /* Changed to bottom */
   color: #4f566b;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .nav-item:hover {
@@ -1368,15 +1386,19 @@ onMounted(() => {
 }
 
 .nav-item.active {
-  background-color: #f0f5ff;
+  background-color: transparent;
   color: #007bff;
-  border-left-color: #007bff;
+  border-bottom-color: #007bff;
+  /* Changed to bottom */
 }
 
 .sidebar-footer {
-  padding: 1.5rem;
-  border-top: 1px solid #e1e4e8;
-  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-top: none;
+  background: transparent;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 /* Main Content */
@@ -1388,12 +1410,77 @@ onMounted(() => {
 
 /* Editor Pane */
 .editor-pane {
-  flex: 0 0 500px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+
+
+/* Main Content Layout Updates */
+.main-content {
+  flex-direction: column !important;
+}
+
+.view-mode-bar {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem;
+  background: #fff;
+  border-bottom: 1px solid #e1e4e8;
+  flex-shrink: 0;
+}
+
+.mode-group {
+  display: flex;
+  background: #f1f3f5;
+  padding: 4px;
+  border-radius: 8px;
+  gap: 4px;
+}
+
+.mode-btn {
+  padding: 6px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  color: #495057;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.mode-btn.active {
+  background: #fff;
+  color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+}
+
+.panels-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.editor-pane {
+  flex: 1;
   display: flex;
   flex-direction: column;
   background: #fff;
   border-right: 1px solid #e1e4e8;
-  transition: width 0.3s ease;
+  min-width: 0;
 }
 
 .editor-header {
