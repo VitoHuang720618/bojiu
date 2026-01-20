@@ -1375,7 +1375,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 840px) {
   .programme-wrap {
     flex-direction: column !important;
     gap: 30px !important;
