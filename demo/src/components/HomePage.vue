@@ -821,15 +821,13 @@ onUnmounted(() => {
 
 @media (max-width: 1279px) {
   .recommend-slider {
-    width: 65% !important;
-    /* 給予 slider 大約 65% 的空間 */
+    width: 55% !important;
     max-width: none !important;
     height: auto !important;
     aspect-ratio: 432 / 183 !important;
     margin-right: 20px !important;
     margin-bottom: 0 !important;
-    flex: 1 !important;
-    /* 讓它自適應撐開 */
+    flex: 0 0 55% !important;
   }
 }
 
