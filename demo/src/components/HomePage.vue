@@ -554,7 +554,7 @@ onUnmounted(() => {
 @media (max-width: 1279px) {
   .button-links {
     width: 100% !important;
-    max-width: 780px !important;
+    max-width: 1200px !important;
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 10px !important;
     padding: 0 !important;
@@ -781,8 +781,8 @@ onUnmounted(() => {
 
   .recommend-content {
     width: 100% !important;
-    max-width: 785px !important;
-    height: 230px !important;
+    max-width: 1200px !important;
+    height: auto !important;
     padding: 24px 20px !important;
     margin: 0 auto !important;
     border-radius: 12px 12px 0 0 !important;
@@ -821,13 +821,15 @@ onUnmounted(() => {
 
 @media (max-width: 1279px) {
   .recommend-slider {
-    width: 100% !important;
-    max-width: 432px !important;
+    width: 65% !important;
+    /* 給予 slider 大約 65% 的空間 */
+    max-width: none !important;
     height: auto !important;
     aspect-ratio: 432 / 183 !important;
-    margin-right: 0 !important;
-    margin-bottom: 20px !important;
-    flex: none !important;
+    margin-right: 20px !important;
+    margin-bottom: 0 !important;
+    flex: 1 !important;
+    /* 讓它自適應撐開 */
   }
 }
 
@@ -954,6 +956,12 @@ onUnmounted(() => {
 }
 
 @media (max-width: 1279px) {
+  .recommend-links {
+    max-width: none !important;
+    /* 解鎖容器寬度 */
+    flex: 1 !important;
+  }
+
   .recommend-links .links {
     gap: 13px 7px !important;
   }
@@ -961,8 +969,8 @@ onUnmounted(() => {
   .recommend-links .links .item {
     width: 100% !important;
     /* 改為流體寬度 */
-    max-width: 143px;
-    /* 限制最大寬度但不鎖死 */
+    max-width: none !important;
+    /* 移除最大寬度限制 */
     height: auto !important;
     aspect-ratio: 143 / 37 !important;
   }
@@ -1133,7 +1141,7 @@ onUnmounted(() => {
 @media (max-width: 1279px) {
   .recommend-footer {
     width: 100% !important;
-    max-width: 789px !important;
+    max-width: 1200px !important;
     height: auto !important;
     margin: 0 auto 2rem auto !important;
     border-radius: 0 0 20px 20px !important;
@@ -1328,7 +1336,7 @@ onUnmounted(() => {
     padding: 0 !important;
     justify-content: center !important;
     width: 100% !important;
-    max-width: 789px !important;
+    max-width: 1200px !important;
     margin: 0 auto !important;
   }
 
@@ -1458,13 +1466,15 @@ onUnmounted(() => {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 14px 14px !important;
     width: 100% !important;
-    max-width: 400px;
+    max-width: none !important;
+    /* 解鎖列表寬度 */
     margin: 0 auto;
   }
 
   .programme-wrap .list .item {
     width: 100% !important;
-    max-width: 180px;
+    max-width: none !important;
+    /* 解鎖項目寬度 */
     margin: 0 auto;
     display: flex !important;
     flex-direction: column !important;
