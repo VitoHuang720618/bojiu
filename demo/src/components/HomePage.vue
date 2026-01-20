@@ -768,7 +768,7 @@ onUnmounted(() => {
   }
 }
 
-@media (min-width: 768px) and (max-width: 1279px) {
+@media (min-width: 740px) and (max-width: 1279px) {
   #home-main {
     padding: 3rem 1rem !important;
     /* 減少左右 padding，確保 785px 內容可以容納 */
@@ -780,7 +780,7 @@ onUnmounted(() => {
   }
 
   .recommend-content {
-    width: 785px !important;
+    width: 100% !important;
     max-width: 785px !important;
     height: 230px !important;
     padding: 24px 20px !important;
@@ -789,7 +789,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 739px) {
   .recommend-content {
     flex-direction: column;
     padding: 1.5rem 1rem !important;
@@ -831,7 +831,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 739px) {
   .recommend-slider {
     width: 100% !important;
     max-width: 100% !important;
@@ -931,7 +931,7 @@ onUnmounted(() => {
   /* 依照標註圖給予足夠間隙 */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 739px) {
   .recommend-links {
     width: 100% !important;
     margin-left: 0 !important;
@@ -986,7 +986,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 739px) {
   .recommend-links .links {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
@@ -1169,20 +1169,6 @@ onUnmounted(() => {
     background-color: transparent !important;
   }
 
-  /* 過渡期處理：在 820px 以下提早將 6 欄切為 3 欄，解決擠壓問題 */
-  @media (max-width: 820px) {
-    .recommend-footer .tools {
-      grid-template-columns: repeat(3, 1fr) !important;
-    }
-  }
-
-  @media (max-width: 430px) {
-    .recommend-footer .tools {
-      grid-template-columns: repeat(3, 1fr) !important;
-      padding: 10px 0 !important;
-    }
-  }
-
   .recommend-footer .tools .item {
     height: 65px !important;
     min-height: 0 !important;
@@ -1194,8 +1180,8 @@ onUnmounted(() => {
     border-right: none !important;
   }
 
-  /* 手機版：改為 3 欄 */
-  @media (max-width: 767px) {
+  /* 手機版：改為 3 欄 (iPad Mini 744px 應為平板 6 欄) */
+  @media (max-width: 739px) {
     .recommend-footer .tools {
       grid-template-columns: repeat(3, 1fr) !important;
     }
@@ -1611,9 +1597,10 @@ onUnmounted(() => {
   }
 }
 
-@media (min-width: 768px) and (max-width: 1279px) {
+@media (min-width: 740px) and (max-width: 1279px) {
   #float-ad {
-    width: 820px !important;
+    width: 100% !important;
+    max-width: 100% !important;
     height: 95px !important;
     margin: 0 auto !important;
     box-shadow: none !important;
@@ -1713,7 +1700,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 739px) {
 
   /* 手機版：隱藏桌面和平板圖片，顯示手機圖片 */
   #float-ad .links .item.rwd-first-button .desktop-image,
