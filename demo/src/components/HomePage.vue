@@ -1356,7 +1356,7 @@ onUnmounted(() => {
   object-fit: contain;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 739px) {
   .programme-wrap {
     display: flex !important;
     flex-direction: column !important;
@@ -1392,7 +1392,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 739px) {
   .programme-wrap .list {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px 10px;
@@ -1406,7 +1406,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 739px) {
   .programme-wrap .list .item {
     width: 100% !important;
   }
