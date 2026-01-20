@@ -1207,12 +1207,8 @@ onUnmounted(() => {
 
   @media (max-width: 480px) {
     .recommend-footer .tools {
-      grid-template-columns: repeat(2, 1fr) !important;
+      grid-template-columns: repeat(3, 1fr) !important;
       padding: 0 !important;
-    }
-
-    .recommend-footer .tools .item:nth-child(2n) {
-      border-right: none !important;
     }
   }
 
