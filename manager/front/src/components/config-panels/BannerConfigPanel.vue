@@ -5,24 +5,7 @@
             <p class="subtitle">為不同裝置提供最佳化的顯示效果</p>
         </div>
 
-        <!-- 批量處理區塊 -->
-        <div class="bulk-upload-section">
-            <div class="bulk-card">
-                <div class="bulk-info">
-                    <h4>一鍵自動生成</h4>
-                    <p>上傳一張高品質大圖，系統將自動裁切中心區域並套用到電腦、平板與手機版。</p>
-                </div>
-                <div class="bulk-action">
-                    <label class="btn btn-primary">
-                        選擇圖片並套用
-                        <input type="file" @change="(e) => $emit('batchUpload', e)" accept="image/*"
-                            class="file-input-hidden" />
-                    </label>
-                </div>
-            </div>
-        </div>
 
-        <div class="divider"><span>個別設置</span></div>
 
         <div class="banner-grid">
             <!-- PC Banner -->
@@ -34,8 +17,7 @@
                     <div v-else class="placeholder">未設置</div>
                     <input type="file" @change="(e) => $emit('upload', e, 'pc')" accept="image/*" class="file-input" />
                     <div class="slot-actions">
-                        <button @click="$emit('crop', 'pc')" v-if="getBannerUrl('pc')"
-                            class="btn btn-secondary btn-sm">裁切</button>
+
                         <button @click="$emit('clear', 'pc')" class="btn btn-danger btn-sm">清除</button>
                     </div>
                 </div>
@@ -51,8 +33,7 @@
                     <input type="file" @change="(e) => $emit('upload', e, 'tablet')" accept="image/*"
                         class="file-input" />
                     <div class="slot-actions">
-                        <button @click="$emit('crop', 'tablet')" v-if="getBannerUrl('tablet')"
-                            class="btn btn-secondary btn-sm">裁切</button>
+
                         <button @click="$emit('clear', 'tablet')" class="btn btn-danger btn-sm">清除</button>
                     </div>
                 </div>
@@ -68,8 +49,7 @@
                     <input type="file" @change="(e) => $emit('upload', e, 'mobile')" accept="image/*"
                         class="file-input" />
                     <div class="slot-actions">
-                        <button @click="$emit('crop', 'mobile')" v-if="getBannerUrl('mobile')"
-                            class="btn btn-secondary btn-sm">裁切</button>
+
                         <button @click="$emit('clear', 'mobile')" class="btn btn-danger btn-sm">清除</button>
                     </div>
                 </div>
@@ -88,8 +68,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'upload', event: Event, device: 'pc' | 'tablet' | 'mobile'): void
-    (e: 'batchUpload', event: Event): void
-    (e: 'crop', device: 'pc' | 'tablet' | 'mobile'): void
     (e: 'clear', device: 'pc' | 'tablet' | 'mobile'): void
 }>()
 
@@ -184,55 +162,7 @@ const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
 }
 
 
-.bulk-upload-section {
-    margin-bottom: 30px;
-    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid #bbdefb;
-}
 
-.bulk-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-}
-
-.bulk-info h4 {
-    margin: 0 0 5px 0;
-    color: #1565c0;
-}
-
-.bulk-info p {
-    margin: 0;
-    font-size: 13px;
-    color: #666;
-}
-
-.file-input-hidden {
-    display: none;
-}
-
-.divider {
-    display: flex;
-    align-items: center;
-    margin: 30px 0 20px;
-    color: #999;
-    font-size: 12px;
-}
-
-.divider::before,
-.divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #eee;
-}
-
-.divider span {
-    padding: 0 15px;
-}
 
 .btn-sm {
     padding: 4px 12px;

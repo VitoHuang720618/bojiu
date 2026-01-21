@@ -35,8 +35,7 @@
 
             <!-- Banner 配置 -->
             <BannerConfigPanel v-if="activeTab === 'banner'" :banner="config.banner" :getImageUrl="getImageUrl"
-              @upload="handleBannerUpload" @batch-upload="handleBatchBannerUpload" @crop="openCropper"
-              @clear="clearBanner" />
+              @upload="handleBannerUpload" @clear="clearBanner" />
 
             <!-- Background 配置 -->
             <BackgroundConfigPanel v-if="activeTab === 'background'" :backgroundImage="config.backgroundImage"
@@ -112,14 +111,13 @@
     <div v-if="loading" class="loading-overlay">
       <div class="loading-spinner">載入中...</div>
     </div>
-    <ImageCropper :show="cropperState.show" :imageUrl="cropperState.imageUrl" :device="cropperState.device"
-      @close="cropperState.show = false" @confirm="handleCropConfirm" />
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
-import ImageCropper from './ImageCropper.vue'
+
 import BannerConfigPanel from './config-panels/BannerConfigPanel.vue'
 import BackgroundConfigPanel from './config-panels/BackgroundConfigPanel.vue'
 import BasicConfigPanel from './config-panels/BasicConfigPanel.vue'
@@ -131,12 +129,7 @@ import ThumbnailConfigPanel from './config-panels/ThumbnailConfigPanel.vue'
 import FloatAdConfigPanel from './config-panels/FloatAdConfigPanel.vue'
 import { configService, type ConfigData } from '../services/configService'
 
-// Cropper State
-const cropperState = reactive({
-  show: false,
-  imageUrl: '',
-  device: 'pc' as 'pc' | 'tablet' | 'mobile'
-})
+
 
 const loading = ref(false)
 const hasChanges = ref(false)
@@ -391,28 +384,15 @@ const saveConfig = async () => {
   }
 }
 
-// Banner 管理方法
-const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
-  if (typeof config.banner === 'string') {
-    return config.banner
-  }
-  return (config.banner as any)?.[device] || ''
-}
 
-const openCropper = (device: 'pc' | 'tablet' | 'mobile') => {
-  const url = getBannerUrl(device)
-  if (url) {
-    cropperState.imageUrl = getImageUrl(url)
-    cropperState.device = device
-    cropperState.show = true
-  }
-}
 
-const handleCropConfirm = async (file: File) => {
-  cropperState.show = false
+const handleBannerUpload = async (event: Event, device: 'pc' | 'tablet' | 'mobile') => {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
   loading.value = true
   try {
-    const response = await configService.uploadImage(file, `banner.${cropperState.device}`, 'single')
+    const response = await configService.uploadImage(file, `banner.${device}`, 'single')
     if (response.success && response.data) {
       if (typeof config.banner === 'string') {
         config.banner = {
@@ -421,119 +401,19 @@ const handleCropConfirm = async (file: File) => {
           mobile: config.banner
         }
       }
-      (config.banner as any)[cropperState.device] = response.data.path
+      (config.banner as any)[device] = response.data.path
       hasChanges.value = true
-      // 立即保存並重新載入預覽
       await configService.updateConfig(config)
       hasChanges.value = false
       reloadPreview()
     }
   } catch (error) {
-    console.error('Failed to upload cropped image:', error)
-    alert('裁切上傳失敗')
+    console.error('Failed to upload banner:', error)
+    alert('圖片上傳失敗')
   } finally {
     loading.value = false
-  }
-}
-
-const handleBatchBannerUpload = async (event: Event) => {
-  const file = (event.target as HTMLInputElement).files?.[0]
-  if (!file) return
-
-  loading.value = true
-  try {
-    // 讀取圖片並獲取尺寸
-    const img = new Image()
-    const reader = new FileReader()
-
-    const loadImage = () => new Promise<HTMLImageElement>((resolve, reject) => {
-      reader.onload = (e) => {
-        img.onload = () => resolve(img)
-        img.onerror = reject
-        img.src = e.target?.result as string
-      }
-      reader.onerror = reject
-      reader.readAsDataURL(file)
-    })
-
-    const sourceImg = await loadImage()
-    const devices = [
-      { id: 'pc', width: 1920, height: 500 },
-      { id: 'tablet', width: 820, height: 340 },
-      { id: 'mobile', width: 430, height: 340 }
-    ] as const
-
-    for (const device of devices) {
-      // 進行中心裁切
-      const canvas = document.createElement('canvas')
-      canvas.width = device.width
-      canvas.height = device.height
-      const ctx = canvas.getContext('2d')
-
-      if (ctx) {
-        const targetRatio = device.width / device.height
-        const sourceRatio = sourceImg.width / sourceImg.height
-
-        let drawW, drawH, curX, curY
-
-        if (sourceRatio > targetRatio) {
-          // 來源比較寬，以高度為準，裁左兩側
-          drawH = sourceImg.height
-          drawW = sourceImg.height * targetRatio
-          curX = (sourceImg.width - drawW) / 2
-          curY = 0
-        } else {
-          // 來源比較窄，以寬度為準，裁上下
-          drawW = sourceImg.width
-          drawH = sourceImg.width / targetRatio
-          curX = 0
-          curY = (sourceImg.height - drawH) / 2
-        }
-
-        ctx.drawImage(sourceImg, curX, curY, drawW, drawH, 0, 0, device.width, device.height)
-
-        const blob = await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), 'image/png'))
-        const croppedFile = new File([blob], `banner-${device.id}.png`, { type: 'image/png' })
-
-        const response = await configService.uploadImage(croppedFile, `banner.${device.id}`, 'single')
-        if (response.success && response.data) {
-          if (typeof config.banner === 'string') {
-            config.banner = { pc: '', tablet: '', mobile: '' }
-          }
-          (config.banner as any)[device.id] = response.data.path
-        }
-      }
-    }
-
-    hasChanges.value = true
-    await configService.updateConfig(config)
-    hasChanges.value = false
-    reloadPreview()
-    alert('自動生成成功！已套用至所有裝置。')
-  } catch (error) {
-    console.error('Batch banner upload failed:', error)
-    alert('批量處理失敗，請檢查圖片格式')
-  } finally {
-    loading.value = false
-      ; (event.target as HTMLInputElement).value = ''
-  }
-}
-
-const handleBannerUpload = async (event: Event, device: 'pc' | 'tablet' | 'mobile') => {
-  const file = (event.target as HTMLInputElement).files?.[0]
-  if (!file) return
-
-  // 讀取本地檔案並開啟裁切器
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    cropperState.imageUrl = e.target?.result as string
-    cropperState.device = device
-    cropperState.show = true
-  }
-  reader.readAsDataURL(file)
-
-    // 清除 input 值，以便下次選取相同檔案也能觸發 change
     ; (event.target as HTMLInputElement).value = ''
+  }
 }
 
 const clearBanner = async (device: 'pc' | 'tablet' | 'mobile') => {

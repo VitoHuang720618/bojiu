@@ -8,7 +8,8 @@ import {
   recommendedTools,
   carouselSlides,
   videoContent,
-  programContent
+  programContent,
+  siteConfig
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
 import type { ButtonLinkConfig, BannerConfig } from '../types'
@@ -110,17 +111,18 @@ const effectiveButtonLinks = computed(() => {
 const effectiveToolIcons = computed(() => {
   const toolIconsData = apiToolIcons.value
 
-  if (toolIconsData.length > 0) {
+  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
+  if (siteConfig.useApi && toolIconsData) {
     return toolIconsData.map((tool, index) => ({
       id: tool?.id || `api-tool-${index}`,
       default: tool?.default || '',
       hover: tool?.hover || '',
       alt: tool?.alt || '',
-      href: tool?.href || ''
+      href: tool?.href || '#'
     }))
   }
 
-  // 回退到預設資料
+  // 回退到預設資料 (僅在 useApi: false 或非 API 模式下)
   return assetManifest.toolIcons.map((tool) => ({
     id: tool.id,
     default: tool.default,
@@ -289,13 +291,8 @@ onUnmounted(() => {
               <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
             </div>
             <div class="tools">
-              <div v-for="(tool, index) in recommendedTools" :key="tool.id" class="item">
-                <ImageButton v-if="effectiveToolIcons[index] && effectiveToolIcons[index].default"
-                  :default-src="effectiveToolIcons[index].default" :hover-src="effectiveToolIcons[index].hover"
-                  :alt="effectiveToolIcons[index].alt || tool.name"
-                  :href="effectiveToolIcons[index].href || tool.href" />
-                <ImageButton v-else :default-src="assetManifest.toolIcons[index]?.default"
-                  :hover-src="assetManifest.toolIcons[index]?.hover" :alt="tool.name" :href="tool.href" />
+              <div v-for="tool in effectiveToolIcons" :key="tool.id" class="item">
+                <ImageButton :default-src="tool.default" :hover-src="tool.hover" :alt="tool.alt" :href="tool.href" />
               </div>
             </div>
           </div>
