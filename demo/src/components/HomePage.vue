@@ -277,11 +277,13 @@ onUnmounted(() => {
                 <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
-                <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
-                  <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
-                    :hover-src="effectiveRouteLinks[index].hover" :alt="route.title"
-                    :href="effectiveRouteLinks[index].href || route.href" />
-                </div>
+                <template v-for="(route, index) in recommendedRoutes" :key="route.id">
+                  <div class="item" v-if="effectiveRouteLinks[index] && effectiveRouteLinks[index].default">
+                    <ImageButton :default-src="effectiveRouteLinks[index].default"
+                      :hover-src="effectiveRouteLinks[index].hover" :alt="route.title"
+                      :href="effectiveRouteLinks[index].href || route.href" />
+                  </div>
+                </template>
               </div>
             </div>
           </div>
