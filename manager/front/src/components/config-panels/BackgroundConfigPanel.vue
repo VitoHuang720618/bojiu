@@ -61,6 +61,8 @@ const getFileName = (path: string) => {
     border-radius: 12px;
     padding: 1.5rem;
     border: 1px solid #e9ecef;
+    max-width: 600px;
+    /* Constrain width */
 }
 
 .image-preview-wrapper {

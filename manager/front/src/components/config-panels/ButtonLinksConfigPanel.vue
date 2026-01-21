@@ -178,6 +178,8 @@ defineEmits<{
     grid-template-columns: 1fr 2fr;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    max-width: 600px;
+    /* Constrain width */
 }
 
 .field-group label {
@@ -208,6 +210,8 @@ defineEmits<{
     gap: 2rem;
     padding-top: 1rem;
     border-top: 1px solid #f1f3f5;
+    max-width: 600px;
+    /* Constrain width */
 }
 
 .upload-slot {

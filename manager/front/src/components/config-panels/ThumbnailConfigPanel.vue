@@ -238,6 +238,13 @@ defineEmits<{
     /* Fill the grid cell */
 }
 
+@media (max-width: 576px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+}
+
 .field-group:last-child {
     margin-bottom: 0;
 }

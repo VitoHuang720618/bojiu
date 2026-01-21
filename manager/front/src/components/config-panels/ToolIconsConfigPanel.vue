@@ -201,6 +201,12 @@ defineEmits<{
     border-top: 1px solid #f1f3f5;
 }
 
+@media (max-width: 576px) {
+    .dual-upload-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 .upload-slot {
     display: flex;
     flex-direction: column;

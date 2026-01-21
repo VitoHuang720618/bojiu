@@ -91,6 +91,8 @@ defineEmits<{
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    max-width: 600px;
+    /* Constrain width */
 }
 
 .section-title {
