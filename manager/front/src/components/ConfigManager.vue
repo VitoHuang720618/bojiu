@@ -417,7 +417,16 @@ const handleBannerUpload = async (event: Event, device: 'pc' | 'tablet' | 'mobil
 }
 
 const clearBanner = async (device: 'pc' | 'tablet' | 'mobile') => {
-  if (typeof config.banner === 'object') {
+  // 如果是字串，先轉換為物件
+  if (typeof config.banner === 'string') {
+    config.banner = {
+      pc: config.banner,
+      tablet: config.banner,
+      mobile: config.banner
+    }
+  }
+
+  if (config.banner && typeof config.banner === 'object') {
     (config.banner as any)[device] = ''
     hasChanges.value = true
     // 立即保存並重新載入預覽
