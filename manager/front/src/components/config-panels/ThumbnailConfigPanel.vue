@@ -44,15 +44,17 @@
                             <input v-model="item.href" type="url" class="form-control" placeholder="https://..."
                                 @input="$emit('change')" />
                         </div>
-                        <div class="field-group">
-                            <label>顯示標題</label>
-                            <input v-model="item.title" type="text" class="form-control" :placeholder="`${itemLabel}標題`"
-                                @input="$emit('change')" />
-                        </div>
-                        <div class="field-group">
-                            <label>圖片描述 (ALT)</label>
-                            <input v-model="item.alt" type="text" class="form-control" placeholder="描述文字..."
-                                @input="$emit('change')" />
+                        <div class="form-row">
+                            <div class="field-group">
+                                <label>顯示標題</label>
+                                <input v-model="item.title" type="text" class="form-control"
+                                    :placeholder="`${itemLabel}標題`" @input="$emit('change')" />
+                            </div>
+                            <div class="field-group">
+                                <label>圖片描述 (ALT)</label>
+                                <input v-model="item.alt" type="text" class="form-control" placeholder="描述文字..."
+                                    @input="$emit('change')" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,6 +221,23 @@ defineEmits<{
     margin-bottom: 1rem;
 }
 
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 600px;
+    /* Match form-control max-width */
+}
+
+.form-row .field-group {
+    margin-bottom: 0;
+}
+
+.form-row .form-control {
+    max-width: 100%;
+    /* Fill the grid cell */
+}
+
 .field-group:last-child {
     margin-bottom: 0;
 }
@@ -233,6 +252,8 @@ defineEmits<{
 
 .form-control {
     width: 100%;
+    max-width: 600px;
+    /* Constrain width */
     padding: 0.6rem 0.8rem;
     border: 1px solid #ced4da;
     border-radius: 6px;

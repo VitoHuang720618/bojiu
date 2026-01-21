@@ -179,6 +179,7 @@ const handleUpload = (file: File, index: number) => {
 
 .form-control {
     width: 100%;
+    max-width: 600px;
     padding: 0.6rem 0.8rem;
     border: 1px solid #ced4da;
     border-radius: 6px;
