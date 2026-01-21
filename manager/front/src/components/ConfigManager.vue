@@ -209,8 +209,7 @@ const config = reactive<ConfigData>({
     recommendedBrowsers: '',
     selectedVideos: '',
     hotPrograms: ''
-  }
-
+  },
   routeLinks: [],
   toolIcons: [],
   videoThumbnails: [],
