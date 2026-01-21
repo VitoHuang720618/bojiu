@@ -958,6 +958,8 @@ onUnmounted(() => {
     max-width: none !important;
     /* 解鎖容器寬度 */
     flex: 1 !important;
+    min-width: 0 !important;
+    /* 關鍵：允許 flex item 壓縮，防止撐開 */
   }
 
   .recommend-links .links {
@@ -971,6 +973,12 @@ onUnmounted(() => {
     /* 移除最大寬度限制 */
     height: auto !important;
     aspect-ratio: 143 / 37 !important;
+  }
+
+  .recommend-links .links .item img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
   }
 
   .recommend-routes-title {
