@@ -128,8 +128,8 @@ defineEmits<{
 }
 
 .items-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
 }
 
@@ -141,6 +141,7 @@ defineEmits<{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     display: flex;
     flex-direction: column;
+    max-width: 600px; /* Constrain width */
 }
 
 .item-card-header {
