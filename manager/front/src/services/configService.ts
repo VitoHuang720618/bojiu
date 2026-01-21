@@ -28,10 +28,10 @@ export interface ConfigData {
     selectedVideos: string
     hotPrograms: string
   }
-  routeLinks: {
+  routeLinks: Array<{
     default: string
     hover: string
-  }
+  }>
   toolIcons: Array<{
     href: string
     default: string

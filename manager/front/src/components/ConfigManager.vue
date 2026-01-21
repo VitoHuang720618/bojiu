@@ -211,13 +211,7 @@ const config = reactive<ConfigData>({
     hotPrograms: ''
   }
 
-  ,
-  routeLinks: {
-    default: '',
-    hover: ''
-  }
-
-  ,
+  routeLinks: [],
   toolIcons: [],
   videoThumbnails: [],
   programThumbnails: [],
@@ -239,6 +233,15 @@ const loadConfig = async () => {
     }
 
     Object.assign(config, data)
+
+    // Migration for RouteLinks (Object -> Array)
+    if (config.routeLinks && !Array.isArray(config.routeLinks)) {
+      const old = config.routeLinks as any
+      config.routeLinks = Array(6).fill(null).map(() => ({
+        default: old.default || '',
+        hover: old.hover || ''
+      })) as any
+    }
 
     // 如果 buttonLinks 為空或不完整，初始化預設值
     if (!config.buttonLinks || config.buttonLinks.length === 0) {
@@ -412,7 +415,7 @@ const handleBannerUpload = async (event: Event, device: 'pc' | 'tablet' | 'mobil
     alert('圖片上傳失敗')
   } finally {
     loading.value = false
-    ; (event.target as HTMLInputElement).value = ''
+      ; (event.target as HTMLInputElement).value = ''
   }
 }
 
@@ -1084,17 +1087,21 @@ const resetFloatAdButtons = async () => {
   }
 }
 
-// RouteLinks 管理方法
+// RouteLi// RouteLinks 管理方法
 // 處理推薦路線圖片上傳
-const handleRouteLinksImageUpload = async (event: Event, imageType: 'default' | 'hover') => {
+const handleRouteLinksImageUpload = async (event: Event, index: number, imageType: 'default' | 'hover') => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
   loading.value = true
   try {
-    const response = await configService.uploadImage(file, `routeLinks.${imageType}`)
+    const response = await configService.uploadImage(file, `routeLinks.${index}.${imageType}`)
     if (response.success && response.data) {
-      config.routeLinks[imageType] = response.data.path
+      if (!config.routeLinks[index]) {
+        // Ensure object exists
+        (config.routeLinks as any)[index] = { default: '', hover: '' }
+      }
+      (config.routeLinks as any)[index][imageType] = response.data.path
       hasChanges.value = true
       // 立即保存並重新載入預覽
       await configService.updateConfig(config)
@@ -1112,8 +1119,10 @@ const handleRouteLinksImageUpload = async (event: Event, imageType: 'default' | 
 }
 
 // 刪除推薦路線圖片
-const removeRouteLinksImage = async (imageType: 'default' | 'hover') => {
-  config.routeLinks[imageType] = ''
+const removeRouteLinksImage = async (index: number, imageType: 'default' | 'hover') => {
+  if ((config.routeLinks as any)[index]) {
+    (config.routeLinks as any)[index][imageType] = ''
+  }
   hasChanges.value = true
   // 立即保存並重新載入預覽
   loading.value = true
@@ -1132,11 +1141,12 @@ const removeRouteLinksImage = async (imageType: 'default' | 'hover') => {
 // 重置推薦路線為預設值
 const resetRouteLinks = async () => {
   if (confirm('確定要重置推薦路線為預設配置嗎？這將清除所有自定義設置。')) {
-    // 設置為預設的推薦路線配置
-    config.routeLinks = {
+    // 設置為預設的推薦路線配置 (6組)
+    config.routeLinks = Array(6).fill(null).map(() => ({
       default: "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
       hover: "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png"
-    }
+    })) as any
+
     hasChanges.value = true
     // 立即保存並重新載入預覽
     loading.value = true
