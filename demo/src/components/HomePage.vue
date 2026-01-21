@@ -279,7 +279,8 @@ onUnmounted(() => {
               <div class="links">
                 <div v-for="(route, index) in recommendedRoutes" :key="route.id" class="item">
                   <ImageButton v-if="effectiveRouteLinks[index]" :default-src="effectiveRouteLinks[index].default"
-                    :hover-src="effectiveRouteLinks[index].hover" :alt="route.title" :href="route.href" />
+                    :hover-src="effectiveRouteLinks[index].hover" :alt="route.title"
+                    :href="effectiveRouteLinks[index].href || route.href" />
                 </div>
               </div>
             </div>

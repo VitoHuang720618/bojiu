@@ -16,6 +16,14 @@
                     <div class="card-header">
                         <h5>線路 {{ index + 1 }}</h5>
                     </div>
+
+                    <div class="input-section">
+                        <label>連結網址 (HREF)</label>
+                        <input type="text" :value="link.href"
+                            @change="(e) => $emit('update', index, 'href', (e.target as HTMLInputElement).value)"
+                            placeholder="請輸入跳轉連結 (https://...)" class="form-control" />
+                    </div>
+
                     <div class="dual-upload-row">
                         <!-- Default -->
                         <div class="upload-slot">
@@ -64,6 +72,7 @@
 interface RouteLink {
     default: string
     hover: string
+    href?: string
 }
 
 defineProps<{
@@ -75,6 +84,7 @@ defineEmits<{
     (e: 'reset'): void
     (e: 'upload', event: Event, index: number, type: 'default' | 'hover'): void
     (e: 'removeImage', index: number, type: 'default' | 'hover'): void
+    (e: 'update', index: number, key: string, value: string): void
 }>()
 </script>
 
@@ -107,17 +117,44 @@ defineEmits<{
 }
 
 .card-header h5 {
-    margin: 0 0 15px 0;
+    margin: 0 0 0px 0;
     color: #333;
-    border-bottom: 1px solid #f8f9fa;
-    padding-bottom: 10px;
     font-size: 1rem;
+}
+
+.input-section {
+    margin: 15px 0;
+}
+
+.input-section label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: border-color 0.15s;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .dual-upload-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    border-top: 1px solid #f8f9fa;
+    padding-top: 15px;
 }
 
 .upload-slot {

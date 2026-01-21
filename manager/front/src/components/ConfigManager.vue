@@ -55,7 +55,7 @@
             <!-- Route Links 配置 -->
             <RouteLinksConfigPanel v-if="activeTab === 'routelinks'" :routeLinks="config.routeLinks"
               :getImageUrl="getImageUrl" @reset="resetRouteLinks" @upload="handleRouteLinksImageUpload"
-              @removeImage="removeRouteLinksImage" />
+              @removeImage="removeRouteLinksImage" @update="updateRouteLink" />
 
             <!-- Carousel 配置 -->
             <CarouselConfigPanel v-if="activeTab === 'carousel'" :carouselSlides="config.carouselSlides"
@@ -238,7 +238,8 @@ const loadConfig = async () => {
       const old = config.routeLinks as any
       config.routeLinks = Array(6).fill(null).map(() => ({
         default: old.default || '',
-        hover: old.hover || ''
+        hover: old.hover || '',
+        href: ''
       })) as any
     }
 
@@ -1143,7 +1144,8 @@ const resetRouteLinks = async () => {
     // 設置為預設的推薦路線配置 (6組)
     config.routeLinks = Array(6).fill(null).map(() => ({
       default: "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
-      hover: "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png"
+      hover: "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png",
+      href: ''
     })) as any
 
     hasChanges.value = true
@@ -1159,6 +1161,31 @@ const resetRouteLinks = async () => {
     } finally {
       loading.value = false
     }
+  }
+}
+
+// 更新推薦路線文字欄位 (如 href)
+const updateRouteLink = async (index: number, key: string, value: string) => {
+  if (!config.routeLinks[index]) {
+    (config.routeLinks as any)[index] = { default: '', hover: '', href: '' }
+  }
+  (config.routeLinks as any)[index][key] = value
+  hasChanges.value = true
+
+  // 這裡不自動儲存，僅標記變更，因為使用者可能還在打字
+  // 但如果需要即時生效到預覽(如果有渲染連結的話)，可以考慮 debounce save
+  // 這裡簡單起見，我們手動保存或等使用者切換，但考慮到 Panel 行為...
+  // 使用者通常打完字希望生效，我們可以可以直接儲存
+
+  loading.value = true
+  try {
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    // reloadPreview() // 預覽如果有點擊功能可 reload，目前主要是視覺
+  } catch (error) {
+    console.error('更新推薦路線連結失敗:', error)
+  } finally {
+    loading.value = false
   }
 }
 

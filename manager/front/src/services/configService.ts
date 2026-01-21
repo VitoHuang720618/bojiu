@@ -31,6 +31,7 @@ export interface ConfigData {
   routeLinks: Array<{
     default: string
     hover: string
+    href: string
   }>
   toolIcons: Array<{
     href: string
