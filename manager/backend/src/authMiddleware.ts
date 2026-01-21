@@ -49,7 +49,7 @@ export class AuthMiddleware {
           // Try to authenticate if token is present, but don't fail if missing
           const authHeader = req.headers.authorization;
           const token = this.authService.extractTokenFromHeader(authHeader);
-          
+
           if (token) {
             try {
               const validation = await this.authService.validateToken(token);
@@ -60,12 +60,16 @@ export class AuthMiddleware {
               // Ignore authentication errors for optional auth
             }
           }
-          
+
           return next();
         }
 
-        // Check rate limiting for authentication attempts
+        // Extract token from Authorization header
+        const authHeader = req.headers.authorization;
+        const token = this.authService.extractTokenFromHeader(authHeader);
         const clientId = this.getClientId(req);
+
+        // Check rate limiting for authentication attempts
         if (this.isRateLimited(clientId, rateLimitAttempts, rateLimitWindow)) {
           return res.status(429).json({
             success: false,
@@ -74,12 +78,8 @@ export class AuthMiddleware {
           });
         }
 
-        // Extract token from Authorization header
-        const authHeader = req.headers.authorization;
-        const token = this.authService.extractTokenFromHeader(authHeader);
-
         if (!token) {
-          this.recordFailedAttempt(clientId);
+          // No token is just "not logged in", doesn't count as a failed "attack" attempt
           return res.status(401).json({
             success: false,
             error: 'Authentication token required'
@@ -88,7 +88,7 @@ export class AuthMiddleware {
 
         // Validate token
         const validation = await this.authService.validateToken(token);
-        
+
         if (!validation.valid || !validation.user) {
           this.recordFailedAttempt(clientId);
           return res.status(401).json({
@@ -155,7 +155,7 @@ export class AuthMiddleware {
   /**
    * Get client identifier for rate limiting
    */
-  private getClientId(req: Request): string {
+  public getClientId(req: Request): string {
     // Use IP address as client identifier
     return req.ip || req.socket.remoteAddress || 'unknown';
   }
@@ -203,7 +203,7 @@ export class AuthMiddleware {
   /**
    * Reset rate limit for client
    */
-  private resetRateLimit(clientId: string): void {
+  public resetRateLimit(clientId: string): void {
     this.rateLimitMap.delete(clientId);
   }
 
@@ -223,8 +223,8 @@ export class AuthMiddleware {
       '/api/auth/change-password',
       '/api/users/change-password'
     ];
-    
-    return passwordChangeEndpoints.some(endpoint => 
+
+    return passwordChangeEndpoints.some(endpoint =>
       req.path.includes(endpoint) || req.originalUrl.includes(endpoint)
     );
   }
@@ -241,7 +241,7 @@ export class AuthMiddleware {
         if (token && this.authService.isTokenNearExpiration(token)) {
           // Add header to suggest token refresh
           res.setHeader('X-Token-Refresh-Suggested', 'true');
-          
+
           const expiration = this.authService.getTokenExpiration(token);
           if (expiration) {
             res.setHeader('X-Token-Expires-At', expiration.toISOString());
@@ -263,15 +263,15 @@ export class AuthMiddleware {
     return (req: Request, res: Response, next: NextFunction) => {
       // Store original res.json to intercept response
       const originalJson = res.json;
-      
-      res.json = function(body: any) {
+
+      res.json = function (body: any) {
         // Log authentication events
         if (req.user) {
           console.log(`Auth Event: ${req.method} ${req.path} - User: ${req.user.username} (${req.user.role}) - IP: ${req.ip}`);
         } else if (req.path.includes('/auth/') || req.path.includes('/login')) {
           console.log(`Auth Attempt: ${req.method} ${req.path} - IP: ${req.ip} - Success: ${body.success || false}`);
         }
-        
+
         return originalJson.call(this, body);
       };
 
@@ -284,7 +284,7 @@ export class AuthMiddleware {
    */
   cleanupRateLimit(): void {
     const now = Date.now();
-    
+
     for (const [clientId, data] of this.rateLimitMap.entries()) {
       if (now > data.resetTime) {
         this.rateLimitMap.delete(clientId);
@@ -298,7 +298,7 @@ export class AuthMiddleware {
   getRateLimitStats(): { totalClients: number; blockedClients: number } {
     const now = Date.now();
     let blockedClients = 0;
-    
+
     for (const [, data] of this.rateLimitMap.entries()) {
       if (now <= data.resetTime && data.attempts >= 5) {
         blockedClients++;

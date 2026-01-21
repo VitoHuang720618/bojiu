@@ -7,16 +7,16 @@ import express, { Request, Response } from 'express';
 import { AuthService } from './authService.js';
 import { UserService } from './userService.js';
 import { AuthMiddleware } from './authMiddleware.js';
-import { 
-  LoginRequest, 
-  CreateUserRequest, 
+import {
+  LoginRequest,
+  CreateUserRequest,
   UpdateUserRequest,
-  User 
+  User
 } from './userTypes.js';
 
 export function createUserRoutes(
-  authService: AuthService, 
-  userService: UserService, 
+  authService: AuthService,
+  userService: UserService,
   authMiddleware: AuthMiddleware
 ): express.Router {
   const router = express.Router();
@@ -47,9 +47,12 @@ export function createUserRoutes(
       const result = await authService.authenticate(loginData);
 
       if (result.success) {
+        // Reset rate limit on successful authentication
+        authMiddleware.resetRateLimit(authMiddleware.getClientId(req));
+
         // Generate refresh token
         const refreshToken = authService.generateRefreshToken(result.user!);
-        
+
         res.json({
           success: true,
           user: result.user,
@@ -89,6 +92,9 @@ export function createUserRoutes(
       const result = await authService.refreshToken(refreshToken);
 
       if (result.success) {
+        // Reset rate limit on successful token refresh
+        authMiddleware.resetRateLimit(authMiddleware.getClientId(req));
+
         res.json({
           success: true,
           token: result.token,
@@ -215,7 +221,7 @@ export function createUserRoutes(
   router.get('/users/:id', authMiddleware.requireAdmin(), async (req: Request, res: Response) => {
     try {
       const userId = parseInt(req.params.id);
-      
+
       if (isNaN(userId)) {
         return res.status(400).json({
           success: false,
@@ -224,7 +230,7 @@ export function createUserRoutes(
       }
 
       const user = await userService.getUserById(userId);
-      
+
       if (!user) {
         return res.status(404).json({
           success: false,
@@ -281,17 +287,17 @@ export function createUserRoutes(
       });
     } catch (error) {
       console.error('Create user error:', error);
-      
+
       // Handle specific validation errors
       if (error instanceof Error) {
-        if (error.message.includes('Username already exists') || 
-            error.message.includes('Email already exists')) {
+        if (error.message.includes('Username already exists') ||
+          error.message.includes('Email already exists')) {
           return res.status(409).json({
             success: false,
             error: error.message
           });
         }
-        
+
         if (error.message.includes('Validation failed')) {
           return res.status(400).json({
             success: false,
@@ -345,7 +351,7 @@ export function createUserRoutes(
       });
     } catch (error) {
       console.error('Update user error:', error);
-      
+
       // Handle specific errors
       if (error instanceof Error) {
         if (error.message.includes('User not found')) {
@@ -354,15 +360,15 @@ export function createUserRoutes(
             error: error.message
           });
         }
-        
-        if (error.message.includes('Username already exists') || 
-            error.message.includes('Email already exists')) {
+
+        if (error.message.includes('Username already exists') ||
+          error.message.includes('Email already exists')) {
           return res.status(409).json({
             success: false,
             error: error.message
           });
         }
-        
+
         if (error.message.includes('Validation failed')) {
           return res.status(400).json({
             success: false,
@@ -417,7 +423,7 @@ export function createUserRoutes(
       }
     } catch (error) {
       console.error('Delete user error:', error);
-      
+
       // Handle specific errors
       if (error instanceof Error) {
         if (error.message.includes('Cannot delete the last admin user')) {
@@ -426,7 +432,7 @@ export function createUserRoutes(
             error: error.message
           });
         }
-        
+
         if (error.message.includes('User not found')) {
           return res.status(404).json({
             success: false,
