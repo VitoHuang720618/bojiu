@@ -86,10 +86,11 @@ export const banner = {
 
 export const backgroundImage = "/defaults/backgroundImage.png"
 
-export const routeLinksImages = {
-  "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
-  "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png"
-}
+export const routeLinksImages = Array(6).fill(null).map((_, i) => ({
+  default: `/assets/images/Lineweb-btn-${i + 1}.webp`,
+  hover: `/assets/images/Lineweb-btn-${i + 1}-hover.webp`,
+  href: ''
+}))
 
 export const recommendedRoutes = [
   {

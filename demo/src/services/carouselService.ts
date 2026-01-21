@@ -21,7 +21,7 @@ class CarouselService {
     buttonLinks: ({ text: string, href: string, target: string, defaultImage?: string, hoverImage?: string } | null)[],
     toolIcons: ({ id: string, default: string, hover: string, alt: string, href: string } | null)[],
     floatAdButtons?: ({ default: string, hover: string, href: string, alt: string } | null)[],
-    routeLinks?: { default: string, hover: string } | null
+    routeLinks?: Array<{ default: string, hover: string, href: string }> | null
   }> {
     try {
       // 檢查是否啟用了 API
@@ -67,7 +67,7 @@ class CarouselService {
             href: f.href,
             alt: f.name
           })),
-          routeLinks: routeLinksImages
+          routeLinks: routeLinksImages as any
         }
       }
 
@@ -122,10 +122,11 @@ class CarouselService {
             hover: processImageUrl(button.hover)
           } : null
         ),
-        routeLinks: config.routeLinks ? {
-          default: processImageUrl(config.routeLinks.default),
-          hover: processImageUrl(config.routeLinks.hover)
-        } : null
+        routeLinks: Array.isArray(config.routeLinks) ? config.routeLinks.map((route: any) => ({
+          default: processImageUrl(route.default),
+          hover: processImageUrl(route.hover),
+          href: route.href || ''
+        })) : null
       }
     } catch (error: any) {
       // 這裡不再打印 Error，保持主控台乾淨
@@ -141,33 +142,15 @@ class CarouselService {
             href: '#',
             alt: '輪播圖 1'
           },
-          {
-            image: '/assets/images/tools-title.webp',
-            href: '#',
-            alt: '輪播圖 2'
-          },
-          {
-            image: '/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png',
-            href: '#',
-            alt: '輪播圖 3'
-          },
-          {
-            image: '/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png',
-            href: '#',
-            alt: '輪播圖 4'
-          },
-          {
-            image: '/assets/images/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png',
-            href: '#',
-            alt: '輪播圖 5'
-          }
+          ...Array(4).fill(null).map((_, i) => ({ image: `/assets/images/carousel-${i + 1}.png`, href: '#', alt: `輪播圖 ${i + 2}` }))
         ],
         banner: '',
         backgroundImage: '',
         videoThumbnails: [],
         programThumbnails: [],
         buttonLinks: [],
-        toolIcons: []
+        toolIcons: [],
+        routeLinks: []
       }
     }
   }

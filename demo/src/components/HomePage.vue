@@ -26,7 +26,7 @@ const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, ti
 const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
 const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
 const apiFloatAdButtons = ref<({ href: string, default: string, hover: string } | null)[]>([])
-const apiRouteLinks = ref<{ default: string, hover: string } | null>(null)
+const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
 
 // 浮動按鈕收合狀態
 const isFloatAdCollapsed = ref(false)
@@ -154,15 +154,22 @@ const effectiveFloatAdButtons = computed(() => {
 })
 
 const effectiveRouteLinks = computed(() => {
-  // 只使用API數據，和背景圖設置一樣
-  const routeLinksData = apiRouteLinks.value
+  // 對每一條推薦路線進行映射，確保始終有 6 個位置
+  // 優先順序：API 資料內容 > 預設 Manifest 資料
+  const apiData = apiRouteLinks.value
 
-  if (Array.isArray(routeLinksData)) {
-    return routeLinksData
-  }
+  return recommendedRoutes.map((route, index) => {
+    // 獲取 API 資料中對應位置的設定
+    const apiItem = Array.isArray(apiData) ? apiData[index] : null
+    // 獲取本地資源清單中對應位置的預設圖
+    const defaultItem = assetManifest.routeLinks[index] || { default: '', hover: '' }
 
-  // 確保 assetManifest.routeLinks 是數組
-  return Array.isArray(assetManifest.routeLinks) ? assetManifest.routeLinks : []
+    return {
+      default: apiItem?.default || defaultItem.default,
+      hover: apiItem?.hover || defaultItem.hover,
+      href: apiItem?.href || route.href // 優先使用 API 連結，否則使用預設
+    }
+  })
 })
 
 const nextSlide = () => {
@@ -277,13 +284,10 @@ onUnmounted(() => {
                 <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
-                <template v-for="(route, index) in recommendedRoutes" :key="route.id">
-                  <div class="item" v-if="effectiveRouteLinks[index] && effectiveRouteLinks[index].default">
-                    <ImageButton :default-src="effectiveRouteLinks[index].default"
-                      :hover-src="effectiveRouteLinks[index].hover" :alt="route.title"
-                      :href="effectiveRouteLinks[index].href || route.href" />
-                  </div>
-                </template>
+                <div v-for="(item, index) in effectiveRouteLinks" :key="index" class="item">
+                  <ImageButton :default-src="item.default" :hover-src="item.hover"
+                    :alt="recommendedRoutes[index]?.title" :href="item.href" />
+                </div>
               </div>
             </div>
           </div>
