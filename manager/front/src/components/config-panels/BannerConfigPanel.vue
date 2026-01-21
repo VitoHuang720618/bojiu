@@ -104,9 +104,9 @@ const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
 
 <style scoped>
 .banner-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     margin-top: 20px;
 }
 
@@ -114,6 +114,8 @@ const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+    max-width: 600px; /* 限制最大寬度，避免過大 */
 }
 
 .banner-slot label {
@@ -125,16 +127,15 @@ const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
 .image-upload {
     border: 2px dashed #e0e0e0;
     border-radius: 8px;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
     position: relative;
     background: #fdfdfd;
     transition: all 0.3s ease;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 200px;
+    min-height: 180px;
 }
 
 .image-upload:hover {
@@ -144,9 +145,10 @@ const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
 
 .preview-img {
     max-width: 100%;
-    height: 150px;
+    max-height: 250px; /* 增加高度限制，讓圖片更清晰 */
+    height: auto;
     object-fit: contain;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     border-radius: 4px;
 }
 

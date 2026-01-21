@@ -192,6 +192,7 @@ defineEmits<{
 
 .form-control {
     width: 100%;
+    max-width: 600px;
     padding: 0.6rem 0.8rem;
     border: 1px solid #ced4da;
     border-radius: 6px;
@@ -204,6 +205,7 @@ defineEmits<{
     gap: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid #f1f3f5;
+    max-width: 600px; /* Constrain width */
 }
 
 .upload-slot {
