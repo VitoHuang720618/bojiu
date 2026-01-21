@@ -5,7 +5,6 @@ import ImageButton from './ImageButton.vue'
 import { assetManifest } from '../config/assetManifest'
 import {
   recommendedRoutes,
-  recommendedTools,
   carouselSlides,
   videoContent,
   programContent,
@@ -33,19 +32,23 @@ const isFloatAdCollapsed = ref(false)
 
 // 计算属性：优先使用API数据，否则使用默认数据
 const effectiveCarouselSlides = computed(() => {
-  return apiCarouselSlides.value.length > 0 ?
-    apiCarouselSlides.value.map((slide, index) => ({
+  // 如果啟用 API 模式，直接使用 API 數據
+  if (siteConfig.useApi) {
+    return apiCarouselSlides.value.map((slide, index) => ({
       id: `api-slide-${index}`,
       alt: slide.alt,
       href: slide.href,
       image: slide.image
-    })) :
-    carouselSlides.map((slide, index) => ({
-      id: slide.id,
-      alt: slide.alt,
-      href: slide.href || '#',
-      image: assetManifest.carouselSlides[index] || '' // 使用 assetManifest 中的圖片
     }))
+  }
+
+  // 回退到預設資料
+  return carouselSlides.map((slide, index) => ({
+    id: slide.id,
+    alt: slide.alt,
+    href: slide.href || '#',
+    image: assetManifest.carouselSlides[index] || '' // 使用 assetManifest 中的圖片
+  }))
 })
 
 const effectiveBanner = computed(() => {
@@ -58,9 +61,11 @@ const effectiveBackgroundImage = computed(() => {
 })
 
 const effectiveVideoThumbnails = computed(() => {
-  if (apiVideoThumbnails.value.length > 0) {
+  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
+  if (siteConfig.useApi) {
     return apiVideoThumbnails.value
   }
+
   // 回退到預設資料
   return videoContent.map((video, index) => ({
     image: assetManifest.videoThumbnails[index] || '',
@@ -71,9 +76,11 @@ const effectiveVideoThumbnails = computed(() => {
 })
 
 const effectiveProgramThumbnails = computed(() => {
-  if (apiProgramThumbnails.value.length > 0) {
+  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
+  if (siteConfig.useApi) {
     return apiProgramThumbnails.value
   }
+
   // 回退到預設資料
   return programContent.map((program, index) => ({
     image: assetManifest.programThumbnails[index] || '',
@@ -86,7 +93,8 @@ const effectiveProgramThumbnails = computed(() => {
 const effectiveButtonLinks = computed(() => {
   const buttonLinksData = apiButtonLinks.value
 
-  if (buttonLinksData.length > 0) {
+  // 如果啟用 API 模式，優先使用 API 數據 (即使為空)
+  if (siteConfig.useApi) {
     return buttonLinksData.map((button, index) => ({
       id: `api-button-${index}`,
       text: button?.text || '',
@@ -135,7 +143,8 @@ const effectiveToolIcons = computed(() => {
 const effectiveFloatAdButtons = computed(() => {
   const floatAdButtonsData = apiFloatAdButtons.value
 
-  if (floatAdButtonsData.length > 0) {
+  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
+  if (siteConfig.useApi) {
     return floatAdButtonsData.map((button, index) => ({
       id: `api-floatad-${index}`,
       href: button?.href || '#',
