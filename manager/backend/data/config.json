@@ -1,5 +1,5 @@
 {
-  "logo": "/assets/images/logo.png",
+  "logo": "",
   "banner": {
     "pc": "http://localhost:3002/uploads/banner-pc.png",
     "tablet": "http://localhost:3002/uploads/banner-tablet.png",
@@ -39,143 +39,238 @@
   "carouselSlides": [
     {
       "image": "http://localhost:3002/uploads/carousel-0.png",
+      "title": "",
       "href": "",
-      "alt": "輪播圖 1"
+      "description": ""
+    },
+    {
+      "image": "http://localhost:3002/uploads/carousel-1.png",
+      "title": "",
+      "href": "",
+      "description": ""
     }
   ],
   "titles": {
-    "recommendedRoutes": "/assets/images/crown-icon.webp",
-    "recommendedBrowsers": "/assets/images/tools-title.webp",
-    "selectedVideos": "/assets/images/live-title.webp",
-    "hotPrograms": "/assets/images/sport-title.webp"
+    "recommendedRoutes": "",
+    "recommendedBrowsers": "",
+    "selectedVideos": "",
+    "hotPrograms": ""
   },
-  "routeLinks": {
-    "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
-    "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png"
-  },
+  "routeLinks": [
+    {
+      "default": "",
+      "hover": "",
+      "href": "http://www.yahoo.com.tw"
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    }
+  ],
   "toolIcons": [
     {
-      "href": "https://live.titan007.com/oldIndexall.aspx",
-      "default": "http://localhost:3002/uploads/tool-0-default.png",
-      "hover": "http://localhost:3002/uploads/tool-0-hover.png"
+      "href": "https://www.xiaohongshu.com",
+      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
     },
     {
-      "href": "https://live.leisu.com/",
-      "default": "http://localhost:3002/uploads/tool-1-default.png",
-      "hover": "http://localhost:3002/uploads/tool-1-hover.png"
+      "href": "https://www.douyin.com",
+      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
+      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
     },
     {
-      "href": "https://live.nowscore.com/2in1.aspx",
-      "default": "http://localhost:3002/uploads/tool-2-default.png",
-      "hover": "http://localhost:3002/uploads/tool-2-hover.png"
-    },
-    {
-      "href": "https://v.douyin.com/KZUpEUBUIlI/",
-      "default": "http://localhost:3002/uploads/tool-3-default.png",
-      "hover": "http://localhost:3002/uploads/tool-3-hover.png"
-    },
-    {
-      "href": "https://www.baidu.com/",
-      "default": "http://localhost:3002/uploads/tool-4-default.png",
-      "hover": "http://localhost:3002/uploads/tool-4-hover.png"
-    },
-    {
-      "href": "https://x.com/ezfun9527",
-      "default": "http://localhost:3002/uploads/tool-5-default.png",
-      "hover": "http://localhost:3002/uploads/tool-5-hover.png"
+      "href": "https://www.baidu.com",
+      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
+      "hover": ""
     }
   ],
   "videoThumbnails": [
     {
-      "image": "http://localhost:3002/uploads/videoThumbnails-0-image.png",
-      "href": "https://fun99888.com/index.php/sport-information/",
-      "alt": "",
-      "title": "甜美Aura"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "http://localhost:3002/uploads/videoThumbnails-1-image.png",
-      "href": "https://fun99888.com/index.php/sport-information/",
-      "alt": "",
-      "title": "变态马洛"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/c370f50d-c248-4167-927f-c9af0bae3351.png",
-      "href": "https://fun99888.com/index.php/sport-information/",
-      "alt": "",
-      "title": "蹦蹦冲啊"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/612623c8-aa39-44be-8eec-6d57d645bcfb.png",
-      "href": "https://fun99888.com/index.php/sport-information/",
-      "alt": "",
-      "title": "阳光Hank"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/4e67c664-2a43-4ac2-9e09-dff556a007ce.png",
-      "href": "https://example.com/video5",
-      "alt": "",
-      "title": "专属福利"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/af698bb9-9183-4714-b568-fa7ef0721cfc.png",
-      "href": "https://fun99888.com/index.php/sport-information/",
-      "alt": "",
-      "title": "撩人双飞闺蜜秀"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     }
   ],
   "programThumbnails": [
     {
-      "image": "http://localhost:3002/uploads/programThumbnails-0-image.png",
-      "href": "https://www.fun99666.com/index.php/funfans/",
-      "alt": "",
-      "title": "Fun乐园圣典直播"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/c67bb6cc-e00c-4811-a62a-38604bda41f7.png",
-      "href": "https://example.com/program2",
-      "alt": "火熱節目 2",
-      "title": "熱門節目 2"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/391bcfda-fff2-4a55-b3d2-444884ddf87f.png",
-      "href": "https://example.com/program3",
-      "alt": "火熱節目 3",
-      "title": "熱門節目 3"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/a1d2e390-0a0f-4dde-8d9b-6de5bb9f4de0.jpg",
-      "href": "https://example.com/program4",
-      "alt": "火熱節目 4",
-      "title": "熱門節目 4"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/626e1c19-bf48-40ed-9a2f-8e2a8e4dce13.png",
-      "href": "https://example.com/program5",
-      "alt": "火熱節目 5",
-      "title": "熱門節目 5"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     },
     {
-      "image": "/assets/images/95e0ab84-342d-4bf0-8cbc-3b6e107308f3.jpg",
-      "href": "https://example.com/program6",
-      "alt": "火熱節目 6",
-      "title": "熱門節目 6"
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     }
   ],
   "floatAdButtons": [
     {
-      "href": "https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777",
-      "default": "http://localhost:3002/uploads/float-0-default.png",
-      "hover": "http://localhost:3002/uploads/float-0-hover.png"
+      "href": "https://example.com/customer-service",
+      "default": "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
+      "hover": "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png",
+      "mobile": ""
     },
     {
-      "href": "https://v.douyin.com/KZUpEUBUIlI/",
-      "default": "http://localhost:3002/uploads/float-1-default.png",
-      "hover": "http://localhost:3002/uploads/float-1-hover.png"
+      "href": "https://example.com/girl-douyin",
+      "default": "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
+      "hover": "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png",
+      "mobile": ""
     },
     {
-      "href": "https://www.fun99666.com/",
-      "default": "http://localhost:3002/uploads/float-2-default.png",
-      "hover": "http://localhost:3002/uploads/float-2-hover.png"
+      "href": "https://example.com/sports-douyin",
+      "default": "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
+      "hover": "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png",
+      "mobile": ""
     }
   ]
 }

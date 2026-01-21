@@ -12,7 +12,8 @@
     "dev:backend": "yarn workspace backend dev",
     "build:demo": "yarn workspace b9-website-recreation-demo build",
     "build:manager": "yarn workspace b9-website-recreation-manager build",
-    "build:all": "yarn build:demo && yarn build:manager"
+    "build:all": "yarn build:demo && yarn build:manager",
+    "sync:config": "node scripts/sync-config.js"
   },
   "devDependencies": {
     "typescript": "^5.3.0"
