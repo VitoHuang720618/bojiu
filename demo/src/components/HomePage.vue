@@ -981,8 +981,8 @@ onUnmounted(() => {
 
   .recommend-links .links .item img {
     width: 100% !important;
-    height: 100% !important;
-    object-fit: fill !important;
+    height: auto !important;
+    object-fit: contain !important;
   }
 
   .recommend-routes-title {
@@ -1006,7 +1006,7 @@ onUnmounted(() => {
 
 @media (max-width: 739px) {
   .recommend-links .links {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
   }
 
@@ -1019,8 +1019,8 @@ onUnmounted(() => {
 
 @media (max-width: 430px) {
   .recommend-links .links {
-    grid-template-columns: repeat(2, 166px) !important;
-    gap: 15px 10px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px 8px !important;
     justify-content: center !important;
     width: 100% !important;
   }
