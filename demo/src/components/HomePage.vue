@@ -767,7 +767,8 @@ onUnmounted(() => {
   width: 100%;
   /* height: 410px; Removed fixed height for tighter fit */
   height: auto;
-  background: rgba(41, 13, 16, 0.80);
+  background: rgba(41, 13, 16, 0.40);
+  /* 經用戶調整：顏色調淡 (0.8 -> 0.4) */
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
   padding: 25px 27px;
