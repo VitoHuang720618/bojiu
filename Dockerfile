@@ -21,7 +21,7 @@ RUN npx vite build
 FROM nginx:alpine
 
 # Install Node.js for backend
-RUN apk add --no-cache nodejs npm curl
+RUN apk add --no-cache nodejs npm curl openssl
 
 # Copy built frontends
 COPY --from=builder /build/demo/dist /usr/share/nginx/html/demo
@@ -47,9 +47,9 @@ RUN npm prune --production
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 # Create required directories with proper permissions
-RUN mkdir -p /app/uploads /app/data && \
-    chown -R nginx:nginx /app/uploads /app/data && \
-    chmod 755 /app/uploads /app/data
+RUN mkdir -p /app/uploads /app/data /etc/nginx/ssl && \
+    chown -R nginx:nginx /app/uploads /app/data /etc/nginx/ssl && \
+    chmod 755 /app/uploads /app/data /etc/nginx/ssl
 
 # Create volume mount points
 VOLUME ["/app/uploads", "/app/data"]
@@ -65,5 +65,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     curl -f http://localhost:${PORT:-80}/ >/dev/null && \
     curl -f http://localhost:${PORT:-80}/admin/ >/dev/null || exit 1
 
-EXPOSE 80
+EXPOSE 80 443
 CMD ["/start.sh"]

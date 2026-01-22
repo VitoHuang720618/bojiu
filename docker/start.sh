@@ -78,6 +78,27 @@ log "  UPLOAD_PATH: $UPLOAD_PATH"
 log "  CONFIG_PATH: $CONFIG_PATH"
 log "  MAX_FILE_SIZE: $MAX_FILE_SIZE bytes"
 
+# SSL Certificate Generation
+log "Checking SSL certificates..."
+if [ ! -f /etc/nginx/ssl/server.crt ] || [ ! -f /etc/nginx/ssl/server.key ]; then
+    log "Generating self-signed SSL certificate..."
+    # Create directory if it doesn't exist (though Dockerfile creates it)
+    mkdir -p /etc/nginx/ssl
+    
+    # Generate certificate
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout /etc/nginx/ssl/server.key \
+        -out /etc/nginx/ssl/server.crt \
+        -subj "/C=TW/ST=Taipei/L=Taipei/O=B9Website/OU=Web/CN=localhost" \
+        2>/dev/null
+        
+    chmod 644 /etc/nginx/ssl/server.crt
+    chmod 600 /etc/nginx/ssl/server.key
+    log "Self-signed certificate generated."
+else
+    log "SSL certificates found."
+fi
+
 # Process Nginx configuration to inject the dynamic port
 log "Configuring Nginx to listen on port $NGINX_LISTEN_PORT..."
 # Use sed to replace the placeholder with the actual port
