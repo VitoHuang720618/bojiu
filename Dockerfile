@@ -45,6 +45,7 @@ RUN npm prune --production
 
 # Copy Nginx configuration
 COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/.htpasswd /etc/nginx/.htpasswd
 
 # Create required directories with proper permissions
 RUN mkdir -p /app/uploads /app/data /etc/nginx/ssl && \
