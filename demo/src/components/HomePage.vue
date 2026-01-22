@@ -217,9 +217,7 @@ onMounted(async () => {
   startCarousel()
 })
 
-const onBannerSizeLoaded = () => {
-  // 當原圖載入完成後，佔位區域會自動獲得相同尺寸
-}
+
 
 // 切換浮動按鈕收合狀態
 const toggleFloatAd = (event?: Event) => {
