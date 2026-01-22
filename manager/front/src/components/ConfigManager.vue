@@ -1,21 +1,39 @@
 <template>
   <div class="config-manager-layout">
     <!-- Sidebar Navigation -->
-    <aside class="sidebar">
+    <aside class="sidebar" :class="{ 'collapsed': isSidebarCollapsed }">
       <div class="sidebar-header">
-        <h1>配置管理</h1>
+        <h1 v-show="!isSidebarCollapsed">配置管理</h1>
+        <button class="toggle-btn" @click="isSidebarCollapsed = !isSidebarCollapsed">
+          {{ isSidebarCollapsed ? '☰' : '◀' }}
+        </button>
       </div>
 
       <nav class="nav-menu">
         <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
-          :class="['nav-item', { active: activeTab === tab.id }]">
-          {{ tab.label }}
+          :class="['nav-item', { active: activeTab === tab.id }]" :title="isSidebarCollapsed ? tab.label : ''">
+          <span class="nav-icon" v-if="tab.icon">{{ tab.icon }}</span>
+          <span class="nav-label" v-show="!isSidebarCollapsed">{{ tab.label }}</span>
         </button>
       </nav>
 
       <div class="sidebar-footer">
-        <button @click="loadConfig" class="btn btn-secondary">重新載入</button>
-        <button @click="saveConfig" class="btn btn-primary" :disabled="!hasChanges">保存配置</button>
+        <button @click="loadConfig" class="btn btn-secondary" :title="isSidebarCollapsed ? '重新載入' : ''">
+          <span v-if="isSidebarCollapsed">↻</span>
+          <span v-else>重新載入</span>
+        </button>
+        <button @click="saveConfig" class="btn btn-primary" :disabled="!hasChanges"
+          :title="isSidebarCollapsed ? '保存配置' : ''">
+          <span v-if="isSidebarCollapsed">💾</span>
+          <span v-else>保存配置</span>
+        </button>
+        <div class="publish-section">
+          <button @click="publishConfig" class="btn btn-danger btn-block" :disabled="hasChanges"
+            :title="isSidebarCollapsed ? '發布為靜態預設' : ''">
+            <span v-if="isSidebarCollapsed">🚀</span>
+            <span v-else>發布為靜態預設</span>
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -133,6 +151,7 @@ import { configService, type ConfigData } from '../services/configService'
 
 const loading = ref(false)
 const hasChanges = ref(false)
+const isSidebarCollapsed = ref(false)
 // removed mainActiveTab logic
 
 const activeTab = ref('banner')
@@ -174,17 +193,17 @@ const previewFrameStyle = computed(() => {
 })
 
 const tabs = [
-  { id: 'basic', label: '基本設置' },
-  { id: 'banner', label: 'Banner' },
-  { id: 'background', label: '背景圖' },
-  { id: 'buttonlinks', label: '按鈕鏈接' },
-  { id: 'toolicons', label: '工具圖標' },
-  { id: 'routelinks', label: '推薦路線' },
-  { id: 'carousel', label: '輪播圖' },
-  { id: 'videos', label: '娛樂直播' },
-  { id: 'programs', label: '賽事精選' },
-  { id: 'floatads', label: '浮動廣告' },
-  { id: 'preview', label: '預覽頁面' }
+  { id: 'basic', label: '基本設置', icon: '⚙️' },
+  { id: 'banner', label: 'Banner', icon: '🖼️' },
+  { id: 'background', label: '背景圖', icon: '🌄' },
+  { id: 'buttonlinks', label: '按鈕鏈接', icon: '🔗' },
+  { id: 'toolicons', label: '工具圖標', icon: '🛠️' },
+  { id: 'routelinks', label: '推薦路線', icon: '🛣️' },
+  { id: 'carousel', label: '輪播圖', icon: '🎠' },
+  { id: 'videos', label: '娛樂直播', icon: '🎬' },
+  { id: 'programs', label: '賽事精選', icon: '🏆' },
+  { id: 'floatads', label: '浮動廣告', icon: '📢' },
+  { id: 'preview', label: '預覽頁面', icon: '👁️' }
 ]
 
 const currentTabLabel = computed(() => {
@@ -382,6 +401,23 @@ const saveConfig = async () => {
   } catch (error) {
     console.error('保存配置失敗:', error)
     alert('保存配置失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+const publishConfig = async () => {
+  if (!confirm('確定要發布當前配置為靜態預設值嗎？\n這將生成 site-settings.json 並複製所有圖片到 demo 目錄。\n發布後，即使關閉 useApi，前台也會顯示這些內容。')) {
+    return
+  }
+
+  loading.value = true
+  try {
+    await configService.publishConfig()
+    alert('發布成功！\n現在您可以關閉 API 依賴，Demo 網站將使用這些靜態設定。')
+  } catch (error) {
+    console.error('Failed to publish config:', error)
+    alert('發布失敗: ' + (error instanceof Error ? error.message : '未知錯誤'))
   } finally {
     loading.value = false
   }
@@ -1238,158 +1274,215 @@ onMounted(() => {
   loadConfig()
 
 }) </script>
+
 <style scoped>
+/* Layout Container */
 .config-manager-layout {
   display: flex;
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   overflow: hidden;
   background-color: #f5f7fa;
-  flex-direction: column;
-  /* Change to column */
+  flex-direction: row;
+  /* Default to Row (Sidebar Left) for Desktop */
 }
 
-/* Top Navbar (Sidebar) */
+/* Sidebar (Desktop) */
 .sidebar {
-  width: 100%;
-  height: auto;
-  background: #ffffff;
-  border-bottom: 1px solid #e1e4e8;
+  width: 260px;
+  height: 100%;
+  background: #2c3e50;
+  /* Dark sidebar */
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   flex-shrink: 0;
   z-index: 10;
-  padding: 0 1rem;
+  color: white;
+  border-right: 1px solid #ddd;
+  transition: width 0.3s ease;
+}
+
+.sidebar.collapsed {
+  width: 60px;
 }
 
 .sidebar-header {
   padding: 1rem;
-  border-bottom: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
-  margin-right: 1rem;
-}
-
-.sidebar-header h1 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1a1f36;
+  color: white;
   margin: 0;
 }
 
 .nav-menu {
   flex: 1;
   display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0;
-  height: 100%;
-  align-items: center;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 0;
 }
 
 .nav-item {
-  width: auto;
-  text-align: center;
-  padding: 1rem 1.2rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.8rem 1.5rem;
   background: none;
   border: none;
-  border-bottom: 3px solid transparent;
-  /* Changed to bottom */
-  color: #4f566b;
+  border-left: 4px solid transparent;
+  color: #a0aec0;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .nav-item {
+  padding: 0.8rem 0;
+  justify-content: center;
+}
+
+.nav-icon {
+  margin-right: 10px;
+}
+
+.sidebar.collapsed .nav-icon {
+  margin-right: 0;
 }
 
 .nav-item:hover {
-  background-color: #f7f9fc;
-  color: #1a1f36;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
 }
 
 .nav-item.active {
-  background-color: transparent;
-  color: #007bff;
-  border-bottom-color: #007bff;
-  /* Changed to bottom */
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-left-color: #007bff;
 }
 
 .sidebar-footer {
-  padding: 0.5rem 1rem;
-  border-top: none;
-  background: transparent;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.publish-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
+  margin-top: 5px;
 }
 
 /* Main Content */
 .main-content {
   flex: 1;
   display: flex;
-  overflow: hidden;
-}
-
-/* Editor Pane */
-.editor-pane {
-  flex: 1;
-  display: flex;
   flex-direction: column;
-  background: #fff;
-  transition: width 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+  /* Prevent flex overflow */
 }
 
+/* Responsive: Mobile/Tablet (< 1024px) */
+@media (max-width: 1024px) {
+  .config-manager-layout {
+    flex-direction: column;
+    /* Stack vertically */
+  }
 
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding:
+      0.5rem;
+    background: #2c3e50;
+    overflow-x: auto;
+    /* Allow horizontal scroll for nav */
+  }
 
-/* Main Content Layout Updates */
-.main-content {
-  flex-direction: column !important;
+  .sidebar-header {
+    padding:
+      0.5rem 1rem;
+    border-bottom: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    margin-right: 0.5rem;
+  }
+
+  .sidebar-header h1 {
+    font-size: 1rem;
+  }
+
+  .nav-menu {
+    flex-direction: row;
+    padding: 0;
+    overflow-x: auto;
+    align-items:
+      center;
+    height: 100%;
+  }
+
+  .nav-item {
+    width: auto;
+    padding: 0.5rem 1rem;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .nav-item.active {
+    border-left-color: transparent;
+    border-bottom-color: #007bff;
+  }
+
+  .sidebar-footer {
+    display: none;
+    /* Hide footer buttons in top bar to save space, maybe move to a modal or bottom bar? */
+    /*
+  Alternatively, keep them but compact */
+  }
+
+  /* Show a mobile specific action bar or keep them if space allows */
 }
 
-.view-mode-bar {
-  display: flex;
-  justify-content: center;
-  padding: 0.75rem;
-  background: #fff;
-  border-bottom: 1px solid #e1e4e8;
-  flex-shrink: 0;
-}
+/*
+  Specific fix: If sidebar-footer is hidden on mobile, we need a way to access actions. Let's keep them but make them
+  compact or put them in a separate bar. For now, let's allow them to wrap or stay on the right. */
+@media (max-width: 1024px) {
+  .sidebar-footer {
+    display: flex;
+    flex-direction: row;
+    padding: 0.25rem;
+    background: none;
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    margin-left: auto;
+    /* Push to right */
+    gap: 5px;
+  }
 
-.mode-group {
-  display: flex;
-  background: #f1f3f5;
-  padding: 4px;
-  border-radius: 8px;
-  gap: 4px;
-}
+  .publish-section {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 10px;
+    margin-left: 5px;
+  }
 
-.mode-btn {
-  padding: 6px 16px;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #6c757d;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s;
-}
-
-.mode-btn:hover {
-  color: #495057;
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.mode-btn.active {
-  background: #fff;
-  color: #007bff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  font-weight: 500;
+  .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
 }
 
 .panels-container {
@@ -1403,7 +1496,8 @@ onMounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background:
+    #fff;
   border-right: 1px solid #e1e4e8;
   min-width: 0;
 }
@@ -1421,7 +1515,8 @@ onMounted(() => {
 }
 
 .editor-body {
-  flex: 1;
+  flex:
+    1;
   overflow-y: auto;
   padding: 2rem;
   background: #fff;
@@ -1438,7 +1533,8 @@ onMounted(() => {
 }
 
 .preview-header {
-  display: flex;
+  display:
+    flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
@@ -1451,7 +1547,8 @@ onMounted(() => {
   gap: 0.5rem;
   background: #f1f3f5;
   padding: 0.25rem;
-  border-radius: 8px;
+  border-radius:
+    8px;
 }
 
 .device-btn {
@@ -1460,7 +1557,8 @@ onMounted(() => {
   background: none;
   border-radius: 6px;
   cursor: pointer;
-  color: #6c757d;
+  color:
+    #6c757d;
   transition: all 0.2s;
   display: flex;
   align-items: center;
@@ -1475,7 +1573,8 @@ onMounted(() => {
 .device-btn.active {
   background-color: #fff;
   color: #007bff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .preview-dims {
@@ -1491,11 +1590,8 @@ onMounted(() => {
   align-items: flex-start;
   overflow: auto;
   padding: 2rem;
-  background-image:
-    linear-gradient(45deg, #e4e6eb 25%, transparent 25%),
-    linear-gradient(-45deg, #e4e6eb 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #e4e6eb 75%),
-    linear-gradient(-45deg, transparent 75%, #e4e6eb 75%);
+  background-image: linear-gradient(45deg, #e4e6eb 25%, transparent 25%), linear-gradient(-45deg, #e4e6eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e4e6eb 75%), linear-gradient(-45deg, transparent 75%,
+      #e4e6eb 75%);
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
@@ -1503,7 +1599,8 @@ onMounted(() => {
 .preview-viewport {
   position: relative;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(0, 0,
+      0, 0.25);
   background: white;
 }
 
@@ -1513,7 +1610,8 @@ onMounted(() => {
   background: white;
 }
 
-/* Device Specific Styles for Preview Wrapper */
+/* Device Specific
+  Styles for Preview Wrapper */
 .preview-viewport.mobile {
   border-radius: 40px;
   padding: 10px;
@@ -1533,7 +1631,8 @@ onMounted(() => {
 }
 
 .preview-viewport.tablet .preview-frame {
-  border-radius: 12px;
+  border-radius:
+    12px;
   width: 820px;
   height: 1180px;
 }
@@ -1542,7 +1641,8 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   box-shadow: none;
-  background: transparent;
+  background:
+    transparent;
 }
 
 /* Utility buttons */
@@ -1550,7 +1650,8 @@ onMounted(() => {
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight:
+    500;
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.2s;
@@ -1585,8 +1686,17 @@ onMounted(() => {
 }
 
 .btn-block {
-  display: block;
   width: 100%;
+  display: block;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
 }
 
 .mb-2 {
@@ -1601,7 +1711,8 @@ onMounted(() => {
   height: 100%;
   background: rgba(255, 255, 255, 0.8);
   display: flex;
-  justify-content: center;
+  justify-content:
+    center;
   align-items: center;
   z-index: 1000;
 }
@@ -1719,14 +1830,16 @@ onMounted(() => {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius:
+    4px;
   font-size: 1rem;
 }
 
 .form-control:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 2px rgba(0, 123,
+      255, 0.25);
 }
 
 .image-upload {
@@ -1759,7 +1872,8 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   background: #eee;
-  color: #999;
+  color:
+    #999;
   border-radius: 4px;
   border: 1px solid #ddd;
 }

@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+
+const isCollapsed = ref(false)
+
+const toggleSidebar = () => {
+  isCollapsed.value = !isCollapsed.value
+}
 
 const allMenuItems = [
   { id: 'config', label: '配置管理', icon: '⚙️', path: '/config', roles: ['admin', 'user'] },
@@ -15,7 +21,7 @@ const allMenuItems = [
 // Filter menu items based on user role
 const menuItems = computed(() => {
   if (!authStore.user) return []
-  return allMenuItems.filter(item => 
+  return allMenuItems.filter(item =>
     item.roles.includes(authStore.user!.role)
   )
 })
@@ -41,29 +47,28 @@ const handleLogout = async () => {
 
 
 <template>
-  <aside class="sidebar">
+  <aside class="sidebar" :class="{ collapsed: isCollapsed }">
     <div class="sidebar-logo">
-      <span class="logo-text">B9 Admin</span>
+      <span class="logo-text" v-show="!isCollapsed">B9 Admin</span>
+      <button class="toggle-btn" @click="toggleSidebar" :title="isCollapsed ? '展開' : '收起'">
+        {{ isCollapsed ? '☰' : '◀' }}
+      </button>
     </div>
-    
+
     <nav class="sidebar-nav">
       <ul>
-        <li 
-          v-for="item in menuItems" 
-          :key="item.id"
-          :class="{ active: activeMenu === item.id }"
-          @click="handleMenuClick(item)"
-        >
+        <li v-for="item in menuItems" :key="item.id" :class="{ active: activeMenu === item.id }"
+          @click="handleMenuClick(item)">
           <span class="icon">{{ item.icon }}</span>
-          <span class="label">{{ item.label }}</span>
+          <span class="label" v-show="!isCollapsed">{{ item.label }}</span>
         </li>
       </ul>
     </nav>
-    
+
     <div class="sidebar-footer">
-      <button @click="handleLogout" class="logout-btn">
+      <button @click="handleLogout" class="logout-btn" :title="isCollapsed ? '登出系統' : ''">
         <span class="icon">🚪</span>
-        <span class="label">登出系統</span>
+        <span class="label" v-show="!isCollapsed">登出系統</span>
       </button>
     </div>
   </aside>
@@ -78,12 +83,40 @@ const handleLogout = async () => {
   display: flex;
   flex-direction: column;
   color: var(--color-text);
+  transition: width 0.3s ease;
+}
+
+.sidebar.collapsed {
+  width: 70px;
 }
 
 .sidebar-logo {
   padding: var(--spacing-lg);
   text-align: center;
   border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+  justify-content: center;
+  padding: 10px;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s;
+}
+
+.toggle-btn:hover {
+  color: #fff;
 }
 
 .logo-text {
@@ -122,9 +155,19 @@ const handleLogout = async () => {
   border-right: 4px solid var(--color-accent);
 }
 
+.sidebar.collapsed .sidebar-nav li {
+  padding: 12px;
+  justify-content: center;
+}
+
 .sidebar-nav .icon {
   margin-right: 12px;
   font-size: 18px;
+}
+
+.sidebar.collapsed .sidebar-nav .icon {
+  margin-right: 0;
+  font-size: 20px;
 }
 
 .sidebar-footer {
@@ -153,5 +196,13 @@ const handleLogout = async () => {
 
 .logout-btn .icon {
   margin-right: 8px;
+}
+
+.sidebar.collapsed .logout-btn {
+  padding: 10px 0;
+}
+
+.sidebar.collapsed .logout-btn .icon {
+  margin-right: 0;
 }
 </style>

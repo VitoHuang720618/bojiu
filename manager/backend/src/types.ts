@@ -1,12 +1,16 @@
 // 共享型別定義，與前端保持一致
 export interface AssetManifest {
   logo: string
-  banner: string
+  banner: {
+    pc: string
+    tablet: string
+    mobile: string
+  }
   backgroundImage?: string
   buttonLinks: ButtonLinkConfig[]
   carouselSlides: CarouselSlide[]
   titles: TitleImages
-  routeLinks: RouteLinks
+  routeLinks: RouteLinkItem[]
   toolIcons: ToolIcon[]
   videoThumbnails: VideoThumbnail[]
   programThumbnails: ProgramThumbnail[]
@@ -57,6 +61,13 @@ export interface TitleImages {
   hotPrograms: string
 }
 
+export interface RouteLinkItem {
+  default: string
+  hover: string
+  href?: string
+}
+
+// Deprecated: old interface
 export interface RouteLinks {
   default: string
   hover: string

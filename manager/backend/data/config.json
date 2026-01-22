@@ -1,5 +1,5 @@
 {
-  "logo": "",
+  "logo": "http://localhost:3002/uploads/logo.png",
   "banner": {
     "pc": "http://localhost:3002/uploads/banner-pc.png",
     "tablet": "http://localhost:3002/uploads/banner-tablet.png",
@@ -42,12 +42,6 @@
       "title": "",
       "href": "",
       "description": ""
-    },
-    {
-      "image": "http://localhost:3002/uploads/carousel-1.png",
-      "title": "",
-      "href": "",
-      "description": ""
     }
   ],
   "titles": {
@@ -58,33 +52,33 @@
   },
   "routeLinks": [
     {
-      "default": "",
-      "hover": "",
-      "href": "http://www.yahoo.com.tw"
-    },
-    {
-      "default": "",
-      "hover": "",
+      "default": "http://localhost:3002/uploads/routeLinks-0-default.png",
+      "hover": "http://localhost:3002/uploads/routeLinks-0-hover.png",
       "href": ""
     },
     {
-      "default": "",
-      "hover": "",
+      "default": "http://localhost:3002/uploads/routeLinks-1-default.png",
+      "hover": "http://localhost:3002/uploads/routeLinks-1-hover.png",
       "href": ""
     },
     {
-      "default": "",
-      "hover": "",
+      "default": "http://localhost:3002/uploads/routeLinks-2-default.png",
+      "hover": "http://localhost:3002/uploads/routeLinks-2-hover.png",
       "href": ""
     },
     {
-      "default": "",
-      "hover": "",
+      "default": "http://localhost:3002/uploads/routeLinks-3-default.png",
+      "hover": "http://localhost:3002/uploads/routeLinks-3-hover.png",
       "href": ""
     },
     {
-      "default": "",
-      "hover": "",
+      "default": "http://localhost:3002/uploads/routeLinks-4-default.png",
+      "hover": "http://localhost:3002/uploads/routeLinks-4-hover.png",
+      "href": ""
+    },
+    {
+      "default": "http://localhost:3002/uploads/routeLinks-5-default.png",
+      "hover": "http://localhost:3002/uploads/routeLinks-5-hover.png",
       "href": ""
     }
   ],
@@ -123,117 +117,9 @@
       "href": "",
       "title": "",
       "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
     }
   ],
   "programThumbnails": [
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
     {
       "image": "",
       "href": "",

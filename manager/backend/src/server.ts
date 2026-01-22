@@ -459,6 +459,125 @@ async function startServer() {
       }
     })
 
+    app.post('/api/publish', authMiddleware, async (req: Request, res: Response) => {
+      try {
+        const config = await assetManager.readManifest()
+
+        // Define Paths
+        let targetDefaultsDir: string
+        let targetSettingsPath: string
+
+        if (nodeEnv === 'production') {
+          // Docker container path
+          targetDefaultsDir = '/usr/share/nginx/html/demo/defaults'
+          targetSettingsPath = '/usr/share/nginx/html/demo/site-settings.json'
+        } else {
+          // Local development path
+          targetDefaultsDir = path.join(__dirname, '../../../demo/public/defaults')
+          targetSettingsPath = path.join(__dirname, '../../../demo/public/site-settings.json')
+        }
+
+        console.log(`Publishing to: ${targetDefaultsDir}`)
+
+        // Ensure target directory exists
+        if (!fs.existsSync(targetDefaultsDir)) {
+          fs.mkdirSync(targetDefaultsDir, { recursive: true })
+        }
+
+        // Helper to copy image and return new path
+        const processImage = (url: string) => {
+          if (!url || !url.includes('/uploads/')) return ''
+
+          const filename = url.split('/uploads/').pop()
+          if (!filename) return ''
+
+          const sourcePath = path.join(UPLOADS_DIR, filename)
+          const targetPath = path.join(targetDefaultsDir, filename)
+
+          if (fs.existsSync(sourcePath)) {
+            fs.copyFileSync(sourcePath, targetPath)
+          }
+
+          return `/defaults/${filename}`
+        }
+
+        // Process Data & Assets
+        const runtimeConfig = {
+          siteConfig: {
+            useApi: false // Force API off
+          },
+          banner: {
+            pc: processImage(config.banner.pc),
+            tablet: processImage(config.banner.tablet),
+            mobile: processImage(config.banner.mobile)
+          },
+          backgroundImage: processImage(config.backgroundImage || ''),
+          routeLinksImages: (config.routeLinks || []).map(link => ({
+            default: processImage(link.default),
+            hover: processImage(link.hover),
+            href: link.href || ''
+          })),
+          recommendedRoutes: (config.routeLinks || []).map((link, index) => ({
+            id: `route-${index + 1}`,
+            index: index + 1,
+            title: `线路 ${index + 1}`,
+            href: link.href || ''
+          })),
+          recommendedTools: (config.toolIcons || []).map((tool, index) => ({
+            id: `tool-${index}`,
+            name: `Tool ${index}`,
+            href: tool.href || '#',
+            default: processImage(tool.default),
+            hover: processImage(tool.hover)
+          })),
+          videoThumbnails: (config.videoThumbnails || []).map((video, index) => ({
+            id: `video-${index}`,
+            title: video.title || `Video ${index}`,
+            href: video.href || '#',
+            image: processImage(video.image),
+            alt: video.alt || ''
+          })),
+          programThumbnails: (config.programThumbnails || []).map((program, index) => ({
+            id: `program-${index}`,
+            title: program.title || `Program ${index}`,
+            href: program.href || '#',
+            image: processImage(program.image),
+            alt: program.alt || ''
+          })),
+          carouselSlides: (config.carouselSlides || []).map((slide, index) => ({
+            id: `slide-${index}`,
+            image: processImage(slide.image),
+            href: slide.href || '',
+            alt: slide.title || `Carousel ${index}`
+          })),
+          floatAdButtons: (config.floatAdButtons || []).map((btn, index) => ({
+            id: `float-${index}`,
+            name: `Float ${index}`,
+            href: btn.href || '#',
+            default: processImage(btn.default),
+            hover: processImage(btn.hover)
+          }))
+        }
+
+        // Write site-settings.json
+        fs.writeFileSync(targetSettingsPath, JSON.stringify(runtimeConfig, null, 2), 'utf8')
+
+        console.log(`Successfully published settings to ${targetSettingsPath}`)
+
+        res.json({
+          success: true,
+          message: '發布成功！靜態設定已生成。'
+        })
+
+      } catch (error) {
+        console.error('發布失敗:', error)
+        res.status(500).json({
+          success: false,
+          error: '發布失敗'
+        })
+      }
+    })
+
     app.get('/api/status', authMiddleware, (req: Request, res: Response) => {
       res.json({
         success: true,

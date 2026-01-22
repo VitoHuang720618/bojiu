@@ -159,6 +159,19 @@ class ConfigService {
       throw new Error(`Failed to update asset: ${response.statusText}`)
     }
   }
+
+  // 發布配置為靜態預設值
+  async publishConfig(): Promise<void> {
+    const response = await fetch(`${this.baseUrl}/publish`, {
+      method: 'POST',
+      headers: this.getAuthHeaders()
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.error || `Publish failed: ${response.statusText}`)
+    }
+  }
 }
 
 export const configService = new ConfigService()

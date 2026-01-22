@@ -1,0 +1,313 @@
+{
+  "siteConfig": {
+    "useApi": false
+  },
+  "banner": {
+    "pc": "/defaults/banner-pc.png",
+    "tablet": "/defaults/banner-tablet.png",
+    "mobile": ""
+  },
+  "backgroundImage": "/defaults/backgroundImage.png",
+  "routeLinksImages": [
+    {
+      "default": "",
+      "hover": "",
+      "href": "http://www.yahoo.com.tw"
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    },
+    {
+      "default": "",
+      "hover": "",
+      "href": ""
+    }
+  ],
+  "recommendedRoutes": [
+    {
+      "id": "route-1",
+      "index": 1,
+      "title": "线路 1",
+      "href": "http://www.yahoo.com.tw"
+    },
+    {
+      "id": "route-2",
+      "index": 2,
+      "title": "线路 2",
+      "href": ""
+    },
+    {
+      "id": "route-3",
+      "index": 3,
+      "title": "线路 3",
+      "href": ""
+    },
+    {
+      "id": "route-4",
+      "index": 4,
+      "title": "线路 4",
+      "href": ""
+    },
+    {
+      "id": "route-5",
+      "index": 5,
+      "title": "线路 5",
+      "href": ""
+    },
+    {
+      "id": "route-6",
+      "index": 6,
+      "title": "线路 6",
+      "href": ""
+    }
+  ],
+  "recommendedTools": [
+    {
+      "id": "tool-0",
+      "name": "Tool 0",
+      "href": "https://www.xiaohongshu.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "tool-1",
+      "name": "Tool 1",
+      "href": "https://www.douyin.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "tool-2",
+      "name": "Tool 2",
+      "href": "https://www.baidu.com",
+      "default": "",
+      "hover": ""
+    }
+  ],
+  "videoThumbnails": [
+    {
+      "id": "video-0",
+      "title": "Video 0",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-1",
+      "title": "Video 1",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-2",
+      "title": "Video 2",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-3",
+      "title": "Video 3",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-4",
+      "title": "Video 4",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-5",
+      "title": "Video 5",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-6",
+      "title": "Video 6",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-7",
+      "title": "Video 7",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    }
+  ],
+  "programThumbnails": [
+    {
+      "id": "program-0",
+      "title": "Program 0",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-1",
+      "title": "Program 1",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-2",
+      "title": "Program 2",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-3",
+      "title": "Program 3",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-4",
+      "title": "Program 4",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-5",
+      "title": "Program 5",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-6",
+      "title": "Program 6",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-7",
+      "title": "Program 7",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-8",
+      "title": "Program 8",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-9",
+      "title": "Program 9",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-10",
+      "title": "Program 10",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-11",
+      "title": "Program 11",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-12",
+      "title": "Program 12",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-13",
+      "title": "Program 13",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-14",
+      "title": "Program 14",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-15",
+      "title": "Program 15",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    }
+  ],
+  "carouselSlides": [
+    {
+      "id": "slide-0",
+      "image": "/defaults/carousel-0.png",
+      "href": "",
+      "alt": "Carousel 0"
+    },
+    {
+      "id": "slide-1",
+      "image": "/defaults/carousel-1.png",
+      "href": "",
+      "alt": "Carousel 1"
+    }
+  ],
+  "floatAdButtons": [
+    {
+      "id": "float-0",
+      "name": "Float 0",
+      "href": "https://example.com/customer-service",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "float-1",
+      "name": "Float 1",
+      "href": "https://example.com/girl-douyin",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "float-2",
+      "name": "Float 2",
+      "href": "https://example.com/sports-douyin",
+      "default": "",
+      "hover": ""
+    }
+  ]
+}
