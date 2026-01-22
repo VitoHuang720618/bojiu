@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ImageComponent from './ImageComponent.vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   defaultSrc: string
   hoverSrc: string
   alt?: string
@@ -9,7 +9,10 @@ const props = defineProps<{
   target?: string
   dataIndex?: number
   dataTitle?: string
-}>()
+  lazy?: boolean
+}>(), {
+  lazy: true
+})
 
 const handleClick = (e: MouseEvent) => {
   if (!props.href) {
@@ -22,8 +25,8 @@ const handleClick = (e: MouseEvent) => {
   <component :is="href ? 'a' : 'div'" class="img-button" :href="href" :target="href ? target : undefined"
     :rel="href && target === '_blank' ? 'noopener noreferrer' : undefined" :data-index="dataIndex"
     :data-title="dataTitle" @click="handleClick">
-    <ImageComponent :src="defaultSrc" :alt="alt" class="img-button--default" />
-    <ImageComponent :src="hoverSrc" :alt="alt" class="img-button--hover" />
+    <ImageComponent :src="defaultSrc" :alt="alt" class="img-button--default" :lazy="lazy" />
+    <ImageComponent :src="hoverSrc" :alt="alt" class="img-button--hover" :lazy="lazy" />
   </component>
 </template>
 

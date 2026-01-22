@@ -10,4 +10,12 @@ app.config.errorHandler = (err, _instance, info) => {
   console.error('Error info:', info)
 }
 
-app.mount('#app')
+// Load site configuration
+import { loadRuntimeConfig } from './config/siteConfig'
+
+const initApp = async () => {
+  await loadRuntimeConfig()
+  app.mount('#app')
+}
+
+initApp()

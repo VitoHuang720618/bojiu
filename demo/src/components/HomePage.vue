@@ -8,7 +8,8 @@ import {
   carouselSlides,
   videoContent,
   programContent,
-  siteConfig
+  siteConfig,
+  titles
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
 import type { ButtonLinkConfig, BannerConfig } from '../types'
@@ -32,8 +33,9 @@ const isFloatAdCollapsed = ref(false)
 
 // 计算属性：优先使用API数据，否则使用默认数据
 const effectiveCarouselSlides = computed(() => {
-  // 如果啟用 API 模式，直接使用 API 數據
+  // Config-Driven Mode: Strict API Usage
   if (siteConfig.useApi) {
+    // If API data is empty, return empty (do NOT fallback)
     return apiCarouselSlides.value.map((slide, index) => ({
       id: `api-slide-${index}`,
       alt: slide.alt,
@@ -42,31 +44,35 @@ const effectiveCarouselSlides = computed(() => {
     }))
   }
 
-  // 回退到預設資料
+  // Local Dev Mode: Use assetManifest
   return carouselSlides.map((slide, index) => ({
     id: slide.id,
     alt: slide.alt,
     href: slide.href || '#',
-    image: assetManifest.carouselSlides[index] || '' // 使用 assetManifest 中的圖片
+    image: assetManifest.carouselSlides[index] || ''
   }))
 })
 
 const effectiveBanner = computed(() => {
-  return apiBanner.value || assetManifest.banner
+  if (siteConfig.useApi) {
+    return apiBanner.value || '' // Strict: no fallback
+  }
+  return assetManifest.banner
 })
 
 const effectiveBackgroundImage = computed(() => {
+  if (siteConfig.useApi) {
+    return apiBackgroundImage.value || '' // Strict: no fallback
+  }
   const bgImage = apiBackgroundImage.value
   return bgImage || (assetManifest as any).backgroundImage
 })
 
 const effectiveVideoThumbnails = computed(() => {
-  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
   if (siteConfig.useApi) {
-    return apiVideoThumbnails.value
+    return apiVideoThumbnails.value // Strict: empty if API is empty
   }
 
-  // 回退到預設資料
   return videoContent.map((video, index) => ({
     image: assetManifest.videoThumbnails[index] || '',
     href: '#',
@@ -76,12 +82,10 @@ const effectiveVideoThumbnails = computed(() => {
 })
 
 const effectiveProgramThumbnails = computed(() => {
-  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
   if (siteConfig.useApi) {
-    return apiProgramThumbnails.value
+    return apiProgramThumbnails.value // Strict: empty if API is empty
   }
 
-  // 回退到預設資料
   return programContent.map((program, index) => ({
     image: assetManifest.programThumbnails[index] || '',
     href: '#',
@@ -91,11 +95,8 @@ const effectiveProgramThumbnails = computed(() => {
 })
 
 const effectiveButtonLinks = computed(() => {
-  const buttonLinksData = apiButtonLinks.value
-
-  // 如果啟用 API 模式，優先使用 API 數據 (即使為空)
   if (siteConfig.useApi) {
-    return buttonLinksData.map((button, index) => ({
+    return apiButtonLinks.value.map((button, index) => ({
       id: `api-button-${index}`,
       text: button?.text || '',
       href: button?.href || '#',
@@ -105,7 +106,6 @@ const effectiveButtonLinks = computed(() => {
     }))
   }
 
-  // 回退到預設資料
   return assetManifest.buttonLinks.map((button) => ({
     id: button.id,
     text: button.alt,
@@ -117,11 +117,8 @@ const effectiveButtonLinks = computed(() => {
 })
 
 const effectiveToolIcons = computed(() => {
-  const toolIconsData = apiToolIcons.value
-
-  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
-  if (siteConfig.useApi && toolIconsData) {
-    return toolIconsData.map((tool, index) => ({
+  if (siteConfig.useApi) {
+    return apiToolIcons.value.map((tool, index) => ({
       id: tool?.id || `api-tool-${index}`,
       default: tool?.default || '',
       hover: tool?.hover || '',
@@ -130,7 +127,6 @@ const effectiveToolIcons = computed(() => {
     }))
   }
 
-  // 回退到預設資料 (僅在 useApi: false 或非 API 模式下)
   return assetManifest.toolIcons.map((tool) => ({
     id: tool.id,
     default: tool.default,
@@ -141,11 +137,8 @@ const effectiveToolIcons = computed(() => {
 })
 
 const effectiveFloatAdButtons = computed(() => {
-  const floatAdButtonsData = apiFloatAdButtons.value
-
-  // 如果啟用 API 模式，直接使用 API 數據 (即使為空)
   if (siteConfig.useApi) {
-    return floatAdButtonsData.map((button, index) => ({
+    return apiFloatAdButtons.value.map((button, index) => ({
       id: `api-floatad-${index}`,
       href: button?.href || '#',
       default: button?.default || '',
@@ -153,7 +146,6 @@ const effectiveFloatAdButtons = computed(() => {
     }))
   }
 
-  // 回退到預設資料
   return assetManifest.floatAdButtons.map((button) => ({
     id: button.id,
     href: '#',
@@ -163,20 +155,24 @@ const effectiveFloatAdButtons = computed(() => {
 })
 
 const effectiveRouteLinks = computed(() => {
-  // 對每一條推薦路線進行映射，確保始終有 6 個位置
-  // 優先順序：API 資料內容 > 預設 Manifest 資料
-  const apiData = apiRouteLinks.value
+  if (siteConfig.useApi) {
+    const apiData = apiRouteLinks.value || [] // Default to empty array if null
+    return recommendedRoutes.map((route, index) => {
+      const apiItem = apiData[index]
+      return {
+        default: apiItem?.default || '', // Strict: no fallback to assetManifest
+        hover: apiItem?.hover || '',
+        href: apiItem?.href || route.href
+      }
+    })
+  }
 
   return recommendedRoutes.map((route, index) => {
-    // 獲取 API 資料中對應位置的設定
-    const apiItem = Array.isArray(apiData) ? apiData[index] : null
-    // 獲取本地資源清單中對應位置的預設圖
     const defaultItem = assetManifest.routeLinks[index] || { default: '', hover: '' }
-
     return {
-      default: apiItem?.default || defaultItem.default,
-      hover: apiItem?.hover || defaultItem.hover,
-      href: apiItem?.href || route.href // 優先使用 API 連結，否則使用預設
+      default: defaultItem.default,
+      hover: defaultItem.hover,
+      href: route.href
     }
   })
 })
@@ -244,12 +240,10 @@ onUnmounted(() => {
 <template>
   <div class="main-inner">
     <!-- Banner -->
-    <div id="banner">
+    <div id="banner" :class="{ 'banner-empty': !effectiveBanner }">
       <ImageComponent v-if="effectiveBanner" :src="effectiveBanner" alt="Banner" :lazy="false" />
-      <div v-else class="banner-placeholder">
-        <!-- 隱藏的原圖用來獲取尺寸 -->
-        <img :src="assetManifest.banner" alt="Banner placeholder" class="banner-size-reference"
-          @load="onBannerSizeLoaded" />
+      <div v-else class="banner-placeholder-visual">
+        <span class="placeholder-text">Banner Area</span>
       </div>
     </div>
 
@@ -266,9 +260,14 @@ onUnmounted(() => {
         <!-- Top Button Links -->
         <div class="button-links">
           <div v-for="(item, index) in assetManifest.buttonLinks" :key="item.id" class="item">
-            <ImageButton :default-src="effectiveButtonLinks[index]?.defaultImage || item.default"
-              :hover-src="effectiveButtonLinks[index]?.hoverImage || item.hover" :alt="item.alt"
-              :href="effectiveButtonLinks[index]?.href" :target="effectiveButtonLinks[index]?.target" />
+            <template v-if="effectiveButtonLinks[index]?.defaultImage">
+              <ImageButton :default-src="effectiveButtonLinks[index]?.defaultImage || item.default"
+                :hover-src="effectiveButtonLinks[index]?.hoverImage || item.hover" :alt="item.alt"
+                :href="effectiveButtonLinks[index]?.href" :target="effectiveButtonLinks[index]?.target" :lazy="false" />
+            </template>
+            <div v-else class="button-link-placeholder">
+              <span>連結 {{ index + 1 }}</span>
+            </div>
           </div>
         </div>
 
@@ -289,13 +288,15 @@ onUnmounted(() => {
             <!-- Recommended Routes -->
             <div class="recommend-links">
               <div class="block-title recommend-routes-title">
-                <img :src="assetManifest.titles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
+                <ImageComponent
+                  :src="(siteConfig.useApi && titles.recommendedRoutes) ? titles.recommendedRoutes : assetManifest.titles.recommendedRoutes"
+                  alt="皇冠圖標" class="crown-icon" />
                 <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
                 <div v-for="(item, index) in effectiveRouteLinks" :key="index" class="item">
                   <ImageButton :default-src="item.default" :hover-src="item.hover"
-                    :alt="recommendedRoutes[index]?.title" :href="item.href" />
+                    :alt="recommendedRoutes[index]?.title" :href="item.href" :lazy="false" />
                 </div>
               </div>
             </div>
@@ -304,7 +305,9 @@ onUnmounted(() => {
           <!-- Bottom Tools (Browsers) -->
           <div class="recommend-footer">
             <div class="block-title">
-              <ImageComponent :src="assetManifest.titles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
+              <ImageComponent
+                :src="(siteConfig.useApi && titles.recommendedBrowsers) ? titles.recommendedBrowsers : assetManifest.titles.recommendedBrowsers"
+                alt="推荐浏览器标题" :lazy="false" />
             </div>
             <div class="tools">
               <div v-for="tool in effectiveToolIcons" :key="tool.id" class="item">
@@ -319,12 +322,13 @@ onUnmounted(() => {
           <!-- Selected Videos -->
           <div class="programme-block">
             <div class="block-title">
-              <ImageComponent :src="assetManifest.titles.selectedVideos" alt="精选短视频標題圖" :lazy="false" />
+              <ImageComponent
+                :src="(siteConfig.useApi && titles.selectedVideos) ? titles.selectedVideos : assetManifest.titles.selectedVideos"
+                alt="精选短视频標題圖" :lazy="false" />
             </div>
-            <div class="list" v-if="effectiveVideoThumbnails.length > 0">
-              <div v-for="(video, index) in effectiveVideoThumbnails" :key="video ? `video-${index}` : `empty-${index}`"
-                class="item" :class="{ 'empty-item': !video }">
-                <template v-if="video">
+            <div class="list">
+              <div v-for="(video, index) in effectiveVideoThumbnails" :key="`video-${index}`" class="item">
+                <template v-if="video && video.image">
                   <a :href="video.href" target="_blank" rel="noopener noreferrer">
                     <div class="img">
                       <ImageComponent :src="video.image" :alt="video.alt" />
@@ -332,22 +336,22 @@ onUnmounted(() => {
                     <span>{{ video.title }}</span>
                   </a>
                 </template>
-                <div v-else class="empty-placeholder"></div>
+                <!-- 保持 Grid 佔位，顯示骨架框 -->
+                <div v-else class="empty-placeholder-box"></div>
               </div>
             </div>
-            <div v-else class="empty-section-placeholder"></div>
           </div>
 
           <!-- Hot Programs -->
           <div class="programme-block sport-block">
             <div class="block-title">
-              <ImageComponent :src="assetManifest.titles.hotPrograms" alt="火熱節目標題圖" :lazy="false" />
+              <ImageComponent
+                :src="(siteConfig.useApi && titles.hotPrograms) ? titles.hotPrograms : assetManifest.titles.hotPrograms"
+                alt="火熱節目標題圖" :lazy="false" />
             </div>
-            <div class="list" v-if="effectiveProgramThumbnails.length > 0">
-              <div v-for="(program, index) in effectiveProgramThumbnails"
-                :key="program ? `program-${index}` : `empty-program-${index}`" class="item"
-                :class="{ 'empty-item': !program }">
-                <template v-if="program">
+            <div class="list">
+              <div v-for="(program, index) in effectiveProgramThumbnails" :key="`program-${index}`" class="item">
+                <template v-if="program && program.image">
                   <a :href="program.href" target="_blank" rel="noopener noreferrer">
                     <div class="img">
                       <ImageComponent :src="program.image" :alt="program.alt" />
@@ -355,10 +359,10 @@ onUnmounted(() => {
                     <span>{{ program.title }}</span>
                   </a>
                 </template>
-                <div v-else class="empty-placeholder"></div>
+                <!-- 保持 Grid 佔位，顯示骨架框 -->
+                <div v-else class="empty-placeholder-box"></div>
               </div>
             </div>
-            <div v-else class="empty-section-placeholder"></div>
           </div>
         </div>
       </div>
@@ -761,12 +765,13 @@ onUnmounted(() => {
 /* Top Content Area */
 .recommend-content {
   width: 100%;
-  height: 410px;
+  /* height: 410px; Removed fixed height for tighter fit */
+  height: auto;
   background: rgba(41, 13, 16, 0.80);
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
-  padding: 45px 27px 44px 27px;
-  /* 標註圖鎖定：上45, 下44, 左27 */
+  padding: 25px 27px;
+  /* 經用戶調整：縮減上下間距 */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1590,6 +1595,123 @@ onUnmounted(() => {
 }
 
 
+
+/* Empty State Placeholders */
+.banner-empty {
+  width: 100%;
+  height: 400px;
+  /* Default PC height */
+  background-color: #1a1a1a;
+  border-bottom: 4px solid #dfb082;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1279px) {
+  .banner-empty {
+    height: 300px;
+  }
+}
+
+@media (max-width: 430px) {
+  .banner-empty {
+    height: 180px;
+  }
+}
+
+.banner-placeholder-visual {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image:
+    linear-gradient(45deg, #222 25%, transparent 25%),
+    linear-gradient(-45deg, #222 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #222 75%),
+    linear-gradient(-45deg, transparent 75%, #222 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  opacity: 0.3;
+}
+
+.placeholder-text {
+  color: #dfb082;
+  font-size: 1.5rem;
+  font-weight: bold;
+  opacity: 0.5;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px dashed #dfb082;
+}
+
+.button-link-placeholder {
+  width: 352px;
+  height: 102px;
+  border: 2px dashed rgba(223, 176, 130, 0.3);
+  border-radius: 50px;
+  /* Match button curvature */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(223, 176, 130, 0.4);
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 1600px) {
+  .button-link-placeholder {
+    width: 100%;
+    aspect-ratio: 352/102;
+    height: auto;
+  }
+}
+
+@media (max-width: 430px) {
+  .button-link-placeholder {
+    width: 185px;
+    height: 50px;
+    font-size: 0.9rem;
+  }
+}
+
+.empty-placeholder-box {
+  width: 100%;
+  aspect-ratio: 236 / 133;
+  border: 2px dashed rgba(223, 176, 130, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Skeleton Shine Effect */
+.empty-placeholder-box::after,
+.button-link-placeholder::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
 
 /* Float Ad */
 #float-ad {

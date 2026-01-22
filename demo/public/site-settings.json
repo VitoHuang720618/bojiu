@@ -1,0 +1,181 @@
+{
+  "siteConfig": {
+    "useApi": false
+  },
+  "banner": {
+    "pc": "/defaults/banner-pc.png",
+    "tablet": "/defaults/banner-tablet.png",
+    "mobile": ""
+  },
+  "backgroundImage": "/defaults/backgroundImage.png",
+  "routeLinksImages": [
+    {
+      "default": "/defaults/routeLinks-0-default.png",
+      "hover": "/defaults/routeLinks-0-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-1-default.png",
+      "hover": "/defaults/routeLinks-1-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-2-default.png",
+      "hover": "/defaults/routeLinks-2-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-3-default.png",
+      "hover": "/defaults/routeLinks-3-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-4-default.png",
+      "hover": "/defaults/routeLinks-4-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-5-default.png",
+      "hover": "/defaults/routeLinks-5-hover.png",
+      "href": ""
+    }
+  ],
+  "recommendedRoutes": [
+    {
+      "id": "route-1",
+      "index": 1,
+      "title": "线路 1",
+      "href": ""
+    },
+    {
+      "id": "route-2",
+      "index": 2,
+      "title": "线路 2",
+      "href": ""
+    },
+    {
+      "id": "route-3",
+      "index": 3,
+      "title": "线路 3",
+      "href": ""
+    },
+    {
+      "id": "route-4",
+      "index": 4,
+      "title": "线路 4",
+      "href": ""
+    },
+    {
+      "id": "route-5",
+      "index": 5,
+      "title": "线路 5",
+      "href": ""
+    },
+    {
+      "id": "route-6",
+      "index": 6,
+      "title": "线路 6",
+      "href": ""
+    }
+  ],
+  "recommendedTools": [
+    {
+      "id": "tool-0",
+      "name": "Tool 0",
+      "href": "https://www.xiaohongshu.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "tool-1",
+      "name": "Tool 1",
+      "href": "https://www.douyin.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "tool-2",
+      "name": "Tool 2",
+      "href": "https://www.baidu.com",
+      "default": "",
+      "hover": ""
+    }
+  ],
+  "videoThumbnails": [
+    {
+      "id": "video-0",
+      "title": "Video 0",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-1",
+      "title": "Video 1",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-2",
+      "title": "Video 2",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    }
+  ],
+  "programThumbnails": [
+    {
+      "id": "program-0",
+      "title": "Program 0",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-1",
+      "title": "Program 1",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-2",
+      "title": "Program 2",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    }
+  ],
+  "carouselSlides": [
+    {
+      "id": "slide-0",
+      "image": "/defaults/carousel-0.png",
+      "href": "",
+      "alt": "Carousel 0"
+    }
+  ],
+  "floatAdButtons": [
+    {
+      "id": "float-0",
+      "name": "Float 0",
+      "href": "https://example.com/customer-service",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "float-1",
+      "name": "Float 1",
+      "href": "https://example.com/girl-douyin",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "float-2",
+      "name": "Float 2",
+      "href": "https://example.com/sports-douyin",
+      "default": "",
+      "hover": ""
+    }
+  ]
+}
