@@ -78,26 +78,88 @@ log "  UPLOAD_PATH: $UPLOAD_PATH"
 log "  CONFIG_PATH: $CONFIG_PATH"
 log "  MAX_FILE_SIZE: $MAX_FILE_SIZE bytes"
 
-# SSL Certificate Generation
-log "Checking SSL certificates..."
-if [ ! -f /etc/nginx/ssl/server.crt ] || [ ! -f /etc/nginx/ssl/server.key ]; then
-    log "Generating self-signed SSL certificate..."
-    # Create directory if it doesn't exist (though Dockerfile creates it)
-    mkdir -p /etc/nginx/ssl
+# SSL setup function
+setup_ssl() {
+    log "Configuring SSL..."
     
-    # Generate certificate
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-        -keyout /etc/nginx/ssl/server.key \
-        -out /etc/nginx/ssl/server.crt \
-        -subj "/C=TW/ST=Taipei/L=Taipei/O=B9Website/OU=Web/CN=localhost" \
-        2>/dev/null
+    # Check if we should use Let's Encrypt
+    if [ -n "$DOMAIN" ] && [ "$DOMAIN" != "localhost" ]; then
+        log "Domain provided: $DOMAIN. Attempting to setup Let's Encrypt..."
         
-    chmod 644 /etc/nginx/ssl/server.crt
-    chmod 600 /etc/nginx/ssl/server.key
-    log "Self-signed certificate generated."
-else
-    log "SSL certificates found."
-fi
+        # Check if we already have a cert
+        if [ -d "/etc/letsencrypt/live/$DOMAIN" ]; then
+            log "Existing Let's Encrypt certificates found."
+            ln -sf "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" /etc/nginx/ssl/server.crt
+            ln -sf "/etc/letsencrypt/live/$DOMAIN/privkey.pem" /etc/nginx/ssl/server.key
+        else
+            log "No existing certificates found. Generating new ones..."
+            
+            # Start Nginx temporarily for validation (it needs to serve the challenge)
+            # using the default config which points to existing keys (or self-signed ones we made temporarily)
+            log "Generating temporary self-signed cert for bootstrapping..."
+             openssl req -x509 -nodes -days 1 -newkey rsa:2048 \
+                -keyout /etc/nginx/ssl/server.key \
+                -out /etc/nginx/ssl/server.crt \
+                -subj "/CN=localhost" 2>/dev/null
+                
+            chmod 644 /etc/nginx/ssl/server.crt
+            chmod 600 /etc/nginx/ssl/server.key
+            
+            log "Starting Nginx path verification..."
+            nginx &
+            TEMP_NGINX_PID=$!
+            sleep 5
+            
+            # Request connection
+            log "Requesting certificate via Certbot..."
+            if certbot certonly --webroot -w /usr/share/nginx/html/demo \
+                -d "$DOMAIN" \
+                --email "${EMAIL:-admin@$DOMAIN}" \
+                --agree-tos \
+                --non-interactive \
+                --text; then
+                
+                log "Certificate obtained successfully!"
+                
+                # Stop temporary Nginx
+                kill $TEMP_NGINX_PID 2>/dev/null || true
+                wait $TEMP_NGINX_PID 2>/dev/null || true
+                
+                # Link Certs
+                ln -sf "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" /etc/nginx/ssl/server.crt
+                ln -sf "/etc/letsencrypt/live/$DOMAIN/privkey.pem" /etc/nginx/ssl/server.key
+                
+            else
+                log "Error: Certbot failed to obtain certificate."
+                log "Falling back to self-signed certificate."
+                # Kill temp nginx
+                kill $TEMP_NGINX_PID 2>/dev/null || true
+                wait $TEMP_NGINX_PID 2>/dev/null || true
+                
+                # Regenerate longer-lasting self-signed if certbot failed
+                if [ ! -f /etc/nginx/ssl/server.crt ] || [ ! -f /etc/nginx/ssl/server.key ]; then
+                     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+                        -keyout /etc/nginx/ssl/server.key \
+                        -out /etc/nginx/ssl/server.crt \
+                        -subj "/CN=localhost" 2>/dev/null
+                fi
+            fi
+        fi
+    else
+        log "No domain specified or strictly localhost. Using self-signed certificate."
+        if [ ! -f /etc/nginx/ssl/server.crt ] || [ ! -f /etc/nginx/ssl/server.key ]; then
+            openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+                -keyout /etc/nginx/ssl/server.key \
+                -out /etc/nginx/ssl/server.crt \
+                -subj "/C=TW/ST=Taipei/L=Taipei/O=B9Website/OU=Web/CN=localhost" \
+                2>/dev/null
+            chmod 644 /etc/nginx/ssl/server.crt
+            chmod 600 /etc/nginx/ssl/server.key
+        fi
+    fi
+}
+
+setup_ssl
 
 # Process Nginx configuration to inject the dynamic port
 log "Configuring Nginx to listen on port $NGINX_LISTEN_PORT..."

@@ -21,7 +21,7 @@ RUN npx vite build
 FROM nginx:alpine
 
 # Install Node.js for backend
-RUN apk add --no-cache nodejs npm curl openssl
+RUN apk add --no-cache nodejs npm curl openssl certbot
 
 # Copy built frontends
 COPY --from=builder /build/demo/dist /usr/share/nginx/html/demo
