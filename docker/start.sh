@@ -105,10 +105,19 @@ setup_ssl() {
             chmod 644 /etc/nginx/ssl/server.crt
             chmod 600 /etc/nginx/ssl/server.key
             
-            log "Starting Nginx path verification..."
+            # Start Nginx in background to serve the challenge
+            log "Starting Nginx for validation..."
             nginx &
             TEMP_NGINX_PID=$!
-            sleep 5
+            
+            # Wait for Nginx to be ready
+            for i in $(seq 1 10); do
+                if curl -s http://localhost:$NGINX_LISTEN_PORT >/dev/null; then
+                    log "Nginx is up (attempt $i)"
+                    break
+                fi
+                sleep 1
+            done
             
             # Request connection
             log "Requesting certificate via Certbot..."
@@ -136,6 +145,12 @@ setup_ssl() {
                 kill $TEMP_NGINX_PID 2>/dev/null || true
                 wait $TEMP_NGINX_PID 2>/dev/null || true
                 
+                # Try to output certbot logs if any
+                if [ -d "/var/log/letsencrypt" ]; then
+                    log "Certbot logs:"
+                    cat /var/log/letsencrypt/letsencrypt.log | tail -n 20
+                fi
+
                 # Regenerate longer-lasting self-signed if certbot failed
                 if [ ! -f /etc/nginx/ssl/server.crt ] || [ ! -f /etc/nginx/ssl/server.key ]; then
                      openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
