@@ -174,12 +174,12 @@ setup_ssl() {
     fi
 }
 
-setup_ssl
-
 # Process Nginx configuration to inject the dynamic port
 log "Configuring Nginx to listen on port $NGINX_LISTEN_PORT..."
 # Use sed to replace the placeholder with the actual port
 sed -i "s/\${LISTEN_PORT}/$NGINX_LISTEN_PORT/g" /etc/nginx/nginx.conf
+
+setup_ssl
 
 # Volume mount and directory validation
 log "Validating volume mounts and directories..."
