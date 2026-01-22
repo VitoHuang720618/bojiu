@@ -801,7 +801,7 @@ onUnmounted(() => {
     width: 100% !important;
     max-width: 1200px !important;
     height: auto !important;
-    padding: 24px 20px !important;
+    padding: 15px 15px !important;
     margin: 0 auto !important;
     border-radius: 12px 12px 0 0 !important;
   }
@@ -810,7 +810,7 @@ onUnmounted(() => {
 @media (max-width: 739px) {
   .recommend-content {
     flex-direction: column;
-    padding: 1.5rem 1rem !important;
+    padding: 15px 15px !important;
   }
 }
 
@@ -863,8 +863,8 @@ onUnmounted(() => {
 @media (max-width: 430px) {
   .recommend-content {
     flex-direction: column !important;
-    padding: 15px !important;
-    gap: 20px !important;
+    padding: 10px !important;
+    gap: 15px !important;
   }
 
   .recommend-slider {
