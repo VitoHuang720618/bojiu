@@ -1456,9 +1456,10 @@ onUnmounted(() => {
   width: 100%;
   aspect-ratio: 236 / 133;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   background-color: #1a1a1a;
   border: 1px solid rgba(223, 176, 130, 0.2);
+  border-bottom: none;
 }
 
 .programme-wrap .list .item .img img {
@@ -1475,13 +1476,15 @@ onUnmounted(() => {
   width: 100%;
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 8px 8px;
   color: #fff;
   font-size: 1rem;
   font-weight: 500;
   margin: 0 !important;
   padding: 0;
   box-sizing: border-box;
+  border: 1px solid rgba(223, 176, 130, 0.2);
+  border-top: none;
 }
 
 @media (max-width: 1279px) {
