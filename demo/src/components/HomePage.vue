@@ -1,182 +1,37 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import ImageComponent from './ImageComponent.vue'
 import ImageButton from './ImageButton.vue'
 import { assetManifest } from '../config/assetManifest'
 import {
   recommendedRoutes,
-  carouselSlides,
-  videoContent,
-  programContent,
   siteConfig,
   titles
 } from '../config/siteConfig'
-import { carouselService } from '../services/carouselService'
-import type { ButtonLinkConfig, BannerConfig } from '../types'
+import { useSiteData } from '../composables/useSiteData'
 
+// State for Carousel
 const currentSlide = ref(0)
 let carouselInterval: number | null = null
 
-// 从API获取的轮播图数据
-const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
-const apiBanner = ref<string | BannerConfig>('')
-const apiBackgroundImage = ref<string>('')
-const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
-const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
-const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
-const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
-const apiFloatAdButtons = ref<({ href: string, default: string, hover: string } | null)[]>([])
-const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
-
-// 浮動按鈕收合狀態
+// State for Float Ad
 const isFloatAdCollapsed = ref(false)
 
-// 计算属性：优先使用API数据，否则使用默认数据
-const effectiveCarouselSlides = computed(() => {
-  // Config-Driven Mode: Strict API Usage
-  if (siteConfig.useApi) {
-    // If API data is empty, return empty (do NOT fallback)
-    return apiCarouselSlides.value.map((slide, index) => ({
-      id: `api-slide-${index}`,
-      alt: slide.alt,
-      href: slide.href,
-      image: slide.image
-    }))
-  }
+// Use Composable
+const {
+  effectiveCarouselSlides,
+  effectiveBanner,
+  effectiveBackgroundImage,
+  effectiveVideoThumbnails,
+  effectiveProgramThumbnails,
+  effectiveButtonLinks,
+  effectiveToolIcons,
+  effectiveFloatAdButtons,
+  effectiveRouteLinks,
+  loadConfig
+} = useSiteData()
 
-  // Local Dev Mode: Use assetManifest
-  return carouselSlides.map((slide, index) => ({
-    id: slide.id,
-    alt: slide.alt,
-    href: slide.href || '#',
-    image: assetManifest.carouselSlides[index] || ''
-  }))
-})
-
-const effectiveBanner = computed(() => {
-  if (siteConfig.useApi) {
-    return apiBanner.value || '' // Strict: no fallback
-  }
-  return assetManifest.banner
-})
-
-const effectiveBackgroundImage = computed(() => {
-  if (siteConfig.useApi) {
-    return apiBackgroundImage.value || '' // Strict: no fallback
-  }
-  const bgImage = apiBackgroundImage.value
-  return bgImage || (assetManifest as any).backgroundImage
-})
-
-const effectiveVideoThumbnails = computed(() => {
-  if (siteConfig.useApi) {
-    return apiVideoThumbnails.value // Strict: empty if API is empty
-  }
-
-  return videoContent.map((video, index) => ({
-    image: assetManifest.videoThumbnails[index] || '',
-    href: '#',
-    alt: video.title,
-    title: video.title
-  }))
-})
-
-const effectiveProgramThumbnails = computed(() => {
-  if (siteConfig.useApi) {
-    return apiProgramThumbnails.value // Strict: empty if API is empty
-  }
-
-  return programContent.map((program, index) => ({
-    image: assetManifest.programThumbnails[index] || '',
-    href: '#',
-    alt: program.title,
-    title: program.title
-  }))
-})
-
-const effectiveButtonLinks = computed(() => {
-  if (siteConfig.useApi) {
-    return apiButtonLinks.value.map((button, index) => ({
-      id: `api-button-${index}`,
-      text: button?.text || '',
-      href: button?.href || '#',
-      target: button?.target || '_blank',
-      defaultImage: button?.defaultImage || '',
-      hoverImage: button?.hoverImage || ''
-    }))
-  }
-
-  return assetManifest.buttonLinks.map((button) => ({
-    id: button.id,
-    text: button.alt,
-    href: '#',
-    target: '_blank',
-    defaultImage: button.default,
-    hoverImage: button.hover
-  }))
-})
-
-const effectiveToolIcons = computed(() => {
-  if (siteConfig.useApi) {
-    return apiToolIcons.value.map((tool, index) => ({
-      id: tool?.id || `api-tool-${index}`,
-      default: tool?.default || '',
-      hover: tool?.hover || '',
-      alt: tool?.alt || '',
-      href: tool?.href || '#'
-    }))
-  }
-
-  return assetManifest.toolIcons.map((tool) => ({
-    id: tool.id,
-    default: tool.default,
-    hover: tool.hover,
-    alt: tool.alt,
-    href: '#'
-  }))
-})
-
-const effectiveFloatAdButtons = computed(() => {
-  if (siteConfig.useApi) {
-    return apiFloatAdButtons.value.map((button, index) => ({
-      id: `api-floatad-${index}`,
-      href: button?.href || '#',
-      default: button?.default || '',
-      hover: button?.hover || ''
-    }))
-  }
-
-  return assetManifest.floatAdButtons.map((button) => ({
-    id: button.id,
-    href: '#',
-    default: button.default,
-    hover: button.hover
-  }))
-})
-
-const effectiveRouteLinks = computed(() => {
-  if (siteConfig.useApi) {
-    const apiData = apiRouteLinks.value || [] // Default to empty array if null
-    return recommendedRoutes.map((route, index) => {
-      const apiItem = apiData[index]
-      return {
-        default: apiItem?.default || '', // Strict: no fallback to assetManifest
-        hover: apiItem?.hover || '',
-        href: apiItem?.href || route.href
-      }
-    })
-  }
-
-  return recommendedRoutes.map((route, index) => {
-    const defaultItem = assetManifest.routeLinks[index] || { default: '', hover: '' }
-    return {
-      default: defaultItem.default,
-      hover: defaultItem.hover,
-      href: route.href
-    }
-  })
-})
-
+// Carousel Logic
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % effectiveCarouselSlides.value.length
 }
@@ -192,34 +47,17 @@ const stopCarousel = () => {
   }
 }
 
-// 加载轮播图和banner数据
-const loadConfig = async () => {
-  try {
-    const config = await carouselService.getConfig()
-    apiCarouselSlides.value = config.carouselSlides
-    apiBanner.value = config.banner
-    apiBackgroundImage.value = config.backgroundImage
-    apiVideoThumbnails.value = config.videoThumbnails
-    apiProgramThumbnails.value = config.programThumbnails
-    apiButtonLinks.value = config.buttonLinks
-    apiToolIcons.value = config.toolIcons
-    apiFloatAdButtons.value = config.floatAdButtons || []
-    apiRouteLinks.value = config.routeLinks || null
-  } catch (error: any) {
-    if (error?.message !== 'API is disabled via config') {
-      console.error('Failed to load config:', error)
-    }
-  }
-}
-
+// Lifecycle Hooks
 onMounted(async () => {
   await loadConfig()
   startCarousel()
 })
 
+onUnmounted(() => {
+  stopCarousel()
+})
 
-
-// 切換浮動按鈕收合狀態
+// UI Interaction
 const toggleFloatAd = (event?: Event) => {
   // 防止事件冒泡
   if (event) {
@@ -229,10 +67,6 @@ const toggleFloatAd = (event?: Event) => {
 
   isFloatAdCollapsed.value = !isFloatAdCollapsed.value
 }
-
-onUnmounted(() => {
-  stopCarousel()
-})
 </script>
 
 <template>
