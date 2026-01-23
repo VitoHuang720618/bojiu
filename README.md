@@ -38,7 +38,13 @@ docker-compose up --build -d
 
 啟動後即可訪問：
 - **前端展示**：[http://localhost/](http://localhost/)
-- **管理後台**：[http://localhost/admin/](http://localhost/admin/)
+- **管理後台**: [http://localhost/admin/](http://localhost/admin/)
+  - **Nginx 防護 (Basic Auth)**:
+    - 帳號: `guard_x92`
+    - 密碼: `X92_#Titan_Shield_@2026`
+  - **後台登入**:
+    - 預設帳號: `admin`
+    - 預設密碼: `Admin123!`
 
 ## 雲端部署注意事項
 

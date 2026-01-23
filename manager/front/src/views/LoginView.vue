@@ -101,7 +101,7 @@ const togglePasswordVisibility = () => {
       </form>
       
       <div class="login-footer">
-        <p>預設帳號: admin / Admin123!</p>
+
         <p>© 2025 B9 Entertainment. All rights reserved.</p>
       </div>
     </div>
