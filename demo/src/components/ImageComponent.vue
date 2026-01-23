@@ -112,7 +112,7 @@ img {
   display: block;
   width: 100%;
   height: auto;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.6s ease-out;
 }
 
 img:not(.is-loaded) {

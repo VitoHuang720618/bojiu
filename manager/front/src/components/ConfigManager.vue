@@ -146,9 +146,12 @@ import CarouselConfigPanel from './config-panels/CarouselConfigPanel.vue'
 import ThumbnailConfigPanel from './config-panels/ThumbnailConfigPanel.vue'
 import FloatAdConfigPanel from './config-panels/FloatAdConfigPanel.vue'
 import { configService, type ConfigData } from '../services/configService'
+import { useToastStore } from '../stores/toastStore'
 
 
 
+
+const toast = useToastStore()
 const loading = ref(false)
 const hasChanges = ref(false)
 const isSidebarCollapsed = ref(false)
@@ -383,7 +386,7 @@ const loadConfig = async () => {
     hasChanges.value = false
   } catch (error) {
     console.error('載入配置失敗:', error)
-    alert('載入配置失敗')
+    toast.error('載入配置失敗')
   } finally {
     loading.value = false
   }
@@ -395,12 +398,12 @@ const saveConfig = async () => {
   try {
     await configService.updateConfig(config)
     hasChanges.value = false
-    alert('配置保存成功')
+    toast.success('配置保存成功')
     // 重新載入預覽
     reloadPreview()
   } catch (error) {
     console.error('保存配置失敗:', error)
-    alert('保存配置失敗')
+    toast.error('保存配置失敗')
   } finally {
     loading.value = false
   }
@@ -414,10 +417,10 @@ const publishConfig = async () => {
   loading.value = true
   try {
     await configService.publishConfig()
-    alert('發布成功！\n現在您可以關閉 API 依賴，Demo 網站將使用這些靜態設定。')
+    toast.success('發布成功！\n現在您可以關閉 API 依賴，Demo 網站將使用這些靜態設定。')
   } catch (error) {
     console.error('Failed to publish config:', error)
-    alert('發布失敗: ' + (error instanceof Error ? error.message : '未知錯誤'))
+    toast.error('發布失敗: ' + (error instanceof Error ? error.message : '未知錯誤'))
   } finally {
     loading.value = false
   }
@@ -448,7 +451,7 @@ const handleBannerUpload = async (event: Event, device: 'pc' | 'tablet' | 'mobil
     }
   } catch (error) {
     console.error('Failed to upload banner:', error)
-    alert('圖片上傳失敗')
+    toast.error('圖片上傳失敗')
   } finally {
     loading.value = false
       ; (event.target as HTMLInputElement).value = ''
@@ -476,7 +479,7 @@ const clearBanner = async (device: 'pc' | 'tablet' | 'mobile') => {
       reloadPreview()
     } catch (error) {
       console.error('清除 Banner 失敗:', error)
-      alert('清除失敗')
+      toast.error('清除失敗')
     } finally {
       loading.value = false
     }
@@ -499,11 +502,11 @@ const handleImageUpload = async (event: Event, field: keyof ConfigData) => {
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳失敗:', error)
-    alert('上傳失敗')
+    toast.error('上傳失敗')
   } finally {
     loading.value = false
   }
@@ -525,11 +528,11 @@ const handleCarouselImageUpload = async (event: Event, index: number) => {
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳失敗:', error)
-    alert('上傳失敗')
+    toast.error('上傳失敗')
   } finally {
     loading.value = false
   }
@@ -551,11 +554,11 @@ const handleVideoUpload = async (event: Event, index: number) => {
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳失敗:', error)
-    alert('上傳失敗')
+    toast.error('上傳失敗')
   } finally {
     loading.value = false
   }
@@ -577,11 +580,11 @@ const handleProgramUpload = async (event: Event, index: number) => {
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳失敗:', error)
-    alert('上傳失敗')
+    toast.error('上傳失敗')
   } finally {
     loading.value = false
   }
@@ -599,7 +602,7 @@ const clearImage = async (field: keyof ConfigData) => {
     reloadPreview()
   } catch (error) {
     console.error('清除圖片失敗:', error)
-    alert('清除圖片失敗')
+    toast.error('清除圖片失敗')
   } finally {
     loading.value = false
   }
@@ -782,11 +785,11 @@ const handleButtonImageUpload = async (event: Event, index: number, imageType: '
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳失敗:', error)
-    alert('上傳失敗')
+    toast.error('上傳失敗')
   } finally {
     loading.value = false
   }
@@ -907,11 +910,11 @@ const handleToolIconImageUpload = async (event: Event, index: number, imageType:
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳失敗:', error)
-    alert('上傳失敗')
+    toast.error('上傳失敗')
   } finally {
     loading.value = false
   }
@@ -1035,7 +1038,7 @@ const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳浮動廣告圖片失敗:', error)
@@ -1144,7 +1147,7 @@ const handleRouteLinksImageUpload = async (event: Event, index: number, imageTyp
       hasChanges.value = false
       reloadPreview()
     } else {
-      alert(response.error || '上傳失敗')
+      toast.error(response.error || '上傳失敗')
     }
   } catch (error) {
     console.error('上傳推薦路線圖片失敗:', error)
