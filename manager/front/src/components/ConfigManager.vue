@@ -1369,13 +1369,14 @@ onMounted(() => {
 .sidebar-footer {
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .publish-section {
+  grid-column: 1 / -1;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 10px;
   margin-top: 5px;
@@ -1655,7 +1656,17 @@ onMounted(() => {
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);}
 
 .btn-primary {
   background-color: #007bff;
