@@ -415,9 +415,9 @@ const saveConfig = async () => {
 
 const publishConfig = async () => {
   const confirmed = await confirmModal.value?.open(
-    '確認發布',
-    '確定要發布當前配置為靜態預設值嗎？',
-    '這將生成 site-settings.json 並複製所有圖片到 demo 目錄。發布後，即使關閉 useApi，前台也會顯示這些內容。'
+    '確定要公開更新嗎？',
+    '按下「確定」後，客人看到的網站就會變成現在這個樣子。',
+    '這樣就算系統重開機，設定也不會跑掉。確定沒問題再按喔！'
   )
   if (!confirmed) return
 
@@ -646,7 +646,7 @@ const addCarouselSlide = () => {
 
 // 刪除輪播圖
 const removeCarouselSlide = async (index: number) => {
-  if (await confirmModal.value?.open('確認刪除', '確定要刪除這張輪播圖嗎？')) {
+  if (await confirmModal.value?.open('真的要刪除嗎？', '這張輪播圖刪掉就不見囉，確定不要了嗎？')) {
     config.carouselSlides.splice(index, 1)
     hasChanges.value = true
     // 立即保存並重新載入預覽
@@ -713,7 +713,7 @@ const addVideoThumbnail = () => {
 
 // 刪除視頻
 const removeVideoThumbnail = async (index: number) => {
-  if (await confirmModal.value?.open('確認刪除', '確定要刪除這個視頻嗎？')) {
+  if (await confirmModal.value?.open('真的要刪除嗎？', '這個影片刪掉就不見囉，確定不要了嗎？')) {
     config.videoThumbnails.splice(index, 1)
     hasChanges.value = true
     // 立即保存並重新載入預覽
@@ -745,7 +745,7 @@ const addProgramThumbnail = () => {
 
 // 刪除節目
 const removeProgramThumbnail = async (index: number) => {
-  if (await confirmModal.value?.open('確認刪除', '確定要刪除這個節目嗎？')) {
+  if (await confirmModal.value?.open('真的要刪除嗎？', '這個節目刪掉就不見囉，確定不要了嗎？')) {
     config.programThumbnails.splice(index, 1)
     hasChanges.value = true
     // 立即保存並重新載入預覽
