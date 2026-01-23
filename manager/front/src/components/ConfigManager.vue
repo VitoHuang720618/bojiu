@@ -130,6 +130,7 @@
       <div class="loading-spinner">載入中...</div>
     </div>
 
+    <ConfirmModal ref="confirmModal" />
   </div>
 </template>
 
@@ -147,11 +148,14 @@ import ThumbnailConfigPanel from './config-panels/ThumbnailConfigPanel.vue'
 import FloatAdConfigPanel from './config-panels/FloatAdConfigPanel.vue'
 import { configService, type ConfigData } from '../services/configService'
 import { useToastStore } from '../stores/toastStore'
+import ConfirmModal from './ConfirmModal.vue'
+
 
 
 
 
 const toast = useToastStore()
+const confirmModal = ref<InstanceType<typeof ConfirmModal>>()
 const loading = ref(false)
 const hasChanges = ref(false)
 const isSidebarCollapsed = ref(false)
@@ -410,9 +414,12 @@ const saveConfig = async () => {
 }
 
 const publishConfig = async () => {
-  if (!confirm('確定要發布當前配置為靜態預設值嗎？\n這將生成 site-settings.json 並複製所有圖片到 demo 目錄。\n發布後，即使關閉 useApi，前台也會顯示這些內容。')) {
-    return
-  }
+  const confirmed = await confirmModal.value?.open(
+    '確認發布',
+    '確定要發布當前配置為靜態預設值嗎？',
+    '這將生成 site-settings.json 並複製所有圖片到 demo 目錄。發布後，即使關閉 useApi，前台也會顯示這些內容。'
+  )
+  if (!confirmed) return
 
   loading.value = true
   try {
@@ -639,7 +646,7 @@ const addCarouselSlide = () => {
 
 // 刪除輪播圖
 const removeCarouselSlide = async (index: number) => {
-  if (confirm('確定要刪除這張輪播圖嗎？')) {
+  if (await confirmModal.value?.open('確認刪除', '確定要刪除這張輪播圖嗎？')) {
     config.carouselSlides.splice(index, 1)
     hasChanges.value = true
     // 立即保存並重新載入預覽
@@ -706,7 +713,7 @@ const addVideoThumbnail = () => {
 
 // 刪除視頻
 const removeVideoThumbnail = async (index: number) => {
-  if (confirm('確定要刪除這個視頻嗎？')) {
+  if (await confirmModal.value?.open('確認刪除', '確定要刪除這個視頻嗎？')) {
     config.videoThumbnails.splice(index, 1)
     hasChanges.value = true
     // 立即保存並重新載入預覽
@@ -738,7 +745,7 @@ const addProgramThumbnail = () => {
 
 // 刪除節目
 const removeProgramThumbnail = async (index: number) => {
-  if (confirm('確定要刪除這個節目嗎？')) {
+  if (await confirmModal.value?.open('確認刪除', '確定要刪除這個節目嗎？')) {
     config.programThumbnails.splice(index, 1)
     hasChanges.value = true
     // 立即保存並重新載入預覽
