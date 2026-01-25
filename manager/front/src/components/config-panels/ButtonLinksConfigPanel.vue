@@ -7,23 +7,18 @@
             </div>
             <div class="header-actions">
                 <button @click="$emit('reset')" class="btn btn-outline-secondary">重置為預設</button>
-                <button @click="$emit('add')" class="btn btn-primary">新增按鈕</button>
             </div>
         </div>
 
         <div v-if="buttonLinks.length === 0" class="empty-state">
             <div class="empty-icon">🔗</div>
             <p>目前沒有自定義按鈕，將使用系統預設配置</p>
-            <button @click="$emit('add')" class="btn btn-outline-primary">新增第一個按鈕</button>
         </div>
 
         <div class="items-list">
             <div v-for="(button, index) in buttonLinks" :key="index" class="item-card">
                 <div class="item-card-header">
                     <span class="item-badge">按鈕 {{ index + 1 }}</span>
-                    <button @click="$emit('remove', index)" class="btn btn-icon-danger" title="刪除按鈕">
-                        <span class="icon">🗑️</span>
-                    </button>
                 </div>
 
                 <div class="item-card-body">
@@ -48,7 +43,7 @@
                                     <img v-if="button.defaultImage" :src="getImageUrl(button.defaultImage)"
                                         alt="Default" class="preview-img" />
                                     <div v-else class="placeholder">
-                                        <span class="icon">🖼️</span>
+                                        <span class="text">默認</span>
                                     </div>
                                     <input type="file" @change="(e) => $emit('upload', e, index, 'defaultImage')"
                                         accept="image/*" class="file-input" />
@@ -63,7 +58,7 @@
                                     <img v-if="button.hoverImage" :src="getImageUrl(button.hoverImage)" alt="Hover"
                                         class="preview-img" />
                                     <div v-else class="placeholder">
-                                        <span class="icon">✨</span>
+                                        <span class="text">懸停</span>
                                     </div>
                                     <input type="file" @change="(e) => $emit('upload', e, index, 'hoverImage')"
                                         accept="image/*" class="file-input" />

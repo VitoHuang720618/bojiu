@@ -2,7 +2,7 @@
   "logo": "http://localhost:3002/uploads/logo.png",
   "banner": {
     "pc": "http://localhost:3002/uploads/banner-pc.png",
-    "tablet": "http://localhost:3002/uploads/banner-tablet.png",
+    "tablet": "",
     "mobile": ""
   },
   "backgroundImage": "http://localhost:3002/uploads/backgroundImage.png",
@@ -18,22 +18,22 @@
       "text": "APP",
       "href": "https://haa68686.com:9900/web/simple.php#/aioDownload",
       "target": "_blank",
-      "defaultImage": "http://localhost:3002/uploads/button-1-defaultImage.png",
-      "hoverImage": "http://localhost:3002/uploads/button-1-hoverImage.png"
+      "defaultImage": "/assets/images/1630a76f-f7e7-4af7-8099-082bc201512c.png",
+      "hoverImage": "/assets/images/4d106ec5-aa73-4fd5-915e-7e1c6311afa5.png"
     },
     {
       "text": "FUN乐园",
       "href": "https://fun99666.com/",
       "target": "_blank",
-      "defaultImage": "http://localhost:3002/uploads/button-2-defaultImage.png",
-      "hoverImage": "http://localhost:3002/uploads/button-2-hoverImage.png"
+      "defaultImage": "/assets/images/64e1d47d-537d-45d0-bfd4-801e473bb525.png",
+      "hoverImage": "/assets/images/87fe8990-8297-4e70-9693-e37c665ee087.png"
     },
     {
       "text": "合作夥伴",
       "href": "https://haa68686.com:9900/web/#/article/at3",
       "target": "_blank",
-      "defaultImage": "http://localhost:3002/uploads/button-3-defaultImage.png",
-      "hoverImage": "http://localhost:3002/uploads/button-3-hoverImage.png"
+      "defaultImage": "/assets/images/95e17bec-043c-49ea-a438-e8057a39f4ad.png",
+      "hoverImage": "/assets/images/e9df8ef5-cd97-4c06-b051-a894e67f0935.png"
     }
   ],
   "carouselSlides": [
@@ -52,33 +52,33 @@
   },
   "routeLinks": [
     {
-      "default": "http://localhost:3002/uploads/routeLinks-0-default.png",
-      "hover": "http://localhost:3002/uploads/routeLinks-0-hover.png",
+      "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+      "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png",
       "href": ""
     },
     {
-      "default": "http://localhost:3002/uploads/routeLinks-1-default.png",
-      "hover": "http://localhost:3002/uploads/routeLinks-1-hover.png",
+      "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+      "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png",
       "href": ""
     },
     {
-      "default": "http://localhost:3002/uploads/routeLinks-2-default.png",
-      "hover": "http://localhost:3002/uploads/routeLinks-2-hover.png",
+      "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+      "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png",
       "href": ""
     },
     {
-      "default": "http://localhost:3002/uploads/routeLinks-3-default.png",
-      "hover": "http://localhost:3002/uploads/routeLinks-3-hover.png",
+      "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+      "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png",
       "href": ""
     },
     {
-      "default": "http://localhost:3002/uploads/routeLinks-4-default.png",
-      "hover": "http://localhost:3002/uploads/routeLinks-4-hover.png",
+      "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+      "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png",
       "href": ""
     },
     {
-      "default": "http://localhost:3002/uploads/routeLinks-5-default.png",
-      "hover": "http://localhost:3002/uploads/routeLinks-5-hover.png",
+      "default": "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",
+      "hover": "/assets/images/43d1eb1c-91ed-4e12-903e-197a2042d7cf.png",
       "href": ""
     }
   ],
@@ -96,42 +96,33 @@
     {
       "href": "https://www.baidu.com",
       "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
-      "hover": ""
+      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
+    },
+    {
+      "href": "https://www.youku.com",
+      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
+    },
+    {
+      "href": "https://www.iqiyi.com",
+      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
+    },
+    {
+      "href": "https://x.com",
+      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
     }
   ],
   "videoThumbnails": [
     {
-      "image": "",
+      "image": "http://localhost:3002/uploads/videoThumbnails-0-image.png",
       "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
+      "title": "hello",
       "alt": ""
     }
   ],
   "programThumbnails": [
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
-      "alt": ""
-    },
     {
       "image": "",
       "href": "",
@@ -144,7 +135,8 @@
       "href": "https://example.com/customer-service",
       "default": "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
       "hover": "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png",
-      "mobile": ""
+      "mobile": "http://localhost:3002/uploads/float-0-mobile.png",
+      "tablet": "http://localhost:3002/uploads/float-0-tablet.png"
     },
     {
       "href": "https://example.com/girl-douyin",

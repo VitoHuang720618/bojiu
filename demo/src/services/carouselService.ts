@@ -13,6 +13,7 @@ class CarouselService {
   }
 
   async getConfig(): Promise<{
+    logo: string,
     carouselSlides: { image: string, href: string, alt: string }[],
     banner: string | BannerConfig,
     backgroundImage: string,
@@ -27,9 +28,9 @@ class CarouselService {
       // 檢查是否啟用了 API
       const {
         siteConfig,
+        assetsState, // Import assetsState
         carouselSlides,
         banner,
-        backgroundImage,
         videoThumbnails,
         programThumbnails,
         buttonLinks,
@@ -41,9 +42,10 @@ class CarouselService {
       if (siteConfig.useApi === false) {
         // Return static data from config
         return {
+          logo: assetsState.logo,
           carouselSlides,
           banner,
-          backgroundImage,
+          backgroundImage: assetsState.backgroundImage,
           videoThumbnails,
           programThumbnails,
           // Map structure for compatibility
@@ -89,6 +91,7 @@ class CarouselService {
       }
 
       return {
+        logo: processImageUrl(config.logo || ''),
         carouselSlides: (config.carouselSlides || []).map((slide: any) => ({
           ...slide,
           image: processImageUrl(slide.image)
@@ -136,6 +139,7 @@ class CarouselService {
 
       // 返回默认数据作为后备
       return {
+        logo: '',
         carouselSlides: [
           {
             image: '/assets/images/39c91b7a-9464-4acc-85a5-8ac436268dd2.png',

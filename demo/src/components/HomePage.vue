@@ -92,9 +92,9 @@ const toggleFloatAd = (event?: Event) => {
         <!-- Top Button Links -->
         <div class="button-links">
           <div v-for="(item, index) in assetManifest.buttonLinks" :key="item.id" class="item">
-            <template v-if="effectiveButtonLinks[index]?.defaultImage">
-              <ImageButton :default-src="effectiveButtonLinks[index]?.defaultImage || item.default"
-                :hover-src="effectiveButtonLinks[index]?.hoverImage || item.hover" :alt="item.alt"
+            <template v-if="effectiveButtonLinks[index]?.defaultImage !== undefined">
+              <ImageButton :default-src="effectiveButtonLinks[index]?.defaultImage || ''"
+                :hover-src="effectiveButtonLinks[index]?.hoverImage || ''" :alt="item.alt"
                 :href="effectiveButtonLinks[index]?.href" :target="effectiveButtonLinks[index]?.target" :lazy="false" />
             </template>
             <div v-else class="button-link-placeholder">
@@ -112,7 +112,7 @@ const toggleFloatAd = (event?: Event) => {
               <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
                 :class="{ active: currentSlide === index }">
                 <a :href="slide.href" target="_blank" rel="noopener noreferrer">
-                  <ImageComponent :src="slide.image || assetManifest.carouselSlides[index]" :alt="slide.alt" />
+                  <ImageComponent :src="slide.image" :alt="slide.alt" />
                 </a>
               </div>
             </div>
@@ -160,16 +160,12 @@ const toggleFloatAd = (event?: Event) => {
             </div>
             <div class="list">
               <div v-for="(video, index) in effectiveVideoThumbnails" :key="`video-${index}`" class="item">
-                <template v-if="video && video.image">
-                  <a :href="video.href" target="_blank" rel="noopener noreferrer">
-                    <div class="img">
-                      <ImageComponent :src="video.image" :alt="video.alt" />
-                    </div>
-                    <span>{{ video.title }}</span>
-                  </a>
-                </template>
-                <!-- 保持 Grid 佔位，顯示骨架框 -->
-                <div v-else class="empty-placeholder-box"></div>
+                <a :href="video?.href || '#'" target="_blank" rel="noopener noreferrer">
+                  <div class="img">
+                    <ImageComponent :src="video?.image || ''" :alt="video?.alt || ''" />
+                  </div>
+                  <span>{{ video?.title || '&nbsp;' }}</span>
+                </a>
               </div>
             </div>
           </div>
@@ -183,16 +179,12 @@ const toggleFloatAd = (event?: Event) => {
             </div>
             <div class="list">
               <div v-for="(program, index) in effectiveProgramThumbnails" :key="`program-${index}`" class="item">
-                <template v-if="program && program.image">
-                  <a :href="program.href" target="_blank" rel="noopener noreferrer">
-                    <div class="img">
-                      <ImageComponent :src="program.image" :alt="program.alt" />
-                    </div>
-                    <span>{{ program.title }}</span>
-                  </a>
-                </template>
-                <!-- 保持 Grid 佔位，顯示骨架框 -->
-                <div v-else class="empty-placeholder-box"></div>
+                <a :href="program?.href || '#'" target="_blank" rel="noopener noreferrer">
+                  <div class="img">
+                    <ImageComponent :src="program?.image || ''" :alt="program?.alt || ''" />
+                  </div>
+                  <span>{{ program?.title || '&nbsp;' }}</span>
+                </a>
               </div>
             </div>
           </div>
@@ -1305,8 +1297,8 @@ const toggleFloatAd = (event?: Event) => {
 .programme-wrap .list .item span {
   display: flex;
   align-items: center;
-  justify-content: center;
-  /* PC 版置中 */
+  justify-content: flex-start;
+  /* 靠左顯示 */
   width: 100%;
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
@@ -1315,7 +1307,7 @@ const toggleFloatAd = (event?: Event) => {
   font-size: 1rem;
   font-weight: 500;
   margin: 0 !important;
-  padding: 0;
+  padding: 0 12px;
   box-sizing: border-box;
   border: 1px solid rgba(223, 176, 130, 0.2);
   border-top: none;

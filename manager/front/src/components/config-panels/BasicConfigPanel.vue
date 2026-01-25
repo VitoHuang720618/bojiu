@@ -16,7 +16,6 @@
                 <div class="image-preview-wrapper" :class="{ 'has-image': logo }">
                     <img v-if="logo" :src="getImageUrl(logo)" alt="Logo" class="preview-img" />
                     <div v-else class="placeholder">
-                        <span class="icon">🏷️</span>
                         <p>尚未設置 Logo</p>
                     </div>
                     <input type="file" @change="(e) => $emit('upload', e, 'logo')" accept="image/*"

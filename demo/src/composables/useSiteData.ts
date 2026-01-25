@@ -3,8 +3,13 @@ import { assetManifest } from '../config/assetManifest'
 import {
     recommendedRoutes,
     carouselSlides,
-    videoContent,
-    programContent,
+    videoThumbnails,
+    programThumbnails,
+    recommendedTools,
+    floatAdButtons,
+    routeLinksImages,
+    banner,
+    assetsState,
     siteConfig
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
@@ -12,6 +17,7 @@ import type { ButtonLinkConfig, BannerConfig } from '../types'
 
 export function useSiteData() {
     // Cloud API Data Refs
+    const apiLogo = ref<string>('')
     const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
     const apiBanner = ref<string | BannerConfig>('')
     const apiBackgroundImage = ref<string>('')
@@ -23,6 +29,13 @@ export function useSiteData() {
     const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
 
     // Computed Properties: Priority Logic (API vs Local)
+    const effectiveLogo = computed(() => {
+        if (siteConfig.useApi) {
+            return apiLogo.value !== undefined ? apiLogo.value : assetManifest.logo
+        }
+        return assetsState.logo !== undefined ? assetsState.logo : assetManifest.logo
+    })
+
     const effectiveCarouselSlides = computed(() => {
         if (siteConfig.useApi) {
             return apiCarouselSlides.value.map((slide, index) => ({
@@ -36,7 +49,7 @@ export function useSiteData() {
             id: slide.id,
             alt: slide.alt,
             href: slide.href || '#',
-            image: assetManifest.carouselSlides[index] || ''
+            image: slide.image || assetManifest.carouselSlides[index] || ''
         }))
     })
 
@@ -44,26 +57,26 @@ export function useSiteData() {
         if (siteConfig.useApi) {
             return apiBanner.value || ''
         }
-        return assetManifest.banner
+        // 優先返回 siteConfig 裡的響應式 banner 物件
+        return banner
     })
 
     const effectiveBackgroundImage = computed(() => {
         if (siteConfig.useApi) {
-            return apiBackgroundImage.value || ''
+            return apiBackgroundImage.value !== undefined ? apiBackgroundImage.value : ''
         }
-        const bgImage = apiBackgroundImage.value
-        return bgImage || (assetManifest as any).backgroundImage
+        return assetsState.backgroundImage !== undefined ? assetsState.backgroundImage : assetManifest.backgroundImage
     })
 
     const effectiveVideoThumbnails = computed(() => {
         if (siteConfig.useApi) {
             return apiVideoThumbnails.value
         }
-        return videoContent.map((video, index) => ({
-            image: assetManifest.videoThumbnails[index] || '',
-            href: '#',
-            alt: video.title,
-            title: video.title
+        return videoThumbnails.map((video, index) => ({
+            image: video.image || '',
+            href: video.href || '#',
+            alt: video.title || '',
+            title: video.title || ''
         }))
     })
 
@@ -71,11 +84,11 @@ export function useSiteData() {
         if (siteConfig.useApi) {
             return apiProgramThumbnails.value
         }
-        return programContent.map((program, index) => ({
-            image: assetManifest.programThumbnails[index] || '',
-            href: '#',
-            alt: program.title,
-            title: program.title
+        return programThumbnails.map((program, index) => ({
+            image: program.image || '',
+            href: program.href || '#',
+            alt: program.title || '',
+            title: program.title || ''
         }))
     })
 
@@ -90,11 +103,12 @@ export function useSiteData() {
                 hoverImage: button?.hoverImage || ''
             }))
         }
-        return assetManifest.buttonLinks.map((button) => ({
+        // 映射 navigation
+        return siteConfig.navigation.map((button) => ({
             id: button.id,
-            text: button.alt,
-            href: '#',
-            target: '_blank',
+            text: button.label,
+            href: button.href,
+            target: button.isExternal ? '_blank' : '_self',
             defaultImage: button.default,
             hoverImage: button.hover
         }))
@@ -110,12 +124,12 @@ export function useSiteData() {
                 href: tool?.href || '#'
             }))
         }
-        return assetManifest.toolIcons.map((tool) => ({
+        return recommendedTools.map((tool) => ({
             id: tool.id,
             default: tool.default,
             hover: tool.hover,
-            alt: tool.alt,
-            href: '#'
+            alt: tool.name,
+            href: tool.href
         }))
     })
 
@@ -128,9 +142,9 @@ export function useSiteData() {
                 hover: button?.hover || ''
             }))
         }
-        return assetManifest.floatAdButtons.map((button) => ({
+        return floatAdButtons.map((button) => ({
             id: button.id,
-            href: '#',
+            href: button.href,
             default: button.default,
             hover: button.hover
         }))
@@ -148,20 +162,18 @@ export function useSiteData() {
                 }
             })
         }
-        return recommendedRoutes.map((route, index) => {
-            const defaultItem = assetManifest.routeLinks[index] || { default: '', hover: '' }
-            return {
-                default: defaultItem.default,
-                hover: defaultItem.hover,
-                href: route.href
-            }
-        })
+        return routeLinksImages.map((link, index) => ({
+            default: link.default,
+            hover: link.hover,
+            href: link.href || recommendedRoutes[index]?.href || '#'
+        }))
     })
 
     // Data Loading Action
     const loadConfig = async () => {
         try {
             const config = await carouselService.getConfig()
+            apiLogo.value = config.logo !== undefined ? config.logo : ''
             apiCarouselSlides.value = config.carouselSlides
             apiBanner.value = config.banner
             apiBackgroundImage.value = config.backgroundImage
@@ -183,6 +195,7 @@ export function useSiteData() {
         apiCarouselSlides,
 
         // Computed (Read-only for template)
+        effectiveLogo,
         effectiveCarouselSlides,
         effectiveBanner,
         effectiveBackgroundImage,

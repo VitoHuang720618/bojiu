@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import ImageComponent from './ImageComponent.vue'
-import { assetManifest } from '../config/assetManifest'
+import { useSiteData } from '../composables/useSiteData'
+
+// Use logo from composable
+const { effectiveLogo } = useSiteData()
 </script>
 
 <template>
   <header id="header">
     <div class="header__logo">
-      <ImageComponent :src="assetManifest.logo" alt="博九娱乐网" :lazy="false" />
+      <ImageComponent :src="effectiveLogo" alt="博九娱乐网" :lazy="false" />
     </div>
   </header>
 </template>

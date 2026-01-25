@@ -79,8 +79,12 @@ export const siteConfig = reactive<SiteConfig>({
 
 // Function to update local assets for non-API mode
 export const updateLocalAssets = (config: any) => {
+  if (config.logo !== undefined) Object.assign(assetsState, { logo: config.logo })
   if (config.banner) Object.assign(banner, config.banner)
-  if (config.backgroundImage) Object.assign(assetsState, { backgroundImage: config.backgroundImage })
+  if (config.backgroundImage !== undefined) Object.assign(assetsState, { backgroundImage: config.backgroundImage })
+  if (config.buttonLinks) {
+    siteConfig.navigation.splice(0, siteConfig.navigation.length, ...config.buttonLinks)
+  }
   if (config.routeLinksImages) routeLinksImages.splice(0, routeLinksImages.length, ...config.routeLinksImages)
   if (config.recommendedRoutes) recommendedRoutes.splice(0, recommendedRoutes.length, ...config.recommendedRoutes)
   if (config.recommendedTools) recommendedTools.splice(0, recommendedTools.length, ...config.recommendedTools)
@@ -102,10 +106,6 @@ export const loadRuntimeConfig = async () => {
       if (runtimeConfig.siteConfig) {
         Object.assign(siteConfig, runtimeConfig.siteConfig)
       }
-
-      // Force useApi to true since we have a valid runtime config
-      siteConfig.useApi = true
-
 
       // Update local assets if they exist in runtime config
       updateLocalAssets(runtimeConfig)
@@ -129,9 +129,9 @@ export const banner = reactive({
 })
 
 export const assetsState = reactive({
+  logo: "/assets/images/logo.png",
   backgroundImage: "/defaults/backgroundImage.png"
 })
-export const backgroundImage = "/defaults/backgroundImage.png"
 
 export const titles = reactive({
   recommendedRoutes: "",

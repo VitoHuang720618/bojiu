@@ -32,7 +32,6 @@
                                 <img v-if="link?.default" :src="getImageUrl(link.default)" alt="Default"
                                     class="preview-img" />
                                 <div v-else class="placeholder">
-                                    <span class="icon">🖼️</span>
                                     <span class="text">默認</span>
                                 </div>
                                 <input type="file" @change="(e) => $emit('upload', e, index, 'default')"
@@ -49,7 +48,6 @@
                                 <img v-if="link?.hover" :src="getImageUrl(link.hover)" alt="Hover"
                                     class="preview-img" />
                                 <div v-else class="placeholder">
-                                    <span class="icon">✨</span>
                                     <span class="text">懸停</span>
                                 </div>
                                 <input type="file" @change="(e) => $emit('upload', e, index, 'hover')" accept="image/*"

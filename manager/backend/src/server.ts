@@ -486,19 +486,27 @@ async function startServer() {
 
         // Helper to copy image and return new path
         const processImage = (url: string) => {
-          if (!url || !url.includes('/uploads/')) return ''
+          if (!url) return ''
 
-          const filename = url.split('/uploads/').pop()
-          if (!filename) return ''
+          // 如果已經是 defaults 或 assets 路徑，直接回傳
+          if (url.includes('/defaults/') || url.includes('/assets/')) return url
 
-          const sourcePath = path.join(UPLOADS_DIR, filename)
-          const targetPath = path.join(targetDefaultsDir, filename)
+          // 只有 uploads 目錄的圖需要複製到 defaults
+          if (url.includes('/uploads/')) {
+            const filename = url.split('/uploads/').pop()
+            if (!filename) return url
 
-          if (fs.existsSync(sourcePath)) {
-            fs.copyFileSync(sourcePath, targetPath)
+            const sourcePath = path.join(UPLOADS_DIR, filename)
+            const targetPath = path.join(targetDefaultsDir, filename)
+
+            if (fs.existsSync(sourcePath)) {
+              fs.copyFileSync(sourcePath, targetPath)
+            }
+
+            return `/defaults/${filename}`
           }
 
-          return `/defaults/${filename}`
+          return url
         }
 
         // Process Data & Assets
@@ -506,6 +514,14 @@ async function startServer() {
           siteConfig: {
             useApi: false // Force API off
           },
+          logo: processImage(config.logo || ''),
+          buttonLinks: (config.buttonLinks || []).map(btn => ({
+            label: btn.text || '', // 後端用 text
+            href: btn.href || '',
+            isExternal: btn.target === '_blank', // 後端用 target
+            default: processImage(btn.defaultImage || ''),
+            hover: processImage(btn.hoverImage || '')
+          })),
           banner: {
             pc: processImage(config.banner.pc),
             tablet: processImage(config.banner.tablet),
@@ -532,16 +548,16 @@ async function startServer() {
           })),
           videoThumbnails: (config.videoThumbnails || []).map((video, index) => ({
             id: `video-${index}`,
-            title: video.title || `Video ${index}`,
+            title: video.title || '',
             href: video.href || '#',
-            image: processImage(video.image),
+            image: processImage(video.image || ''),
             alt: video.alt || ''
           })),
           programThumbnails: (config.programThumbnails || []).map((program, index) => ({
             id: `program-${index}`,
-            title: program.title || `Program ${index}`,
+            title: program.title || '',
             href: program.href || '#',
-            image: processImage(program.image),
+            image: processImage(program.image || ''),
             alt: program.alt || ''
           })),
           carouselSlides: (config.carouselSlides || []).map((slide, index) => ({

@@ -11,7 +11,6 @@
                     <img v-if="backgroundImage" :src="getImageUrl(backgroundImage)" alt="Background"
                         class="preview-img" />
                     <div v-else class="placeholder">
-                        <span class="icon">🖼️</span>
                         <p>尚未設置背景圖</p>
                     </div>
                     <input type="file" @change="(e) => $emit('upload', e)" accept="image/*" class="file-input" />

@@ -28,7 +28,6 @@
                         <div class="image-preview-wrapper" :class="{ 'has-image': item.image }">
                             <img v-if="item.image" :src="getImageUrl(item.image)" :alt="item.alt" class="preview-img" />
                             <div v-else class="placeholder">
-                                <span class="icon">🖼️</span>
                                 <span class="text">上傳縮圖</span>
                             </div>
                             <input type="file" @change="(e) => $emit('upload', e, index)" accept="image/*"
