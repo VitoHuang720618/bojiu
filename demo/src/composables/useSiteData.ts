@@ -72,7 +72,7 @@ export function useSiteData() {
         if (siteConfig.useApi) {
             return apiVideoThumbnails.value
         }
-        return videoThumbnails.map((video, index) => ({
+        return videoThumbnails.map((video) => ({
             image: video.image || '',
             href: video.href || '#',
             alt: video.title || '',
@@ -84,7 +84,7 @@ export function useSiteData() {
         if (siteConfig.useApi) {
             return apiProgramThumbnails.value
         }
-        return programThumbnails.map((program, index) => ({
+        return programThumbnails.map((program) => ({
             image: program.image || '',
             href: program.href || '#',
             alt: program.title || '',
