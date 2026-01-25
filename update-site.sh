@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# ==============================================================================
+# B9 Website - VM Deployment Script
+# ==============================================================================
+
+# 配置變數 (請確認與您的 GCP 環境一致)
+IMAGE_NAME="asia-east1-docker.pkg.dev/slot-439403/b9/my-web-app"
+CONTAINER_NAME="b9-app"
+DEFAULT_TAG="latest"
+
+# 接受參數作為 Tag，若無則使用預設值
+TAG=${1:-$DEFAULT_TAG}
+FULL_IMAGE="${IMAGE_NAME}:${TAG}"
+
+echo "🚀 開始準備部署版本: ${TAG}"
+
+# 1. Pull 最新的 Image
+echo "📥 正在從 Artifact Registry 拉取映像檔..."
+docker pull ${FULL_IMAGE}
+if [ $? -ne 0 ]; then
+    echo "❌ 拉取失敗，請檢查 GCP 權限 (gcloud auth configure-docker)"
+    exit 1
+fi
+
+# 2. 停止並移除舊容器
+if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
+    echo "🛑 正在停止舊服務: ${CONTAINER_NAME}..."
+    docker stop ${CONTAINER_NAME}
+    echo "🗑️ 正在移除舊容器..."
+    docker rm ${CONTAINER_NAME}
+fi
+
+# 3. 啟動新容器
+# 注意：這裡掛載了 /app/data 和 /app/uploads 確保資料持久化
+# 並且將 Host 的 80 端口映射到容器的 80
+echo "⚙️ 正在啟動新容器..."
+docker run -d \
+    --name ${CONTAINER_NAME} \
+    --restart always \
+    -p 80:80 \
+    -p 443:443 \
+    -v $(pwd)/data:/app/data \
+    -v $(pwd)/uploads:/app/uploads \
+    -e NODE_ENV=production \
+    ${FULL_IMAGE}
+
+if [ $? -eq 0 ]; then
+    echo "✅ 服務已成功啟動！"
+    echo "🔍 檢查狀態:"
+    docker ps -f name=${CONTAINER_NAME}
+else
+    echo "❌ 啟動失敗，請檢查 Docker 記錄。"
+    exit 1
+fi
+
+# 4. 清理過時的 Images (選用)
+echo "🧹 清理舊有的過時映像檔 (Dangling images)..."
+docker image prune -f
