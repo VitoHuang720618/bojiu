@@ -267,37 +267,12 @@ async function startServer() {
         validateImageFileStrict(req.file)
 
         // 根據 assetPath 生成正確的文件名並重命名文件
-        let targetFilename = 'default.png'
+        const timestamp = Date.now()
+        let targetFilename = `upload-${timestamp}.png`
 
         if (assetPath) {
-          if (assetPath === 'logo') {
-            targetFilename = 'logo.png'
-          } else if (assetPath === 'banner') {
-            targetFilename = 'banner.png'
-          } else if (assetPath.startsWith('banner.')) {
-            const device = assetPath.split('.')[1]
-            targetFilename = `banner-${device}.png`
-          } else if (assetPath.startsWith('carouselSlides.')) {
-            const index = assetPath.split('.')[1]
-            targetFilename = `carousel-${index}.png`
-          } else if (assetPath.startsWith('buttonLinks.')) {
-            const parts = assetPath.split('.')
-            const index = parts[1]
-            const type = parts[2] || 'default'
-            targetFilename = `button-${index}-${type}.png`
-          } else if (assetPath.startsWith('toolIcons.')) {
-            const parts = assetPath.split('.')
-            const index = parts[1]
-            const type = parts[2] || 'default'
-            targetFilename = `tool-${index}-${type}.png`
-          } else if (assetPath.startsWith('floatAdButtons.')) {
-            const parts = assetPath.split('.')
-            const index = parts[1]
-            const type = parts[2] || 'default'
-            targetFilename = `float-${index}-${type}.png`
-          } else {
-            targetFilename = assetPath.replace(/\./g, '-') + '.png'
-          }
+          const cleanPath = assetPath.replace(/\./g, '-')
+          targetFilename = `${cleanPath}-${timestamp}.png`
         }
 
         // 重命名文件到目標文件名

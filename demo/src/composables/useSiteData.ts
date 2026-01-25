@@ -17,10 +17,10 @@ import type { ButtonLinkConfig, BannerConfig } from '../types'
 
 export function useSiteData() {
     // Cloud API Data Refs
-    const apiLogo = ref<string>('')
+    const apiLogo = ref<string | undefined>(undefined)
     const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
-    const apiBanner = ref<string | BannerConfig>('')
-    const apiBackgroundImage = ref<string>('')
+    const apiBanner = ref<string | BannerConfig | undefined>(undefined)
+    const apiBackgroundImage = ref<string | undefined>(undefined)
     const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
     const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
     const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
