@@ -7,10 +7,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Runtime data & Huge binary folders
+uploads/
+data/
+PC\ web_images/
+phone+tablet_images/
+manager/backend/uploads/
+manager/backend/data/
+demo/public/defaults/
+demo/public/site-settings.json
+
+# Nested dependencies
+**/node_modules/
+**/dist/
+**/.DS_Store
 
 # Editor directories and files
 .vscode/*
