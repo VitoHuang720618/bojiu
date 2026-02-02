@@ -1698,7 +1698,7 @@ const toggleFloatAd = (event?: Event) => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 739px) {
   #float-ad {
     position: relative !important;
     margin: 0 !important;
