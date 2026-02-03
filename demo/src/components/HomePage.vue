@@ -67,29 +67,10 @@ const toggleFloatAd = (event?: Event) => {
 
   isFloatAdCollapsed.value = !isFloatAdCollapsed.value
 }
-
-// Scroll to Top
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
-}
 </script>
 
 <template>
   <div class="main-inner">
-    <!-- Back to Top Button -->
-    <button class="back-to-top" @click="scrollToTop" aria-label="Back to Top">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 4L4 12H9V20H15V12H20L12 4Z" fill="currentColor" />
-        <!-- Alternative Chevron style to match image closer -->
-        <path d="M6 15L12 9L18 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round" />
-      </svg>
-      <div class="caret-icon"></div>
-    </button>
-
     <!-- Banner -->
     <div id="banner" :class="{ 'banner-empty': !effectiveBanner }">
       <ImageComponent v-if="effectiveBanner" :src="effectiveBanner" alt="Banner" :lazy="false" />
@@ -1569,8 +1550,7 @@ const scrollToTop = () => {
 
 /* Float Ad */
 #float-ad {
-  top: 350px;
-  /* PC版改為靠右上 (距離頂部 350px) */
+  bottom: 1rem;
   max-width: 120px;
   /* 依照要求調整為 120px */
   min-width: 75px;
@@ -1598,7 +1578,7 @@ const scrollToTop = () => {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 20px 0 10px 0 !important;
+    padding: 10px 0 !important;
     background: #3e080f !important;
   }
 }
@@ -1609,6 +1589,8 @@ const scrollToTop = () => {
     max-width: 100% !important;
     height: 95px !important;
     margin: 0 auto !important;
+    padding-top: 30px !important;
+    box-sizing: border-box !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
   }
@@ -1748,56 +1730,13 @@ const scrollToTop = () => {
     /* 鎖死高度與圖片一致 */
     aspect-ratio: auto !important;
     /* 移除強制比例，讓高度驅動 */
-  }
-}
-
-/* Back to Top Button */
-.back-to-top {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  background: #64000d;
-  border: 2px solid rgba(255, 239, 178, 0.60);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s ease;
-  padding: 0;
-}
-
-.back-to-top:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
-  background: #7a0a19;
-  border-color: rgba(255, 239, 178, 0.90);
-}
-
-.back-to-top svg {
-  width: 28px;
-  height: 28px;
-  color: #ffefb2;
-  /* Gold color to match border */
-}
-
-/* Position adjustment for mobile/tablet to avoid overlap with float ad */
-@media (max-width: 1279px) {
-  .back-to-top {
-    bottom: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
-    /* Use 44px for mobile touch target, kept slightly smaller than desktop but accessible */
+    flex: none !important;
   }
 
-  .back-to-top svg {
-    width: 24px;
-    height: 24px;
+  #float-ad .links .item :deep(img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
   }
 }
 </style>
