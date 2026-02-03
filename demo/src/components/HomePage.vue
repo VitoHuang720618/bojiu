@@ -312,7 +312,7 @@ const toggleFloatAd = (event?: Event) => {
 #home-main {
   border-color: #dfb082;
   border-style: solid;
-  border-width: 4px 0;
+  border-width: 4px 0 0 0;
   box-sizing: border-box;
   padding: 3rem 4.6875rem;
 }
