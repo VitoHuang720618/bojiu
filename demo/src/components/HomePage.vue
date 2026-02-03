@@ -1561,6 +1561,7 @@ onUnmounted(() => {
 @media (max-width: 1279px) {
   #float-ad {
     position: relative !important;
+    top: auto !important;
     bottom: 0 !important;
     right: auto !important;
     left: auto !important;
