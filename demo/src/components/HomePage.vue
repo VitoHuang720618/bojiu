@@ -128,7 +128,7 @@ const toggleFloatAd = (event?: Event) => {
               <div class="links">
                 <div v-for="(item, index) in effectiveRouteLinks" :key="index" class="item">
                   <ImageButton :default-src="item.default" :hover-src="item.hover"
-                    :alt="recommendedRoutes[index]?.title" :href="item.href" :lazy="false" />
+                    :alt="recommendedRoutes[index]?.title" :href="item.href" :lazy="false" target="_blank" />
                 </div>
               </div>
             </div>
