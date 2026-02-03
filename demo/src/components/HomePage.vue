@@ -57,7 +57,28 @@ onUnmounted(() => {
 })
 
 // UI Interaction
+// Scroll to Top Logic
+const showScrollTop = ref(false)
 
+const handleScroll = () => {
+  showScrollTop.value = window.scrollY > 300
+}
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+// Attach scroll listener
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
@@ -215,6 +236,11 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Scroll To Top Button -->
+    <button class="scroll-to-top" :class="{ show: showScrollTop }" @click="scrollToTop" aria-label="Scroll to top">
+      <div class="arrow-up"></div>
+    </button>
   </div>
 </template>
 
@@ -1724,5 +1750,51 @@ onUnmounted(() => {
     height: 100% !important;
     object-fit: contain !important;
   }
+}
+
+/* Scroll To Top Button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+  /* Reference image has a red pattern background, but user asked for "only circle and arrow". 
+     However, usually valid buttons need a background for contrast. 
+     The reference image (red pattern) suggests it sits on a red background or HAS a red background.
+     Let's start with transparent background but a border as requested.
+  */
+  border: 2px solid #dfb082;
+  /* Gold-ish color */
+  cursor: pointer;
+  z-index: 98;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.scroll-to-top.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.scroll-to-top:hover {
+  background-color: rgba(223, 176, 130, 0.1);
+}
+
+.scroll-to-top .arrow-up {
+  width: 12px;
+  height: 12px;
+  border-top: 3px solid #dfb082;
+  border-left: 3px solid #dfb082;
+  transform: rotate(45deg);
+  margin-top: 4px;
+  /* Visual adjustment to center the arrow */
 }
 </style>
