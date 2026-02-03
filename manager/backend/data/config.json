@@ -2,8 +2,8 @@
   "logo": "http://localhost:3002/uploads/logo-1769329563858.png",
   "banner": {
     "pc": "http://localhost:3002/uploads/banner-pc.png",
-    "tablet": "",
-    "mobile": ""
+    "tablet": "http://localhost:3002/uploads/banner-tablet-1770110417167.png",
+    "mobile": "http://localhost:3002/uploads/banner-mobile-1770110423831.png"
   },
   "backgroundImage": "http://localhost:3002/uploads/backgroundImage.png",
   "buttonLinks": [
@@ -84,14 +84,9 @@
   ],
   "toolIcons": [
     {
-      "href": "https://www.xiaohongshu.com",
-      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
-      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
-    },
-    {
       "href": "https://www.douyin.com",
-      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
-      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
+      "default": "http://localhost:3002/uploads/toolIcons-0-default-1770109036363.png",
+      "hover": "http://localhost:3002/uploads/toolIcons-0-hover-1770109041102.png"
     },
     {
       "href": "https://www.baidu.com",
@@ -120,9 +115,69 @@
       "href": "",
       "title": "hello",
       "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     }
   ],
   "programThumbnails": [
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
+    },
     {
       "image": "",
       "href": "",

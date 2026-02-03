@@ -35,8 +35,8 @@
   ],
   "banner": {
     "pc": "/defaults/banner-pc.png",
-    "tablet": "",
-    "mobile": ""
+    "tablet": "/defaults/banner-tablet-1770110417167.png",
+    "mobile": "/defaults/banner-mobile-1770110423831.png"
   },
   "backgroundImage": "/defaults/backgroundImage.png",
   "routeLinksImages": [
@@ -113,41 +113,34 @@
     {
       "id": "tool-0",
       "name": "Tool 0",
-      "href": "https://www.xiaohongshu.com",
-      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
-      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
+      "href": "https://www.douyin.com",
+      "default": "/defaults/toolIcons-0-default-1770109036363.png",
+      "hover": "/defaults/toolIcons-0-hover-1770109041102.png"
     },
     {
       "id": "tool-1",
       "name": "Tool 1",
-      "href": "https://www.douyin.com",
-      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
-      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
-    },
-    {
-      "id": "tool-2",
-      "name": "Tool 2",
       "href": "https://www.baidu.com",
       "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
       "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
     },
     {
-      "id": "tool-3",
-      "name": "Tool 3",
+      "id": "tool-2",
+      "name": "Tool 2",
       "href": "https://www.youku.com",
       "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
       "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
     },
     {
-      "id": "tool-4",
-      "name": "Tool 4",
+      "id": "tool-3",
+      "name": "Tool 3",
       "href": "https://www.iqiyi.com",
       "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
       "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
     },
     {
-      "id": "tool-5",
-      "name": "Tool 5",
+      "id": "tool-4",
+      "name": "Tool 4",
       "href": "https://x.com",
       "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
       "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
@@ -160,11 +153,81 @@
       "href": "#",
       "image": "/defaults/videoThumbnails-0-image.png",
       "alt": ""
+    },
+    {
+      "id": "video-1",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-2",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-3",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-4",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-5",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
     }
   ],
   "programThumbnails": [
     {
       "id": "program-0",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-1",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-2",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-3",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-4",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-5",
       "title": "",
       "href": "#",
       "image": "",

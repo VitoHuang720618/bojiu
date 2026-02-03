@@ -1,0 +1,12 @@
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+uploads/
+data/
+PC web_images/
+phone+tablet_images/
+.git/
+**/*.js.map
+**/typescript.js
+**/esbuild
