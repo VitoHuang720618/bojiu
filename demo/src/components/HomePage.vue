@@ -143,7 +143,8 @@ const toggleFloatAd = (event?: Event) => {
             </div>
             <div class="tools">
               <div v-for="tool in effectiveToolIcons" :key="tool.id" class="item">
-                <ImageButton :default-src="tool.default" :hover-src="tool.hover" :alt="tool.alt" :href="tool.href" />
+                <ImageButton :default-src="tool.default" :hover-src="tool.hover" :alt="tool.alt" :href="tool.href"
+                  target="_blank" />
               </div>
             </div>
           </div>
