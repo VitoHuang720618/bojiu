@@ -1097,7 +1097,7 @@ const scrollToTop = () => {
 
 .recommend-footer .tools .item :deep(.img-button) {
   width: 120px !important;
-  height: 105px !important;
+  height: 110px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
