@@ -1569,7 +1569,8 @@ const scrollToTop = () => {
 
 /* Float Ad */
 #float-ad {
-  bottom: 1rem;
+  top: 350px;
+  /* PC版改為靠右上 (距離頂部 350px) */
   max-width: 120px;
   /* 依照要求調整為 120px */
   min-width: 75px;
