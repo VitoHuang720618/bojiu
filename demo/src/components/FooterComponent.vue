@@ -11,29 +11,29 @@ import { siteConfig } from '../config/siteConfig'
 <style scoped>
 #footer {
   align-items: center;
-  background: linear-gradient(0deg, #232323, #000) #000;
+  background: #3e080f;
   display: flex;
-  height: 56px;
+  height: 44px;
   justify-content: center;
   width: 100%;
   color: #fff;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 @media (max-width: 1279px) {
   #footer {
-    height: 48px;
-    background: #1a0305 !important;
-    border-top: 1px solid #dfb082 !important;
+    height: 44px;
+    background: #3e080f !important;
+    border-top: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   #footer span {
-    width: 232px;
-    height: 16px;
-    font-size: 14px;
+    width: auto;
+    height: auto;
+    font-size: 12px;
     font-family: "Microsoft YaHei UI", "Microsoft YaHei UI-Light", sans-serif;
     font-weight: 300;
     text-align: left;
