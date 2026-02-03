@@ -1777,4 +1777,10 @@ const scrollToTop = () => {
   margin-top: 4px;
   /* Visual adjustment to center the arrow */
 }
+
+@media (max-width: 1279px) {
+  .scroll-to-top {
+    display: none !important;
+  }
+}
 </style>
