@@ -67,10 +67,29 @@ const toggleFloatAd = (event?: Event) => {
 
   isFloatAdCollapsed.value = !isFloatAdCollapsed.value
 }
+
+// Scroll to Top
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
 </script>
 
 <template>
   <div class="main-inner">
+    <!-- Back to Top Button -->
+    <button class="back-to-top" @click="scrollToTop" aria-label="Back to Top">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4L4 12H9V20H15V12H20L12 4Z" fill="currentColor" />
+        <!-- Alternative Chevron style to match image closer -->
+        <path d="M6 15L12 9L18 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <div class="caret-icon"></div>
+    </button>
+
     <!-- Banner -->
     <div id="banner" :class="{ 'banner-empty': !effectiveBanner }">
       <ImageComponent v-if="effectiveBanner" :src="effectiveBanner" alt="Banner" :lazy="false" />
@@ -1728,13 +1747,54 @@ const toggleFloatAd = (event?: Event) => {
     /* 鎖死高度與圖片一致 */
     aspect-ratio: auto !important;
     /* 移除強制比例，讓高度驅動 */
-    flex: none !important;
+  }
+}
+
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #fce3ba 0%, #dfb082 100%);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.back-to-top:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
+  background: linear-gradient(135deg, #fffdda 0%, #f0c092 100%);
+}
+
+.back-to-top svg {
+  width: 28px;
+  height: 28px;
+  color: #3e080f;
+  /* Dark red/brown color for the icon to contrast with gold */
+}
+
+/* Position adjustment for mobile/tablet to avoid overlap with float ad */
+@media (max-width: 1279px) {
+  .back-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
   }
 
-  #float-ad .links .item :deep(img) {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
+  .back-to-top svg {
+    width: 24px;
+    height: 24px;
   }
 }
 </style>
