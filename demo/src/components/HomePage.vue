@@ -1578,7 +1578,7 @@ const toggleFloatAd = (event?: Event) => {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 10px 0 !important;
+    padding: 20px 0 10px 0 !important;
     background: #3e080f !important;
   }
 }
