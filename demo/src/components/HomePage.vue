@@ -14,8 +14,7 @@ import { useSiteData } from '../composables/useSiteData'
 const currentSlide = ref(0)
 let carouselInterval: number | null = null
 
-// State for Float Ad
-const isFloatAdCollapsed = ref(false)
+
 
 // Use Composable
 const {
@@ -58,15 +57,7 @@ onUnmounted(() => {
 })
 
 // UI Interaction
-const toggleFloatAd = (event?: Event) => {
-  // 防止事件冒泡
-  if (event) {
-    event.preventDefault()
-    event.stopPropagation()
-  }
 
-  isFloatAdCollapsed.value = !isFloatAdCollapsed.value
-}
 </script>
 
 <template>
@@ -194,14 +185,11 @@ const toggleFloatAd = (event?: Event) => {
     </div>
 
     <!-- Float Ad Buttons -->
-    <div id="float-ad" :class="{ collapsed: isFloatAdCollapsed }">
+    <div id="float-ad">
       <!-- 收合/展開按鈕 -->
-      <button class="float-ad-toggle" @click.stop="toggleFloatAd($event)" @touchend.stop="toggleFloatAd($event)"
-        type="button">
-        <span class="toggle-icon">{{ isFloatAdCollapsed ? '▲' : '▼' }}</span>
-      </button>
 
-      <div class="links" v-show="!isFloatAdCollapsed">
+
+      <div class="links">
         <div v-for="(button, index) in effectiveFloatAdButtons" :key="button.id" class="item" :class="{
           'rwd-first-button': index === 0,
           'rwd-second-button': index === 1,
@@ -1597,11 +1585,7 @@ const toggleFloatAd = (event?: Event) => {
 }
 
 
-@media (max-width: 1279px) {
-  .float-ad-toggle {
-    display: none !important;
-  }
-}
+
 
 
 #float-ad .links {
