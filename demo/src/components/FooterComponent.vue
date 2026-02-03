@@ -24,7 +24,7 @@ import { siteConfig } from '../config/siteConfig'
   #footer {
     height: 44px;
     background: #3e080f !important;
-    border-top: none !important;
+    border-top: 2px solid #dfb082 !important;
     display: flex;
     align-items: center;
     justify-content: center;

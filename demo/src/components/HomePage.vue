@@ -1260,6 +1260,13 @@ const scrollToTop = () => {
   margin: 0 auto;
   cursor: pointer;
   box-sizing: border-box;
+  container-type: inline-size;
+  /* New Card Style */
+  border: 3px solid rgba(248, 238, 201, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .programme-wrap .list .item a {
@@ -1268,23 +1275,25 @@ const scrollToTop = () => {
   width: 100%;
   text-decoration: none;
   box-sizing: border-box;
+  height: 100%;
 }
 
 .programme-wrap .list .item .img {
   width: 100%;
   aspect-ratio: 236 / 133;
   overflow: hidden;
-  border-radius: 8px 8px 0 0;
   background-color: #1a1a1a;
-  border: 3px solid rgba(248, 238, 201, 0.6);
-  border-bottom: none;
   box-sizing: border-box;
+  border: none;
+  border-radius: 0;
 }
 
 .programme-wrap .list .item .img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  /* Remove gap */
 }
 
 .programme-wrap .list .item span {
@@ -1295,15 +1304,20 @@ const scrollToTop = () => {
   width: 100%;
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
-  border-radius: 0 0 8px 8px;
   color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
+  /* Auto-shrink text RWD: Scale with container width, max 24px, min 14px */
+  font-size: clamp(14px, 10cqi, 24px);
+  font-family: "Microsoft JhengHei", "Microsoft JhengHei-Bold";
+  font-weight: bold;
   margin: 0 !important;
-  padding: 0 12px;
+  padding: 0 5px;
+  /* Layout protection */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   box-sizing: border-box;
-  border: 3px solid rgba(248, 238, 201, 0.6);
-  border-top: none;
+  border: none;
+  border-radius: 0;
 }
 
 @media (max-width: 1279px) {
@@ -1324,27 +1338,27 @@ const scrollToTop = () => {
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
-    border-radius: 10px !important;
+    /* RWD Card Style Override/Reinforce */
+    border: 3px solid rgba(248, 238, 201, 0.6) !important;
+    border-radius: 12px !important;
   }
 
   .programme-wrap .list .item .img {
     width: 100% !important;
     height: auto !important;
     aspect-ratio: 173 / 94 !important;
-    border-radius: 10px 10px 0 0 !important;
-    border: 3px solid rgba(248, 238, 201, 0.6) !important;
-    border-bottom: none !important;
     box-sizing: border-box !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
 
   .programme-wrap .list .item span {
     width: 100% !important;
     height: 34px !important;
     font-size: 0.85rem !important;
-    border-radius: 0 0 10px 10px !important;
     margin: 0 !important;
-    border: 3px solid rgba(248, 238, 201, 0.6) !important;
-    border-top: none !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
 }
 
@@ -1382,6 +1396,8 @@ const scrollToTop = () => {
 .programme-wrap .list .item.empty-item {
   opacity: 0.3;
   /* 半透明顯示空位置 */
+  border: none !important;
+  border-radius: 0 !important;
 }
 
 .programme-wrap .list .item .empty-placeholder {

@@ -113,7 +113,7 @@
     {
       "image": "http://localhost:3002/uploads/videoThumbnails-0-image.png",
       "href": "",
-      "title": "hello",
+      "title": "Fun乐园圣典直播",
       "alt": ""
     },
     {
@@ -151,7 +151,7 @@
     {
       "image": "",
       "href": "",
-      "title": "",
+      "title": "Fun乐园圣典直播",
       "alt": ""
     },
     {
@@ -205,7 +205,7 @@
       "default": "http://localhost:3002/uploads/floatAdButtons-2-default-1770115313479.png",
       "hover": "http://localhost:3002/uploads/floatAdButtons-2-hover-1770115317390.png",
       "tablet": "http://localhost:3002/uploads/floatAdButtons-2-tablet-1770121593972.png",
-      "mobile": ""
+      "mobile": "http://localhost:3002/uploads/floatAdButtons-2-mobile-1770121601401.png"
     }
   ]
 }
