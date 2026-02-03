@@ -1287,6 +1287,7 @@ const toggleFloatAd = (event?: Event) => {
   background-color: #1a1a1a;
   border: 3px solid rgba(248, 238, 201, 0.6);
   border-bottom: none;
+  box-sizing: border-box;
 }
 
 .programme-wrap .list .item .img img {
@@ -1340,6 +1341,9 @@ const toggleFloatAd = (event?: Event) => {
     height: auto !important;
     aspect-ratio: 173 / 94 !important;
     border-radius: 10px 10px 0 0 !important;
+    border: 3px solid rgba(248, 238, 201, 0.6) !important;
+    border-bottom: none !important;
+    box-sizing: border-box !important;
   }
 
   .programme-wrap .list .item span {
@@ -1348,6 +1352,8 @@ const toggleFloatAd = (event?: Event) => {
     font-size: 0.85rem !important;
     border-radius: 0 0 10px 10px !important;
     margin: 0 !important;
+    border: 3px solid rgba(248, 238, 201, 0.6) !important;
+    border-top: none !important;
   }
 }
 
