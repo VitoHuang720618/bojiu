@@ -546,7 +546,9 @@ async function startServer() {
             name: `Float ${index}`,
             href: btn.href || '#',
             default: processImage(btn.default),
-            hover: processImage(btn.hover)
+            hover: processImage(btn.hover),
+            tablet: processImage(btn.tablet || ''),
+            mobile: processImage(btn.mobile || '')
           }))
         }
 

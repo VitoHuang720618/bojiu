@@ -362,18 +362,21 @@ const loadConfig = async () => {
           href: "https://example.com/customer-service",
           default: "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
           hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png",
+          tablet: "",
           mobile: ""
         },
         {
           href: "https://example.com/girl-douyin",
           default: "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
           hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png",
+          tablet: "",
           mobile: ""
         },
         {
           href: "https://example.com/sports-douyin",
           default: "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
           hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png",
+          tablet: "",
           mobile: ""
         }
       ]
@@ -383,6 +386,7 @@ const loadConfig = async () => {
         href: button.href || '',
         default: button.default || '',
         hover: button.hover || '',
+        tablet: button.tablet || '',
         mobile: button.mobile || ''
       }))
     }
@@ -1024,13 +1028,14 @@ const addFloatAdButton = () => {
     href: '',
     default: '',
     hover: '',
+    tablet: '',
     mobile: ''
   })
   hasChanges.value = true
 }
 
 // 處理浮動廣告按鈕圖片上傳
-const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 'default' | 'hover' | 'mobile') => {
+const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 'default' | 'hover' | 'tablet' | 'mobile') => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
@@ -1056,7 +1061,7 @@ const handleFloatAdImageUpload = async (event: Event, index: number, imageType: 
 }
 
 // 刪除浮動廣告按鈕圖片
-const removeFloatAdImage = async (index: number, imageType: 'default' | 'hover' | 'mobile') => {
+const removeFloatAdImage = async (index: number, imageType: 'default' | 'hover' | 'tablet' | 'mobile') => {
   config.floatAdButtons[index][imageType] = ''
   hasChanges.value = true
   // 立即保存並重新載入預覽
@@ -1102,18 +1107,21 @@ const resetFloatAdButtons = async () => {
         href: "https://example.com/customer-service",
         default: "/assets/images/df3c0216-67b1-4944-addf-fa61dde067d8.png",
         hover: "/assets/images/3020cc60-d081-41d9-819e-d9dadafcb3a3.png",
-        mobile: ""
+        tablet: "",
+        mobile: "/assets/images/13013a52-9b2f-4b08-9dfc-279288134763.png"
       },
       {
         href: "https://example.com/girl-douyin",
         default: "/assets/images/f9840969-4947-4f70-85f0-6959ecf0219f.png",
         hover: "/assets/images/583ef505-1e0f-4708-9187-8ebe4500802b.png",
+        tablet: "",
         mobile: ""
       },
       {
         href: "https://example.com/sports-douyin",
         default: "/assets/images/6d7bbe82-c8bf-4d9b-bc50-629fc982748b.png",
         hover: "/assets/images/38da2308-5535-4ca8-9689-fa9b15bceaf0.png",
+        tablet: "",
         mobile: ""
       }
     ]
@@ -1676,7 +1684,8 @@ onMounted(() => {
 
 .btn:active {
   transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);}
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
 
 .btn-primary {
   background-color: #007bff;

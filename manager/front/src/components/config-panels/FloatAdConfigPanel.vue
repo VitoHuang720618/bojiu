@@ -33,7 +33,8 @@
                             @input="$emit('change')" />
                     </div>
 
-                    <div class="triple-upload-row">
+
+                    <div class="upload-grid">
                         <div class="upload-slot">
                             <label>PC 默認</label>
                             <div class="image-preview-wrapper" :class="{ 'has-image': button.default }">
@@ -65,6 +66,21 @@
                         </div>
 
                         <div class="upload-slot">
+                            <label>平板端</label>
+                            <div class="image-preview-wrapper" :class="{ 'has-image': button.tablet }">
+                                <img v-if="button.tablet" :src="getImageUrl(button.tablet)" alt="Tablet"
+                                    class="preview-img" />
+                                <div v-else class="placeholder">
+                                    <span class="text">平板</span>
+                                </div>
+                                <input type="file" @change="(e) => $emit('upload', e, index, 'tablet')" accept="image/*"
+                                    class="file-input" />
+                            </div>
+                            <button v-if="button.tablet" @click="$emit('removeImage', index, 'tablet')"
+                                class="btn btn-link-danger btn-sm">移除</button>
+                        </div>
+
+                        <div class="upload-slot">
                             <label>手機端</label>
                             <div class="image-preview-wrapper" :class="{ 'has-image': button.mobile }">
                                 <img v-if="button.mobile" :src="getImageUrl(button.mobile)" alt="Mobile"
@@ -90,6 +106,7 @@ interface FloatAdButton {
     href: string
     default: string
     hover: string
+    tablet?: string
     mobile: string
 }
 
@@ -102,8 +119,8 @@ defineEmits<{
     (e: 'reset'): void
     (e: 'add'): void
     (e: 'remove', index: number): void
-    (e: 'upload', event: Event, index: number, type: 'default' | 'hover' | 'mobile'): void
-    (e: 'removeImage', index: number, type: 'default' | 'hover' | 'mobile'): void
+    (e: 'upload', event: Event, index: number, type: 'default' | 'hover' | 'tablet' | 'mobile'): void
+    (e: 'removeImage', index: number, type: 'default' | 'hover' | 'tablet' | 'mobile'): void
     (e: 'change'): void
 }>()
 </script>
@@ -199,13 +216,14 @@ defineEmits<{
     font-size: 0.9rem;
 }
 
-.triple-upload-row {
+.upload-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid #f1f3f5;
-    max-width: 600px; /* Constrain width */
+    max-width: 600px;
+    /* Constrain width */
 }
 
 .upload-slot {
@@ -286,7 +304,7 @@ defineEmits<{
 }
 
 @media (max-width: 768px) {
-    .triple-upload-row {
+    .upload-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }

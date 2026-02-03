@@ -83,6 +83,8 @@ export interface FloatAdButton {
   href: string
   default: string
   hover: string
+  tablet?: string
+  mobile?: string
 }
 
 // API 請求/回應型別

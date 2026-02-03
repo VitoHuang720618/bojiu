@@ -21,7 +21,7 @@ class CarouselService {
     programThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
     buttonLinks: ({ text: string, href: string, target: string, defaultImage?: string, hoverImage?: string } | null)[],
     toolIcons: ({ id: string, default: string, hover: string, alt: string, href: string } | null)[],
-    floatAdButtons?: ({ default: string, hover: string, href: string, alt: string } | null)[],
+    floatAdButtons?: ({ default: string, hover: string, href: string, alt: string, tablet?: string, mobile?: string } | null)[],
     routeLinks?: Array<{ default: string, hover: string, href: string }> | null
   }> {
     try {
@@ -67,7 +67,9 @@ class CarouselService {
             default: f.default,
             hover: f.hover,
             href: f.href,
-            alt: f.name
+            alt: f.name,
+            tablet: f.tablet,
+            mobile: f.mobile
           })),
           routeLinks: routeLinksImages as any
         }
@@ -122,7 +124,9 @@ class CarouselService {
           button ? {
             ...button,
             default: processImageUrl(button.default),
-            hover: processImageUrl(button.hover)
+            hover: processImageUrl(button.hover),
+            tablet: processImageUrl(button.tablet),
+            mobile: processImageUrl(button.mobile)
           } : null
         ),
         routeLinks: Array.isArray(config.routeLinks) ? config.routeLinks.map((route: any) => ({

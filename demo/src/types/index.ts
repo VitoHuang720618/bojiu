@@ -65,8 +65,19 @@ export interface SiteConfig {
   baseUrl: string
   useApi: boolean
   navigation: NavigationItem[]
+  floatAdButtons: FloatAdButton[]
   footer: FooterConfig
   theme: ThemeConfig
+}
+
+export interface FloatAdButton {
+  id: string
+  name: string
+  href: string
+  default: string
+  hover: string
+  tablet?: string
+  mobile?: string
 }
 
 export interface HeroContent {

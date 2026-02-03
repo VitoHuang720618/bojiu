@@ -205,19 +205,11 @@ const scrollToTop = () => {
           <ImageButton class="desktop-image" :default-src="button.default" :hover-src="button.hover"
             :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
           <!-- 平板版圖片 -->
-          <ImageButton v-if="index === 0" class="tablet-image" default-src="/images/rwd/gm.webp"
-            hover-src="/images/rwd/gm.webp" alt="浮動廣告 1" :href="button.href" />
-          <ImageButton v-if="index === 1" class="tablet-image" default-src="/images/rwd/diuying.webp"
-            hover-src="/images/rwd/diuying.webp" alt="浮動廣告 2" :href="button.href" />
-          <ImageButton v-if="index === 2" class="tablet-image" default-src="/images/rwd/fun.webp"
-            hover-src="/images/rwd/fun.webp" alt="浮動廣告 3" :href="button.href" />
+          <ImageButton class="tablet-image" :default-src="button.tablet || button.default"
+            :hover-src="button.tablet || button.default" :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
           <!-- 手機版圖片 -->
-          <ImageButton v-if="index === 0" class="mobile-image" default-src="/images/rwd/mobile-gm.webp"
-            hover-src="/images/rwd/mobile-gm.webp" alt="浮動廣告 1" :href="button.href" />
-          <ImageButton v-if="index === 1" class="mobile-image" default-src="/images/rwd/mobile-diuying.webp"
-            hover-src="/images/rwd/mobile-diuying.webp" alt="浮動廣告 2" :href="button.href" />
-          <ImageButton v-if="index === 2" class="mobile-image" default-src="/images/rwd/mobile-fun.webp"
-            hover-src="/images/rwd/mobile-fun.webp" alt="浮動廣告 3" :href="button.href" />
+          <ImageButton class="mobile-image" :default-src="button.mobile || button.default"
+            :hover-src="button.mobile || button.default" :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
         </div>
       </div>
     </div>
@@ -1641,12 +1633,12 @@ const scrollToTop = () => {
     display: flex !important;
     /* 強制在 1279px 以下顯示，無視 Vue 的 v-show */
     flex-direction: row !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
     align-items: center !important;
-    gap: 80px !important;
+    gap: 0 !important;
     /* 增加間距讓按鈕更分散 */
     width: 100% !important;
-    padding: 0 10px !important;
+    padding: 0 120px !important;
     box-sizing: border-box !important;
   }
 
@@ -1715,15 +1707,15 @@ const scrollToTop = () => {
   #float-ad .links {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: center !important;
-    gap: 12px !important;
-    /* 縮減間距更細緻 */
-    padding: 0 5px !important;
+    justify-content: space-between !important;
+    gap: 0 !important;
+    /* Let space-between handle distribution */
+    padding: 10px 50px !important;
   }
 
   #float-ad .links .item {
-    width: 31% !important;
-    height: 48px !important;
+    width: 65px !important;
+    height: 49px !important;
     /* 鎖死高度與圖片一致 */
     aspect-ratio: auto !important;
     /* 移除強制比例，讓高度驅動 */

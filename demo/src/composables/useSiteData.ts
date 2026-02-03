@@ -25,7 +25,7 @@ export function useSiteData() {
     const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
     const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
     const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
-    const apiFloatAdButtons = ref<({ href: string, default: string, hover: string } | null)[]>([])
+    const apiFloatAdButtons = ref<({ href: string, default: string, hover: string, tablet?: string, mobile?: string } | null)[]>([])
     const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
 
     // Computed Properties: Priority Logic (API vs Local)
@@ -139,14 +139,18 @@ export function useSiteData() {
                 id: `api-floatad-${index}`,
                 href: button?.href || '#',
                 default: button?.default || '',
-                hover: button?.hover || ''
+                hover: button?.hover || '',
+                tablet: button?.tablet || '',
+                mobile: button?.mobile || ''
             }))
         }
         return floatAdButtons.map((button) => ({
             id: button.id,
             href: button.href,
             default: button.default,
-            hover: button.hover
+            hover: button.hover,
+            tablet: button.tablet || '',
+            mobile: button.mobile || ''
         }))
     })
 

@@ -15,6 +15,7 @@ export const siteConfig = reactive<SiteConfig>({
   description: 'B9 Entertainment Website',
   baseUrl: getBaseUrl(),
   useApi: true, // Default to true, but assets below are used when API fails or is disabled
+  floatAdButtons: [],
 
   navigation: [
     {
@@ -431,21 +432,27 @@ export const floatAdButtons = reactive([
     "name": "Float 0",
     "href": "https://example.com/customer-service",
     "default": "",
-    "hover": ""
+    "hover": "",
+    "tablet": "",
+    "mobile": ""
   },
   {
     "id": "float-1",
     "name": "Float 1",
     "href": "https://example.com/girl-douyin",
     "default": "",
-    "hover": ""
+    "hover": "",
+    "tablet": "",
+    "mobile": ""
   },
   {
     "id": "float-2",
     "name": "Float 2",
     "href": "https://example.com/sports-douyin",
     "default": "",
-    "hover": ""
+    "hover": "",
+    "tablet": "",
+    "mobile": ""
   }
 ])
 
