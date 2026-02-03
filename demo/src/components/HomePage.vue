@@ -1285,7 +1285,7 @@ const toggleFloatAd = (event?: Event) => {
   overflow: hidden;
   border-radius: 8px 8px 0 0;
   background-color: #1a1a1a;
-  border: 1px solid rgba(223, 176, 130, 0.2);
+  border: 3px solid rgba(248, 238, 201, 0.6);
   border-bottom: none;
 }
 
@@ -1298,8 +1298,8 @@ const toggleFloatAd = (event?: Event) => {
 .programme-wrap .list .item span {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  /* 靠左顯示 */
+  justify-content: center;
+  /* 居中顯示 */
   width: 100%;
   height: 43px;
   background: linear-gradient(to right, #4d176f, #671dbb);
@@ -1310,7 +1310,7 @@ const toggleFloatAd = (event?: Event) => {
   margin: 0 !important;
   padding: 0 12px;
   box-sizing: border-box;
-  border: 1px solid rgba(223, 176, 130, 0.2);
+  border: 3px solid rgba(248, 238, 201, 0.6);
   border-top: none;
 }
 
