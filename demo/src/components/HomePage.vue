@@ -1755,10 +1755,10 @@ const scrollToTop = () => {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #fce3ba 0%, #dfb082 100%);
-  border: 2px solid #fff;
+  width: 50px;
+  height: 50px;
+  background: #64000d;
+  border: 2px solid rgba(255, 239, 178, 0.60);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1773,14 +1773,15 @@ const scrollToTop = () => {
 .back-to-top:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
-  background: linear-gradient(135deg, #fffdda 0%, #f0c092 100%);
+  background: #7a0a19;
+  border-color: rgba(255, 239, 178, 0.90);
 }
 
 .back-to-top svg {
   width: 28px;
   height: 28px;
-  color: #3e080f;
-  /* Dark red/brown color for the icon to contrast with gold */
+  color: #ffefb2;
+  /* Gold color to match border */
 }
 
 /* Position adjustment for mobile/tablet to avoid overlap with float ad */
@@ -1788,8 +1789,9 @@ const scrollToTop = () => {
   .back-to-top {
     bottom: 20px;
     right: 20px;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
+    /* Use 44px for mobile touch target, kept slightly smaller than desktop but accessible */
   }
 
   .back-to-top svg {
