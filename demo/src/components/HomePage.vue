@@ -924,7 +924,7 @@ const toggleFloatAd = (event?: Event) => {
 .recommend-footer .block-title {
   margin-right: 0;
   margin-bottom: 0;
-  background-color: #550000;
+  background-color: #920200;
   padding: 0;
   border-radius: 0 0 0 20px;
   display: flex;
@@ -968,7 +968,7 @@ const toggleFloatAd = (event?: Event) => {
     border-radius: 0;
     justify-content: flex-start;
     padding: 0;
-    background: linear-gradient(90deg, #8b0012 0%, #ba081f 100%);
+    background: #920200;
   }
 
   .recommend-footer .block-title img {
@@ -1007,7 +1007,7 @@ const toggleFloatAd = (event?: Event) => {
     flex: 0 0 48px !important;
     justify-content: flex-start !important;
     padding: 0 15px !important;
-    background: #550000 !important;
+    background: #920200 !important;
     /* 平板下標題欄維持深紅 */
     border-radius: 0 !important;
   }
