@@ -97,7 +97,7 @@ onUnmounted(() => {
 
 <template>
   <picture v-if="isObjectSrc">
-    <source media="(max-width: 430px)" :srcset="(src as BannerConfig).mobile || (src as BannerConfig).pc">
+    <source media="(max-width: 739px)" :srcset="(src as BannerConfig).mobile || (src as BannerConfig).pc">
     <source media="(max-width: 1279px)" :srcset="(src as BannerConfig).tablet || (src as BannerConfig).pc">
     <img ref="imgRef" :src="isIntersecting || !lazy ? (src as BannerConfig).pc : ''" :alt="alt" :width="width"
       :height="height" :class="{ 'is-loaded': isLoaded, 'has-error': hasError }" @load="handleLoad"
