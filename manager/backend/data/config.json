@@ -82,33 +82,7 @@
       "href": ""
     }
   ],
-  "toolIcons": [
-    {
-      "href": "https://www.douyin.com",
-      "default": "http://localhost:3002/uploads/toolIcons-0-default-1770109036363.png",
-      "hover": "http://localhost:3002/uploads/toolIcons-0-hover-1770109041102.png"
-    },
-    {
-      "href": "https://www.baidu.com",
-      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
-      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
-    },
-    {
-      "href": "https://www.youku.com",
-      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
-      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
-    },
-    {
-      "href": "https://www.iqiyi.com",
-      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
-      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
-    },
-    {
-      "href": "https://x.com",
-      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
-      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
-    }
-  ],
+  "toolIcons": [],
   "videoThumbnails": [
     {
       "image": "http://localhost:3002/uploads/videoThumbnails-0-image.png",

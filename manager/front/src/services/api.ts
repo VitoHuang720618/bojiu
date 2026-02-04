@@ -105,12 +105,21 @@ class ApiService {
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
 
+    const headers: HeadersInit = {
+      ...options.headers,
+    };
+
+    // Only set default Content-Type to application/json if not already set and body is not FormData
+    if (
+      !(options.body instanceof FormData) &&
+      !Object.keys(headers).some(k => k.toLowerCase() === 'content-type')
+    ) {
+      (headers as any)['Content-Type'] = 'application/json';
+    }
+
     const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
       ...options,
+      headers,
     };
 
     // Add auth token if available

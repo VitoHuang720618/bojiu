@@ -100,11 +100,7 @@ class ConfigService {
     // 所以我們必須明確移除 header 中的 Content-Type，避免 apiService 預設的 application/json 覆蓋它
     return apiService.request<UploadResponse>('/upload', {
       method: 'POST',
-      body: formData,
-      headers: {
-        // @ts-ignore - 故意設為 undefined 以移除預設的 Content-Type
-        'Content-Type': undefined
-      } as any
+      body: formData
     })
   }
 
