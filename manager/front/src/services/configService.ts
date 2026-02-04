@@ -1,3 +1,5 @@
+import { apiService } from './api'
+
 export interface BannerConfig {
   pc: string
   tablet: string
@@ -71,63 +73,17 @@ export interface UploadResponse {
 }
 
 class ConfigService {
-  private baseUrl: string
-
-  constructor() {
-    // Use environment variable or default to relative path for container deployment
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
-    // Remove trailing slash if present
-    this.baseUrl = this.baseUrl.replace(/\/$/, '')
-  }
-
-  // Helper method to get auth headers
-  private getAuthHeaders(): HeadersInit {
-    const token = localStorage.getItem('auth_token')
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json'
-    }
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
-    }
-
-    return headers
-  }
-
   // 獲取配置
   async getConfig(): Promise<ConfigData> {
-    const response = await fetch(`${this.baseUrl}/config`, {
-      headers: this.getAuthHeaders()
-    })
-    if (!response.ok) {
-      throw new Error(`Failed to fetch config: ${response.statusText}`)
-    }
-    return response.json()
+    return apiService.request<ConfigData>('/config')
   }
 
   // 更新配置
   async updateConfig(config: ConfigData): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/config`, {
+    await apiService.request('/config', {
       method: 'POST',
-      headers: this.getAuthHeaders(),
       body: JSON.stringify(config)
     })
-
-    if (!response.ok) {
-      throw new Error(`Failed to update config: ${response.statusText}`)
-    }
-  }
-
-  // Helper method to get auth headers for FormData
-  private getAuthHeadersForFormData(): HeadersInit {
-    const token = localStorage.getItem('auth_token')
-    const headers: HeadersInit = {}
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
-    }
-
-    return headers
   }
 
   // 上傳圖片
@@ -139,39 +95,32 @@ class ConfigService {
     if (assetType) formData.append('assetType', assetType)
     if (position !== undefined) formData.append('position', position.toString())
 
-    const response = await fetch(`${this.baseUrl}/upload`, {
+    // 使用 apiService.request 但要注意 Content-Type
+    // 當 body 是 FormData 時，fetch 會自動設定 Content-Type 為 multipart/form-data 並加上 boundary
+    // 所以我們必須明確移除 header 中的 Content-Type，避免 apiService 預設的 application/json 覆蓋它
+    return apiService.request<UploadResponse>('/upload', {
       method: 'POST',
-      headers: this.getAuthHeadersForFormData(),
-      body: formData
+      body: formData,
+      headers: {
+        // @ts-ignore - 故意設為 undefined 以移除預設的 Content-Type
+        'Content-Type': undefined
+      } as any
     })
-
-    return response.json()
   }
 
   // 更新特定資產路徑
   async updateAssetPath(path: string, value: any): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/asset/${path}`, {
+    await apiService.request(`/asset/${path}`, {
       method: 'PUT',
-      headers: this.getAuthHeaders(),
       body: JSON.stringify({ value })
     })
-
-    if (!response.ok) {
-      throw new Error(`Failed to update asset: ${response.statusText}`)
-    }
   }
 
   // 發布配置為靜態預設值
   async publishConfig(): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/publish`, {
-      method: 'POST',
-      headers: this.getAuthHeaders()
+    await apiService.request('/publish', {
+      method: 'POST'
     })
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData.error || `Publish failed: ${response.statusText}`)
-    }
   }
 }
 

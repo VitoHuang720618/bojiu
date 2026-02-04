@@ -98,7 +98,7 @@ class ApiService {
     this.baseUrl = this.baseUrl.replace(/\/$/, '')
   }
 
-  private async request<T>(
+  public async request<T>(
     endpoint: string,
     options: RequestInit = {},
     skipTokenRefresh = false
