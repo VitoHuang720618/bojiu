@@ -82,7 +82,38 @@
       "href": ""
     }
   ],
-  "toolIcons": [],
+  "toolIcons": [
+    {
+      "href": "https://www.xiaohongshu.com",
+      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
+    },
+    {
+      "href": "https://www.douyin.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "href": "https://www.baidu.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "href": "https://www.youku.com",
+      "default": "",
+      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
+    },
+    {
+      "href": "https://www.iqiyi.com",
+      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
+    },
+    {
+      "href": "https://x.com",
+      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
+    }
+  ],
   "videoThumbnails": [
     {
       "image": "http://localhost:3002/uploads/videoThumbnails-0-image.png",

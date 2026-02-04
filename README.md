@@ -85,6 +85,28 @@ docker-compose up --build -d
   - **適用設備**：筆記型電腦、桌上型螢幕。
   - **佈局特性**：寬螢幕設計，最大內容寬度限制為 1500px。
 
+## 架構決策與疑難排解 (Architecture & Troubleshooting)
+
+### 1. 認證機制 (Dual Authentication)
+本專案採用雙層認證架構：
+- **第一層 (Nginx)**: Basic Auth (`/admin/` 路徑)。
+  - 目的：保護後台入口，防止被掃描器或未授權者接觸。
+  - 特性：瀏覽器層級驗證，除非關閉瀏覽器，否則不會過期。
+- **第二層 (Application)**: JWT (JSON Web Tokens)。
+  - 目的：應用程式內部的權限控管 (RBAC)。
+  - 特性：
+    - Access Token: 1 小時過期。
+    - Refresh Token: 7 天過期 (存於 localStorage)。
+    - **自動換證機制**: 前端 `apiService` 會在收到 401 錯誤時自動使用 Refresh Token 換取新憑證，使用者無感。
+
+### 2. 圖片上傳 (Upload Handling)
+- **問題**: `apiService` 曾預設強制加入 `Content-Type: application/json`，導致 `FormData` 上傳失敗 (500 Error)。
+- **解決**: `apiService` 現已加入自動判斷邏輯，當偵測到 `FormData` 時會自動略過 Content-Type 設定，讓瀏覽器自動生成正確的 Boundary。
+
+### 3. 本地開發 (Local Development)
+- **Vite Proxy**: 前端 (3001) 透過 `vite.config.ts` 的 Proxy 設定轉發 API 請求至後端 (3002)。
+- **常見錯誤**: 若出現 `ECONNREFUSED`，代表後端 Server 未啟動。請確保同時開啟兩個終端機分別執行 `yarn dev:manager` 和 `yarn dev:backend`。
+
 ## 授權
 
 私有專案

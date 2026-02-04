@@ -1598,7 +1598,7 @@ const scrollToTop = () => {
     max-width: 100% !important;
     height: 95px !important;
     margin: 0 auto !important;
-    padding-top: 30px !important;
+    padding-top: 18px !important;
     box-sizing: border-box !important;
     box-shadow: none !important;
     backdrop-filter: none !important;

@@ -109,7 +109,50 @@
       "href": ""
     }
   ],
-  "recommendedTools": [],
+  "recommendedTools": [
+    {
+      "id": "tool-0",
+      "name": "Tool 0",
+      "href": "https://www.xiaohongshu.com",
+      "default": "/defaults/toolIcons-0-default-1770172150046.png",
+      "hover": "/defaults/toolIcons-0-hover-1770172154759.png"
+    },
+    {
+      "id": "tool-1",
+      "name": "Tool 1",
+      "href": "https://www.douyin.com",
+      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
+      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
+    },
+    {
+      "id": "tool-2",
+      "name": "Tool 2",
+      "href": "https://www.baidu.com",
+      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
+      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
+    },
+    {
+      "id": "tool-3",
+      "name": "Tool 3",
+      "href": "https://www.youku.com",
+      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
+    },
+    {
+      "id": "tool-4",
+      "name": "Tool 4",
+      "href": "https://www.iqiyi.com",
+      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
+    },
+    {
+      "id": "tool-5",
+      "name": "Tool 5",
+      "href": "https://x.com",
+      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
+    }
+  ],
   "videoThumbnails": [
     {
       "id": "video-0",
