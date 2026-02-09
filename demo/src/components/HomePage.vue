@@ -35,7 +35,35 @@ const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % effectiveCarouselSlides.value.length
 }
 
+const prevSlide = () => {
+  currentSlide.value = (currentSlide.value - 1 + effectiveCarouselSlides.value.length) % effectiveCarouselSlides.value.length
+}
+
+// Touch Handling
+const touchStartX = ref(0)
+const touchEndX = ref(0)
+
+const handleTouchStart = (e: TouchEvent) => {
+  touchStartX.value = e.changedTouches[0].screenX
+}
+
+const handleTouchEnd = (e: TouchEvent) => {
+  touchEndX.value = e.changedTouches[0].screenX
+  handleSwipe()
+}
+
+const handleSwipe = () => {
+  if (touchEndX.value < touchStartX.value - 50) {
+    nextSlide() // Swipe Left -> Next
+  }
+  if (touchEndX.value > touchStartX.value + 50) {
+    prevSlide() // Swipe Right -> Prev
+  }
+}
+
 const startCarousel = () => {
+  // Clear any existing interval first to prevent duplicates
+  stopCarousel()
   carouselInterval = window.setInterval(nextSlide, 3000)
 }
 
@@ -105,13 +133,28 @@ const scrollToTop = () => {
           <!-- Top Content (Slider + Routes) -->
           <div class="recommend-content">
             <!-- Carousel Slider -->
-            <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel">
+            <div class="recommend-slider" @mouseenter="stopCarousel" @mouseleave="startCarousel"
+              @touchstart="handleTouchStart" @touchend="handleTouchEnd">
               <div v-for="(slide, index) in effectiveCarouselSlides" :key="slide.id" class="carousel-slide"
                 :class="{ active: currentSlide === index }">
                 <a :href="slide.href" target="_blank" rel="noopener noreferrer">
                   <ImageComponent :src="slide.image" :alt="slide.alt" />
                 </a>
               </div>
+
+              <!-- Navigation Buttons -->
+              <button class="nav-btn prev" @click.stop="prevSlide" aria-label="Previous Slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
+              <button class="nav-btn next" @click.stop="nextSlide" aria-label="Next Slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
             </div>
 
             <!-- Recommended Routes -->
@@ -587,8 +630,7 @@ const scrollToTop = () => {
   /* 經用戶調整：顏色調淡 (0.8 -> 0.4) */
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
-  padding: 25px 27px;
-  /* 經用戶調整：縮減上下間距 */
+  padding: 45px 27px 44px 63px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -633,11 +675,11 @@ const scrollToTop = () => {
 
 .recommend-slider {
   width: 100%;
-  max-width: 925px;
+  max-width: 811px;
   height: auto;
-  aspect-ratio: 925 / 320;
-  flex: 0 1 925px;
-  /* 優先佔據 925px，僅在寬度不足時收縮 */
+  aspect-ratio: 811 / 321;
+  flex: 0 1 811px;
+  /* 優先佔據 811px，僅在寬度不足時收縮 */
   min-width: 0;
   position: relative;
   overflow: hidden;
@@ -645,6 +687,45 @@ const scrollToTop = () => {
   border: 3px solid #f8eec9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  padding: 0;
+  opacity: 1;
+  /* Default visible */
+}
+
+/* 移除 PC 限定，讓全裝置都顯示 */
+/* @media (min-width: 1280px) { ... } */
+
+.nav-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.nav-btn.prev {
+  left: 10px;
+}
+
+.nav-btn.next {
+  right: 10px;
+}
+
+
 
 @media (max-width: 1024px) {
   .recommend-slider {
@@ -1749,9 +1830,9 @@ const scrollToTop = () => {
 .scroll-to-top {
   position: fixed;
   bottom: 100px;
-  right: 72px;
-  width: 40px;
-  height: 40px;
+  right: 75px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: transparent;
   /* Reference image has a red pattern background, but user asked for "only circle and arrow". 
@@ -1762,7 +1843,7 @@ const scrollToTop = () => {
   border: 2px solid #dfb082;
   /* Gold-ish color */
   cursor: pointer;
-  z-index: 98;
+  z-index: 999;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -1788,7 +1869,17 @@ const scrollToTop = () => {
 
 @media (max-width: 1279px) {
   .scroll-to-top {
-    display: none !important;
+    width: 31px;
+    height: 31px;
+    right: 40px;
+  }
+}
+
+@media (max-width: 739px) {
+  .scroll-to-top {
+    width: 32px;
+    height: 32px;
+    right: 23px;
   }
 }
 </style>
