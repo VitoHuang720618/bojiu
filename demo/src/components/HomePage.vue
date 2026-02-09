@@ -1573,7 +1573,7 @@ const scrollToTop = () => {
 .button-link-placeholder {
   width: 352px;
   height: 102px;
-  border: 2px dashed rgba(223, 176, 130, 0.3);
+  border: 2px solid rgba(223, 176, 130, 0.6);
   border-radius: 50px;
   /* Match button curvature */
   display: flex;
