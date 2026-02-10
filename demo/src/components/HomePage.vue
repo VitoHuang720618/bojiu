@@ -246,13 +246,15 @@ const scrollToTop = () => {
         }">
           <!-- 桌面版圖片 -->
           <ImageButton class="desktop-image" :default-src="button.default" :hover-src="button.hover"
-            :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
+            :alt="`浮動廣告 ${index + 1}`" :href="button.href" target="_blank" />
           <!-- 平板版圖片 -->
           <ImageButton class="tablet-image" :default-src="button.tablet || button.default"
-            :hover-src="button.tablet || button.default" :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
+            :hover-src="button.tablet || button.default" :alt="`浮動廣告 ${index + 1}`" :href="button.href"
+            target="_blank" />
           <!-- 手機版圖片 -->
           <ImageButton class="mobile-image" :default-src="button.mobile || button.default"
-            :hover-src="button.mobile || button.default" :alt="`浮動廣告 ${index + 1}`" :href="button.href" />
+            :hover-src="button.mobile || button.default" :alt="`浮動廣告 ${index + 1}`" :href="button.href"
+            target="_blank" />
         </div>
       </div>
     </div>
