@@ -1362,9 +1362,11 @@ const scrollToTop = () => {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   text-decoration: none;
   box-sizing: border-box;
-  height: 100%;
+  color: inherit;
+  /* Inherit color from parent to avoid blue text if default a */
 }
 
 .programme-wrap .list .item .img {
@@ -1375,6 +1377,8 @@ const scrollToTop = () => {
   box-sizing: border-box;
   border: none;
   border-radius: 0;
+  pointer-events: none;
+  /* Let clicks pass through to parent <a> */
 }
 
 .programme-wrap .list .item .img img {
@@ -1382,7 +1386,8 @@ const scrollToTop = () => {
   height: 100%;
   object-fit: cover;
   display: block;
-  /* Remove gap */
+  pointer-events: none;
+  /* Let clicks pass through to parent <a> */
 }
 
 .programme-wrap .list .item span {
@@ -1407,6 +1412,8 @@ const scrollToTop = () => {
   box-sizing: border-box;
   border: none;
   border-radius: 0;
+  pointer-events: none;
+  /* Let clicks pass through to parent <a> */
 }
 
 @media (max-width: 1279px) {
