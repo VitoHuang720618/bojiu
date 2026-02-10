@@ -114,28 +114,28 @@
       "id": "tool-0",
       "name": "Tool 0",
       "href": "https://www.xiaohongshu.com",
-      "default": "/defaults/toolIcons-0-default-1770172150046.png",
-      "hover": "/defaults/toolIcons-0-hover-1770172154759.png"
+      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
     },
     {
       "id": "tool-1",
       "name": "Tool 1",
       "href": "https://www.douyin.com",
-      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
-      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
+      "default": "",
+      "hover": ""
     },
     {
       "id": "tool-2",
       "name": "Tool 2",
       "href": "https://www.baidu.com",
-      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
-      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
+      "default": "",
+      "hover": ""
     },
     {
       "id": "tool-3",
       "name": "Tool 3",
       "href": "https://www.youku.com",
-      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+      "default": "",
       "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
     },
     {
@@ -247,6 +247,12 @@
       "image": "/defaults/carouselSlides-0-image-1770119663805.png",
       "href": "",
       "alt": "Carousel 0"
+    },
+    {
+      "id": "slide-1",
+      "image": "/defaults/carouselSlides-1-image-1770683668078.png",
+      "href": "",
+      "alt": "Carousel 1"
     }
   ],
   "floatAdButtons": [
@@ -255,27 +261,21 @@
       "name": "Float 0",
       "href": "https://example.com/customer-service",
       "default": "/defaults/floatAdButtons-0-default-1770115286468.png",
-      "hover": "/defaults/floatAdButtons-0-hover-1770115292570.png",
-      "tablet": "/defaults/floatAdButtons-0-tablet-1770121561612.png",
-      "mobile": "/defaults/floatAdButtons-0-mobile-1770121571643.png"
+      "hover": "/defaults/floatAdButtons-0-hover-1770115292570.png"
     },
     {
       "id": "float-1",
       "name": "Float 1",
       "href": "https://example.com/girl-douyin",
       "default": "/defaults/floatAdButtons-1-default-1770115304549.png",
-      "hover": "/defaults/floatAdButtons-1-hover-1770115307378.png",
-      "tablet": "/defaults/floatAdButtons-1-tablet-1770121580545.png",
-      "mobile": "/defaults/floatAdButtons-1-mobile-1770121585993.png"
+      "hover": "/defaults/floatAdButtons-1-hover-1770115307378.png"
     },
     {
       "id": "float-2",
       "name": "Float 2",
       "href": "https://example.com/sports-douyin",
       "default": "/defaults/floatAdButtons-2-default-1770115313479.png",
-      "hover": "/defaults/floatAdButtons-2-hover-1770115317390.png",
-      "tablet": "/defaults/floatAdButtons-2-tablet-1770121593972.png",
-      "mobile": "/defaults/floatAdButtons-2-mobile-1770121601401.png"
+      "hover": "/defaults/floatAdButtons-2-hover-1770115317390.png"
     }
   ]
 }

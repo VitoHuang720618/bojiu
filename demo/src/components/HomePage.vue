@@ -702,8 +702,10 @@ const scrollToTop = () => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 20;
+  /* Increased from 10 to ensure visibility */
   transition: all 0.3s ease;
+
   padding: 0;
   opacity: 1;
   /* Default visible */
@@ -723,6 +725,10 @@ const scrollToTop = () => {
 
 .nav-btn.next {
   right: 10px;
+}
+
+.nav-btn svg {
+  pointer-events: none;
 }
 
 
