@@ -820,14 +820,16 @@ const scrollToTop = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  display: none;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  z-index: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s;
 }
 
 .carousel-slide.active {
-  display: block;
   opacity: 1;
+  z-index: 1;
+  visibility: visible;
 }
 
 .carousel-slide a {
