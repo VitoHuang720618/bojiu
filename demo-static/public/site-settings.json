@@ -1,0 +1,281 @@
+{
+  "siteConfig": {
+    "useApi": false
+  },
+  "logo": "/defaults/logo-1769329563858.png",
+  "buttonLinks": [
+    {
+      "label": "寰宇瀏覽器",
+      "href": "https://www.ub66.com/",
+      "isExternal": true,
+      "default": "/defaults/button-0-defaultImage.png",
+      "hover": "/defaults/button-0-hoverImage.png"
+    },
+    {
+      "label": "APP",
+      "href": "https://haa68686.com:9900/web/simple.php#/aioDownload",
+      "isExternal": true,
+      "default": "/defaults/button-1-defaultImage.png",
+      "hover": "/defaults/button-1-hoverImage.png"
+    },
+    {
+      "label": "FUN乐园",
+      "href": "https://fun99666.com/",
+      "isExternal": true,
+      "default": "/defaults/button-2-defaultImage.png",
+      "hover": "/defaults/button-2-hoverImage.png"
+    },
+    {
+      "label": "合作夥伴",
+      "href": "https://haa68686.com:9900/web/#/article/at3",
+      "isExternal": true,
+      "default": "/defaults/button-3-defaultImage.png",
+      "hover": "/defaults/button-3-hoverImage.png"
+    }
+  ],
+  "banner": {
+    "pc": "/defaults/banner-pc.png",
+    "tablet": "/defaults/banner-tablet-1770110417167.png",
+    "mobile": "/defaults/banner-mobile-1770110423831.png"
+  },
+  "backgroundImage": "/defaults/backgroundImage.png",
+  "routeLinksImages": [
+    {
+      "default": "/defaults/routeLinks-0-default.png",
+      "hover": "/defaults/routeLinks-0-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-1-default.png",
+      "hover": "/defaults/routeLinks-1-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-2-default.png",
+      "hover": "/defaults/routeLinks-2-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-3-default.png",
+      "hover": "/defaults/routeLinks-3-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-4-default.png",
+      "hover": "/defaults/routeLinks-4-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-5-default.png",
+      "hover": "/defaults/routeLinks-5-hover.png",
+      "href": ""
+    }
+  ],
+  "recommendedRoutes": [
+    {
+      "id": "route-1",
+      "index": 1,
+      "title": "线路 1",
+      "href": ""
+    },
+    {
+      "id": "route-2",
+      "index": 2,
+      "title": "线路 2",
+      "href": ""
+    },
+    {
+      "id": "route-3",
+      "index": 3,
+      "title": "线路 3",
+      "href": ""
+    },
+    {
+      "id": "route-4",
+      "index": 4,
+      "title": "线路 4",
+      "href": ""
+    },
+    {
+      "id": "route-5",
+      "index": 5,
+      "title": "线路 5",
+      "href": ""
+    },
+    {
+      "id": "route-6",
+      "index": 6,
+      "title": "线路 6",
+      "href": ""
+    }
+  ],
+  "recommendedTools": [
+    {
+      "id": "tool-0",
+      "name": "Tool 0",
+      "href": "https://www.xiaohongshu.com",
+      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
+    },
+    {
+      "id": "tool-1",
+      "name": "Tool 1",
+      "href": "https://www.douyin.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "tool-2",
+      "name": "Tool 2",
+      "href": "https://www.baidu.com",
+      "default": "",
+      "hover": ""
+    },
+    {
+      "id": "tool-3",
+      "name": "Tool 3",
+      "href": "https://www.youku.com",
+      "default": "",
+      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
+    },
+    {
+      "id": "tool-4",
+      "name": "Tool 4",
+      "href": "https://www.iqiyi.com",
+      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
+    },
+    {
+      "id": "tool-5",
+      "name": "Tool 5",
+      "href": "https://x.com",
+      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
+    }
+  ],
+  "videoThumbnails": [
+    {
+      "id": "video-0",
+      "title": "Fun乐园圣典直播，Fun乐园圣典直播",
+      "href": "#",
+      "image": "/defaults/videoThumbnails-0-image.png",
+      "alt": ""
+    },
+    {
+      "id": "video-1",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-2",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-3",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-4",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "video-5",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    }
+  ],
+  "programThumbnails": [
+    {
+      "id": "program-0",
+      "title": "Fun乐园圣典直播",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-1",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-2",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-3",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-4",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    },
+    {
+      "id": "program-5",
+      "title": "",
+      "href": "#",
+      "image": "",
+      "alt": ""
+    }
+  ],
+  "carouselSlides": [
+    {
+      "id": "slide-0",
+      "image": "/defaults/carouselSlides-0-image-1770119663805.png",
+      "href": "",
+      "alt": "Carousel 0"
+    },
+    {
+      "id": "slide-1",
+      "image": "/defaults/carouselSlides-1-image-1770683668078.png",
+      "href": "",
+      "alt": "Carousel 1"
+    }
+  ],
+  "floatAdButtons": [
+    {
+      "id": "float-0",
+      "name": "Float 0",
+      "href": "https://example.com/customer-service",
+      "default": "/defaults/floatAdButtons-0-default-1770115286468.png",
+      "hover": "/defaults/floatAdButtons-0-hover-1770115292570.png"
+    },
+    {
+      "id": "float-1",
+      "name": "Float 1",
+      "href": "https://example.com/girl-douyin",
+      "default": "/defaults/floatAdButtons-1-default-1770115304549.png",
+      "hover": "/defaults/floatAdButtons-1-hover-1770115307378.png"
+    },
+    {
+      "id": "float-2",
+      "name": "Float 2",
+      "href": "https://example.com/sports-douyin",
+      "default": "/defaults/floatAdButtons-2-default-1770115313479.png",
+      "hover": "/defaults/floatAdButtons-2-hover-1770115317390.png"
+    }
+  ]
+}

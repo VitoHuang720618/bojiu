@@ -1,0 +1,145 @@
+/* Global styles based on original B9 website */
+
+/* CSS Custom Properties */
+:root {
+  /* Primary Colors */
+  --color-primary: #ba081f;
+  --color-secondary: #8b0012;
+  --color-background: #16181b;
+  --color-text: #ffd08c;
+  --color-accent: #dfb082;
+  --color-border: #dfb082;
+  
+  /* Gradients */
+  --gradient-header: linear-gradient(0deg, #ba081f, #8b0012);
+  --gradient-footer: linear-gradient(0deg, #232323, #000);
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  
+  /* Breakpoints */
+  --breakpoint-mobile: 480px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+/* Dark theme */
+.dark {
+  color-scheme: dark;
+  background-color: var(--color-background);
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-background);
+}
+
+body {
+  font-family: Arial, Microsoft Yahei, PingFangSC, sans-serif;
+  font-size: 16px;
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Utility classes */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+}
+
+/* Image button component styles */
+.img-button {
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+
+.img-button img {
+  display: block;
+  width: 100%;
+}
+
+.img-button img.img-button--default {
+  opacity: 1;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.img-button img.img-button--hover {
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.img-button:hover img.img-button--default {
+  opacity: 0;
+}
+
+.img-button:hover img.img-button--hover {
+  opacity: 1;
+}
+
+/* Responsive utilities */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .md\:flex-col {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1024px) {
+  .lg\:flex-col {
+    flex-direction: column;
+  }
+}
