@@ -13,7 +13,6 @@ export const siteConfig = reactive<SiteConfig>({
   description: 'B9 Entertainment Website',
   baseUrl: getBaseUrl(),
   useApi: false, // 靜態模式
-  routesApiUrl: '',
   floatAdButtons: [],
   navigation: [
     {
@@ -74,7 +73,7 @@ export const siteConfig = reactive<SiteConfig>({
   }
 })
 
-export const updateLocalAssets = (config: any) => {
+export const updateLocalAssets = (_config: any) => {
   // 靜態模式無需更新
 }
 

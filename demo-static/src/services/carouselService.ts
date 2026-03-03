@@ -3,7 +3,6 @@ import type { BannerConfig } from '../types'
 class CarouselService {
   async getConfig(): Promise<any> {
     const {
-      siteConfig,
       assetsState,
       carouselSlides,
       banner,

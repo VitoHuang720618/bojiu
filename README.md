@@ -37,6 +37,36 @@ docker-compose up --build -d
 ```
 
 啟動後即可訪問：
+### 1. 專案目錄結構
+- `manager/`: 後台管理系統 (Go + Vue 3)。
+- `demo/`: 動態展示網站 (Vue 3 + Vite)，依賴 API 獲取資料。
+- `demo-static/`: **純靜態展示網站**。不依賴後台 API 與外部圖床，所有資源與連結皆已本地化，適合離線部署或追求極速加載的場景。
+
+---
+
+### 2. 環境與端口 (Environment)
+- Manager Backend: http://localhost:3002
+- Manager Frontend: http://localhost:3001
+- Demo Site (Dynamic): http://localhost:3000
+- Demo Site (Static): http://localhost:3005 (預設可自行調整)
+
+---
+
+### 3. 如何啟動靜態版 (demo-static)
+如果要啟動完全靜態化的版本，請進入 `demo-static` 目錄：
+```bash
+cd demo-static
+yarn install
+yarn dev
+```
+靜態版特點：
+*   **無後台傳輸**：`useApi` 已設為 `false`，不請求任何外部設定。
+*   **本地圖檔**：圖片皆存放於 `public/uploads/`，不依賴 GCP。
+*   **硬編碼連結**：所有導流連結皆已對齊 2026-03-02 官網狀態。
+
+---
+
+### 4. 開發規範 (Coding Standards)
 - **前端展示**：[http://localhost/](http://localhost/)
 - **管理後台**: [http://localhost/admin/](http://localhost/admin/)
   - **Nginx 防護 (Basic Auth)**:
