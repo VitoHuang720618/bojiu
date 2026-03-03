@@ -4,7 +4,7 @@ const path = require('path');
 
 // 使用 CJS 格式以繞過 package.json 的 "type": "module" 限制
 const tsFilePath = path.join(__dirname, '../src/config/siteConfig.ts');
-const uploadDir = path.join(__dirname, '../public/uploads');
+const uploadDir = path.join(__dirname, '../uploads');
 
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
@@ -52,10 +52,10 @@ async function processAll() {
         }
     }
 
-    // 將 ts 中的網址改成讀取本地 public/uploads
+    // 將 ts 中的網址改成讀取獨立的 /uploads/
     content = content.replace(/https:\/\/bojiu\.vito\.website\/uploads\//g, '/uploads/');
     fs.writeFileSync(tsFilePath, content);
-    console.log(`\n完成！總共下載了 ${count} 張新圖，並已修正路徑為本地。`);
+    console.log(`\n完成！總共下載了 ${count} 張新圖，並已修正路徑。`);
 }
 
 processAll();
