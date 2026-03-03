@@ -9,6 +9,8 @@ lerna-debug.log*
 
 # Runtime data & Huge binary folders
 uploads/
+!demo-static/uploads/
+!/demo-static/uploads/
 data/
 PC\ web_images/
 phone+tablet_images/
