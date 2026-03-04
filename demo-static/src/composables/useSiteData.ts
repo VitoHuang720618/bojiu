@@ -13,6 +13,7 @@ import {
     siteConfig
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
+import { apiService } from '../services/apiService'
 import type { ButtonLinkConfig, BannerConfig } from '../types'
 
 export function useSiteData() {
@@ -27,6 +28,7 @@ export function useSiteData() {
     const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
     const apiFloatAdButtons = ref<({ href: string, default: string, hover: string, tablet?: string, mobile?: string } | null)[]>([])
     const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
+    const dynamicHostnames = ref<string[]>([]) // 存放從 /api/hostnames 得到的動態網址
 
     // Computed Properties: Priority Logic (API vs Local)
     const effectiveLogo = computed(() => {
@@ -155,6 +157,20 @@ export function useSiteData() {
     })
 
     const effectiveRouteLinks = computed(() => {
+        // 第一優先：如果獲取到動態主機名 (Dynamic Hostnames)
+        if (dynamicHostnames.value.length > 0) {
+            return recommendedRoutes.map((route, index) => {
+                const dynamicHref = dynamicHostnames.value[index]
+                const staticImages = routeLinksImages[index]
+                return {
+                    default: staticImages?.default || '',
+                    hover: staticImages?.hover || '',
+                    href: dynamicHref || route.href
+                }
+            })
+        }
+
+        // 第二優先：原本的 API 配置邏輯 (Cloud API)
         if (siteConfig.useApi) {
             const apiData = apiRouteLinks.value || []
             return recommendedRoutes.map((route, index) => {
@@ -166,6 +182,8 @@ export function useSiteData() {
                 }
             })
         }
+
+        // 預設 (Fallback)：寫死在 siteConfig.ts 裡的原始狀態
         return routeLinksImages.map((link, index) => ({
             default: link.default,
             hover: link.hover,
@@ -175,6 +193,18 @@ export function useSiteData() {
 
     // Data Loading Action
     const loadConfig = async () => {
+        // 無論 siteConfig.useApi 為何，優先嘗試獲取動態線路 (動靜結合模式)
+        try {
+            const hostnames = await apiService.getHostnames()
+            if (hostnames && hostnames.length > 0) {
+                dynamicHostnames.value = hostnames
+                console.log('useSiteData: 成功獲取動態線路資料')
+            }
+        } catch (err) {
+            // 失敗時不報錯，繼續流程，回退機制會處理顯示
+            console.warn('useSiteData: 動態線路獲取失敗，將使用 Fallback 連結')
+        }
+
         try {
             const config = await carouselService.getConfig()
             apiLogo.value = config.logo !== undefined ? config.logo : ''
