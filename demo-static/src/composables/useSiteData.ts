@@ -179,8 +179,8 @@ export function useSiteData() {
                 dynamicHostnames.value = hostnames
                 console.log('useSiteData: 背景獲取動態線路成功')
             }
-        }).catch(err => {
-            console.warn('useSiteData: 背景獲取動態線路失敗，回退至靜態連結')
+        }).catch(() => {
+            console.warn('useSiteData: 背景獲取動態線路失敗')
         })
 
         // 核心配置加載 (保持同步以確保基本畫面)
