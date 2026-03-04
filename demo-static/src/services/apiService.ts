@@ -24,13 +24,9 @@ export const apiService = {
                 credentials: 'include'
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const contentType = response.headers.get('content-type');
 
-            // 如果返回的是 HTML，說明遇到了人機驗證
+            // 無論狀態碼為何，如果返回的是 HTML，優先檢查是否為人機驗證
             if (contentType && contentType.includes('text/html')) {
                 const html = await response.text();
 
@@ -38,10 +34,9 @@ export const apiService = {
                 const match = html.match(/identity_id=([^; ]+)/);
                 if (match && match[1]) {
                     const identityId = match[1];
-                    console.log('ApiService: 偵測到驗證頁面，正在自動處理 identity_id...');
+                    console.log('ApiService: 偵測到驗證頁面 (狀態碼: ' + response.status + ')，正在自動處理 identity_id...');
 
-                    // 手動寫入 Cookie (由於是同網域 Proxy，這會生效)
-                    // 仿照驗證頁面的 expiry (7200秒 = 2小時)
+                    // 手動寫入 Cookie
                     const expiry = 7200;
                     const date = new Date();
                     date.setTime(date.getTime() + (expiry * 1000));
@@ -50,6 +45,10 @@ export const apiService = {
                     // 遞迴重試一次
                     return this.getHostnames();
                 }
+            }
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
