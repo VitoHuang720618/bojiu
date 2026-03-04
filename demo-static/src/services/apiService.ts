@@ -28,14 +28,15 @@ export const apiService = {
                     credentials: 'include'
                 });
 
-                const contentType = response.headers.get('content-type');
+                const contentType = response.headers.get('content-type') || '';
+                const isHtml = contentType.includes('text/html');
+                const isPossiblyWaf = response.status === 404 || response.status === 403 || isHtml;
 
-                // 無論狀態碼為何，如果返回的是 HTML，優先檢查是否為人機驗證
-                if (contentType && contentType.includes('text/html')) {
-                    const html = await response.text();
+                if (isPossiblyWaf) {
+                    const text = await response.text();
+                    // 更加寬鬆的提取邏輯：尋找 identity_id 的值
+                    const match = text.match(/identity_id=([^; "']+)/);
 
-                    // 使用正則表達式提取 identity_id 的值
-                    const match = html.match(/identity_id=([^; ]+)/);
                     if (match && match[1]) {
                         const identityId = match[1];
 
@@ -44,18 +45,21 @@ export const apiService = {
                             return [];
                         }
 
-                        console.log(`ApiService: 偵測到驗證頁面 (狀態碼: ${response.status}, 重試次數: ${retries + 1})，正在處理 identity_id...`);
+                        console.log(`ApiService: 偵測到驗證特徵 (狀態: ${response.status}, 重試: ${retries + 1})`);
+                        console.log(`ApiService: 正在自動設置 identity_id...`);
 
-                        // 手動寫入 Cookie
+                        // 寫入 Cookie
                         const expiry = 7200;
                         const date = new Date();
                         date.setTime(date.getTime() + (expiry * 1000));
                         document.cookie = `identity_id=${identityId}; expires=${date.toUTCString()}; Max-Age=${expiry}; path=/; SameSite=Lax`;
 
-                        // 關鍵：等待 1000ms 讓瀏覽器穩定 Cookie，然後再重試
+                        // 延遲 1000ms 確保 Cookie 生效
                         retries++;
                         await new Promise(resolve => setTimeout(resolve, 1000));
                         return fetchInternal();
+                    } else if (isHtml) {
+                        console.warn('ApiService: 收到 HTML 但未找到驗證 identity_id');
                     }
                 }
 
