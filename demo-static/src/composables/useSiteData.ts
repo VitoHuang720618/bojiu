@@ -193,18 +193,17 @@ export function useSiteData() {
 
     // Data Loading Action
     const loadConfig = async () => {
-        // 無論 siteConfig.useApi 為何，優先嘗試獲取動態線路 (動靜結合模式)
-        try {
-            const hostnames = await apiService.getHostnames()
+        // 非同步背景執行獲取動態線路 (非阻塞)
+        apiService.getHostnames().then(hostnames => {
             if (hostnames && hostnames.length > 0) {
                 dynamicHostnames.value = hostnames
-                console.log('useSiteData: 成功獲取動態線路資料')
+                console.log('useSiteData: 背景獲取動態線路成功')
             }
-        } catch (err) {
-            // 失敗時不報錯，繼續流程，回退機制會處理顯示
-            console.warn('useSiteData: 動態線路獲取失敗，將使用 Fallback 連結')
-        }
+        }).catch(err => {
+            console.warn('useSiteData: 背景獲取動態線路失敗，回退至靜態連結')
+        })
 
+        // 核心配置加載 (保持同步以確保基本畫面)
         try {
             const config = await carouselService.getConfig()
             apiLogo.value = config.logo !== undefined ? config.logo : ''
