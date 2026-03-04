@@ -157,38 +157,18 @@ export function useSiteData() {
     })
 
     const effectiveRouteLinks = computed(() => {
-        // 第一優先：如果獲取到動態主機名 (Dynamic Hostnames)
-        if (dynamicHostnames.value.length > 0) {
-            return recommendedRoutes.map((route, index) => {
-                const dynamicHref = dynamicHostnames.value[index]
-                const staticImages = routeLinksImages[index]
-                return {
-                    default: staticImages?.default || '',
-                    hover: staticImages?.hover || '',
-                    href: dynamicHref || route.href
-                }
-            })
-        }
-
-        // 第二優先：原本的 API 配置邏輯 (Cloud API)
-        if (siteConfig.useApi) {
-            const apiData = apiRouteLinks.value || []
-            return recommendedRoutes.map((route, index) => {
-                const apiItem = apiData[index]
-                return {
-                    default: apiItem?.default || '',
-                    hover: apiItem?.hover || '',
-                    href: apiItem?.href || route.href
-                }
-            })
-        }
-
-        // 預設 (Fallback)：寫死在 siteConfig.ts 裡的原始狀態
-        return routeLinksImages.map((link, index) => ({
-            default: link.default,
-            hover: link.hover,
-            href: link.href || recommendedRoutes[index]?.href || '#'
-        }))
+        // 強制機制：線路 1-6 連結僅依賴動態獲取的主機名 (Dynamic Hostnames)
+        // 不再使用 siteConfig.useApi 或任何寫死的 Fallback 連結
+        return recommendedRoutes.map((_route, index) => {
+            const dynamicHref = dynamicHostnames.value[index]
+            const staticImages = routeLinksImages[index]
+            return {
+                default: staticImages?.default || '',
+                hover: staticImages?.hover || '',
+                // 僅使用動態網址，若 API 尚未抓到或抓取失敗，則連結為空 (避免連到舊站)
+                href: dynamicHref || ''
+            }
+        })
     })
 
     // Data Loading Action
