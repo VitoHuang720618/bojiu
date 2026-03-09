@@ -13,9 +13,13 @@ import {
     siteConfig
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
+import { apiService } from '../services/apiService'
 import type { ButtonLinkConfig, BannerConfig } from '../types'
 
 export function useSiteData() {
+    // Dynamic Data Refs
+    const dynamicHostnames = ref<string[]>([])
+
     // Cloud API Data Refs
     const apiLogo = ref<string | undefined>(undefined)
     const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
@@ -155,26 +159,32 @@ export function useSiteData() {
     })
 
     const effectiveRouteLinks = computed(() => {
-        if (siteConfig.useApi) {
-            const apiData = apiRouteLinks.value || []
-            return recommendedRoutes.map((route, index) => {
-                const apiItem = apiData[index]
-                return {
-                    default: apiItem?.default || '',
-                    hover: apiItem?.hover || '',
-                    href: apiItem?.href || route.href
-                }
-            })
-        }
-        return routeLinksImages.map((link, index) => ({
-            default: link.default,
-            hover: link.hover,
-            href: link.href || recommendedRoutes[index]?.href || '#'
-        }))
+        // 強制機制：線路 1-6 連結僅依賴動態獲取的主機名 (Dynamic Hostnames)
+        // 不再使用 siteConfig.useApi 或任何寫死的 Fallback 連結
+        return recommendedRoutes.map((_route, index) => {
+            const dynamicHref = dynamicHostnames.value[index]
+            const staticImages = routeLinksImages[index]
+            return {
+                default: staticImages?.default || '',
+                hover: staticImages?.hover || '',
+                // 僅使用動態網址，若 API 尚未抓到或抓取失敗，則連結為空 (避免連到舊站)
+                href: dynamicHref || ''
+            }
+        })
     })
 
     // Data Loading Action
     const loadConfig = async () => {
+        // 非同步背景執行獲取動態線路 (非阻塞)
+        apiService.getHostnames().then(hostnames => {
+            if (hostnames && hostnames.length > 0) {
+                dynamicHostnames.value = hostnames
+                console.log('useSiteData: 背景獲取動態線路成功')
+            }
+        }).catch(() => {
+            console.warn('useSiteData: 背景獲取動態線路失敗')
+        })
+
         try {
             const config = await carouselService.getConfig()
             apiLogo.value = config.logo !== undefined ? config.logo : ''
