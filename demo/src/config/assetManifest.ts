@@ -48,8 +48,8 @@ export const assetManifest = {
   titles: {
     recommendedRoutes: '/assets/images/crown-icon.webp',
     recommendedBrowsers: '/assets/images/tools-title.webp',
-    selectedVideos: '/assets/images/live-title.webp',
-    hotPrograms: '/assets/images/sport-title.webp'
+    selectedVideos: '/assets/images/live-title-new.png',
+    hotPrograms: '/assets/images/sport-title-new.png'
   },
 
   // Route links (6 items)

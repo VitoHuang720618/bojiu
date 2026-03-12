@@ -11,7 +11,7 @@ import { siteConfig } from '../config/siteConfig'
 <style scoped>
 #footer {
   align-items: center;
-  background: #3e080f;
+  background: #060417, linear-gradient(0deg, #000000 0%, #232323 100%), #000000;
   display: flex;
   height: 44px;
   justify-content: center;
@@ -23,7 +23,7 @@ import { siteConfig } from '../config/siteConfig'
 @media (max-width: 1279px) {
   #footer {
     height: 44px;
-    background: #3e080f !important;
+    background: #060417, linear-gradient(0deg, #000000 0%, #232323 100%), #000000 !important;
     border-top: 2px solid #dfb082 !important;
     display: flex;
     align-items: center;

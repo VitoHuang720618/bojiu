@@ -38,7 +38,7 @@
     "tablet": "/defaults/banner-tablet-1770110417167.png",
     "mobile": "/defaults/banner-mobile-1770110423831.png"
   },
-  "backgroundImage": "/defaults/backgroundImage.png",
+  "backgroundImage": "/defaults/backgroundImage-1773316342271.png",
   "routeLinksImages": [
     {
       "default": "/defaults/routeLinks-0-default.png",
@@ -261,21 +261,27 @@
       "name": "Float 0",
       "href": "https://example.com/customer-service",
       "default": "/defaults/floatAdButtons-0-default-1770115286468.png",
-      "hover": "/defaults/floatAdButtons-0-hover-1770115292570.png"
+      "hover": "/defaults/floatAdButtons-0-hover-1770115292570.png",
+      "tablet": "/defaults/floatAdButtons-0-tablet-1770121561612.png",
+      "mobile": "/defaults/floatAdButtons-0-mobile-1770121571643.png"
     },
     {
       "id": "float-1",
       "name": "Float 1",
       "href": "https://example.com/girl-douyin",
       "default": "/defaults/floatAdButtons-1-default-1770115304549.png",
-      "hover": "/defaults/floatAdButtons-1-hover-1770115307378.png"
+      "hover": "/defaults/floatAdButtons-1-hover-1770115307378.png",
+      "tablet": "/defaults/floatAdButtons-1-tablet-1770121580545.png",
+      "mobile": "/defaults/floatAdButtons-1-mobile-1770121585993.png"
     },
     {
       "id": "float-2",
       "name": "Float 2",
       "href": "https://example.com/sports-douyin",
       "default": "/defaults/floatAdButtons-2-default-1770115313479.png",
-      "hover": "/defaults/floatAdButtons-2-hover-1770115317390.png"
+      "hover": "/defaults/floatAdButtons-2-hover-1770115317390.png",
+      "tablet": "/defaults/floatAdButtons-2-tablet-1770121593972.png",
+      "mobile": "/defaults/floatAdButtons-2-mobile-1770121601401.png"
     }
   ]
 }
