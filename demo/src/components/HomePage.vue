@@ -504,8 +504,8 @@ const scrollToTop = () => {
 }
 
 .recommend-routes-title .crown-icon {
-  width: 42px;
-  height: 39px;
+  width: 48px;
+  height: 33px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -513,14 +513,18 @@ const scrollToTop = () => {
 .recommend-routes-title .title-text {
   display: inline-flex;
   align-items: center;
-  width: 203px;
-  height: 32px;
+  width: auto;
+  height: auto;
   /* background: #fffdda;  暫時註釋，因為文字背景通常指的是 background-clip 或者只是單純色塊，如果 user 是要色塊則開啟 */
   font-size: 32px;
   font-family: "Microsoft YaHei UI", "Microsoft YaHei UI-Bold", sans-serif;
   font-weight: 700;
   text-align: left;
-  color: #ffd08c;
+  background: #ffffff;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ffffff;
   letter-spacing: 6.39px;
   white-space: nowrap;
 }
@@ -972,11 +976,12 @@ const scrollToTop = () => {
     font-weight: 700 !important;
     text-align: left !important;
 
-    /* 將背景色與文字色結合成漸層文字，這通常是設計稿的本意 */
-    background: linear-gradient(180deg, #fffdda 0%, #ffd08c 100%) !important;
+    /* 依照 User 要求改為純白 */
+    background: #ffffff !important;
     -webkit-background-clip: text !important;
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
+    color: #ffffff !important;
 
     letter-spacing: 4.17px !important;
     display: flex !important;
