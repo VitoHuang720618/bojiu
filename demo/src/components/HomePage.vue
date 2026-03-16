@@ -1173,8 +1173,8 @@ const scrollToTop = () => {
   justify-content: center;
   flex: 1;
   cursor: pointer;
-  background: linear-gradient(0deg, #221e1e 0%, #b31b16 100%);
-  transition: background-color 0.3s ease, background 0.3s ease;
+  background: #221e1e;
+  transition: background 0.3s ease;
   align-self: stretch;
   /* 確保背景填滿高度 */
 }
