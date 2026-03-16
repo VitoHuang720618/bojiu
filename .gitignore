@@ -34,3 +34,5 @@ demo/public/site-settings.json
 *.njsproj
 *.sln
 *.sw?
+*.bak
+*.pdf
