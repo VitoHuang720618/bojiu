@@ -355,7 +355,7 @@ const scrollToTop = () => {
 
 @media (max-width: 1280px) {
   #home-main {
-    padding: 3rem 2.5rem;
+    padding: 38px 2.5rem 3rem 2.5rem !important;
     border-bottom: none !important;
   }
 }
@@ -436,7 +436,7 @@ const scrollToTop = () => {
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 10px !important;
     padding: 0 !important;
-    margin: 0 auto 3rem auto !important;
+    margin: 0px auto 29px auto !important;
     justify-content: center !important;
   }
 
@@ -1006,7 +1006,8 @@ const scrollToTop = () => {
   background-color: #0d0d0d;
   border-radius: 0 0 20px 20px;
   overflow: hidden;
-  border-top: 2px solid #dfb082; /* 補上示意圖中的金色線，加粗為 2px */
+  border-top: 2px solid #dfb082;
+  /* 補上示意圖中的金色線，加粗為 2px */
 }
 
 .recommend-footer .block-title {
