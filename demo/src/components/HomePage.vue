@@ -1006,6 +1006,7 @@ const scrollToTop = () => {
   background-color: #0d0d0d;
   border-radius: 0 0 20px 20px;
   overflow: hidden;
+  border-top: 2px solid #dfb082; /* 補上示意圖中的金色線，加粗為 2px */
 }
 
 .recommend-footer .block-title {

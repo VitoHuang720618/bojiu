@@ -17,6 +17,9 @@ import { apiService } from '../services/apiService'
 import type { ButtonLinkConfig, BannerConfig } from '../types'
 
 export function useSiteData() {
+    // Dynamic Data Refs
+    const dynamicHostnames = ref<string[]>([])
+
     // Cloud API Data Refs
     const apiLogo = ref<string | undefined>(undefined)
     const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
@@ -28,7 +31,6 @@ export function useSiteData() {
     const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
     const apiFloatAdButtons = ref<({ href: string, default: string, hover: string, tablet?: string, mobile?: string } | null)[]>([])
     const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
-    const dynamicHostnames = ref<string[]>([]) // 存放從 /api/hostnames 得到的動態網址
 
     // Computed Properties: Priority Logic (API vs Local)
     const effectiveLogo = computed(() => {
@@ -183,7 +185,6 @@ export function useSiteData() {
             console.warn('useSiteData: 背景獲取動態線路失敗')
         })
 
-        // 核心配置加載 (保持同步以確保基本畫面)
         try {
             const config = await carouselService.getConfig()
             apiLogo.value = config.logo !== undefined ? config.logo : ''

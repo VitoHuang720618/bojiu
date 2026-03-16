@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { siteConfig } from '../config/siteConfig'
 </script>
 
 <template>
   <footer id="footer">
-    <span>{{ siteConfig.footer.copyright }}</span>
+    <span>Copyright © 博九娱乐网 Reserved</span>
   </footer>
 </template>
 
 <style scoped>
 #footer {
   align-items: center;
-  background: #3e080f;
+  background: #060417;
   display: flex;
   height: 44px;
   justify-content: center;
@@ -23,7 +22,7 @@ import { siteConfig } from '../config/siteConfig'
 @media (max-width: 1279px) {
   #footer {
     height: 44px;
-    background: #3e080f !important;
+    background: #060417 !important;
     border-top: 2px solid #dfb082 !important;
     display: flex;
     align-items: center;

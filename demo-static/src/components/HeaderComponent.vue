@@ -17,7 +17,7 @@ const { effectiveLogo } = useSiteData()
 <style scoped>
 #header {
   align-items: flex-start;
-  background: linear-gradient(0deg, #8b0012 0%, #ba081f 100%), #000000;
+  background: linear-gradient(0deg, #3041b9 0%, #081fb3 100%), #000000;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.30);
   display: flex;
   height: 75px;
