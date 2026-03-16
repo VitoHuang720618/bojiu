@@ -1013,7 +1013,7 @@ const scrollToTop = () => {
 .recommend-footer .block-title {
   margin-right: 0;
   margin-bottom: 0;
-  background-color: #3625c3;
+  background-color: #200cc5;
   padding: 0;
   border-radius: 0 0 0 20px;
   display: flex;
@@ -1057,7 +1057,7 @@ const scrollToTop = () => {
     border-radius: 0;
     justify-content: flex-start;
     padding: 0;
-    background: #3625c3;
+    background: #200cc5;
   }
 
   .recommend-footer .block-title img {
@@ -1096,7 +1096,7 @@ const scrollToTop = () => {
     flex: 0 0 48px !important;
     justify-content: flex-start !important;
     padding: 0 15px !important;
-    background: #3625c3 !important;
+    background: #200cc5 !important;
     /* 平板下標題欄維持深藍 */
     border-radius: 0 !important;
   }
