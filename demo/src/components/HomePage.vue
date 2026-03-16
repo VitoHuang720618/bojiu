@@ -109,9 +109,9 @@ const scrollToTop = () => {
       backgroundImage: effectiveBackgroundImage ? `url('${effectiveBackgroundImage}')` :
         'radial-gradient(circle, rgba(80, 80, 80, 0.4) 1.5px, transparent 1.5px), radial-gradient(circle, rgba(60, 60, 60, 0.3) 1px, transparent 1px), linear-gradient(180deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px), linear-gradient(0deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px)',
       backgroundColor: effectiveBackgroundImage ? 'transparent' : '#0a0a0a',
-      backgroundSize: effectiveBackgroundImage ? 'cover' : '16px 16px, 32px 32px, 100% 60px, 100% 60px',
-      backgroundPosition: effectiveBackgroundImage ? 'center' : '0 0, 8px 8px, top, bottom',
-      backgroundRepeat: effectiveBackgroundImage ? 'no-repeat' : 'repeat, repeat, repeat-x, repeat-x'
+      backgroundSize: effectiveBackgroundImage ? 'auto' : '16px 16px, 32px 32px, 100% 60px, 100% 60px',
+      backgroundPosition: effectiveBackgroundImage ? 'top left' : '0 0, 8px 8px, top, bottom',
+      backgroundRepeat: effectiveBackgroundImage ? 'repeat' : 'repeat, repeat, repeat-x, repeat-x'
     }">
       <div class="home-main__inner">
         <!-- Top Button Links -->
@@ -632,7 +632,6 @@ const scrollToTop = () => {
   width: 100%;
   /* height: 410px; Removed fixed height for tighter fit */
   height: auto;
-  opacity: 0.8;
   background: rgba(20, 10, 104, 0.80);
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
@@ -1405,7 +1404,7 @@ const scrollToTop = () => {
   /* 居中顯示 */
   width: 100%;
   height: 43px;
-  background: linear-gradient(to right, #4d176f, #671dbb);
+  background: #3b27de;
   color: #fff;
   /* Auto-shrink text RWD: Scale with container width, max 24px, min 14px */
   font-size: clamp(14px, 10cqi, 24px);
@@ -1479,7 +1478,7 @@ const scrollToTop = () => {
 
 /* Sport Block Specific Styles (Green) */
 .programme-wrap .programme-block.sport-block .list .item span {
-  background: linear-gradient(to right, #114b1f, #2c8a3c);
+  background: #3b27de;
 }
 
 
@@ -1692,7 +1691,7 @@ const scrollToTop = () => {
     max-width: 100% !important;
     margin: 0 !important;
     padding: 10px 0 !important;
-    background: #060417, linear-gradient(0deg, #000000 0%, #232323 100%), #000000 !important;
+    background: #060417 !important;
   }
 }
 

@@ -10,7 +10,7 @@
 <style scoped>
 #footer {
   align-items: center;
-  background: linear-gradient(0deg, #000000 0%, #232323 100%), #060417;
+  background: #060417;
   display: flex;
   height: 44px;
   justify-content: center;
@@ -22,7 +22,7 @@
 @media (max-width: 1279px) {
   #footer {
     height: 44px;
-    background: linear-gradient(0deg, #000000 0%, #232323 100%), #060417 !important;
+    background: #060417 !important;
     border-top: 2px solid #dfb082 !important;
     display: flex;
     align-items: center;
