@@ -368,16 +368,16 @@ const scrollToTop = () => {
 
 @media (max-width: 768px) {
   #home-main {
-    padding: 2.5rem 1.25rem;
+    padding: 2.5rem 15px !important;
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 480px) {
   #home-main {
     border-top: 2px solid #dfb082;
     border-bottom: none !important;
-    padding: 1.5rem 0.625rem;
-    padding-bottom: 3rem;
+    padding: 1.5rem 15px !important;
+    padding-bottom: 3rem !important;
   }
 }
 
