@@ -355,7 +355,8 @@ const scrollToTop = () => {
 
 @media (max-width: 1280px) {
   #home-main {
-    padding: 38px 2.5rem 3rem 2.5rem !important; /* 精確鎖定：頂部 38px */
+    padding: 38px 2.5rem 3rem 2.5rem !important;
+    /* 精確鎖定：頂部 38px */
     border-bottom: none !important;
   }
 }
@@ -368,7 +369,8 @@ const scrollToTop = () => {
 
 @media (max-width: 768px) {
   #home-main {
-    padding: 2.5rem 15px !important; /* 統一調整為 15px */
+    padding: 2.5rem 15px !important;
+    /* 統一調整為 15px */
   }
 }
 
@@ -376,7 +378,8 @@ const scrollToTop = () => {
   #home-main {
     border-top: 2px solid #dfb082;
     border-bottom: none !important;
-    padding: 1.5rem 15px !important; /* 統一調整為 15px */
+    padding: 1.5rem 15px !important;
+    /* 統一調整為 15px */
     padding-bottom: 3rem !important;
   }
 }
@@ -463,7 +466,8 @@ const scrollToTop = () => {
     grid-template-columns: repeat(2, 185px) !important;
     gap: 15px 10px !important;
     padding: 0 !important;
-    margin: 0px auto 29px auto !important; /* 修正：頂部 0 (由父層扛)，底部 29px */
+    margin: 0px auto 29px auto !important;
+    /* 修正：頂部 0 (由父層扛)，底部 29px */
     justify-content: center !important;
   }
 
@@ -1759,13 +1763,13 @@ const scrollToTop = () => {
     gap: 0 !important;
     /* 增加間距讓按鈕更分散 */
     width: 100% !important;
-    padding: 0 120px !important;
+    padding: 0 150px !important; /* 依照要求調整為 150px */
     box-sizing: border-box !important;
   }
 
   #float-ad .links .item {
-    width: 151px !important;
-    height: 58px !important;
+    width: 140px !important;
+    height: 60px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1774,9 +1778,9 @@ const scrollToTop = () => {
   }
 
   #float-ad .links .item :deep(img) {
-    width: 151px !important;
-    height: 58px !important;
-    max-width: 151px !important;
+    width: 140px !important;
+    height: 60px !important;
+    max-width: 140px !important;
     object-fit: fill !important;
     /* 使用 fill 確保圖片完全填滿容器 */
   }
