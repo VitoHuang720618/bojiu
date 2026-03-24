@@ -224,9 +224,7 @@ const config = reactive<ConfigData>({
     pc: '',
     tablet: '',
     mobile: ''
-  }
-
-  ,
+  },
   backgroundImage: '',
   buttonLinks: [],
   carouselSlides: [],

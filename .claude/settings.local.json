@@ -5,7 +5,8 @@
       "Bash(yarn test:*)",
       "Bash(find /Users/vitohuang/project/b9-website-recreation/manager/backend -type f -name *.ts)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

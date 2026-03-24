@@ -16,7 +16,13 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Force local dependencies to avoid conflicts with root node_modules */
+    "paths": {
+      "vite": ["./node_modules/vite"],
+      "@vitejs/plugin-vue": ["./node_modules/@vitejs/plugin-vue"]
+    }
   },
   "include": ["vite.config.ts"]
 }

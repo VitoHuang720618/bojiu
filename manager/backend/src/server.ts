@@ -87,15 +87,23 @@ if (!fs.existsSync(configPath)) {
 const assetManager = new AssetManager(CONFIG_PATH)
 const wsManager = new WebSocketManager(httpServer)
 
-// Multer 配置 - 使用臨時文件名，稍後重命名
+// Multer 配置 - 直接使用固定檔名
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, UPLOADS_DIR)
   },
   filename: (req, file, cb) => {
-    // 使用臨時文件名，稍後在路由中重命名
-    const tempName = Date.now() + '-temp' + path.extname(file.originalname)
-    cb(null, tempName)
+    // 根據 assetPath 生成固定的檔名（不含時間戳記）
+    const { assetPath } = req.body
+
+    let targetFilename = `upload.png`
+
+    if (assetPath) {
+      const cleanPath = assetPath.replace(/\./g, '-')
+      targetFilename = `${cleanPath}.png`
+    }
+
+    cb(null, targetFilename)
   }
 })
 
@@ -266,35 +274,18 @@ async function startServer() {
         // 驗證檔案
         validateImageFileStrict(req.file)
 
-        // 根據 assetPath 生成正確的文件名並重命名文件
-        const timestamp = Date.now()
-        let targetFilename = `upload-${timestamp}.png`
+        // 檔案已經被 Multer 直接寫入固定檔名，直接建立 URL
+        const filename = req.file.filename
 
-        if (assetPath) {
-          const cleanPath = assetPath.replace(/\./g, '-')
-          targetFilename = `${cleanPath}-${timestamp}.png`
-        }
+        console.log('File uploaded to:', filename)
 
-        // 重命名文件到目標文件名
-        const targetPath = path.join(UPLOADS_DIR, targetFilename)
-        fs.renameSync(req.file.path, targetPath)
-
-        console.log('File renamed to:', targetFilename)
-
-        // 建立圖片 URL - 容器部署使用相對路徑
-        let imageUrl: string
-        if (nodeEnv === 'production') {
-          // 在容器中使用相對路徑，由 Nginx 處理
-          imageUrl = `/uploads/${targetFilename}`
-        } else {
-          // 開發環境使用完整 URL
-          imageUrl = `http://localhost:${port}/uploads/${targetFilename}`
-        }
+        // 建立圖片 URL - 統一使用相對路徑，由 Nginx 處理
+        const imageUrl = `/uploads/${filename}`
 
         res.json({
           success: true,
           data: {
-            filename: targetFilename,
+            filename,
             path: imageUrl,
             size: req.file.size,
             mimetype: req.file.mimetype
