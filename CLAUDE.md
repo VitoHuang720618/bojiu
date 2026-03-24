@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 這是一個使用 Vue 3 重建的 B9 娛樂網站專案，採用 Monorepo 架構，包含動態展示網站、靜態展示網站與管理後台系統。
 
-**核心技術棧**：Vue 3 (Composition API + `<script setup>`), TypeScript, Vite, Node.js, Express, SQLite
+**核心技術棧**：Vue 3 (Composition API + `<script setup>`), TypeScript, Vite, Node.js, Express, SQLite, Socket.IO
 
 ## 專案結構 (Project Structure)
 
@@ -14,12 +14,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 b9-website-recreation/
 ├── demo/              # 動態展示網站 (Vue 3 + Vite)
 ├── demo-static/       # 純靜態展示網站 (Vue 3 + Vite, 無 API 依賴)
+├── shared/            # 共享元件與工具
 ├── manager/
 │   ├── front/        # 管理後台前端 (Vue 3 + Vite + Pinia)
-│   └── backend/      # 管理後台後端 (Node.js + Express + SQLite)
+│   └── backend/      # 管理後台後端 (Node.js + Express + SQLite + Socket.IO)
+├── docker/           # Docker 相關配置與腳本
 ├── data/             # 配置檔案與資料庫 (持久化存儲)
 ├── uploads/          # 上傳的圖片資源 (持久化存儲)
-└── Dockerfile        # 雲端部署配置
+├── scripts/          # 自動化腳本
+├── AGENTS/           # AI Agent 配置
+├── Dockerfile        # 雲端部署配置
+├── docker-compose.yml
+├── build-push.sh     # 構建與推送腳本
+└── update-site.sh    # 站點更新腳本
 ```
 
 ## 常用指令 (Common Commands)
@@ -30,7 +37,9 @@ cd demo
 yarn install
 yarn dev          # 開發模式 (port 3000)
 yarn build        # 生產構建
+yarn preview       # 預覽構建結果
 yarn test         # 執行測試
+yarn test:watch   # 監看模式
 ```
 
 ### 靜態展示網站 (demo-static/)
@@ -55,7 +64,7 @@ cd manager/backend
 yarn install
 yarn dev          # 開發模式 (port 3002, 使用 nodemon + ts-node)
 yarn build        # 編譯 TypeScript
-yarn start        # 執行編譯後的產物
+yarn start        # 執行編譯後的產物 (生產模式)
 ```
 
 ### Docker 部署
@@ -64,10 +73,10 @@ docker-compose up --build -d    # 本地開發與測試
 docker-compose down -v          # 清理容器與 volumes
 ```
 
-### 測試 (各專案通用)
+### 部署腳本
 ```bash
-yarn test           # 執行測試
-yarn test:watch     # 監看模式 (demo/)
+./build-push.sh    # 構建並推送 Docker 映像
+./update-site.sh   # 更新站點內容
 ```
 
 ## 核心架構 (Core Architecture)
@@ -104,6 +113,12 @@ yarn test:watch     # 監看模式 (demo/)
 - `apiService` 自動偵測 `FormData` 並略過 `Content-Type` 設定
 - 圖片路徑統一處理：`/uploads/` 用於上傳圖片，`/assets/` 用於靜態資源
 
+### 實時通訊 (Real-time Communication)
+
+- **Socket.IO**：用於管理後台的即時更新通知
+- 前端 (manager/front) 與後端 (manager/backend) 之間的 WebSocket 連線
+- 配置變更時自動推送到所有已連線的管理員
+
 ### 響應式設計斷點 (RWD Breakpoints)
 
 - **Mobile (< 740px)**：涵蓋大螢幕手機與折疊機
@@ -116,6 +131,13 @@ yarn test:watch     # 監看模式 (demo/)
 - 使用 Composition API 與 `<script setup>` 語法
 - `ref()` 用於 primitives，`reactive()` 用於 objects
 - Props 使用 `defineProps<Props>()` 解構
+- 多字元件命名：`UserProfile.vue`、`DataTable.vue`
+
+### Node.js / Express 開發
+- 使用 ES Modules (`"type": "module"`)
+- 完整的 Error Handling，禁止忽略錯誤
+- API 路由採用 RESTful 設計
+- Socket.IO 事件命名採用 kebab-case
 
 ### 程式碼品質
 - 測試覆蓋率要求：70%+
@@ -136,10 +158,25 @@ yarn test:watch     # 監看模式 (demo/)
 
 ### 環境變數
 - `NODE_ENV`：建議設為 `production`
-- `PORT`：雲端平台會自動注入
-- `API_PORT`：後端 API 端口
-- `UPLOAD_PATH`：上傳目錄路徑
-- `CONFIG_PATH`：配置目錄路徑
+- `PORT`：雲端平台會自動注入 (Nginx port)
+- `API_PORT`：後端 API 端口 (預設 3005)
+- `UPLOAD_PATH`：上傳目錄路徑 (預設 /app/uploads)
+- `CONFIG_PATH`：配置目錄路徑 (預設 /app/data)
+- `MAX_FILE_SIZE`：最大檔案大小 (bytes, 預設 10485760)
+
+### Docker 資源限制
+- Memory Limit: 512M
+- Memory Reservation: 256M
+- CPU Limit: 0.5 cores
+- CPU Reservation: 0.25 cores
+
+### Health Check
+- HTTP Endpoint: `/health`
+- API Health: `/api/health`
+- Interval: 30s
+- Timeout: 10s
+- Retries: 3
+- Start Period: 60s
 
 ### 本地開發 Proxy
 - 前端 (3001) 透過 `vite.config.ts` 的 Proxy 設定轉發 API 請求至後端 (3002)
@@ -147,9 +184,24 @@ yarn test:watch     # 監看模式 (demo/)
 
 ## 關鍵檔案位置 (Key Files)
 
+### 前端展示網站 (demo/)
 - `demo/src/config/siteConfig.ts`：主要站點配置
 - `demo/src/composables/useSiteData.ts`：資料狀態管理
 - `demo/src/services/carouselService.ts`：API 服務
 - `demo/src/types/index.ts`：TypeScript 型別定義
+
+### 管理後台後端 (manager/backend/)
 - `manager/backend/src/server.ts`：後端伺服器入口
-- `docker-compose.yml`：Docker 配置
+- `manager/backend/src/routes/`：API 路由定義
+- `manager/backend/src/middleware/`：中間件 (auth, upload, error)
+- `manager/backend/src/socket/`：Socket.IO 處理
+
+### 部署相關
+- `docker-compose.yml`：Docker Compose 配置
+- `Dockerfile`：Docker 映像構建
+- `docker/nginx.conf`：Nginx 配置
+
+### 專案文件
+- `README.md`：專案說明與快速開始
+- `PROJECT_STATUS.md`：專案狀態追蹤
+- `CLAUDE.md`：本文件

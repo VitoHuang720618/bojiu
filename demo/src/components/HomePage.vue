@@ -636,7 +636,7 @@ const scrollToTop = () => {
   width: 100%;
   /* height: 410px; Removed fixed height for tighter fit */
   height: auto;
-  background: rgba(20, 10, 104, 0.80);
+  background: rgba(20, 10, 104, 1.0);
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
   padding: 45px 27px 44px 63px;
