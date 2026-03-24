@@ -93,14 +93,20 @@ const storage = multer.diskStorage({
     cb(null, UPLOADS_DIR)
   },
   filename: (req, file, cb) => {
-    // 根據 assetPath 生成固定的檔名（不含時間戳記）
+    // 根據 assetPath 獲取身分標記
     const { assetPath } = req.body
-
-    let targetFilename = `upload.png`
+    
+    // 獲取原始副檔名 (預設 .png)
+    const ext = path.extname(file.originalname).toLowerCase() || '.png'
+    
+    let targetFilename = `upload-${Date.now()}${ext}`
 
     if (assetPath) {
+      // 依據身分標記命名 (例如: banner.pc -> banner-pc.png)
       const cleanPath = assetPath.replace(/\./g, '-')
-      targetFilename = `${cleanPath}.png`
+      targetFilename = `${cleanPath}${ext}`
+    } else {
+      console.warn('⚠️ 上傳請求缺少 assetPath，使用臨時檔名以避免覆蓋預設資源。')
     }
 
     cb(null, targetFilename)

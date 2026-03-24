@@ -89,11 +89,14 @@ class ConfigService {
   // 上傳圖片
   async uploadImage(file: File, assetPath?: string, assetType?: string, position?: number): Promise<UploadResponse> {
     const formData = new FormData()
-    formData.append('file', file)
-
+    
+    // IMPORTANT: Fields must be appended BEFORE the file for multer to see them in req.body during filename generation
     if (assetPath) formData.append('assetPath', assetPath)
     if (assetType) formData.append('assetType', assetType)
     if (position !== undefined) formData.append('position', position.toString())
+    
+    // The file should be the last field
+    formData.append('file', file)
 
     // 使用 apiService.request 但要注意 Content-Type
     // 當 body 是 FormData 時，fetch 會自動設定 Content-Type 為 multipart/form-data 並加上 boundary
