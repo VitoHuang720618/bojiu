@@ -1731,20 +1731,14 @@ const scrollToTop = () => {
   aspect-ratio: 120 / 105;
 }
 
-/* 桌面版：顯示桌面圖片，隱藏所有 RWD 圖片 */
-#float-ad .links .item.rwd-first-button .desktop-image,
-#float-ad .links .item.rwd-second-button .desktop-image,
-#float-ad .links .item.rwd-third-button .desktop-image {
+/* 預設狀態 (桌面版) */
+#float-ad .links .item .desktop-image {
   display: block;
 }
 
-#float-ad .links .item.rwd-first-button .tablet-image,
-#float-ad .links .item.rwd-second-button .tablet-image,
-#float-ad .links .item.rwd-third-button .tablet-image,
-#float-ad .links .item.rwd-first-button .mobile-image,
-#float-ad .links .item.rwd-second-button .mobile-image,
-#float-ad .links .item.rwd-third-button .mobile-image {
-  display: none;
+#float-ad .links .item .tablet-image,
+#float-ad .links .item .mobile-image {
+  display: none !important;
 }
 
 @media (max-width: 1440px) and (min-width: 1280px) {
@@ -1786,18 +1780,12 @@ const scrollToTop = () => {
   }
 
   /* 平板版：隱藏桌面和手機圖片，顯示平板圖片 */
-  #float-ad .links .item.rwd-first-button .desktop-image,
-  #float-ad .links .item.rwd-second-button .desktop-image,
-  #float-ad .links .item.rwd-third-button .desktop-image,
-  #float-ad .links .item.rwd-first-button .mobile-image,
-  #float-ad .links .item.rwd-second-button .mobile-image,
-  #float-ad .links .item.rwd-third-button .mobile-image {
+  #float-ad .links .item .desktop-image,
+  #float-ad .links .item .mobile-image {
     display: none !important;
   }
 
-  #float-ad .links .item.rwd-first-button .tablet-image,
-  #float-ad .links .item.rwd-second-button .tablet-image,
-  #float-ad .links .item.rwd-third-button .tablet-image {
+  #float-ad .links .item .tablet-image {
     display: block !important;
   }
 }
@@ -1805,18 +1793,12 @@ const scrollToTop = () => {
 @media (max-width: 739px) {
 
   /* 手機版：隱藏桌面和平板圖片，顯示手機圖片 */
-  #float-ad .links .item.rwd-first-button .desktop-image,
-  #float-ad .links .item.rwd-second-button .desktop-image,
-  #float-ad .links .item.rwd-third-button .desktop-image,
-  #float-ad .links .item.rwd-first-button .tablet-image,
-  #float-ad .links .item.rwd-second-button .tablet-image,
-  #float-ad .links .item.rwd-third-button .tablet-image {
+  #float-ad .links .item .desktop-image,
+  #float-ad .links .item .tablet-image {
     display: none !important;
   }
 
-  #float-ad .links .item.rwd-first-button .mobile-image,
-  #float-ad .links .item.rwd-second-button .mobile-image,
-  #float-ad .links .item.rwd-third-button .mobile-image {
+  #float-ad .links .item .mobile-image {
     display: block !important;
   }
 }

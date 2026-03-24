@@ -128,18 +128,24 @@ export const assetManifest = {
       id: 'customer-service',
       default: '/assets/images/float-0-default.png',
       hover: '/assets/images/float-0-hover.png',
+      tablet: '',
+      mobile: '',
       alt: '在线客服'
     },
     {
       id: 'girl-douyin',
       default: '/assets/images/float-1-default.png',
       hover: '/assets/images/float-1-hover.png',
+      tablet: '',
+      mobile: '',
       alt: '女孩抖音'
     },
     {
       id: 'sports-douyin',
       default: '/assets/images/float-2-default.png',
       hover: '/assets/images/float-2-hover.png',
+      tablet: '',
+      mobile: '',
       alt: '体育抖音'
     }
   ]

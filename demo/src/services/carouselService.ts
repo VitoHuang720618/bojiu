@@ -158,6 +158,7 @@ class CarouselService {
         programThumbnails: [],
         buttonLinks: [],
         toolIcons: [],
+        floatAdButtons: [],
         routeLinks: []
       }
     }

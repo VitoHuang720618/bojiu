@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(tree:*)",
-      "Bash(yarn test:*)"
+      "Bash(yarn test:*)",
+      "Bash(find /Users/vitohuang/project/b9-website-recreation/manager/backend -type f -name *.ts)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

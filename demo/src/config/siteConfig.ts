@@ -427,33 +427,33 @@ export const carouselSlides = reactive([
 ])
 
 export const floatAdButtons = reactive([
-  {
-    "id": "float-0",
-    "name": "Float 0",
-    "href": "https://example.com/customer-service",
-    "default": "",
-    "hover": "",
-    "tablet": "",
-    "mobile": ""
-  },
-  {
-    "id": "float-1",
-    "name": "Float 1",
-    "href": "https://example.com/girl-douyin",
-    "default": "",
-    "hover": "",
-    "tablet": "",
-    "mobile": ""
-  },
-  {
-    "id": "float-2",
-    "name": "Float 2",
-    "href": "https://example.com/sports-douyin",
-    "default": "",
-    "hover": "",
-    "tablet": "",
-    "mobile": ""
-  }
+    {
+      "id": "float-0",
+      "name": "Float 0",
+      "href": "https://example.com/customer-service",
+      "default": "/defaults/floatAdButtons-0-default-1774324606498.png",
+      "hover": "/defaults/floatAdButtons-0-hover-1774324612151.png",
+      "tablet": "/defaults/floatAdButtons-0-tablet-1774324650635.png",
+      "mobile": "/defaults/floatAdButtons-0-mobile-1774325524932.png"
+    },
+    {
+      "id": "float-1",
+      "name": "Float 1",
+      "href": "https://example.com/girl-douyin",
+      "default": "/defaults/floatAdButtons-1-default-1774324621557.png",
+      "hover": "/defaults/floatAdButtons-1-hover-1774324624507.png",
+      "tablet": "/defaults/floatAdButtons-1-tablet-1774324655594.png",
+      "mobile": "/defaults/floatAdButtons-1-mobile-1774325528535.png"
+    },
+    {
+      "id": "float-2",
+      "name": "Float 2",
+      "href": "https://example.com/sports-douyin",
+      "default": "/defaults/floatAdButtons-2-default-1774324633499.png",
+      "hover": "/defaults/floatAdButtons-2-hover-1774324638235.png",
+      "tablet": "/defaults/floatAdButtons-2-tablet-1774324659376.png",
+      "mobile": "/defaults/floatAdButtons-2-mobile-1774325532199.png"
+    }
 ])
 
 export const videoContent = videoThumbnails

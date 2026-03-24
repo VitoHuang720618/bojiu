@@ -356,6 +356,7 @@ const scrollToTop = () => {
 @media (max-width: 1280px) {
   #home-main {
     padding: 38px 2.5rem 3rem 2.5rem !important;
+    /* 精確鎖定：頂部 38px */
     border-bottom: none !important;
   }
 }
@@ -369,6 +370,7 @@ const scrollToTop = () => {
 @media (max-width: 768px) {
   #home-main {
     padding: 2.5rem 15px !important;
+    /* 統一調整為 15px */
   }
 }
 
@@ -377,6 +379,7 @@ const scrollToTop = () => {
     border-top: 2px solid #dfb082;
     border-bottom: none !important;
     padding: 1.5rem 15px !important;
+    /* 統一調整為 15px */
     padding-bottom: 3rem !important;
   }
 }
@@ -437,6 +440,7 @@ const scrollToTop = () => {
     gap: 10px !important;
     padding: 0 !important;
     margin: 0px auto 29px auto !important;
+    /* 精確鎖定：上 38, 下 29 */
     justify-content: center !important;
   }
 
@@ -461,9 +465,9 @@ const scrollToTop = () => {
   .button-links {
     grid-template-columns: repeat(2, 185px) !important;
     gap: 15px 10px !important;
-    padding: 0 10px !important;
-    max-width: 100% !important;
-    margin-bottom: 1.5rem !important;
+    padding: 0 !important;
+    margin: 0px auto 29px auto !important;
+    /* 修正：頂部 0 (由父層扛)，底部 29px */
     justify-content: center !important;
   }
 
@@ -632,7 +636,7 @@ const scrollToTop = () => {
   width: 100%;
   /* height: 410px; Removed fixed height for tighter fit */
   height: auto;
-  background: rgba(20, 10, 104, 0.80);
+  background: rgba(20, 10, 104, 1.0);
   border-radius: 20px 20px 0px 0px;
   box-sizing: border-box;
   padding: 45px 27px 44px 63px;
@@ -1727,20 +1731,14 @@ const scrollToTop = () => {
   aspect-ratio: 120 / 105;
 }
 
-/* 桌面版：顯示桌面圖片，隱藏所有 RWD 圖片 */
-#float-ad .links .item.rwd-first-button .desktop-image,
-#float-ad .links .item.rwd-second-button .desktop-image,
-#float-ad .links .item.rwd-third-button .desktop-image {
+/* 預設狀態 (桌面版) */
+#float-ad .links .item .desktop-image {
   display: block;
 }
 
-#float-ad .links .item.rwd-first-button .tablet-image,
-#float-ad .links .item.rwd-second-button .tablet-image,
-#float-ad .links .item.rwd-third-button .tablet-image,
-#float-ad .links .item.rwd-first-button .mobile-image,
-#float-ad .links .item.rwd-second-button .mobile-image,
-#float-ad .links .item.rwd-third-button .mobile-image {
-  display: none;
+#float-ad .links .item .tablet-image,
+#float-ad .links .item .mobile-image {
+  display: none !important;
 }
 
 @media (max-width: 1440px) and (min-width: 1280px) {
@@ -1759,7 +1757,7 @@ const scrollToTop = () => {
     gap: 0 !important;
     /* 增加間距讓按鈕更分散 */
     width: 100% !important;
-    padding: 0 150px !important;
+    padding: 0 150px !important; /* 依照要求調整為 150px */
     box-sizing: border-box !important;
   }
 
@@ -1782,18 +1780,12 @@ const scrollToTop = () => {
   }
 
   /* 平板版：隱藏桌面和手機圖片，顯示平板圖片 */
-  #float-ad .links .item.rwd-first-button .desktop-image,
-  #float-ad .links .item.rwd-second-button .desktop-image,
-  #float-ad .links .item.rwd-third-button .desktop-image,
-  #float-ad .links .item.rwd-first-button .mobile-image,
-  #float-ad .links .item.rwd-second-button .mobile-image,
-  #float-ad .links .item.rwd-third-button .mobile-image {
+  #float-ad .links .item .desktop-image,
+  #float-ad .links .item .mobile-image {
     display: none !important;
   }
 
-  #float-ad .links .item.rwd-first-button .tablet-image,
-  #float-ad .links .item.rwd-second-button .tablet-image,
-  #float-ad .links .item.rwd-third-button .tablet-image {
+  #float-ad .links .item .tablet-image {
     display: block !important;
   }
 }
@@ -1801,18 +1793,12 @@ const scrollToTop = () => {
 @media (max-width: 739px) {
 
   /* 手機版：隱藏桌面和平板圖片，顯示手機圖片 */
-  #float-ad .links .item.rwd-first-button .desktop-image,
-  #float-ad .links .item.rwd-second-button .desktop-image,
-  #float-ad .links .item.rwd-third-button .desktop-image,
-  #float-ad .links .item.rwd-first-button .tablet-image,
-  #float-ad .links .item.rwd-second-button .tablet-image,
-  #float-ad .links .item.rwd-third-button .tablet-image {
+  #float-ad .links .item .desktop-image,
+  #float-ad .links .item .tablet-image {
     display: none !important;
   }
 
-  #float-ad .links .item.rwd-first-button .mobile-image,
-  #float-ad .links .item.rwd-second-button .mobile-image,
-  #float-ad .links .item.rwd-third-button .mobile-image {
+  #float-ad .links .item .mobile-image {
     display: block !important;
   }
 }
