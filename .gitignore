@@ -7,17 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Runtime data & Huge binary folders
-uploads/
-!demo-static/uploads/
-!/demo-static/uploads/
-data/
-PC\ web_images/
-phone+tablet_images/
-manager/backend/uploads/
-manager/backend/data/
-demo/public/defaults/
-demo/public/site-settings.json
+# Runtime data & Huge binary folders (Allowed for Git Push to VM)
+# uploads/
+# !demo-static/uploads/
+# !/demo-static/uploads/
+# data/
+# PC\ web_images/
+# phone+tablet_images/
+# manager/backend/uploads/
+# manager/backend/data/
+!demo/public/defaults/
+!demo/public/site-settings.json
+!manager/backend/data/config.json
+!manager/backend/uploads/
 
 # Nested dependencies
 **/node_modules/
