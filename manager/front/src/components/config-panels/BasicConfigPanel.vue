@@ -12,22 +12,262 @@
                 <p>顯示在頁面頂部的品牌標誌</p>
             </div>
 
-            <div class="image-upload-card">
-                <div class="image-preview-wrapper" :class="{ 'has-image': logo }">
-                    <img v-if="logo" :src="getImageUrl(logo)" alt="Logo" class="preview-img" />
-                    <div v-else class="placeholder">
-                        <p>尚未設置 Logo</p>
+            <div class="uploader-container logo-uploader">
+                <ImageUploader :preview-url="logo ? getImageUrl(logo) : ''" alt-text="Logo" placeholder="點擊上傳 Logo"
+                    @upload="(file) => handleUpload(file, 'logo')" @clear="$emit('clear', 'logo')" />
+            </div>
+        </div>
+
+
+        <!-- Header 樣式設置 (Pro Designer Mode) -->
+        <div class="form-section designer-section">
+            <div class="section-title">
+                <h4>頁首 (Header) 專業設計工具</h4>
+                <p>參照設計稿欄位進行填寫，前端將自動生成對應效果</p>
+            </div>
+
+            <div class="designer-card">
+                <!-- 幾何與佈局 -->
+                <div class="designer-group">
+                    <div class="group-header">📏 幾何與佈局</div>
+                    <div class="controls-grid">
+                        <div class="field-item">
+                            <label>高度 (H)</label>
+                            <div class="input-with-unit">
+                                <input type="number" :value="headerStyles.height"
+                                    @input="updateHeaderStyle({ height: Number(($event.target as HTMLInputElement).value) })" />
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="field-item">
+                            <label>不透明度 (Opacity)</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.1" min="0" max="1" :value="headerStyles.opacity"
+                                    @input="updateHeaderStyle({ opacity: Number(($event.target as HTMLInputElement).value) })" />
+                            </div>
+                        </div>
                     </div>
-                    <input type="file" @change="(e) => $emit('upload', e, 'logo')" accept="image/*"
-                        class="file-input" />
                 </div>
 
-                <div class="upload-actions">
-                    <div class="info">
-                        <label>點擊區域上傳新 Logo</label>
-                        <span v-if="logo" class="filename">{{ getFileName(logo) }}</span>
+                <!-- 背景填充 -->
+                <div class="designer-group">
+                    <div class="group-header">🎨 背景填充 (Fill)</div>
+                    <div class="mode-selector">
+                        <button class="mode-btn" :class="{ active: headerStyles.backgroundMode === 'solid' }"
+                            @click="updateHeaderStyle({ backgroundMode: 'solid' })">純色</button>
+                        <button class="mode-btn" :class="{ active: headerStyles.backgroundMode === 'gradient' }"
+                            @click="updateHeaderStyle({ backgroundMode: 'gradient' })">線性漸層</button>
                     </div>
-                    <button v-if="logo" @click="$emit('clear', 'logo')" class="btn btn-danger btn-sm">清除</button>
+
+                    <!-- 純色模式 -->
+                    <div v-if="headerStyles.backgroundMode === 'solid'" class="controls-grid single-row">
+                        <div class="field-item">
+                            <label>顏色</label>
+                            <input type="color" :value="headerStyles.solidColor"
+                                @input="updateHeaderStyle({ solidColor: ($event.target as HTMLInputElement).value })" />
+                        </div>
+                    </div>
+
+                    <!-- 漸層模式 -->
+                    <div v-else class="controls-grid">
+                        <div class="field-item">
+                            <label>起始色 (C1)</label>
+                            <input type="color" :value="headerStyles.gradient.color1"
+                                @input="updateHeaderStyle({ gradient: { ...headerStyles.gradient, color1: ($event.target as HTMLInputElement).value } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>結束色 (C2)</label>
+                            <input type="color" :value="headerStyles.gradient.color2"
+                                @input="updateHeaderStyle({ gradient: { ...headerStyles.gradient, color2: ($event.target as HTMLInputElement).value } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>角度 (Angle)</label>
+                            <div class="input-with-unit">
+                                <input type="number" :value="headerStyles.gradient.angle"
+                                    @input="updateHeaderStyle({ gradient: { ...headerStyles.gradient, angle: Number(($event.target as HTMLInputElement).value) } })" />
+                                <span>deg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 外陰影 -->
+                <div class="designer-group">
+                    <div class="group-header">
+                        <span>🌓 外陰影 (Box Shadow)</span>
+                        <input type="checkbox" :checked="headerStyles.boxShadow.enabled"
+                            @change="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, enabled: ($event.target as HTMLInputElement).checked } })" />
+                    </div>
+                    <div v-if="headerStyles.boxShadow.enabled" class="controls-grid">
+                        <div class="field-item">
+                            <label>X 偏移</label>
+                            <input type="number" :value="headerStyles.boxShadow.x"
+                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, x: Number(($event.target as HTMLInputElement).value) } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>Y 偏移</label>
+                            <input type="number" :value="headerStyles.boxShadow.y"
+                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, y: Number(($event.target as HTMLInputElement).value) } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>Blur (模糊)</label>
+                            <input type="number" :value="headerStyles.boxShadow.blur"
+                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, blur: Number(($event.target as HTMLInputElement).value) } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>Spread (擴展)</label>
+                            <input type="number" :value="headerStyles.boxShadow.spread"
+                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, spread: Number(($event.target as HTMLInputElement).value) } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>陰影顏色</label>
+                            <input type="color" :value="headerStyles.boxShadow.color"
+                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, color: ($event.target as HTMLInputElement).value } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>陰影透明度</label>
+                            <input type="number" step="0.1" min="0" max="1" :value="headerStyles.boxShadow.opacity"
+                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, opacity: Number(($event.target as HTMLInputElement).value) } })" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 預覽區域 -->
+                <div class="designer-preview-section">
+                    <div class="preview-title">即時預覽 (Live Preview)</div>
+                    <div class="checkerboard-bg">
+                        <div class="preview-element" :style="headerPreviewStyle">
+                            <span class="element-label">Header Preview</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSS 編輯器 (覆寫用) -->
+            <div class="css-editor-card mt-4">
+                <label class="control-label mb-2 d-block">進階自定義 CSS (Override)</label>
+                <div class="editor-wrapper">
+                    <textarea :value="headerCss"
+                        @input="(e) => $emit('update:headerCss', (e.target as HTMLTextAreaElement).value)"
+                        placeholder="#header { /* 您的自定義 CSS */ }" class="css-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 推薦區域 樣式設置 (Pro Designer Mode) -->
+        <div class="form-section designer-section">
+            <div class="section-title">
+                <h4>推薦區域 專業設計工具</h4>
+                <p>設定推薦內容區塊的背景與陰影</p>
+            </div>
+
+            <div class="designer-card">
+                <!-- 背景填充 -->
+                <div class="designer-group">
+                    <div class="group-header">🎨 背景填充 (Fill)</div>
+                    <div class="mode-selector">
+                        <button class="mode-btn" :class="{ active: recommendStyles.backgroundMode === 'solid' }"
+                            @click="updateRecommendStyle({ backgroundMode: 'solid' })">純色</button>
+                        <button class="mode-btn" :class="{ active: recommendStyles.backgroundMode === 'gradient' }"
+                            @click="updateRecommendStyle({ backgroundMode: 'gradient' })">線性漸層</button>
+                    </div>
+
+                    <!-- 控制項與 Header 類似，僅更新函式不同 -->
+                    <div v-if="recommendStyles.backgroundMode === 'solid'" class="controls-grid single-row">
+                        <div class="field-item">
+                            <label>顏色</label>
+                            <input type="color" :value="recommendStyles.solidColor"
+                                @input="updateRecommendStyle({ solidColor: ($event.target as HTMLInputElement).value })" />
+                        </div>
+                        <div class="field-item">
+                            <label>不透明度</label>
+                            <input type="number" step="0.1" min="0" max="1" :value="recommendStyles.opacity"
+                                @input="updateRecommendStyle({ opacity: Number(($event.target as HTMLInputElement).value) })" />
+                        </div>
+                    </div>
+                    <div v-else class="controls-grid">
+                        <div class="field-item">
+                            <label>起始色</label>
+                            <input type="color" :value="recommendStyles.gradient.color1"
+                                @input="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, color1: ($event.target as HTMLInputElement).value } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>結束色</label>
+                            <input type="color" :value="recommendStyles.gradient.color2"
+                                @input="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, color2: ($event.target as HTMLInputElement).value } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>角度</label>
+                            <input type="number" :value="recommendStyles.gradient.angle"
+                                @input="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, angle: Number(($event.target as HTMLInputElement).value) } })" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 預覽區域 -->
+                <div class="designer-preview-section">
+                    <div class="preview-title">即時預覽 (Live Preview)</div>
+                    <div class="checkerboard-bg">
+                        <div class="preview-element recommend-preview" :style="recommendPreviewStyle">
+                            <span class="element-label">Recommend Area</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSS 編輯器 -->
+            <div class="css-editor-card mt-4">
+                <label class="control-label mb-2 d-block">進階自定義 CSS (Override)</label>
+                <div class="editor-wrapper">
+                    <textarea :value="recommendContentCss"
+                        @input="(e) => $emit('update:recommendContentCss', (e.target as HTMLTextAreaElement).value)"
+                        placeholder=".recommend-content { /* 您的自定義 CSS */ }" class="css-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 標題圖片設置 -->
+        <div class="form-section">
+            <div class="section-title">
+                <h4>標題圖片設定</h4>
+                <p>設定各區塊標題所使用的圖示圖片</p>
+            </div>
+
+            <div class="title-images-grid">
+                <div class="title-image-card">
+                    <label>推薦優質線路標題</label>
+                    <div class="uploader-container title-uploader">
+                        <ImageUploader :preview-url="titles.recommendedRoutes ? getImageUrl(titles.recommendedRoutes) : ''"
+                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'recommendedRoutes')"
+                            @clear="$emit('clearTitleImage', 'recommendedRoutes')" />
+                    </div>
+                </div>
+
+                <div class="title-image-card">
+                    <label>推薦瀏覽器標題</label>
+                    <div class="uploader-container title-uploader">
+                        <ImageUploader :preview-url="titles.recommendedBrowsers ? getImageUrl(titles.recommendedBrowsers) : ''"
+                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'recommendedBrowsers')"
+                            @clear="$emit('clearTitleImage', 'recommendedBrowsers')" />
+                    </div>
+                </div>
+
+                <div class="title-image-card">
+                    <label>娛樂直播標題</label>
+                    <div class="uploader-container title-uploader">
+                        <ImageUploader :preview-url="titles.selectedVideos ? getImageUrl(titles.selectedVideos) : ''"
+                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'selectedVideos')"
+                            @clear="$emit('clearTitleImage', 'selectedVideos')" />
+                    </div>
+                </div>
+
+                <div class="title-image-card">
+                    <label>賽事精選標題</label>
+                    <div class="uploader-container title-uploader">
+                        <ImageUploader :preview-url="titles.hotPrograms ? getImageUrl(titles.hotPrograms) : ''"
+                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'hotPrograms')"
+                            @clear="$emit('clearTitleImage', 'hotPrograms')" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,30 +275,272 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import ImageUploader from '../common/ImageUploader.vue'
+import { VisualStylesConfig } from '../../services/configService'
+
 const props = defineProps<{
     logo: string | undefined
+    headerStyles: VisualStylesConfig
+    recommendStyles: VisualStylesConfig
+    headerCss?: string
+    recommendContentCss?: string
+    titles: {
+        recommendedRoutes: string
+        recommendedBrowsers: string
+        selectedVideos: string
+        hotPrograms: string
+    }
     getImageUrl: (path: string) => string
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
     (e: 'upload', event: Event, field: string): void
     (e: 'clear', field: string): void
+    (e: 'update:headerStyles', value: VisualStylesConfig): void
+    (e: 'update:recommendStyles', value: VisualStylesConfig): void
+    (e: 'update:headerCss', value: string): void
+    (e: 'update:recommendContentCss', value: string): void
+    (e: 'uploadTitleImage', event: Event, field: string): void
+    (e: 'clearTitleImage', field: string): void
 }>()
 
-const getFileName = (path: string) => {
-    return path.split('/').pop() || path
+const handleUpload = (file: File, field: string) => {
+    emit('upload', { target: { files: [file] } } as unknown as Event, field)
 }
+
+const handleTitleUpload = (file: File, field: string) => {
+    emit('uploadTitleImage', { target: { files: [file] } } as unknown as Event, field)
+}
+
+// 通用樣式更新函式
+const updateHeaderStyle = (updates: Partial<VisualStylesConfig>) => {
+    emit('update:headerStyles', { ...props.headerStyles, ...updates })
+}
+
+const updateRecommendStyle = (updates: Partial<VisualStylesConfig>) => {
+    emit('update:recommendStyles', { ...props.recommendStyles, ...updates })
+}
+
+// 輔助函式：將 Hex + Opacity 轉為 RGBA
+const hexToRgba = (hex: string, opacity: number) => {
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`
+}
+
+// 生成預覽樣式
+const getPreviewStyle = (config: VisualStylesConfig) => {
+    let background = ''
+    if (config.backgroundMode === 'solid') {
+        background = hexToRgba(config.solidColor, config.opacity)
+    } else {
+        background = `linear-gradient(${config.gradient.angle}deg, ${config.gradient.color1} 0%, ${config.gradient.color2} 100%)`
+    }
+
+    let boxShadow = 'none'
+    if (config.boxShadow.enabled) {
+        const shadowColor = hexToRgba(config.boxShadow.color, config.boxShadow.opacity)
+        boxShadow = `${config.boxShadow.x}px ${config.boxShadow.y}px ${config.boxShadow.blur}px ${config.boxShadow.spread}px ${shadowColor}`
+    }
+
+    return {
+        background,
+        boxShadow,
+        height: config.height ? `${config.height}px` : 'auto'
+    }
+}
+
+const headerPreviewStyle = computed(() => getPreviewStyle(props.headerStyles))
+const recommendPreviewStyle = computed(() => getPreviewStyle(props.recommendStyles))
 </script>
 
 <style scoped>
-.panel-header {
-    margin-bottom: 2.5rem;
+.designer-section {
+    max-width: 800px !important;
 }
 
-.subtitle {
+.designer-card {
+    background: #fdfdfe;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.designer-group {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    padding: 1.2rem;
+}
+
+.group-header {
     font-size: 0.9rem;
-    color: #666;
-    margin: 0.25rem 0 0 0;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.group-header input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.controls-grid.single-row {
+    grid-template-columns: 1fr 1fr;
+}
+
+.field-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.field-item label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.field-item input[type="number"],
+.field-item input[type="text"],
+.field-item select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.field-item input:focus {
+    border-color: #3b82f6;
+}
+
+.field-item input[type="color"] {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #fff;
+    padding: 2px;
+}
+
+.input-with-unit {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-unit input {
+    padding-right: 30px !important;
+}
+
+.input-with-unit span {
+    position: absolute;
+    right: 8px;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.mode-selector {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mode-btn.active {
+    background: #fff;
+    color: #0f172a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.designer-preview-section {
+    margin-top: 1rem;
+}
+
+.preview-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.8rem;
+}
+
+.checkerboard-bg {
+    width: 100%;
+    min-height: 120px;
+    background-image: 
+        linear-gradient(45deg, #f1f5f9 25%, transparent 25%),
+        linear-gradient(-45deg, #f1f5f9 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f1f5f9 75%),
+        linear-gradient(-45deg, transparent 75%, #f1f5f9 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.preview-element {
+    width: 100%;
+    max-width: 600px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.recommend-preview {
+    max-width: 400px;
+    height: 150px;
+    border-radius: 8px;
+}
+
+.element-label {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #1e293b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-section {
@@ -68,109 +550,74 @@ const getFileName = (path: string) => {
     padding: 2rem;
     margin-bottom: 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-    max-width: 600px; /* Constrain width */
 }
 
-.section-title {
-    margin-bottom: 1.5rem;
-}
-
-.section-title h4 {
-    margin: 0;
-    color: #333;
-    font-size: 1.1rem;
-}
-
-.section-title p {
-    margin: 0.2rem 0 0 0;
-    font-size: 0.85rem;
-    color: #888;
-}
-
-.image-upload-card {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid #e9ecef;
-}
-
-.image-preview-wrapper {
-    position: relative;
-    border: 2px dashed #dee2e6;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #fff;
+.logo-uploader {
+    width: 240px;
     height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
 }
 
-.image-preview-wrapper:hover {
-    border-color: #007bff;
-    background: #f0f7ff;
-}
-
-.image-preview-wrapper.has-image {
-    border-style: solid;
-}
-
-.preview-img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-}
-
-.placeholder {
-    text-align: center;
-    color: #adb5bd;
-}
-
-.placeholder .icon {
-    font-size: 1.5rem;
-    display: block;
-}
-
-.file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
+.title-uploader {
     width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 1;
+    height: 80px;
 }
 
-.upload-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
+.title-images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
 }
 
-.upload-actions .info {
+.title-image-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #f1f5f9;
 }
 
-.upload-actions label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #495057;
-}
-
-.filename {
-    font-size: 0.75rem;
-    color: #6c757d;
-    font-family: monospace;
-}
-
-.btn-sm {
-    padding: 0.4rem 0.8rem;
+.title-image-card label {
     font-size: 0.8rem;
-    position: relative;
-    z-index: 2;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* 移除舊有的 preview 樣式，統一由 ImageUploader 處理 */
+
+.css-editor-card {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 1.2rem;
+    border: 1px solid #e2e8f0;
+}
+
+.css-textarea {
+    width: 100%;
+    height: 150px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #fff;
+    resize: vertical;
+    outline: none;
+}
+
+.mt-4 { margin-top: 1.5rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.d-block { display: block; }
+
+.btn-danger {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
 }
 </style>

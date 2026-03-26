@@ -48,8 +48,22 @@
 
           <div class="editor-body">
             <!-- Basic 配置 -->
-            <BasicConfigPanel v-if="activeTab === 'basic'" :logo="config.logo" :getImageUrl="getImageUrl"
-              @upload="(e, field) => handleImageUpload(e, field as any)" @clear="(field) => clearImage(field as any)" />
+            <BasicConfigPanel v-if="activeTab === 'basic'" 
+              :logo="config.logo"
+              :headerStyles="config.headerStyles"
+              :recommendStyles="config.recommendStyles"
+              :headerCss="config.headerCss"
+              :recommendContentCss="config.recommendContentCss"
+              :titles="config.titles"
+              :getImageUrl="getImageUrl"
+              @update:headerStyles="(val) => updateConfigValue('headerStyles', val)"
+              @update:recommendStyles="(val) => updateConfigValue('recommendStyles', val)"
+              @update:headerCss="(val: string) => updateConfigValue('headerCss', val)"
+              @update:recommendContentCss="(val: string) => updateConfigValue('recommendContentCss', val)"
+              @upload="(e, field) => handleImageUpload(e, field as any)"
+              @clear="(field) => clearImage(field as any)"
+              @uploadTitleImage="(e, field) => uploadTitleImage(e, field as any)"
+              @clearTitleImage="(field) => clearTitleImage(field as any)" />
 
             <!-- Banner 配置 -->
             <BannerConfigPanel v-if="activeTab === 'banner'" :banner="config.banner" :getImageUrl="getImageUrl"
@@ -226,6 +240,47 @@ const config = reactive<ConfigData>({
     mobile: ''
   },
   backgroundImage: '',
+  headerStyles: {
+    height: 75,
+    backgroundMode: 'gradient',
+    solidColor: '#3041b9',
+    opacity: 1.0,
+    gradient: {
+      color1: '#3041b9',
+      color2: '#081fb3',
+      angle: 0
+    },
+    boxShadow: {
+      enabled: true,
+      x: 0,
+      y: 0,
+      blur: 20,
+      spread: 0,
+      color: '#000000',
+      opacity: 0.3
+    }
+  },
+  recommendStyles: {
+    backgroundMode: 'solid',
+    solidColor: '#140a68',
+    opacity: 1.0,
+    gradient: {
+      color1: '#140a68',
+      color2: '#0a0540',
+      angle: 180
+    },
+    boxShadow: {
+      enabled: false,
+      x: 0,
+      y: 0,
+      blur: 10,
+      spread: 0,
+      color: '#000000',
+      opacity: 0.5
+    }
+  },
+  headerCss: '',
+  recommendContentCss: '',
   buttonLinks: [],
   carouselSlides: [],
   titles: {
@@ -487,8 +542,8 @@ const clearBanner = async (device: 'pc' | 'tablet' | 'mobile') => {
       hasChanges.value = false
       reloadPreview()
     } catch (error) {
-      console.error('清除 Banner 失敗:', error)
-      toast.error('清除失敗')
+      console.error('移除 Banner 失敗:', error)
+      toast.error('移除失敗')
     } finally {
       loading.value = false
     }
@@ -599,7 +654,7 @@ const handleProgramUpload = async (event: Event, index: number) => {
   }
 }
 
-// 清除圖片
+// 移除
 const clearImage = async (field: keyof ConfigData) => {
   (config as any)[field] = ''
   hasChanges.value = true
@@ -610,14 +665,77 @@ const clearImage = async (field: keyof ConfigData) => {
     hasChanges.value = false
     reloadPreview()
   } catch (error) {
-    console.error('清除圖片失敗:', error)
-    toast.error('清除圖片失敗')
+    console.error('移除失敗:', error)
+    toast.error('移除失敗')
   } finally {
     loading.value = false
   }
 }
 
-// 清除輪播圖片
+// 通用配置更新方法
+const updateConfigValue = async (field: keyof ConfigData, value: any) => {
+  (config as any)[field] = value
+  hasChanges.value = true
+  
+  loading.value = true
+  try {
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    reloadPreview()
+  } catch (error) {
+    console.error(`更新 ${field} 失敗:`, error)
+    toast.error(`更新 ${field} 失敗`)
+  } finally {
+    loading.value = false
+  }
+}
+
+// 上傳標題圖片
+const uploadTitleImage = async (e: Event, field: 'recommendedRoutes' | 'recommendedBrowsers' | 'selectedVideos' | 'hotPrograms') => {
+  const target = e.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  loading.value = true
+  try {
+    const response = await configService.uploadImage(file, field, 'title')
+    if (response.success && response.data) {
+      ;(config.titles as any)[field] = response.data.path
+      hasChanges.value = true
+      // 立即保存並重新載入預覽
+      await configService.updateConfig(config)
+      hasChanges.value = false
+      reloadPreview()
+      toast.success('標題圖片上傳成功')
+    }
+  } catch (error) {
+    console.error('上傳標題圖片失敗:', error)
+    toast.error('上傳標題圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 移除標題圖片
+const clearTitleImage = async (field: 'recommendedRoutes' | 'recommendedBrowsers' | 'selectedVideos' | 'hotPrograms') => {
+  ;(config.titles as any)[field] = ''
+  hasChanges.value = true
+
+  loading.value = true
+  try {
+    await configService.updateConfig(config)
+    hasChanges.value = false
+    reloadPreview()
+    toast.success('標題圖片已移除')
+  } catch (error) {
+    console.error('移除標題圖片失敗:', error)
+    toast.error('移除標題圖片失敗')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 移除輪播圖片
 const clearCarouselImage = async (index: number) => {
   config.carouselSlides[index].image = ''
   hasChanges.value = true
@@ -628,8 +746,8 @@ const clearCarouselImage = async (index: number) => {
     hasChanges.value = false
     reloadPreview()
   } catch (error) {
-    console.error('清除輪播圖片失敗:', error)
-    alert('清除輪播圖片失敗')
+    console.error('移除輪播圖片失敗:', error)
+    alert('移除輪播圖片失敗')
   } finally {
     loading.value = false
   }
@@ -666,7 +784,7 @@ const removeCarouselSlide = async (index: number) => {
   }
 }
 
-// 清除視頻縮圖
+// 移除視頻縮圖
 const removeVideoImage = async (index: number) => {
   config.videoThumbnails[index].image = ''
   hasChanges.value = true
@@ -677,14 +795,14 @@ const removeVideoImage = async (index: number) => {
     hasChanges.value = false
     reloadPreview()
   } catch (error) {
-    console.error('清除視頻縮圖失敗:', error)
-    alert('清除視頻縮圖失敗')
+    console.error('移除視頻縮圖失敗:', error)
+    alert('移除視頻縮圖失敗')
   } finally {
     loading.value = false
   }
 }
 
-// 清除節目縮圖
+// 移除節目縮圖
 const removeProgramImage = async (index: number) => {
   config.programThumbnails[index].image = ''
   hasChanges.value = true
@@ -695,8 +813,8 @@ const removeProgramImage = async (index: number) => {
     hasChanges.value = false
     reloadPreview()
   } catch (error) {
-    console.error('清除節目縮圖失敗:', error)
-    alert('清除節目縮圖失敗')
+    console.error('移除節目縮圖失敗:', error)
+    alert('移除節目縮圖失敗')
   } finally {
     loading.value = false
   }
@@ -844,7 +962,7 @@ const removeButtonLink = async (index: number) => {
 
 // 重置按鈕鏈接為預設值
 const resetButtonLinks = async () => {
-  if (confirm('確定要重置按鈕鏈接為預設配置嗎？這將清除所有自定義設置。')) {
+  if (confirm('確定要重置按鈕鏈接為預設配置嗎？這將移除所有自定義設置。')) {
     // 設置為預設的按鈕鏈接配置
     config.buttonLinks = [
       {
@@ -969,7 +1087,7 @@ const removeToolIcon = async (index: number) => {
 
 // 重置工具圖標為預設值
 const resetToolIcons = async () => {
-  if (confirm('確定要重置工具圖標為預設配置嗎？這將清除所有自定義設置。')) {
+  if (confirm('確定要重置工具圖標為預設配置嗎？這將移除所有自定義設置。')) {
     // 設置為預設的工具圖標配置
     config.toolIcons = [
       {
@@ -1098,7 +1216,7 @@ const removeFloatAdButton = async (index: number) => {
 
 // 重置浮動廣告按鈕為預設值
 const resetFloatAdButtons = async () => {
-  if (confirm('確定要重置浮動廣告按鈕為預設配置嗎？這將清除所有自定義設置。')) {
+  if (confirm('確定要重置浮動廣告按鈕為預設配置嗎？這將移除所有自定義設置。')) {
     // 設置為預設的浮動廣告按鈕配置
     config.floatAdButtons = [
       {
@@ -1192,7 +1310,7 @@ const removeRouteLinksImage = async (index: number, imageType: 'default' | 'hove
 
 // 重置推薦路線為預設值
 const resetRouteLinks = async () => {
-  if (confirm('確定要重置推薦路線為預設配置嗎？這將清除所有自定義設置。')) {
+  if (confirm('確定要重置推薦路線為預設配置嗎？這將移除所有自定義設置。')) {
     // 設置為預設的推薦路線配置 (6組)
     config.routeLinks = Array(6).fill(null).map(() => ({
       default: "/assets/images/d83f37fd-f535-4c9a-bed2-ac5adc7e5e81.png",

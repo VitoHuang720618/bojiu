@@ -28,33 +28,21 @@
                         <!-- Default -->
                         <div class="upload-slot">
                             <label>默認圖片</label>
-                            <div class="image-preview-wrapper" :class="{ 'has-image': link?.default }">
-                                <img v-if="link?.default" :src="getImageUrl(link.default)" alt="Default"
-                                    class="preview-img" />
-                                <div v-else class="placeholder">
-                                    <span class="text">默認</span>
-                                </div>
-                                <input type="file" @change="(e) => $emit('upload', e, index, 'default')"
-                                    accept="image/*" class="file-input" />
+                            <div class="uploader-container">
+                                <ImageUploader :preview-url="link?.default ? getImageUrl(link.default) : ''"
+                                    placeholder="默認" @upload="(file) => handleUpload(file, index, 'default')"
+                                    @clear="$emit('removeImage', index, 'default')" />
                             </div>
-                            <button v-if="link?.default" @click="$emit('removeImage', index, 'default')"
-                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
 
                         <!-- Hover -->
                         <div class="upload-slot">
                             <label>懸停圖片</label>
-                            <div class="image-preview-wrapper" :class="{ 'has-image': link?.hover }">
-                                <img v-if="link?.hover" :src="getImageUrl(link.hover)" alt="Hover"
-                                    class="preview-img" />
-                                <div v-else class="placeholder">
-                                    <span class="text">懸停</span>
-                                </div>
-                                <input type="file" @change="(e) => $emit('upload', e, index, 'hover')" accept="image/*"
-                                    class="file-input" />
+                            <div class="uploader-container">
+                                <ImageUploader :preview-url="link?.hover ? getImageUrl(link.hover) : ''" placeholder="懸停"
+                                    @upload="(file) => handleUpload(file, index, 'hover')"
+                                    @clear="$emit('removeImage', index, 'hover')" />
                             </div>
-                            <button v-if="link?.hover" @click="$emit('removeImage', index, 'hover')"
-                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
                     </div>
                 </div>
@@ -67,23 +55,29 @@
 </template>
 
 <script setup lang="ts">
+import ImageUploader from '../common/ImageUploader.vue'
+
 interface RouteLink {
     default: string
     hover: string
     href?: string
 }
 
-defineProps<{
+const props = defineProps<{
     routeLinks: RouteLink[]
     getImageUrl: (path: string) => string
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
     (e: 'reset'): void
     (e: 'upload', event: Event, index: number, type: 'default' | 'hover'): void
     (e: 'removeImage', index: number, type: 'default' | 'hover'): void
     (e: 'update', index: number, key: string, value: string): void
 }>()
+
+const handleUpload = (file: File, index: number, type: 'default' | 'hover') => {
+    emit('upload', { target: { files: [file] } } as unknown as Event, index, type)
+}
 </script>
 
 <style scoped>
@@ -168,68 +162,8 @@ defineEmits<{
     color: #495057;
 }
 
-.image-preview-wrapper {
+.uploader-container {
     width: 100%;
     height: 100px;
-    position: relative;
-    border: 2px dashed #dee2e6;
-    border-radius: 8px;
-    background: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.image-preview-wrapper:hover {
-    border-color: #007bff;
-    background: #f0f7ff;
-}
-
-.image-preview-wrapper.has-image {
-    border-style: solid;
-}
-
-.preview-img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-}
-
-.placeholder {
-    text-align: center;
-    color: #adb5bd;
-}
-
-.placeholder .icon {
-    font-size: 1.2rem;
-    display: block;
-}
-
-.placeholder .text {
-    font-size: 0.7rem;
-}
-
-.file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 1;
-}
-
-.btn-link-danger {
-    background: transparent;
-    border: none;
-    color: #dc3545;
-    font-size: 0.8rem;
-    cursor: pointer;
-}
-
-.btn-link-danger:hover {
-    text-decoration: underline;
 }
 </style>

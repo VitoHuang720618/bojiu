@@ -11,47 +11,30 @@
             <!-- PC Banner -->
             <div class="banner-slot">
                 <label>電腦版 (PC)</label>
-                <div class="image-upload">
-                    <img v-if="getBannerUrl('pc')" :src="getImageUrl(getBannerUrl('pc'))" alt="PC Banner"
-                        class="preview-img" />
-                    <div v-else class="placeholder">未設置</div>
-                    <input type="file" @change="(e) => $emit('upload', e, 'pc')" accept="image/*" class="file-input" />
-                    <div class="slot-actions">
-
-                        <button @click="$emit('clear', 'pc')" class="btn btn-danger btn-sm">清除</button>
-                    </div>
+                <div class="uploader-container pc">
+                    <ImageUploader :preview-url="getBannerUrl('pc') ? getImageUrl(getBannerUrl('pc')) : ''"
+                        placeholder="上傳 PC 版 Banner" dimensions="1920x500" @upload="(file) => handleUpload(file, 'pc')"
+                        @clear="$emit('clear', 'pc')" />
                 </div>
             </div>
 
             <!-- Tablet Banner -->
             <div class="banner-slot">
                 <label>平板版 (Tablet)</label>
-                <div class="image-upload">
-                    <img v-if="getBannerUrl('tablet')" :src="getImageUrl(getBannerUrl('tablet'))" alt="Tablet Banner"
-                        class="preview-img" />
-                    <div v-else class="placeholder">未設置</div>
-                    <input type="file" @change="(e) => $emit('upload', e, 'tablet')" accept="image/*"
-                        class="file-input" />
-                    <div class="slot-actions">
-
-                        <button @click="$emit('clear', 'tablet')" class="btn btn-danger btn-sm">清除</button>
-                    </div>
+                <div class="uploader-container tablet">
+                    <ImageUploader :preview-url="getBannerUrl('tablet') ? getImageUrl(getBannerUrl('tablet')) : ''"
+                        placeholder="上傳平板版 Banner" dimensions="1024x400" @upload="(file) => handleUpload(file, 'tablet')"
+                        @clear="$emit('clear', 'tablet')" />
                 </div>
             </div>
 
             <!-- Mobile Banner -->
             <div class="banner-slot">
                 <label>手機版 (Mobile)</label>
-                <div class="image-upload">
-                    <img v-if="getBannerUrl('mobile')" :src="getImageUrl(getBannerUrl('mobile'))" alt="Mobile Banner"
-                        class="preview-img" />
-                    <div v-else class="placeholder">未設置</div>
-                    <input type="file" @change="(e) => $emit('upload', e, 'mobile')" accept="image/*"
-                        class="file-input" />
-                    <div class="slot-actions">
-
-                        <button @click="$emit('clear', 'mobile')" class="btn btn-danger btn-sm">清除</button>
-                    </div>
+                <div class="uploader-container mobile">
+                    <ImageUploader :preview-url="getBannerUrl('mobile') ? getImageUrl(getBannerUrl('mobile')) : ''"
+                        placeholder="上傳手機版 Banner" dimensions="750x300" @upload="(file) => handleUpload(file, 'mobile')"
+                        @clear="$emit('clear', 'mobile')" />
                 </div>
             </div>
         </div>
@@ -59,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import ImageUploader from '../common/ImageUploader.vue'
 import type { BannerConfig } from '../../services/configService'
 
 const props = defineProps<{
@@ -70,6 +54,10 @@ const emit = defineEmits<{
     (e: 'upload', event: Event, device: 'pc' | 'tablet' | 'mobile'): void
     (e: 'clear', device: 'pc' | 'tablet' | 'mobile'): void
 }>()
+
+const handleUpload = (file: File, device: 'pc' | 'tablet' | 'mobile') => {
+    emit('upload', { target: { files: [file] } } as unknown as Event, device)
+}
 
 const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
     if (!props.banner) return ''
@@ -102,67 +90,41 @@ const getBannerUrl = (device: 'pc' | 'tablet' | 'mobile') => {
     font-size: 14px;
 }
 
-.image-upload {
-    border: 2px dashed #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    position: relative;
-    background: #fdfdfd;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 180px;
-}
-
-.image-upload:hover {
-    border-color: #3498db;
-    background: #f0f7ff;
-}
-
-.preview-img {
-    max-width: 100%;
-    max-height: 250px; /* 增加高度限制，讓圖片更清晰 */
-    height: auto;
-    object-fit: contain;
-    margin-bottom: 15px;
-    border-radius: 4px;
-}
-
-.placeholder {
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    background: #f5f5f5;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-.file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
+.uploader-container {
     width: 100%;
-    height: 100%;
-    opacity: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.uploader-container.pc {
+    height: 180px;
+}
+
+.uploader-container.tablet {
+    height: 140px;
+}
+
+.uploader-container.mobile {
+    height: 120px;
+}
+
+
+
+
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
-.slot-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-    margin-top: auto;
+.btn-danger:hover {
+    background: #c82333;
 }
-
-
-
 
 .btn-sm {
     padding: 4px 12px;

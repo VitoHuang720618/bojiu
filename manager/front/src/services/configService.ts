@@ -6,10 +6,36 @@ export interface BannerConfig {
   mobile: string
 }
 
+// 視覺樣式配置介面
+export interface VisualStylesConfig {
+  height?: number
+  backgroundMode: 'solid' | 'gradient'
+  solidColor: string
+  opacity: number
+  gradient: {
+    color1: string
+    color2: string
+    angle: number
+  }
+  boxShadow: {
+    enabled: boolean
+    x: number
+    y: number
+    blur: number
+    spread: number
+    color: string
+    opacity: number
+  }
+}
+
 export interface ConfigData {
   logo: string
   banner: string | BannerConfig
   backgroundImage: string
+  headerStyles: VisualStylesConfig
+  recommendStyles: VisualStylesConfig
+  headerCss: string
+  recommendContentCss: string
   buttonLinks: Array<{
     text: string
     href: string

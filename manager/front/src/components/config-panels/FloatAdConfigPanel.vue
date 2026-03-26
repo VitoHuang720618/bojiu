@@ -37,62 +37,38 @@
                     <div class="upload-grid">
                         <div class="upload-slot">
                             <label>PC 默認</label>
-                            <div class="image-preview-wrapper" :class="{ 'has-image': button.default }">
-                                <img v-if="button.default" :src="getImageUrl(button.default)" alt="Default"
-                                    class="preview-img" />
-                                <div v-else class="placeholder">
-                                    <span class="text">默認</span>
-                                </div>
-                                <input type="file" @change="(e) => $emit('upload', e, index, 'default')"
-                                    accept="image/*" class="file-input" />
+                            <div class="uploader-container">
+                                <ImageUploader :preview-url="button.default ? getImageUrl(button.default) : ''"
+                                    placeholder="默認" @upload="(file) => handleUpload(file, index, 'default')"
+                                    @clear="$emit('removeImage', index, 'default')" />
                             </div>
-                            <button v-if="button.default" @click="$emit('removeImage', index, 'default')"
-                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
 
                         <div class="upload-slot">
                             <label>PC 懸停</label>
-                            <div class="image-preview-wrapper" :class="{ 'has-image': button.hover }">
-                                <img v-if="button.hover" :src="getImageUrl(button.hover)" alt="Hover"
-                                    class="preview-img" />
-                                <div v-else class="placeholder">
-                                    <span class="text">懸停</span>
-                                </div>
-                                <input type="file" @change="(e) => $emit('upload', e, index, 'hover')" accept="image/*"
-                                    class="file-input" />
+                            <div class="uploader-container">
+                                <ImageUploader :preview-url="button.hover ? getImageUrl(button.hover) : ''"
+                                    placeholder="懸停" @upload="(file) => handleUpload(file, index, 'hover')"
+                                    @clear="$emit('removeImage', index, 'hover')" />
                             </div>
-                            <button v-if="button.hover" @click="$emit('removeImage', index, 'hover')"
-                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
 
                         <div class="upload-slot">
                             <label>平板端</label>
-                            <div class="image-preview-wrapper" :class="{ 'has-image': button.tablet }">
-                                <img v-if="button.tablet" :src="getImageUrl(button.tablet)" alt="Tablet"
-                                    class="preview-img" />
-                                <div v-else class="placeholder">
-                                    <span class="text">平板</span>
-                                </div>
-                                <input type="file" @change="(e) => $emit('upload', e, index, 'tablet')" accept="image/*"
-                                    class="file-input" />
+                            <div class="uploader-container">
+                                <ImageUploader :preview-url="button.tablet ? getImageUrl(button.tablet) : ''"
+                                    placeholder="平板" @upload="(file) => handleUpload(file, index, 'tablet')"
+                                    @clear="$emit('removeImage', index, 'tablet')" />
                             </div>
-                            <button v-if="button.tablet" @click="$emit('removeImage', index, 'tablet')"
-                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
 
                         <div class="upload-slot">
                             <label>手機端</label>
-                            <div class="image-preview-wrapper" :class="{ 'has-image': button.mobile }">
-                                <img v-if="button.mobile" :src="getImageUrl(button.mobile)" alt="Mobile"
-                                    class="preview-img" />
-                                <div v-else class="placeholder">
-                                    <span class="text">手機</span>
-                                </div>
-                                <input type="file" @change="(e) => $emit('upload', e, index, 'mobile')" accept="image/*"
-                                    class="file-input" />
+                            <div class="uploader-container">
+                                <ImageUploader :preview-url="button.mobile ? getImageUrl(button.mobile) : ''"
+                                    placeholder="手機" @upload="(file) => handleUpload(file, index, 'mobile')"
+                                    @clear="$emit('removeImage', index, 'mobile')" />
                             </div>
-                            <button v-if="button.mobile" @click="$emit('removeImage', index, 'mobile')"
-                                class="btn btn-link-danger btn-sm">移除</button>
                         </div>
                     </div>
                 </div>
@@ -102,6 +78,8 @@
 </template>
 
 <script setup lang="ts">
+import ImageUploader from '../common/ImageUploader.vue'
+
 interface FloatAdButton {
     href: string
     default: string
@@ -115,7 +93,7 @@ const props = defineProps<{
     getImageUrl: (path: string) => string
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
     (e: 'reset'): void
     (e: 'add'): void
     (e: 'remove', index: number): void
@@ -123,6 +101,10 @@ defineEmits<{
     (e: 'removeImage', index: number, type: 'default' | 'hover' | 'tablet' | 'mobile'): void
     (e: 'change'): void
 }>()
+
+const handleUpload = (file: File, index: number, type: 'default' | 'hover' | 'tablet' | 'mobile') => {
+    emit('upload', { target: { files: [file] } } as unknown as Event, index, type)
+}
 </script>
 
 <style scoped>
@@ -239,48 +221,9 @@ defineEmits<{
     color: #868e96;
 }
 
-.image-preview-wrapper {
+.uploader-container {
     width: 100%;
     height: 70px;
-    position: relative;
-    border: 2px dashed #dee2e6;
-    border-radius: 8px;
-    background: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.image-preview-wrapper:hover {
-    border-color: #007bff;
-    background: #f0f7ff;
-}
-
-.image-preview-wrapper.has-image {
-    border-style: solid;
-}
-
-.preview-img {
-    max-width: 85%;
-    max-height: 85%;
-    object-fit: contain;
-}
-
-.placeholder .icon {
-    font-size: 1.2rem;
-    color: #adb5bd;
-}
-
-.file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 1;
 }
 
 .btn-icon-danger {
@@ -291,16 +234,19 @@ defineEmits<{
     cursor: pointer;
 }
 
-.btn-link-danger {
-    background: transparent;
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
     border: none;
-    color: #dc3545;
+    border-radius: 4px;
+    padding: 4px 10px;
     font-size: 0.75rem;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
-.btn-link-danger:hover {
-    text-decoration: underline;
+.btn-danger:hover {
+    background: #c82333;
 }
 
 @media (max-width: 768px) {

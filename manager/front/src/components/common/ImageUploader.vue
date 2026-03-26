@@ -4,11 +4,11 @@
             <img :src="previewUrl" :alt="altText" class="preview-img" />
             <div class="overlay">
                 <div class="actions">
-                    <button @click="triggerInput" class="btn btn-edit" title="更換圖片">
+                    <button @click.stop="triggerInput" class="btn btn-edit" title="更換圖片">
                         <span class="icon">✎</span>
                     </button>
-                    <button @click="$emit('clear')" class="btn btn-delete" title="清除圖片">
-                        <span class="icon">×</span>
+                    <button @click.stop="$emit('clear')" class="btn btn-delete" title="移除">
+                        <span class="icon">✕</span>
                     </button>
                 </div>
             </div>
@@ -68,7 +68,7 @@ const handleFileChange = (event: Event) => {
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 160px;
+    min-height: inherit; /* 讓外部容器決定高度 */
     border: 2px dashed #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
@@ -101,38 +101,44 @@ const handleFileChange = (event: Event) => {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5); /* 稍微加深背景，但降低模糊度 */
+    backdrop-filter: blur(2px); /* 降低模糊度，由 4px 改為 2px，確保能看清圖案 */
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0.9); /* 改為縮放，避免在窄容器中位移過大 */
 }
 
 .preview-container:hover .overlay {
     opacity: 1;
+    transform: scale(1);
 }
 
 .actions {
     display: flex;
     gap: 12px;
+    padding: 4px; /* 確保按鈕周圍有安全間距 */
 }
 
 .btn {
-    width: 40px;
-    height: 40px;
+    width: 32px; /* 依照主人吩咐：按鈕稍微縮小 */
+    height: 32px;
     border-radius: 50%;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    transition: transform 0.1s;
+    font-size: 1rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .btn-edit {
@@ -159,11 +165,16 @@ const handleFileChange = (event: Event) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px;
+    text-align: center;
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .placeholder .icon {
-    font-size: 2rem;
+    font-size: 1.5rem; /* 標題圖示也稍微縮小 */
     font-weight: 300;
 }
 
@@ -173,11 +184,12 @@ const handleFileChange = (event: Event) => {
 }
 
 .placeholder .dimensions {
-    font-size: 0.8rem;
-    opacity: 0.8;
+    font-size: 0.7rem; /* 再次縮小 */
+    opacity: 0.7;
     background: rgba(0, 0, 0, 0.05);
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
 }
 
 .file-input {

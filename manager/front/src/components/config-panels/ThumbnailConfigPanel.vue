@@ -25,16 +25,11 @@
 
                 <div class="item-card-body">
                     <div class="upload-column">
-                        <div class="image-preview-wrapper" :class="{ 'has-image': item.image }">
-                            <img v-if="item.image" :src="getImageUrl(item.image)" :alt="item.alt" class="preview-img" />
-                            <div v-else class="placeholder">
-                                <span class="text">上傳縮圖</span>
-                            </div>
-                            <input type="file" @change="(e) => $emit('upload', e, index)" accept="image/*"
-                                class="file-input" />
+                        <div class="uploader-wrapper">
+                            <ImageUploader :preview-url="item.image ? getImageUrl(item.image) : ''" :alt-text="item.alt"
+                                placeholder="上傳縮圖" @upload="(file) => handleUpload(file, index)"
+                                @clear="$emit('removeImage', index)" />
                         </div>
-                        <button v-if="item.image" @click="$emit('removeImage', index)"
-                            class="btn btn-link-danger btn-sm">移除圖片</button>
                     </div>
 
                     <div class="fields-column">
@@ -63,6 +58,8 @@
 </template>
 
 <script setup lang="ts">
+import ImageUploader from '../common/ImageUploader.vue'
+
 interface ThumbnailItem {
     image: string
     href: string
@@ -77,13 +74,17 @@ const props = defineProps<{
     getImageUrl: (path: string) => string
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
     (e: 'add'): void
     (e: 'remove', index: number): void
     (e: 'upload', event: Event, index: number): void
     (e: 'removeImage', index: number): void
     (e: 'change'): void
 }>()
+
+const handleUpload = (file: File, index: number) => {
+    emit('upload', { target: { files: [file] } } as unknown as Event, index)
+}
 </script>
 
 <style scoped>
@@ -158,58 +159,9 @@ defineEmits<{
     gap: 0.5rem;
 }
 
-.image-preview-wrapper {
+.uploader-wrapper {
     width: 140px;
     height: 100px;
-    position: relative;
-    border: 2px dashed #dee2e6;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.image-preview-wrapper:hover {
-    border-color: #007bff;
-    background: #f0f7ff;
-}
-
-.image-preview-wrapper.has-image {
-    border-style: solid;
-}
-
-.preview-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.placeholder {
-    text-align: center;
-    color: #adb5bd;
-}
-
-.placeholder .icon {
-    font-size: 1.5rem;
-    display: block;
-}
-
-.placeholder .text {
-    font-size: 0.75rem;
-}
-
-.file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 1;
 }
 
 .fields-column {
@@ -292,17 +244,19 @@ defineEmits<{
     border-radius: 4px;
 }
 
-.btn-link-danger {
-    background: transparent;
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
     border: none;
-    color: #dc3545;
+    border-radius: 4px;
+    padding: 4px 12px;
     font-size: 0.8rem;
     cursor: pointer;
-    padding: 0;
+    transition: background 0.2s;
 }
 
-.btn-link-danger:hover {
-    text-decoration: underline;
+.btn-danger:hover {
+    background: #c82333;
 }
 
 @media (max-width: 768px) {
