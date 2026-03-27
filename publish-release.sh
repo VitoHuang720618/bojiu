@@ -64,13 +64,20 @@ cat <<EOF > deploy_temp/deploy.sh
 set -e
 echo "🚀 [Deploy] Starting server-side update..."
 
-# 1. 進入後端錄安裝必要的生產套件
+# 1. 檢查並自動安裝 PM2
+if ! command -v pm2 &> /dev/null; then
+    echo "💾 PM2 not found, installing it globally..."
+    # 嘗試安裝，如果權限不足會提示使用者
+    npm install -g pm2 || { echo "❌ Failed to install PM2. Please run 'sudo npm install -g pm2' manually."; exit 1; }
+fi
+
+# 2. 進入後端目錄安裝必要的生產套件
 echo "📦 Installing backend production dependencies..."
 cd backend
 npm install --production
 cd ..
 
-# 2. 檢查並使用 PM2 啟動/重啟服務
+# 3. 檢查並使用 PM2 啟動/重啟服務
 if pm2 show bojiu-backend > /dev/null 2>&1; then
     echo "♻️ Restarting existing bojiu-backend..."
     pm2 restart bojiu-backend
@@ -79,7 +86,7 @@ else
     pm2 start backend/dist/server.js --name "bojiu-backend"
 fi
 
-# 3. 保存狀態確保開機自啟
+# 4. 保存狀態確保開機自啟
 echo "💾 Saving PM2 process list..."
 pm2 save
 
