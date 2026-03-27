@@ -244,6 +244,22 @@ chmod +x *.sh
 ```
 這會自動同步代碼並確保服務重新掛載。
 
+## 📊 服務管理 (PM2)
+本專案後端服務名稱為 `bojiu-backend`。常用管理指令：
+```bash
+# 查看服務狀態
+pm2 status
+
+# 查看即時日誌 (排錯首選)
+pm2 logs bojiu-backend
+
+# 重啟服務
+pm2 restart bojiu-backend
+
+# 停止服務
+pm2 stop bojiu-backend
+```
+
 ## 🌐 Nginx 定製工具
 執行下令指令可生成專屬的 Nginx 配置檔：
 ```bash
