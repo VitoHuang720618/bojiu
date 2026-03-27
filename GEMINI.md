@@ -25,32 +25,43 @@
 
 ## ✅ 近期關鍵修改 (2026-03)
 
-- **UI 視覺全面升級**:
-  - **Header/Footer 漸層**: 
-    - Header 更新為新的湛藍漸層 (`linear-gradient(0deg,#3041b9 0%, #081fb3 100%)`) 並增加陰影。
-    - Footer 與平板/手機版廣告區塊更新為深色質感漸層 (`#060417, #232323`)。
-  - **推薦區域 (.recommend-content)**: 
-    - 背景由半透明改為實色 (`rgba(20, 10, 104, 1.0)`) 以增加內容可讀性。
-    - **標題優化**: 「推荐优质线路」更換新版皇冠圖示 (48x33px)，文字改為純白色 (`#ffffff`)，並透過解除固定寬度修正了文字裁切問題。
-    - **區塊細節**: `.block-title` 背景色統一調整為深靛藍色 `#3625c3`，且 Tool Hover 效果同步更新。
-  - **按鈕與圖示**:
-    - 「回到頂部」按鈕樣式重塑，改用本地圖片資源替代純 CSS 結構。
-    - 更新「賽事精選」與「娛樂直播」區塊標題圖示。
-- **靜態化與資產本地化**:
-  - 成功建置 `demo-static` 純靜態分支，資料鎖定於 `siteConfig.ts`。
-  - 透過 `./scripts/download.cjs` 完成 GCP 圖片全數下載並指向 `/uploads/` 目錄。
-- **穩定性修正**:
-  - `FooterComponent.vue`: 移除不必要的 Code 依賴，並將版權宣告硬編碼至樣板中，防止因 API 請求失敗導致底部文字缺失。
-  - 修正了 `build-push.sh` 在打包時可能遇到的 TypeScript 未使用變數報錯 (TS6133)。
+- **生產環境自動化發布流程 (GCP/VPS)**:
+  - **成品化模型 (Build-Artifact Model)**: 引進 `release` 專用分支，僅存放本地編譯後的成品 (`dist/`)，徹底解決伺服器端編譯工具依賴問題。
+  - **發布雙引擎**:
+    - `publish-release.sh` (本地機): 一鍵完成「三端編譯 + 抽離成品 + 強力推送」。
+    - `deploy.sh` (伺服器端): 支援「自動安裝 PM2 + 持久化金庫掛載 + 服務重啟」。
+  - **一鍵更新工具**: 新增 `update.sh` 與 `generate-nginx-conf.sh`，大幅簡化營運人員的操作難度。
+- **數據與核心分離 (Decoupling Architecture)**:
+  - **持久化金庫 (`bojiu-data`)**: 在代碼目錄旁建立獨立資料夾，保護上傳圖片、資料庫與動態設定。
+  - **絕對路徑傳送門 (Absolute Symlinks)**: 透過部署腳本自動建立絕對路徑軟連結，確保 `git reset --hard` 更新代碼時，使用者數據依然穩如泰山且能正確讀取。
+- **穩定性與安全性修正**:
+  - **動態樣式優化**: 重構 `HomePage.vue` 與 `HeaderComponent.vue`，改用 `watch` + 手動 `document.head` 注入動態 CSS，解決了熱更新時 Vue 全域側邊效應報錯的問題。
+  - **預設認證固化**: 於後端初始化邏輯中鎖定預設管理員為 `admin` / `Admin123!`，且關閉初次登入強制修改密碼，確保新環境佈署後的即時可用性。
 
 ## 📌 待辦與維護重點
 
-1. **雙專案同步標準流程 (重要)**:
-   - 先於 `demo` 進行代碼變更。
-   - 執行同步指令：`rsync -av --delete --exclude 'node_modules' --exclude 'dist' --exclude '.git' --exclude 'public/uploads' demo/ demo-static/`。
-   - 重新執行 `node demo-static/scripts/download.cjs` 確保圖片與設定同步。
-2. **靜態資源管理**: 新增圖片若需進入 `demo-static`，必須確保其路徑已在 `siteConfig.ts` 指向 `/uploads/`。
-3. **VM 更新**: commit 推送後需在 VM 執行更新指令才能生效。
+1. **部署標準流程 (重要)**:
+   - **發布**: 在本機執行 `./publish-release.sh`。
+   - **更新**: 在伺服器執行 `./update.sh`。
+2. **雙專案同步流程**:
+   - `demo` 修改後，執行 `rsync -av --delete --exclude 'node_modules' --exclude 'dist' --exclude '.git' --exclude 'public/uploads' demo/ demo-static/`。
+3. **金庫管理**: 定期備份伺服器根目錄外的 `bojiu-data` 資料夾，這比備份代碼庫更重要。
+
+## 🚀 跨機器快速遷移指南 (Know-how)
+
+由於代碼與數據已完全解耦，切換或新增伺服器（VM）時可實現「秒級部署」：
+
+1. **遷移「金庫」 (Stateful)**：
+   - 將舊伺服器的 `/var/www/bojiu-data` 資料夾完整遷移（備份/還原）至新伺服器的相同位置。
+   - 這是網站的「靈魂」，包含所有圖片、設定與帳號。
+
+2. **佈署「核心」 (Stateless)**：
+   - 在新伺服器執行 `git clone -b release git@github.com:VitoHuang720618/bojiu.git bojiu-release`。
+   - 代碼本身不具備狀態，隨時可重新下載。
+
+3. **靈魂連結 (Re-link)**：
+   - 進入 `bojiu-release` 目錄並執行 `./deploy.sh`。
+   - 部署腳本會自動將新拉取的代碼與現有的 `bojiu-data` 金庫重新連接（Symlink），服務即刻恢復。
 
 ---
-*Last Updated: 2026-03-24*
+*Last Updated: 2026-03-27*
