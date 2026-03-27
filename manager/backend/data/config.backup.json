@@ -1,7 +1,7 @@
 {
   "logo": "/uploads/logo.png",
   "banner": {
-    "pc": "/uploads/banner-pc.jpg",
+    "pc": "",
     "tablet": "/uploads/banner-tablet.jpg",
     "mobile": "/uploads/banner-mobile.jpg"
   },
@@ -196,12 +196,6 @@
       "image": "/uploads/videoThumbnails-5-image.png",
       "href": "https://www.fun99666.com/index.php/funfans/",
       "title": "撩人双飞闺蜜秀",
-      "alt": ""
-    },
-    {
-      "image": "",
-      "href": "",
-      "title": "",
       "alt": ""
     }
   ],

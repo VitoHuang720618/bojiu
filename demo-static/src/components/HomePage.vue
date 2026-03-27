@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import ImageComponent from './ImageComponent.vue'
 import ImageButton from './ImageButton.vue'
 import { assetManifest } from '../config/assetManifest'
@@ -77,14 +77,44 @@ const stopCarousel = () => {
   }
 }
 
+// Handle dynamic CSS injection for recommend section
+const dynamicStyleTag = ref<HTMLStyleElement | null>(null)
+
+const updateRecommendDynamicStyle = (css: string) => {
+  if (!css) {
+    if (dynamicStyleTag.value) {
+      dynamicStyleTag.value.innerHTML = ''
+    }
+    return
+  }
+
+  if (!dynamicStyleTag.value) {
+    dynamicStyleTag.value = document.createElement('style')
+    dynamicStyleTag.value.setAttribute('data-dynamic-recommend', '')
+    document.head.appendChild(dynamicStyleTag.value)
+  }
+  dynamicStyleTag.value.innerHTML = css
+}
+
 // Lifecycle Hooks
 onMounted(async () => {
   await loadConfig()
   startCarousel()
+  if (effectiveRecommendContentCss.value) {
+    updateRecommendDynamicStyle(effectiveRecommendContentCss.value)
+  }
+})
+
+watch(() => effectiveRecommendContentCss.value, (newCss) => {
+  updateRecommendDynamicStyle(newCss || '')
 })
 
 onUnmounted(() => {
   stopCarousel()
+  if (dynamicStyleTag.value) {
+    document.head.removeChild(dynamicStyleTag.value)
+    dynamicStyleTag.value = null
+  }
 })
 
 // UI Interaction
@@ -133,8 +163,6 @@ const scrollToTop = () => {
 
         <!-- Recommend Section Container -->
         <div class="recommend-section">
-          <!-- Custom CSS for Recommend Area -->
-          <style v-if="effectiveRecommendContentCss" v-html="effectiveRecommendContentCss"></style>
           <!-- Top Content (Slider + Routes) -->
           <div class="recommend-content" :style="{ background: effectiveRecommendContentBackground }">
             <!-- Carousel Slider -->
