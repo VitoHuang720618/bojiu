@@ -439,10 +439,17 @@ async function startServer() {
         let targetDefaultsDir: string
         let targetSettingsPath: string
 
+        const vpsReleasePath = path.resolve(__dirname, '../../') // In release branch, this is /var/www/bojiu-release
+
         if (nodeEnv === 'production') {
           // Docker container path
           targetDefaultsDir = '/usr/share/nginx/html/demo/defaults'
           targetSettingsPath = '/usr/share/nginx/html/demo/site-settings.json'
+        } else if (fs.existsSync(path.join(vpsReleasePath, 'demo'))) {
+          // VPS Release branch path structure
+          targetDefaultsDir = path.join(vpsReleasePath, 'demo/defaults')
+          targetSettingsPath = path.join(vpsReleasePath, 'demo/site-settings.json')
+          console.log('Detected VPS release structure, targeting:', targetSettingsPath)
         } else {
           // Local development path
           targetDefaultsDir = path.join(__dirname, '../../../demo/public/defaults')
