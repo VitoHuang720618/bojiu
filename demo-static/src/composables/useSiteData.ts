@@ -8,29 +8,43 @@ import {
     recommendedTools,
     floatAdButtons,
     routeLinksImages,
+    siteConfig,
+    titles,
+    pageLayout,
+    programmeLayout,
     banner,
-    assetsState,
-    siteConfig
+    assetsState
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
 import { apiService } from '../services/apiService'
 import type { ButtonLinkConfig, BannerConfig } from '../types'
 
-export function useSiteData() {
-    // Dynamic Data Refs
-    const dynamicHostnames = ref<string[]>([])
+// Global (shared) refs for API data
+const dynamicHostnames = ref<string[]>([])
+const apiLogo = ref<string | undefined>(undefined)
+const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
+const apiBanner = ref<string | BannerConfig | undefined>(undefined)
+const apiBackgroundImage = ref<string | undefined>(undefined)
+const apiHeaderCss = ref<string | undefined>(undefined)
+const apiHeaderBackgroundRgba = ref<string | undefined>(undefined)
+const apiRecommendContentBackground = ref<string | undefined>(undefined)
+const apiRecommendContentCss = ref<string | undefined>(undefined)
+const apiTitles = ref<{
+    recommendedRoutes: string
+    recommendedBrowsers: string
+    selectedVideos: string
+    hotPrograms: string
+} | undefined>(undefined)
+const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
+const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
+const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
+const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
+const apiFloatAdButtons = ref<({ href: string, default: string, hover: string, tablet?: string, mobile?: string } | null)[]>([])
+const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
+const apiPageLayout = ref<string[] | undefined>(undefined)
+const apiProgrammeLayout = ref<string[] | undefined>(undefined)
 
-    // Cloud API Data Refs
-    const apiLogo = ref<string | undefined>(undefined)
-    const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
-    const apiBanner = ref<string | BannerConfig | undefined>(undefined)
-    const apiBackgroundImage = ref<string | undefined>(undefined)
-    const apiVideoThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
-    const apiProgramThumbnails = ref<({ image: string, href: string, alt: string, title: string } | null)[]>([])
-    const apiButtonLinks = ref<(ButtonLinkConfig | null)[]>([])
-    const apiToolIcons = ref<({ id: string, default: string, hover: string, alt: string, href: string } | null)[]>([])
-    const apiFloatAdButtons = ref<({ href: string, default: string, hover: string, tablet?: string, mobile?: string } | null)[]>([])
-    const apiRouteLinks = ref<Array<{ default: string, hover: string, href: string }> | null>(null)
+export function useSiteData() {
 
     // Computed Properties: Priority Logic (API vs Local)
     const effectiveLogo = computed(() => {
@@ -70,6 +84,51 @@ export function useSiteData() {
             return apiBackgroundImage.value !== undefined ? apiBackgroundImage.value : ''
         }
         return assetsState.backgroundImage !== undefined ? assetsState.backgroundImage : assetManifest.backgroundImage
+    })
+
+    const effectiveHeaderCss = computed(() => {
+        if (siteConfig.useApi) {
+            return apiHeaderCss.value
+        }
+        return assetsState.headerCss
+    })
+
+    const effectiveRecommendContentBackground = computed(() => {
+        if (siteConfig.useApi) {
+            return apiRecommendContentBackground.value !== undefined ? apiRecommendContentBackground.value : ''
+        }
+        return assetsState.recommendContentBackground !== undefined ? assetsState.recommendContentBackground : 'rgba(20, 10, 104, 1.0)'
+    })
+
+    const effectiveHeaderBackgroundRgba = computed(() => {
+        if (siteConfig.useApi) {
+            return apiHeaderBackgroundRgba.value !== undefined ? apiHeaderBackgroundRgba.value : ''
+        }
+        return assetsState.headerBackgroundRgba !== undefined ? assetsState.headerBackgroundRgba : ''
+    })
+
+    const effectiveRecommendContentCss = computed(() => {
+        if (siteConfig.useApi) {
+            return apiRecommendContentCss.value !== undefined ? apiRecommendContentCss.value : ''
+        }
+        return assetsState.recommendContentCss !== undefined ? assetsState.recommendContentCss : ''
+    })
+
+    const effectiveTitles = computed(() => {
+        if (siteConfig.useApi) {
+            return apiTitles.value || {
+                recommendedRoutes: '',
+                recommendedBrowsers: '',
+                selectedVideos: '',
+                hotPrograms: ''
+            }
+        }
+        return {
+            recommendedRoutes: titles.recommendedRoutes || assetManifest.titles.recommendedRoutes,
+            recommendedBrowsers: titles.recommendedBrowsers || assetManifest.titles.recommendedBrowsers,
+            selectedVideos: titles.selectedVideos || assetManifest.titles.selectedVideos,
+            hotPrograms: titles.hotPrograms || assetManifest.titles.hotPrograms
+        }
     })
 
     const effectiveVideoThumbnails = computed(() => {
@@ -173,6 +232,20 @@ export function useSiteData() {
         })
     })
 
+    const effectivePageLayout = computed(() => {
+        if (siteConfig.useApi && apiPageLayout.value) {
+            return apiPageLayout.value
+        }
+        return pageLayout
+    })
+
+    const effectiveProgrammeLayout = computed(() => {
+        if (siteConfig.useApi && apiProgrammeLayout.value) {
+            return apiProgrammeLayout.value
+        }
+        return programmeLayout
+    })
+
     // Data Loading Action
     const loadConfig = async () => {
         // 非同步背景執行獲取動態線路 (非阻塞)
@@ -191,12 +264,19 @@ export function useSiteData() {
             apiCarouselSlides.value = config.carouselSlides
             apiBanner.value = config.banner
             apiBackgroundImage.value = config.backgroundImage
+            apiHeaderCss.value = config.headerCss
+            apiHeaderBackgroundRgba.value = config.headerBackgroundRgba
+            apiRecommendContentBackground.value = config.recommendContentBackground
+            apiRecommendContentCss.value = config.recommendContentCss
+            apiTitles.value = config.titles
             apiVideoThumbnails.value = config.videoThumbnails
             apiProgramThumbnails.value = config.programThumbnails
             apiButtonLinks.value = config.buttonLinks
             apiToolIcons.value = config.toolIcons
             apiFloatAdButtons.value = config.floatAdButtons || []
             apiRouteLinks.value = config.routeLinks || null
+            apiPageLayout.value = config.pageLayout
+            apiProgrammeLayout.value = config.programmeLayout
         } catch (error: any) {
             if (error?.message !== 'API is disabled via config') {
                 console.error('Failed to load config:', error)
@@ -213,12 +293,19 @@ export function useSiteData() {
         effectiveCarouselSlides,
         effectiveBanner,
         effectiveBackgroundImage,
+        effectiveHeaderCss,
+        effectiveHeaderBackgroundRgba,
+        effectiveRecommendContentBackground,
+        effectiveRecommendContentCss,
+        effectiveTitles,
         effectiveVideoThumbnails,
         effectiveProgramThumbnails,
         effectiveButtonLinks,
         effectiveToolIcons,
         effectiveFloatAdButtons,
         effectiveRouteLinks,
+        effectivePageLayout,
+        effectiveProgrammeLayout,
 
         // Actions
         loadConfig

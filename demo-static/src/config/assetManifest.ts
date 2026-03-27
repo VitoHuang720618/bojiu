@@ -125,28 +125,28 @@ export const assetManifest = {
   // Float ad buttons (3 items)
   floatAdButtons: [
     {
-      "id": "customer-service",
-      "default": "/uploads/floatAdButtons-0-default-1774324606498.png",
-      "hover": "/uploads/floatAdButtons-0-hover-1774324612151.png",
-      "tablet": "/uploads/floatAdButtons-0-tablet-1774324650635.png",
-      "mobile": "/uploads/floatAdButtons-0-mobile-1774325524932.png",
-      "alt": "在线客服"
+      id: 'customer-service',
+      default: '/assets/images/float-0-default.png',
+      hover: '/assets/images/float-0-hover.png',
+      tablet: '',
+      mobile: '',
+      alt: '在线客服'
     },
     {
-      "id": "girl-douyin",
-      "default": "/uploads/floatAdButtons-1-default-1774324621557.png",
-      "hover": "/uploads/floatAdButtons-1-hover-1774324624507.png",
-      "tablet": "/uploads/floatAdButtons-1-tablet-1774324655594.png",
-      "mobile": "/uploads/floatAdButtons-1-mobile-1774325528535.png",
-      "alt": "女孩抖音"
+      id: 'girl-douyin',
+      default: '/assets/images/float-1-default.png',
+      hover: '/assets/images/float-1-hover.png',
+      tablet: '',
+      mobile: '',
+      alt: '女孩抖音'
     },
     {
-      "id": "sports-douyin",
-      "default": "/uploads/floatAdButtons-2-default-1774324633499.png",
-      "hover": "/uploads/floatAdButtons-2-hover-1774324638235.png",
-      "tablet": "/uploads/floatAdButtons-2-tablet-1774324659376.png",
-      "mobile": "/uploads/floatAdButtons-2-mobile-1774325532199.png",
-      "alt": "体育抖音"
+      id: 'sports-douyin',
+      default: '/assets/images/float-2-default.png',
+      hover: '/assets/images/float-2-hover.png',
+      tablet: '',
+      mobile: '',
+      alt: '体育抖音'
     }
   ]
 }

@@ -17,15 +17,27 @@ class CarouselService {
     carouselSlides: { image: string, href: string, alt: string }[],
     banner: string | BannerConfig,
     backgroundImage: string,
+    headerBackgroundRgba: string,
+    headerCss: string,
+    recommendContentBackground: string,
+    recommendContentCss: string,
+    titles: {
+        recommendedRoutes: string
+        recommendedBrowsers: string
+        selectedVideos: string
+        hotPrograms: string
+    },
     videoThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
     programThumbnails: ({ image: string, href: string, alt: string, title: string } | null)[],
     buttonLinks: ({ text: string, href: string, target: string, defaultImage?: string, hoverImage?: string } | null)[],
     toolIcons: ({ id: string, default: string, hover: string, alt: string, href: string } | null)[],
     floatAdButtons?: ({ default: string, hover: string, href: string, alt: string, tablet?: string, mobile?: string } | null)[],
-    routeLinks?: Array<{ default: string, hover: string, href: string }> | null
+    routeLinks?: Array<{ default: string, hover: string, href: string }> | null,
+    pageLayout?: string[],
+    programmeLayout?: string[]
   }> {
     try {
-      // 檢查是否啟用了 API
+      // 检查是否启用了 API
       const {
         siteConfig,
         assetsState, // Import assetsState
@@ -36,7 +48,11 @@ class CarouselService {
         buttonLinks,
         recommendedTools,
         floatAdButtons,
-        routeLinksImages
+        routeLinksImages,
+        titles,
+        assetManifest,
+        pageLayout,
+        programmeLayout
       } = await import('../config/siteConfig')
 
       if (siteConfig.useApi === false) {
@@ -46,6 +62,16 @@ class CarouselService {
           carouselSlides,
           banner,
           backgroundImage: assetsState.backgroundImage,
+          headerBackgroundRgba: assetsState.headerBackgroundRgba,
+          headerCss: assetsState.headerCss,
+          recommendContentBackground: assetsState.recommendContentBackground,
+          recommendContentCss: assetsState.recommendContentCss,
+          titles: {
+            recommendedRoutes: titles.recommendedRoutes || assetManifest.titles.recommendedRoutes,
+            recommendedBrowsers: titles.recommendedBrowsers || assetManifest.titles.recommendedBrowsers,
+            selectedVideos: titles.selectedVideos || assetManifest.titles.selectedVideos,
+            hotPrograms: titles.hotPrograms || assetManifest.titles.hotPrograms
+          },
           videoThumbnails,
           programThumbnails,
           // Map structure for compatibility
@@ -71,7 +97,9 @@ class CarouselService {
             tablet: f.tablet,
             mobile: f.mobile
           })),
-          routeLinks: routeLinksImages as any
+          routeLinks: routeLinksImages as any,
+          pageLayout: pageLayout,
+          programmeLayout: programmeLayout
         }
       }
 
@@ -104,6 +132,16 @@ class CarouselService {
           mobile: processImageUrl(config.banner.mobile || '')
         } : processImageUrl(config.banner || ''),
         backgroundImage: processImageUrl(config.backgroundImage || ''),
+        headerBackgroundRgba: config.headerBackgroundRgba || 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
+        headerCss: config.headerCss || '',
+        recommendContentBackground: config.recommendContentBackground || 'rgba(20, 10, 104, 1.0)',
+        recommendContentCss: config.recommendContentCss || '',
+        titles: {
+          recommendedRoutes: processImageUrl(config.titles?.recommendedRoutes || ''),
+          recommendedBrowsers: processImageUrl(config.titles?.recommendedBrowsers || ''),
+          selectedVideos: processImageUrl(config.titles?.selectedVideos || ''),
+          hotPrograms: processImageUrl(config.titles?.hotPrograms || '')
+        },
         videoThumbnails: (config.videoThumbnails || []).map((video: any) =>
           video ? { ...video, image: processImageUrl(video.image) } : null
         ),
@@ -133,10 +171,12 @@ class CarouselService {
           default: processImageUrl(route.default),
           hover: processImageUrl(route.hover),
           href: route.href || ''
-        })) : null
+        })) : null,
+        pageLayout: config.pageLayout,
+        programmeLayout: config.programmeLayout
       }
     } catch (error: any) {
-      // 這裡不再打印 Error，保持主控台乾淨
+      // 这里不再打印 Error，保持主控台干净
       if (error?.message !== 'API is disabled via config') {
         console.error('Failed to fetch config from API:', error)
       }
@@ -154,11 +194,24 @@ class CarouselService {
         ],
         banner: '',
         backgroundImage: '',
+        headerBackgroundRgba: 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
+        headerCss: '',
+        recommendContentBackground: 'rgba(20, 10, 104, 1.0)',
+        recommendContentCss: '',
+        titles: {
+          recommendedRoutes: '',
+          recommendedBrowsers: '',
+          selectedVideos: '',
+          hotPrograms: ''
+        },
         videoThumbnails: [],
         programThumbnails: [],
         buttonLinks: [],
         toolIcons: [],
-        routeLinks: []
+        floatAdButtons: [],
+        routeLinks: [],
+        pageLayout: [],
+        programmeLayout: []
       }
     }
   }

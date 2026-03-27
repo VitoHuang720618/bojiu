@@ -111,6 +111,14 @@
               :getImageUrl="getImageUrl" @reset="resetFloatAdButtons" @add="addFloatAdButton"
               @remove="removeFloatAdButton" @upload="handleFloatAdImageUpload" @removeImage="removeFloatAdImage"
               @change="hasChanges = true" />
+
+            <!-- 頁面佈局配置 -->
+            <LayoutConfigPanel v-if="activeTab === 'layout'" 
+              :pageLayout="config.pageLayout || []"
+              :programmeLayout="config.programmeLayout || []" 
+              @update:pageLayout="(val) => config.pageLayout = val"
+              @update:programmeLayout="(val) => config.programmeLayout = val"
+              @change="hasChanges = true" />
           </div>
         </div>
 
@@ -160,6 +168,7 @@ import RouteLinksConfigPanel from './config-panels/RouteLinksConfigPanel.vue'
 import CarouselConfigPanel from './config-panels/CarouselConfigPanel.vue'
 import ThumbnailConfigPanel from './config-panels/ThumbnailConfigPanel.vue'
 import FloatAdConfigPanel from './config-panels/FloatAdConfigPanel.vue'
+import LayoutConfigPanel from './config-panels/LayoutConfigPanel.vue'
 import { configService, type ConfigData } from '../services/configService'
 import { useToastStore } from '../stores/toastStore'
 import ConfirmModal from './ConfirmModal.vue'
@@ -224,6 +233,7 @@ const tabs = [
   { id: 'videos', label: '娛樂直播', icon: '🎬' },
   { id: 'programs', label: '賽事精選', icon: '🏆' },
   { id: 'floatads', label: '浮動廣告', icon: '📢' },
+  { id: 'layout', label: '頁面佈局', icon: '🧩' },
   { id: 'preview', label: '預覽頁面', icon: '👁️' }
 ]
 
@@ -293,7 +303,9 @@ const config = reactive<ConfigData>({
   toolIcons: [],
   videoThumbnails: [],
   programThumbnails: [],
-  floatAdButtons: []
+  floatAdButtons: [],
+  pageLayout: ['banner', 'buttonLinks', 'recommend', 'programme', 'floatAd'],
+  programmeLayout: ['selectedVideos', 'hotPrograms']
 }) // 載入配置
 
 const loadConfig = async () => {
@@ -311,6 +323,14 @@ const loadConfig = async () => {
     }
 
     Object.assign(config, data)
+
+    // 初始化佈局預設值
+    if (!config.pageLayout) {
+      config.pageLayout = ['banner', 'buttonLinks', 'recommend', 'programme', 'floatAd']
+    }
+    if (!config.programmeLayout) {
+      config.programmeLayout = ['selectedVideos', 'hotPrograms']
+    }
 
     // Migration for RouteLinks (Object -> Array)
     if (config.routeLinks && !Array.isArray(config.routeLinks)) {

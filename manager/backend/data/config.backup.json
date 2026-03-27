@@ -5,7 +5,48 @@
     "tablet": "/uploads/banner-tablet.jpg",
     "mobile": "/uploads/banner-mobile.jpg"
   },
-  "backgroundImage": "",
+  "backgroundImage": "/uploads/backgroundImage.jpg",
+  "headerStyles": {
+    "height": 75,
+    "backgroundMode": "gradient",
+    "solidColor": "#3041b9",
+    "opacity": 1,
+    "gradient": {
+      "color1": "#3041b9",
+      "color2": "#081fb3",
+      "angle": 0
+    },
+    "boxShadow": {
+      "enabled": true,
+      "x": 0,
+      "y": 0,
+      "blur": 20,
+      "spread": 0,
+      "color": "#000000",
+      "opacity": 0.3
+    }
+  },
+  "recommendStyles": {
+    "backgroundMode": "solid",
+    "solidColor": "#140a68",
+    "opacity": 1,
+    "gradient": {
+      "color1": "#140a68",
+      "color2": "#0a0540",
+      "angle": 180
+    },
+    "boxShadow": {
+      "enabled": false,
+      "x": 0,
+      "y": 0,
+      "blur": 10,
+      "spread": 0,
+      "color": "#000000",
+      "opacity": 0.5
+    }
+  },
+  "headerCss": "#header {\n    /* 強制恢復原本的高質感漸層與陰影 */\n    background: linear-gradient(0deg, #3041b9 0%, #081fb3 100%), #000000 !important;\n    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.30) !important;\n    border-top: none !important; /* 移除剛才試做的細邊框 */\n    height: 75px !important; /* 恢復標準高度 */\n}",
+  "recommendContentCss": "",
   "buttonLinks": [
     {
       "text": "寰宇瀏覽器",
@@ -53,8 +94,8 @@
   "titles": {
     "recommendedRoutes": "",
     "recommendedBrowsers": "",
-    "selectedVideos": "",
-    "hotPrograms": ""
+    "selectedVideos": "/uploads/selectedVideos.png",
+    "hotPrograms": "/uploads/hotPrograms.png"
   },
   "routeLinks": [
     {
@@ -156,6 +197,12 @@
       "href": "https://www.fun99666.com/index.php/funfans/",
       "title": "撩人双飞闺蜜秀",
       "alt": ""
+    },
+    {
+      "image": "",
+      "href": "",
+      "title": "",
+      "alt": ""
     }
   ],
   "programThumbnails": [
@@ -218,5 +265,19 @@
       "tablet": "/uploads/floatAdButtons-2-tablet.png",
       "mobile": "/uploads/floatAdButtons-2-mobile.png"
     }
-  ]
+  ],
+  "pageLayout": [
+    "banner",
+    "buttonLinks",
+    "recommend",
+    "programme",
+    "floatAd"
+  ],
+  "programmeLayout": [
+    "hotPrograms",
+    "selectedVideos"
+  ],
+  "headerBackgroundRgba": "rgba(20, 10, 104, 1.00)",
+  "recommendContentBackground": "rgba(20, 10, 104, 1.00)",
+  "headerBackground": "/uploads/headerBackground.png"
 }

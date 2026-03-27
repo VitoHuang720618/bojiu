@@ -39,6 +39,16 @@
     "mobile": "/defaults/banner-mobile.jpg"
   },
   "backgroundImage": "/defaults/backgroundImage.jpg",
+  "headerBackgroundRgba": "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
+  "headerCss": "#header {\n    /* 強制恢復原本的高質感漸層與陰影 */\n    background: linear-gradient(0deg, #3041b9 0%, #081fb3 100%), #000000 !important;\n    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.30) !important;\n    border-top: none !important; /* 移除剛才試做的細邊框 */\n    height: 75px !important; /* 恢復標準高度 */\n}",
+  "recommendContentBackground": "rgba(20, 10, 104, 1)",
+  "recommendContentCss": "",
+  "titles": {
+    "recommendedRoutes": "",
+    "recommendedBrowsers": "",
+    "selectedVideos": "/defaults/selectedVideos.png",
+    "hotPrograms": "/defaults/hotPrograms.png"
+  },
   "routeLinksImages": [
     {
       "default": "/defaults/routeLinks-0-default.png",
@@ -283,5 +293,16 @@
       "tablet": "/defaults/floatAdButtons-2-tablet.png",
       "mobile": "/defaults/floatAdButtons-2-mobile.png"
     }
+  ],
+  "pageLayout": [
+    "banner",
+    "buttonLinks",
+    "recommend",
+    "programme",
+    "floatAd"
+  ],
+  "programmeLayout": [
+    "hotPrograms",
+    "selectedVideos"
   ]
 }

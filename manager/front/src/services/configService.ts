@@ -85,6 +85,8 @@ export interface ConfigData {
     tablet: string
     mobile: string
   }>
+  pageLayout?: string[]
+  programmeLayout?: string[]
 }
 
 export interface UploadResponse {

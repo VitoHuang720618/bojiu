@@ -2,72 +2,82 @@
   "siteConfig": {
     "useApi": false
   },
-  "logo": "/defaults/logo-1769329563858.png",
+  "logo": "/defaults/logo.png",
   "buttonLinks": [
     {
       "label": "寰宇瀏覽器",
       "href": "https://www.ub66.com/",
       "isExternal": true,
-      "default": "/defaults/buttonLinks-0-defaultImage-1774323032926.png",
-      "hover": "/defaults/buttonLinks-0-hoverImage-1774323039849.png"
+      "default": "/defaults/buttonLinks-0-defaultImage.png",
+      "hover": "/defaults/buttonLinks-0-hoverImage.png"
     },
     {
       "label": "APP",
       "href": "https://haa68686.com:9900/web/simple.php#/aioDownload",
       "isExternal": true,
-      "default": "/defaults/buttonLinks-1-defaultImage-1774323050259.png",
-      "hover": "/defaults/buttonLinks-1-hoverImage-1774323054025.png"
+      "default": "/defaults/buttonLinks-1-defaultImage.png",
+      "hover": "/defaults/buttonLinks-1-hoverImage.png"
     },
     {
       "label": "FUN乐园",
       "href": "https://fun99666.com/",
       "isExternal": true,
-      "default": "/defaults/buttonLinks-2-defaultImage-1774323058691.png",
-      "hover": "/defaults/buttonLinks-2-hoverImage-1774323063141.png"
+      "default": "/defaults/buttonLinks-2-defaultImage.png",
+      "hover": "/defaults/buttonLinks-2-hoverImage.png"
     },
     {
       "label": "合作夥伴",
       "href": "https://haa68686.com:9900/web/#/article/at3",
       "isExternal": true,
-      "default": "/defaults/buttonLinks-3-defaultImage-1774323070301.png",
-      "hover": "/defaults/buttonLinks-3-hoverImage-1774323074720.png"
+      "default": "/defaults/buttonLinks-3-defaultImage.png",
+      "hover": "/defaults/buttonLinks-3-hoverImage.png"
     }
   ],
   "banner": {
-    "pc": "/defaults/banner-pc-1774321488860.png",
-    "tablet": "/defaults/banner-tablet-1774321493860.png",
-    "mobile": "/defaults/banner-mobile-1774321508936.png"
+    "pc": "/defaults/banner-pc.jpg",
+    "tablet": "/defaults/banner-tablet.jpg",
+    "mobile": "/defaults/banner-mobile.jpg"
   },
-  "backgroundImage": "/defaults/backgroundImage-1773316342271.png",
+  "backgroundImage": "/defaults/backgroundImage.jpg",
+  "headerBackgroundRgba": "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
+  "headerCss": "#header {\n    /* 強制恢復原本的高質感漸層與陰影 */\n    background: linear-gradient(0deg, #3041b9 0%, #081fb3 100%), #000000 !important;\n    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.30) !important;\n    border-top: none !important; /* 移除剛才試做的細邊框 */\n    height: 75px !important; /* 恢復標準高度 */\n}",
+  "recommendContentBackground": "rgba(20, 10, 104, 1)",
+  "recommendContentCss": "",
+  "titles": {
+    "recommendedRoutes": "",
+    "recommendedBrowsers": "",
+    "selectedVideos": "/defaults/selectedVideos.png",
+    "hotPrograms": "/defaults/hotPrograms.png"
+  },
   "routeLinksImages": [
     {
-      "default": "/defaults/routeLinks-0-default-1774323570498.png",
-      "hover": "/defaults/routeLinks-0-hover-1774323574415.png",
+      "default": "/defaults/routeLinks-0-default.png",
+      "hover": "/defaults/routeLinks-0-hover.png",
       "href": ""
     },
     {
-      "default": "/defaults/routeLinks-1-default-1774323579530.png",
-      "hover": "/defaults/routeLinks-1-hover-1774323583422.png",
+      "default": "/defaults/routeLinks-1-default.png",
+      "hover": "/defaults/routeLinks-1-hover.png",
       "href": ""
     },
     {
-      "default": "/defaults/routeLinks-2-default-1774323588021.png",
-      "hover": "/defaults/routeLinks-2-hover-1774323592253.png",
+      "default": "/defaults/routeLinks-2-default.png",
+      "hover": "/defaults/routeLinks-2-hover.png",
       "href": ""
     },
     {
-      "default": "/defaults/routeLinks-3-default-1774323603851.png",
-      "hover": "/defaults/routeLinks-3-hover-1774323609158.png",
+      "default": "/defaults/routeLinks-3-default.png",
+      "hover": "/defaults/routeLinks-3-hover.png",
       "href": ""
     },
     {
-      "default": "/defaults/routeLinks-4-default-1774323613678.png",
-      "hover": "/defaults/routeLinks-4-hover-1774323617087.png",
+      "default": "/defaults/routeLinks-4-default.png",
+      "hover": "/defaults/routeLinks-4-hover.png",
       "href": ""
     },
     {
-      "default": "/defaults/routeLinks-5-default-1774323621403.png",
-      "hover": "/defaults/routeLinks-5-hover-1774323626058.png",
+      "default": "/defaults/routeLinks-5-default.png",
+      "hover": "/defaults/routeLinks-5-hover.png",
       "href": ""
     }
   ],
@@ -114,43 +124,43 @@
       "id": "tool-0",
       "name": "Tool 0",
       "href": "https://live.titan007.com/oldIndexall.aspx",
-      "default": "/defaults/toolIcons-0-default-1774323277649.png",
-      "hover": "/defaults/toolIcons-0-hover-1774323284537.png"
+      "default": "/defaults/toolIcons-0-default.png",
+      "hover": "/defaults/toolIcons-0-hover.png"
     },
     {
       "id": "tool-1",
       "name": "Tool 1",
       "href": "https://live.leisu.com",
-      "default": "/defaults/toolIcons-1-default-1774323376211.png",
-      "hover": "/defaults/toolIcons-1-hover-1774323383415.png"
+      "default": "/defaults/toolIcons-1-default.png",
+      "hover": "/defaults/toolIcons-1-hover.png"
     },
     {
       "id": "tool-2",
       "name": "Tool 2",
       "href": "https://live.nowscore.com/2in1.aspx",
-      "default": "/defaults/toolIcons-2-default-1774323417061.png",
-      "hover": "/defaults/toolIcons-2-hover-1774323421591.png"
+      "default": "/defaults/toolIcons-2-default.png",
+      "hover": "/defaults/toolIcons-2-hover.png"
     },
     {
       "id": "tool-3",
       "name": "Tool 3",
       "href": "https://v.douyin.com/KZUpEUBUIlI/",
-      "default": "/defaults/toolIcons-3-default-1774323450414.png",
-      "hover": "/defaults/toolIcons-3-hover-1774323469938.png"
+      "default": "/defaults/toolIcons-3-default.png",
+      "hover": "/defaults/toolIcons-3-hover.png"
     },
     {
       "id": "tool-4",
       "name": "Tool 4",
       "href": "https://www.baidu.com/",
-      "default": "/defaults/toolIcons-4-default-1774323497860.png",
-      "hover": "/defaults/toolIcons-4-hover-1774323504743.png"
+      "default": "/defaults/toolIcons-4-default.png",
+      "hover": "/defaults/toolIcons-4-hover.png"
     },
     {
       "id": "tool-5",
       "name": "Tool 5",
       "href": "https://x.com",
-      "default": "/defaults/toolIcons-5-default-1774323508953.png",
-      "hover": "/defaults/toolIcons-5-hover-1774323512138.png"
+      "default": "/defaults/toolIcons-5-default.png",
+      "hover": "/defaults/toolIcons-5-hover.png"
     }
   ],
   "videoThumbnails": [
@@ -158,42 +168,42 @@
       "id": "video-0",
       "title": "甜美Aura",
       "href": "https://www.fun99666.com/index.php/funfans/",
-      "image": "/defaults/videoThumbnails-0-image-1774324052854.png",
+      "image": "/defaults/videoThumbnails-0-image.png",
       "alt": ""
     },
     {
       "id": "video-1",
       "title": "变态马洛",
       "href": "https://www.fun99666.com/index.php/funfans/",
-      "image": "/defaults/videoThumbnails-1-image-1774324142369.png",
+      "image": "/defaults/videoThumbnails-1-image.png",
       "alt": ""
     },
     {
       "id": "video-2",
       "title": "阳光Hank",
       "href": "https://www.fun99666.com/index.php/funfans/",
-      "image": "/defaults/videoThumbnails-2-image-1774324148913.png",
+      "image": "/defaults/videoThumbnails-2-image.png",
       "alt": ""
     },
     {
       "id": "video-3",
       "title": "蹦蹦冲啊",
       "href": "https://www.fun99666.com/index.php/funfans/",
-      "image": "/defaults/videoThumbnails-3-image-1774324153273.png",
+      "image": "/defaults/videoThumbnails-3-image.png",
       "alt": ""
     },
     {
       "id": "video-4",
       "title": "专属福利",
       "href": "https://www.fun99666.com/index.php/funfans/",
-      "image": "/defaults/videoThumbnails-4-image-1774324156494.png",
+      "image": "/defaults/videoThumbnails-4-image.png",
       "alt": ""
     },
     {
       "id": "video-5",
       "title": "撩人双飞闺蜜秀",
       "href": "https://www.fun99666.com/index.php/funfans/",
-      "image": "/defaults/videoThumbnails-5-image-1774324159774.png",
+      "image": "/defaults/videoThumbnails-5-image.png",
       "alt": ""
     }
   ],
@@ -202,55 +212,55 @@
       "id": "program-0",
       "title": "NBA賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-0-image-1774324331915.png",
+      "image": "/defaults/programThumbnails-0-image.png",
       "alt": ""
     },
     {
       "id": "program-1",
       "title": "NBA賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-1-image-1774324337457.png",
+      "image": "/defaults/programThumbnails-1-image.png",
       "alt": ""
     },
     {
       "id": "program-2",
       "title": "NBA賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-2-image-1774324342099.png",
+      "image": "/defaults/programThumbnails-2-image.png",
       "alt": ""
     },
     {
       "id": "program-3",
-      "title": "NBA賽事",
+      "title": "英超賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-3-image-1774324349436.png",
+      "image": "/defaults/programThumbnails-3-image.png",
       "alt": ""
     },
     {
       "id": "program-4",
-      "title": "NBA賽事",
+      "title": "英超賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-4-image-1774324356045.png",
+      "image": "/defaults/programThumbnails-4-image.png",
       "alt": ""
     },
     {
       "id": "program-5",
-      "title": "NBA賽事",
+      "title": "英超賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-5-image-1774324362110.png",
+      "image": "/defaults/programThumbnails-5-image.png",
       "alt": ""
     }
   ],
   "carouselSlides": [
     {
       "id": "slide-0",
-      "image": "/defaults/carouselSlides-0-image-1774323696531.png",
+      "image": "/defaults/carouselSlides-0-image.png",
       "href": "https://bet9.net:9900/web/#/",
       "alt": "Carousel 0"
     },
     {
       "id": "slide-1",
-      "image": "/defaults/carouselSlides-1-image-1774323706402.png",
+      "image": "/defaults/carouselSlides-1-image.png",
       "href": "https://bet9.net:9900/web/#/",
       "alt": "Carousel 1"
     }
@@ -260,22 +270,39 @@
       "id": "float-0",
       "name": "Float 0",
       "href": "https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777",
-      "default": "/defaults/floatAdButtons-0-default-1774324606498.png",
-      "hover": "/defaults/floatAdButtons-0-hover-1774324612151.png"
+      "default": "/defaults/floatAdButtons-0-default.png",
+      "hover": "/defaults/floatAdButtons-0-hover.png",
+      "tablet": "/defaults/floatAdButtons-0-tablet.png",
+      "mobile": "/defaults/floatAdButtons-0-mobile.png"
     },
     {
       "id": "float-1",
       "name": "Float 1",
       "href": "https://www.douyin.com/user/MS4wLjABAAAAYBFyAHu_0cdTXYYCxW1TGRSPsU5Ku2wRkWBXBK7mXe0",
-      "default": "/defaults/floatAdButtons-1-default-1774324621557.png",
-      "hover": "/defaults/floatAdButtons-1-hover-1774324624507.png"
+      "default": "/defaults/floatAdButtons-1-default.png",
+      "hover": "/defaults/floatAdButtons-1-hover.png",
+      "tablet": "/defaults/floatAdButtons-1-tablet.png",
+      "mobile": "/defaults/floatAdButtons-1-mobile.png"
     },
     {
       "id": "float-2",
       "name": "Float 2",
       "href": "https://www.fun99666.com/",
-      "default": "/defaults/floatAdButtons-2-default-1774324633499.png",
-      "hover": "/defaults/floatAdButtons-2-hover-1774324638235.png"
+      "default": "/defaults/floatAdButtons-2-default.png",
+      "hover": "/defaults/floatAdButtons-2-hover.png",
+      "tablet": "/defaults/floatAdButtons-2-tablet.png",
+      "mobile": "/defaults/floatAdButtons-2-mobile.png"
     }
+  ],
+  "pageLayout": [
+    "banner",
+    "buttonLinks",
+    "recommend",
+    "programme",
+    "floatAd"
+  ],
+  "programmeLayout": [
+    "hotPrograms",
+    "selectedVideos"
   ]
 }

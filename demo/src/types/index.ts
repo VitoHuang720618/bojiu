@@ -66,6 +66,8 @@ export interface SiteConfig {
   useApi: boolean
   navigation: NavigationItem[]
   floatAdButtons: FloatAdButton[]
+  pageLayout?: string[]
+  programmeLayout?: string[]
   footer: FooterConfig
   theme: ThemeConfig
 }

@@ -108,23 +108,5 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: opacity 0.6s ease-out;
-}
-
-img:not(.is-loaded) {
-  opacity: 0;
-}
-
-img.is-loaded {
-  opacity: 1;
-}
-
-img.has-error {
-  opacity: 0.5;
-  filter: grayscale(100%);
-}
+@import "/src/assets/styles/components/ImageComponent.css";
 </style>

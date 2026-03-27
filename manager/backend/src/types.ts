@@ -7,6 +7,10 @@ export interface AssetManifest {
     mobile: string
   }
   backgroundImage?: string
+  headerStyles: VisualStylesConfig
+  recommendStyles: VisualStylesConfig
+  headerCss?: string
+  recommendContentCss?: string
   buttonLinks: ButtonLinkConfig[]
   carouselSlides: CarouselSlide[]
   titles: TitleImages
@@ -15,6 +19,8 @@ export interface AssetManifest {
   videoThumbnails: VideoThumbnail[]
   programThumbnails: ProgramThumbnail[]
   floatAdButtons: FloatAdButton[]
+  pageLayout?: string[]
+  programmeLayout?: string[]
 }
 
 export interface ButtonLinkConfig {
@@ -136,5 +142,27 @@ export class UploadError extends Error {
     this.name = 'UploadError'
     this.type = options.type
     this.details = options.details
+  }
+}
+
+// 視覺樣式配置介面
+export interface VisualStylesConfig {
+  height?: number
+  backgroundMode: 'solid' | 'gradient'
+  solidColor: string
+  opacity: number
+  gradient: {
+    color1: string
+    color2: string
+    angle: number
+  }
+  boxShadow: {
+    enabled: boolean
+    x: number
+    y: number
+    blur: number
+    spread: number
+    color: string
+    opacity: number
   }
 }

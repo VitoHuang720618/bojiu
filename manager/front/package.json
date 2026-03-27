@@ -10,11 +10,14 @@
     "test": "vitest"
   },
   "dependencies": {
+    "grapesjs": "^0.22.14",
+    "grapesjs-preset-webpage": "^1.0.3",
     "pinia": "2",
     "socket.io-client": "^4.8.3",
     "vue": "^3.4.0",
     "vue-cropper": "^1.1.4",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

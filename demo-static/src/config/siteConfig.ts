@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import type { SiteConfig } from '../types'
+import { assetManifest as originalAssetManifest } from './assetManifest'
 
 // Get base URL from environment or use relative path for container deployment
 const getBaseUrl = () => {
@@ -83,6 +84,11 @@ export const updateLocalAssets = (config: any) => {
   if (config.logo !== undefined) Object.assign(assetsState, { logo: config.logo })
   if (config.banner) Object.assign(banner, config.banner)
   if (config.backgroundImage !== undefined) Object.assign(assetsState, { backgroundImage: config.backgroundImage })
+  if (config.headerBackgroundRgba !== undefined) Object.assign(assetsState, { headerBackgroundRgba: config.headerBackgroundRgba })
+  if (config.headerCss !== undefined) Object.assign(assetsState, { headerCss: config.headerCss })
+  if (config.recommendContentBackground !== undefined) Object.assign(assetsState, { recommendContentBackground: config.recommendContentBackground })
+  if (config.recommendContentCss !== undefined) Object.assign(assetsState, { recommendContentCss: config.recommendContentCss })
+  if (config.titles) Object.assign(titles, config.titles)
   if (config.buttonLinks) {
     siteConfig.navigation.splice(0, siteConfig.navigation.length, ...config.buttonLinks)
   }
@@ -93,10 +99,16 @@ export const updateLocalAssets = (config: any) => {
   if (config.programThumbnails) programThumbnails.splice(0, programThumbnails.length, ...config.programThumbnails)
   if (config.carouselSlides) carouselSlides.splice(0, carouselSlides.length, ...config.carouselSlides)
   if (config.floatAdButtons) floatAdButtons.splice(0, floatAdButtons.length, ...config.floatAdButtons)
-  if (config.titles) Object.assign(titles, config.titles)
+  if (config.pageLayout) {
+    pageLayout.splice(0, pageLayout.length, ...config.pageLayout)
+  }
+  if (config.programmeLayout) {
+    programmeLayout.splice(0, programmeLayout.length, ...config.programmeLayout)
+  }
 }
 
-// Function to load runtime config
+// Re-export assetManifest for use in other modules
+export const assetManifest = originalAssetManifest
 export const loadRuntimeConfig = async () => {
   try {
     const response = await fetch('/site-settings.json')
@@ -123,6 +135,9 @@ export const loadRuntimeConfig = async () => {
 
 // --- Migrated Assets & Content ---
 
+export const pageLayout = reactive<string[]>(['banner', 'buttonLinks', 'recommend', 'programme', 'floatAd'])
+export const programmeLayout = reactive<string[]>(['selectedVideos', 'hotPrograms'])
+
 export const banner = reactive({
   "pc": "/defaults/banner-pc.png",
   "tablet": "/defaults/banner-tablet.png",
@@ -131,7 +146,11 @@ export const banner = reactive({
 
 export const assetsState = reactive({
   logo: "/assets/images/logo.png",
-  backgroundImage: "/defaults/backgroundImage.png"
+  backgroundImage: "/defaults/backgroundImage.png",
+  headerBackgroundRgba: "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
+  headerCss: "",
+  recommendContentBackground: "rgba(20, 10, 104, 1.0)",
+  recommendContentCss: ""
 })
 
 export const titles = reactive({
@@ -427,33 +446,33 @@ export const carouselSlides = reactive([
 ])
 
 export const floatAdButtons = reactive([
-  {
-    "id": "float-0",
-    "name": "Float 0",
-    "href": "https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777",
-    "default": "/uploads/floatAdButtons-0-default-1774324606498.png",
-    "hover": "/uploads/floatAdButtons-0-hover-1774324612151.png",
-    "tablet": "/uploads/floatAdButtons-0-tablet-1774324650635.png",
-    "mobile": "/uploads/floatAdButtons-0-mobile-1774325524932.png"
-  },
-  {
-    "id": "float-1",
-    "name": "Float 1",
-    "href": "https://www.douyin.com/user/MS4wLjABAAAAYBFyAHu_0cdTXYYCxW1TGRSPsU5Ku2wRkWBXBK7mXe0",
-    "default": "/uploads/floatAdButtons-1-default-1774324621557.png",
-    "hover": "/uploads/floatAdButtons-1-hover-1774324624507.png",
-    "tablet": "/uploads/floatAdButtons-1-tablet-1774324655594.png",
-    "mobile": "/uploads/floatAdButtons-1-mobile-1774325528535.png"
-  },
-  {
-    "id": "float-2",
-    "name": "Float 2",
-    "href": "https://www.fun99666.com/",
-    "default": "/uploads/floatAdButtons-2-default-1774324633499.png",
-    "hover": "/uploads/floatAdButtons-2-hover-1774324638235.png",
-    "tablet": "/uploads/floatAdButtons-2-tablet-1774324659376.png",
-    "mobile": "/uploads/floatAdButtons-2-mobile-1774325532199.png"
-  }
+    {
+      "id": "float-0",
+      "name": "Float 0",
+      "href": "https://example.com/customer-service",
+      "default": "/defaults/floatAdButtons-0-default-1774324606498.png",
+      "hover": "/defaults/floatAdButtons-0-hover-1774324612151.png",
+      "tablet": "/defaults/floatAdButtons-0-tablet-1774324650635.png",
+      "mobile": "/defaults/floatAdButtons-0-mobile-1774325524932.png"
+    },
+    {
+      "id": "float-1",
+      "name": "Float 1",
+      "href": "https://example.com/girl-douyin",
+      "default": "/defaults/floatAdButtons-1-default-1774324621557.png",
+      "hover": "/defaults/floatAdButtons-1-hover-1774324624507.png",
+      "tablet": "/defaults/floatAdButtons-1-tablet-1774324655594.png",
+      "mobile": "/defaults/floatAdButtons-1-mobile-1774325528535.png"
+    },
+    {
+      "id": "float-2",
+      "name": "Float 2",
+      "href": "https://example.com/sports-douyin",
+      "default": "/defaults/floatAdButtons-2-default-1774324633499.png",
+      "hover": "/defaults/floatAdButtons-2-hover-1774324638235.png",
+      "tablet": "/defaults/floatAdButtons-2-tablet-1774324659376.png",
+      "mobile": "/defaults/floatAdButtons-2-mobile-1774325532199.png"
+    }
 ])
 
 export const videoContent = videoThumbnails

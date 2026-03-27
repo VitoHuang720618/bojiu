@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import type { SiteConfig } from '../types'
+import { assetManifest as originalAssetManifest } from './assetManifest'
 
 // Get base URL from environment or use relative path for container deployment
 const getBaseUrl = () => {
@@ -83,6 +84,11 @@ export const updateLocalAssets = (config: any) => {
   if (config.logo !== undefined) Object.assign(assetsState, { logo: config.logo })
   if (config.banner) Object.assign(banner, config.banner)
   if (config.backgroundImage !== undefined) Object.assign(assetsState, { backgroundImage: config.backgroundImage })
+  if (config.headerBackgroundRgba !== undefined) Object.assign(assetsState, { headerBackgroundRgba: config.headerBackgroundRgba })
+  if (config.headerCss !== undefined) Object.assign(assetsState, { headerCss: config.headerCss })
+  if (config.recommendContentBackground !== undefined) Object.assign(assetsState, { recommendContentBackground: config.recommendContentBackground })
+  if (config.recommendContentCss !== undefined) Object.assign(assetsState, { recommendContentCss: config.recommendContentCss })
+  if (config.titles) Object.assign(titles, config.titles)
   if (config.buttonLinks) {
     siteConfig.navigation.splice(0, siteConfig.navigation.length, ...config.buttonLinks)
   }
@@ -93,10 +99,16 @@ export const updateLocalAssets = (config: any) => {
   if (config.programThumbnails) programThumbnails.splice(0, programThumbnails.length, ...config.programThumbnails)
   if (config.carouselSlides) carouselSlides.splice(0, carouselSlides.length, ...config.carouselSlides)
   if (config.floatAdButtons) floatAdButtons.splice(0, floatAdButtons.length, ...config.floatAdButtons)
-  if (config.titles) Object.assign(titles, config.titles)
+  if (config.pageLayout) {
+    pageLayout.splice(0, pageLayout.length, ...config.pageLayout)
+  }
+  if (config.programmeLayout) {
+    programmeLayout.splice(0, programmeLayout.length, ...config.programmeLayout)
+  }
 }
 
-// Function to load runtime config
+// Re-export assetManifest for use in other modules
+export const assetManifest = originalAssetManifest
 export const loadRuntimeConfig = async () => {
   try {
     const response = await fetch('/site-settings.json')
@@ -123,6 +135,9 @@ export const loadRuntimeConfig = async () => {
 
 // --- Migrated Assets & Content ---
 
+export const pageLayout = reactive<string[]>(['banner', 'buttonLinks', 'recommend', 'programme', 'floatAd'])
+export const programmeLayout = reactive<string[]>(['selectedVideos', 'hotPrograms'])
+
 export const banner = reactive({
   "pc": "/defaults/banner-pc.png",
   "tablet": "/defaults/banner-tablet.png",
@@ -131,7 +146,11 @@ export const banner = reactive({
 
 export const assetsState = reactive({
   logo: "/assets/images/logo.png",
-  backgroundImage: "/defaults/backgroundImage.png"
+  backgroundImage: "/defaults/backgroundImage.png",
+  headerBackgroundRgba: "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
+  headerCss: "",
+  recommendContentBackground: "rgba(20, 10, 104, 1.0)",
+  recommendContentCss: ""
 })
 
 export const titles = reactive({

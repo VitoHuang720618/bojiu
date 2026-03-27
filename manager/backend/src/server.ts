@@ -481,6 +481,24 @@ async function startServer() {
           return url
         }
 
+        // 輔助函式：將視覺樣式轉為 CSS 字串
+        const hexToRgba = (hex: string, opacity: number) => {
+          if (!hex || !hex.startsWith('#')) return `rgba(0, 0, 0, ${opacity})`
+          const r = parseInt(hex.slice(1, 3), 16)
+          const g = parseInt(hex.slice(3, 5), 16)
+          const b = parseInt(hex.slice(5, 7), 16)
+          return `rgba(${r}, ${g}, ${b}, ${opacity})`
+        }
+
+        const getBackgroundString = (styles: any) => {
+          if (!styles) return ''
+          if (styles.backgroundMode === 'solid') {
+            return hexToRgba(styles.solidColor, styles.opacity)
+          } else {
+            return `linear-gradient(${styles.gradient.angle}deg, ${styles.gradient.color1} 0%, ${styles.gradient.color2} 100%)`
+          }
+        }
+
         // Process Data & Assets
         const runtimeConfig = {
           siteConfig: {
@@ -500,6 +518,16 @@ async function startServer() {
             mobile: processImage(config.banner.mobile)
           },
           backgroundImage: processImage(config.backgroundImage || ''),
+          headerBackgroundRgba: getBackgroundString(config.headerStyles) || 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
+          headerCss: config.headerCss || '',
+          recommendContentBackground: getBackgroundString(config.recommendStyles) || 'rgba(20, 10, 104, 1.0)',
+          recommendContentCss: config.recommendContentCss || '',
+          titles: {
+            recommendedRoutes: processImage(config.titles?.recommendedRoutes || ''),
+            recommendedBrowsers: processImage(config.titles?.recommendedBrowsers || ''),
+            selectedVideos: processImage(config.titles?.selectedVideos || ''),
+            hotPrograms: processImage(config.titles?.hotPrograms || '')
+          },
           routeLinksImages: (config.routeLinks || []).map(link => ({
             default: processImage(link.default),
             hover: processImage(link.hover),
@@ -546,7 +574,9 @@ async function startServer() {
             hover: processImage(btn.hover),
             tablet: processImage(btn.tablet || ''),
             mobile: processImage(btn.mobile || '')
-          }))
+          })),
+          pageLayout: (config as any).pageLayout || ['banner', 'buttonLinks', 'recommend', 'programme', 'floatAd'],
+          programmeLayout: (config as any).programmeLayout || ['selectedVideos', 'hotPrograms']
         }
 
         // Write site-settings.json
