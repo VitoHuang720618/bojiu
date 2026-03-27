@@ -97,91 +97,101 @@ chmod +x deploy_temp/deploy.sh
 # 5.6 生成 Nginx 設定範本與工具
 echo "📜 Generating Nginx configuration templates..."
 cat <<'EOF' > deploy_temp/nginx-template.conf
-# --- 1. 前端 Demo 頁面 ---
-location / {
-    root BASE_PATH/demo;
-    try_files $uri $uri/ /index.html;
+server {
+    listen 80;
+    server_name YOUR_DOMAIN_OR_IP; # 範例: bojiu.vito.website
+    client_max_body_size 50M;
 
-    location ~* \.(js|css)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
+    # 前端 Demo 頁面
+    location / {
+        root BASE_PATH/demo;
+        try_files $uri $uri/ /index.html;
+
+        location ~* \.(js|css)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
     }
-}
 
-# --- 2. 靜態設定檔與資產 ---
-location /site-settings.json {
-    alias BASE_PATH/demo/site-settings.json;
-    add_header Cache-Control "no-cache, must-revalidate";
-}
-
-location /defaults/ {
-    alias BASE_PATH/demo/defaults/;
-    add_header Cache-Control "no-cache, must-revalidate";
-}
-
-# --- 3. 管理後台前端 (Admin) ---
-location /admin/ {
-    alias BASE_PATH/admin/;
-    try_files $uri $uri/ /admin/index.html;
-
-    # Basic Auth Security
-    # auth_basic "Restricted Access";
-    # auth_basic_user_file BASE_PATH/deploy/.htpasswd;
-
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
+    # 靜態設定檔與資產
+    location /site-settings.json {
+        alias BASE_PATH/demo/site-settings.json;
+        add_header Cache-Control "no-cache, must-revalidate";
     }
-}
 
-# --- 4. 後台圖片上傳區 (Uploads) ---
-location /uploads/ {
-    alias BASE_PATH/backend/uploads/;
-    add_header Cache-Control "no-cache, must-revalidate";
-    expires -1;
-
-    location ~* \.(jpg|jpeg|png|gif|webp)$ { }
-    location ~* \.(php|pl|py|jsp|asp|sh|cgi|js|html)$ { deny all; }
-}
-
-# --- 6. 內部後端 API 代理 ---
-location /api/ {
-    proxy_pass http://127.0.0.1:3002;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-
-    add_header Access-Control-Allow-Origin "*" always;
-    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
-    add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization" always;
-
-    if ($request_method = 'OPTIONS') {
-        add_header Access-Control-Allow-Origin "*";
-        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS";
-        add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization";
-        add_header Access-Control-Max-Age 1728000;
-        add_header Content-Type 'text/plain; charset=utf-8';
-        add_header Content-Length 0;
-        return 204;
+    location /defaults/ {
+        alias BASE_PATH/demo/defaults/;
+        add_header Cache-Control "no-cache, must-revalidate";
     }
-}
 
-# --- 7. 健康檢查 ---
-location /health {
-    access_log off;
-    return 200 "healthy\n";
-    add_header Content-Type text/plain;
+    # 管理後台前端 (Admin)
+    location /admin/ {
+        alias BASE_PATH/admin/;
+        try_files $uri $uri/ /admin/index.html;
+
+        # Basic Auth Security
+        # auth_basic "Restricted Access";
+        # auth_basic_user_file BASE_PATH/deploy/.htpasswd;
+
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+    }
+
+    # 後台圖片上傳區 (Uploads)
+    location /uploads/ {
+        alias BASE_PATH/backend/uploads/;
+        add_header Cache-Control "no-cache, must-revalidate";
+        expires -1;
+
+        location ~* \.(jpg|jpeg|png|gif|webp)$ { }
+        location ~* \.(php|pl|py|jsp|asp|sh|cgi|js|html)$ { deny all; }
+    }
+
+    # 內部後端 API 代理
+    location /api/ {
+        proxy_pass http://127.0.0.1:3002;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        add_header Access-Control-Allow-Origin "*" always;
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+        add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization" always;
+
+        if ($request_method = 'OPTIONS') {
+            add_header Access-Control-Allow-Origin "*";
+            add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS";
+            add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization";
+            add_header Access-Control-Max-Age 1728000;
+            add_header Content-Type 'text/plain; charset=utf-8';
+            add_header Content-Length 0;
+            return 204;
+        }
+    }
+
+    # 健康檢查
+    location /health {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+    }
+
+    # 日誌記錄
+    error_log /var/log/nginx/bojiu_error.log;
+    access_log /var/log/nginx/bojiu_access.log;
 }
 EOF
 
 cat <<'EOF' > deploy_temp/generate-nginx-conf.sh
 #!/bin/bash
 CURRENT_DIR=$(pwd)
-echo "🔍 Generating customized Nginx config for path: $CURRENT_DIR"
+echo "🔍 Generating complete Nginx server block for path: $CURRENT_DIR"
 sed "s|BASE_PATH|$CURRENT_DIR|g" nginx-template.conf > bojiu.nginx.conf
 echo "✨ Success! Config generated: bojiu.nginx.conf"
-echo "👉 You can now include this in your nginx server block."
+echo "👉 You can now symlink this file to /etc/nginx/sites-enabled/ or paste its content into your Nginx config."
 EOF
 chmod +x deploy_temp/generate-nginx-conf.sh
 
@@ -192,7 +202,7 @@ git init
 git remote add origin git@github.com:VitoHuang720618/bojiu.git
 git checkout -b release
 git add --all --force
-git commit -m "Distribution: Auto-compiled release with nginx tools at $(date '+%Y-%m-%d %H:%M:%S')"
+git commit -m "Distribution: Auto-compiled release with refined nginx tools at $(date '+%Y-%m-%d %H:%M:%S')"
 git push -f origin release
 
 # 7. 清理現場
