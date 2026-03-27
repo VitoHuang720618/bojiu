@@ -76,67 +76,74 @@ yarn dev
     - 預設帳號: `admin`
     - 預設密碼: `Admin123!`
 
-## 雲端部署注意事項
+## 生產環境發布流程 (Production Release Workflow)
 
-### 1. 本地構建與推送
-專案已優化，您可以直接將代碼推送到 GitHub，並在 Zeabur 或 GCP 上進行自動化部署。
+本專案採用 **「源碼與成品分離」** 的雙分支發布策略，以確保伺服器環境的輕量化與部署的高效性。
 
-### 2. 持久化存儲 (Volumes)
-**極其重要**：在雲端部署時，必須掛載以下目錄以確保數據不遺失：
-- `/app/data`：存放 `config.json` 與 `users.db` (資料庫)。
-- `/app/uploads`：存放所有管理員上傳的圖片資源。
+### 1. 分支策略 (Branch Strategy)
+- **`master` 分支**：存放所有 TypeScript/Vue 原始碼，用於開發與版本管理。
+- **`release` 分支**：僅存放編譯後的成品 (`dist/`)、靜態資產與自動化部署腳本。
 
-### 3. 環境變數
-- `NODE_ENV`: 建議設置為 `production`。
-- `PORT`: 雲端平台會自動注入，Nginx 已配置為自動適配。
+### 2. 本地發布流程 (本地開發機執行)
+當您在 `master` 分支完成修改並測試無誤後，請執行根目錄的自動化發布腳本：
+```bash
+./publish-release.sh
+```
+此腳本會自動完成：
+- 三端編譯 (Demo, Manager Front, Backend)。
+- 收集成品至臨時目錄。
+- 生成伺服器部署工具 (`deploy.sh`, `generate-nginx-conf.sh`)。
+- 強制推送至 GitHub 的 `release` 分支。
 
-## 技術棧
+### 3. 伺服器部署流程 (GCP 伺服器執行)
+在伺服器的 `bojiu-release` 目錄下，僅需執行以下兩步：
+```bash
+# 1. 抓取最新成品
+git fetch origin release && git reset --hard origin/release
 
-- **前端**：Vue 3, TypeScript, Vite, Pinia
-- **後端**：Node.js, Express, SQLite3
-- **部署**：Docker, Nginx
+# 2. 啟動全自動部署
+./deploy.sh
+```
+`deploy.sh` 會自動處理 PM2 安裝、依賴安裝、以及 **數據金庫 (Persistent Storage)** 的掛載。
 
-## 開發規範與設計決策
+---
 
-### 響應式設計斷點 (RWD Breakpoints)
+## 數據持久化與保護 (Data Persistence)
 
-本專案為了適應現代化移動設備（如大螢幕手機、折疊機），針對「手機」的判定範圍進行了優化調整，而不僅僅遵循傳統的 430px 界線。
+為了防止代碼更新時覆蓋掉使用者上傳的圖片或數據，專案採用了 **「金庫隔離與軟連結」** 架構。
 
-- **Mobile (< 740px)**
-  - **判定邏輯**：寬度小於 740px 的所有設備皆視為「手機」。
-  - **設計原因**：傳統的 `< 430px` 僅能涵蓋標準 iPhone/Android 手機。許多現代大尺寸手機（如 iPhone Pro Max）或折疊機在展開前，寬度往往介於 430px ~ 740px 之間。
-  - **使用者體驗**：將此區間歸類為 Mobile，可確保這些手持設備使用者能看到專為直立閱讀優化的版面（如較大的 Banner 字體、單欄排版），而非縮小的平板/桌面介面。
+### 1. 數據金庫 (`bojiu-data`)
+所有具備持久化屬性的資料皆存放於專案路徑平級的 `../bojiu-data` 資料夾中，包含：
+- `uploads/`：使用者上傳的圖片、Banner。
+- `data/`：`config.json` (網站設定) 與 `users.db` (帳號資料庫)。
+- `site-settings.json`：前端使用的靜態配置。
 
-- **Tablet (740px ~ 1279px)**
-  - **適用設備**：iPad Mini、iPad Air、iPad Pro (直立)。
-  - **佈局特性**：流體佈局 (Fluid Layout)，適應各種平板尺寸。
+### 2. 空間傳送門 (Symlinks)
+每當執行 `./deploy.sh` 時，腳本會自動建立絕對路徑的軟連結，將程式內部的路徑指向外部金庫。這意味著：
+- **代碼更新不會殺死數據**：即使您 `git reset --hard` 清空代碼，金庫內的資料依然穩如泰山。
+- **維修方便**：您可以單獨備份整個 `bojiu-data` 資料夾。
 
-- **Desktop (>= 1280px)**
-  - **適用設備**：筆記型電腦、桌上型螢幕。
-  - **佈局特性**：寬螢幕設計，最大內容寬度限制為 1500px。
+---
 
-## 架構決策與疑難排解 (Architecture & Troubleshooting)
+## Nginx 配置工具
 
-### 1. 認證機制 (Dual Authentication)
-本專案採用雙層認證架構：
-- **第一層 (Nginx)**: Basic Auth (`/admin/` 路徑)。
-  - 目的：保護後台入口，防止被掃描器或未授權者接觸。
-  - 特性：瀏覽器層級驗證，除非關閉瀏覽器，否則不會過期。
-- **第二層 (Application)**: JWT (JSON Web Tokens)。
-  - 目的：應用程式內部的權限控管 (RBAC)。
-  - 特性：
-    - Access Token: 1 小時過期。
-    - Refresh Token: 7 天過期 (存於 localStorage)。
-    - **自動換證機制**: 前端 `apiService` 會在收到 401 錯誤時自動使用 Refresh Token 換取新憑證，使用者無感。
+我們為佈署人員提供了自動化配置工具：
+1. **`nginx-template.conf`**：預先封裝好的 Nginx `server` 區塊範本。
+2. **`generate-nginx-conf.sh`**：執行後會自動偵測當前目錄的絕對路徑，產出一份與環境完全對齊的 `bojiu.nginx.conf`。
 
-### 2. 圖片上傳 (Upload Handling)
-- **問題**: `apiService` 曾預設強制加入 `Content-Type: application/json`，導致 `FormData` 上傳失敗 (500 Error)。
-- **解決**: `apiService` 現已加入自動判斷邏輯，當偵測到 `FormData` 時會自動略過 Content-Type 設定，讓瀏覽器自動生成正確的 Boundary。
+---
 
-### 3. 本地開發 (Local Development)
-- **Vite Proxy**: 前端 (3001) 透過 `vite.config.ts` 的 Proxy 設定轉發 API 請求至後端 (3002)。
-- **常見錯誤**: 若出現 `ECONNREFUSED`，代表後端 Server 未啟動。請確保同時開啟兩個終端機分別執行 `yarn dev:manager` 和 `yarn dev:backend`。
+## 預設認證資訊
+
+- **後台入口 (Nginx Basic Auth)**:
+  - 帳號: `guard_x92`
+  - 密碼: `X92_#Titan_Shield_@2026`
+- **後台登入 (Application Auth)**:
+  - 預設帳號: `admin`
+  - 預設密碼: `Admin123!` (已停用強制修改密碼，可直接使用)
 
 ## 授權
 
 私有專案
+
+
