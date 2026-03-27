@@ -59,7 +59,7 @@ touch deploy_temp/demo/defaults/.gitkeep
 
 # 5.5 生成伺服器部署腳本 (deploy.sh)
 echo "📜 Generating server-side deploy.sh with Persistent Storage support..."
-cat <<'EOF' > deploy_temp/deploy.sh
+cat <<'EOF' | tr -d '\r' > deploy_temp/deploy.sh
 #!/bin/bash
 set -e
 echo "🚀 [Deploy] Starting server-side update with Persistent Storage..."
@@ -71,13 +71,11 @@ if ! command -v pm2 &> /dev/null; then
 fi
 
 # 2. 建立持久化數據金庫 (Persistent Storage)
-# 我們把數據放在與專案目錄平級的地方，避免 Git reset 覆寫
 DATA_ROOT="../bojiu-data"
 mkdir -p "$DATA_ROOT/uploads" "$DATA_ROOT/defaults" "$DATA_ROOT/data"
 
 echo "🔐 Checking Persistent Data..."
 
-# 初始化金庫 (如果裡面是空的，就把現在 code 裡的預設圖搬進去)
 if [ ! -f "$DATA_ROOT/data/config.json" ]; then
     echo "📦 Initializing Persistent Data from templates..."
     cp backend/data/config.json "$DATA_ROOT/data/"
@@ -88,10 +86,7 @@ if [ ! -f "$DATA_ROOT/data/config.json" ]; then
 fi
 
 # 3. 建立軟連結 (Symlink) 傳送門
-# 先移除 code 裡原本的空白目錄/檔案
 rm -rf backend/uploads backend/data demo/defaults demo/site-settings.json
-
-# 建立傳送門連往金庫
 ln -snf "$DATA_ROOT/uploads" backend/uploads
 ln -snf "$DATA_ROOT/data" backend/data
 ln -snf "$DATA_ROOT/defaults" demo/defaults
@@ -105,16 +100,17 @@ cd backend
 npm install --production
 cd ..
 
-# 5. 檢查並使用 PM2 啟動/重啟服務
-if pm2 show bojiu-backend > /dev/null 2>&1; then
+# 5. 啟動或重啟 PM2 服務 (強制使用當前路徑以避免導航錯誤)
+APP_PATH=$(pwd)/backend/dist/server.js
+if pm2 show bojiu-backend &>/dev/null; then
     echo "♻️ Restarting existing bojiu-backend..."
     pm2 restart bojiu-backend
 else
     echo "🆕 Starting new bojiu-backend..."
-    pm2 start backend/dist/server.js --name "bojiu-backend"
+    pm2 start "$APP_PATH" --name "bojiu-backend"
 fi
 
-# 6. 保存狀態確保開機自啟
+# 6. 保存狀態
 echo "💾 Saving PM2 process list..."
 pm2 save
 
@@ -213,7 +209,7 @@ server {
 }
 EOF
 
-cat <<'EOF' > deploy_temp/generate-nginx-conf.sh
+cat <<'EOF' | tr -d '\r' > deploy_temp/generate-nginx-conf.sh
 #!/bin/bash
 CURRENT_DIR=$(pwd)
 echo "🔍 Generating complete Nginx server block for path: $CURRENT_DIR"
