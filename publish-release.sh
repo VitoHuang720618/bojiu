@@ -57,6 +57,36 @@ cp -r demo/public/defaults/* deploy_temp/backend/uploads/
 touch deploy_temp/backend/uploads/.gitkeep
 touch deploy_temp/demo/defaults/.gitkeep
 
+# 5.5 生成伺服器部署腳本 (deploy.sh)
+echo "📜 Generating server-side deploy.sh..."
+cat <<EOF > deploy_temp/deploy.sh
+#!/bin/bash
+set -e
+echo "🚀 [Deploy] Starting server-side update..."
+
+# 1. 進入後端錄安裝必要的生產套件
+echo "📦 Installing backend production dependencies..."
+cd backend
+npm install --production
+cd ..
+
+# 2. 檢查並使用 PM2 啟動/重啟服務
+if pm2 show bojiu-backend > /dev/null 2>&1; then
+    echo "♻️ Restarting existing bojiu-backend..."
+    pm2 restart bojiu-backend
+else
+    echo "🆕 Starting new bojiu-backend..."
+    pm2 start backend/dist/server.js --name "bojiu-backend"
+fi
+
+# 3. 保存狀態確保開機自啟
+echo "💾 Saving PM2 process list..."
+pm2 save
+
+echo "✨ [Deploy] Server update completed successfully!"
+EOF
+chmod +x deploy_temp/deploy.sh
+
 # 6. 初始化 Git 並推送到 release 分支
 echo "📤 Pushing to GitHub [release] branch..."
 cd deploy_temp
@@ -64,7 +94,7 @@ git init
 git remote add origin git@github.com:VitoHuang720618/bojiu.git
 git checkout -b release
 git add --all --force
-git commit -m "Distribution: Auto-compiled release at $(date '+%Y-%m-%d %H:%M:%S')"
+git commit -m "Distribution: Auto-compiled release with deploy script at $(date '+%Y-%m-%d %H:%M:%S')"
 git push -f origin release
 
 # 7. 清理現場
