@@ -36,8 +36,9 @@ mkdir -p deploy_temp/demo/defaults deploy_temp/admin deploy_temp/backend/dist de
 # 5. 複製成品與基礎設施
 echo "🚚 Collecting artifacts..."
 
-# 前端與後台管理
+# 前端與後台管理 (剔除不必要的本地測試圖片)
 cp -r demo/dist/* deploy_temp/demo/
+rm -rf deploy_temp/demo/uploads # 強制移除從本地 public/uploads 帶過來的實體圖
 cp -r manager/front/dist/* deploy_temp/admin/
 
 # 後端 JS 執行檔與配置

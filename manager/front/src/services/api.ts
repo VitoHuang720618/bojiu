@@ -92,9 +92,12 @@ class ApiService {
   private refreshPromise: Promise<boolean> | null = null;
 
   constructor() {
-    // Use environment variable or default to relative path for container deployment
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
-    // Remove trailing slash if present
+    // 自動根據當前部署的 Base URL 演算出 API 位址
+    // 例如 BASE_URL 是 /b9-site/admin/，則 API 位址就是 /b9-site/api
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+    const rootBase = base.replace(/\/admin$/, '')
+
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL || `${rootBase}/api`
     this.baseUrl = this.baseUrl.replace(/\/$/, '')
   }
 
@@ -210,9 +213,10 @@ class ApiService {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_data');
 
-    // Redirect to login page
-    if (window.location.pathname !== '/login') {
-      window.location.href = '/login';
+    // 自動導回正確的登入頁面
+    const loginPath = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/login`
+    if (window.location.pathname !== loginPath) {
+      window.location.href = loginPath;
     }
   }
 

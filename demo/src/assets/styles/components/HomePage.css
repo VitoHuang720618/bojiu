@@ -1395,19 +1395,24 @@
   }
 }
 
-/* Float Ad */
-#float-ad {
-  top: 210px;
-  bottom: auto;
-  max-width: 120px;
-  /* 依照要求調整為 120px */
-  min-width: 75px;
-  position: fixed;
-  right: 20px;
-  width: auto;
-  /* 從百分比改為 auto 以便受 max-width 控制 */
-  z-index: 99;
-  transition: all 0.3s ease;
+/* Float Ad - PC 版專屬避讓邏輯 */
+@media (min-width: 1280px) {
+  #float-ad {
+    top: 210px;
+    bottom: auto;
+    max-width: 120px;
+    min-width: 75px;
+    position: fixed;
+    right: 20px;
+    width: auto;
+    z-index: 99;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #float-ad.at-top {
+    position: absolute; /* 在頂部時絕對定位，避開 Banner */
+    top: 620px;
+  }
 }
 
 @media (max-width: 1440px) and (min-width: 1280px) {
@@ -1420,7 +1425,7 @@
 @media (max-width: 1279px) {
   #float-ad {
     position: relative !important;
-    top: auto !important;
+    top: auto;
     bottom: 0 !important;
     right: auto !important;
     left: auto !important;
@@ -1488,7 +1493,8 @@
     gap: 0 !important;
     /* 增加間距讓按鈕更分散 */
     width: 100% !important;
-    padding: 0 150px !important; /* 依照要求調整為 150px */
+    padding: 0 150px !important;
+    /* 依照要求調整為 150px */
     box-sizing: border-box !important;
   }
 
@@ -1583,11 +1589,24 @@
   border: none;
   cursor: pointer;
   z-index: 999;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  
+  /* 預設隱藏 (頂部時) */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .scroll-to-top:hover {

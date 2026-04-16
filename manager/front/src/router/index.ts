@@ -6,13 +6,8 @@ import AdminLayout from '../layouts/AdminLayout.vue'
 import ConfigView from '../views/ConfigView.vue'
 import UsersView from '../views/UsersView.vue'
 
-// Get base path for container deployment
-const getBasePath = () => {
-  if (import.meta.env.PROD) {
-    return '/admin/'
-  }
-  return '/'
-}
+// Get base path from Vite config automatically
+const getBasePath = () => import.meta.env.BASE_URL
 
 const router = createRouter({
     history: createWebHistory(getBasePath()),

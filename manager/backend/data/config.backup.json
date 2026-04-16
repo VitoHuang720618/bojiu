@@ -1,7 +1,7 @@
 {
   "logo": "/uploads/logo.png",
   "banner": {
-    "pc": "",
+    "pc": "/uploads/banner-pc.jpg",
     "tablet": "/uploads/banner-tablet.jpg",
     "mobile": "/uploads/banner-mobile.jpg"
   },

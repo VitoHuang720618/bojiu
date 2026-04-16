@@ -2,19 +2,48 @@ import { reactive } from 'vue'
 import type { SiteConfig } from '../types'
 import { assetManifest as originalAssetManifest } from './assetManifest'
 
-// Get base URL from environment or use relative path for container deployment
-const getBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    return window.location.origin
+// Get Base URL helper
+const BASE_URL = import.meta.env.BASE_URL
+const BASE_PATH = BASE_URL.replace(/\/$/, '')
+
+/**
+ * 自動修復路徑，若路徑以 / 開頭且未包含 BASE_URL，則自動加上前綴
+ */
+export const fixPath = (path: string | undefined | null) => {
+  if (!path || typeof path !== 'string') return path
+  if (path.startsWith('/') && !path.startsWith(BASE_URL) && !path.startsWith('http')) {
+    return `${BASE_PATH}${path}`
   }
-  return import.meta.env.VITE_BASE_URL || ''
+  return path
+}
+
+// 遞迴掃描對象並修復所有路徑屬性
+const fixPathsInObject = (obj: any) => {
+  if (!obj || typeof obj !== 'object') return obj
+  if (Array.isArray(obj)) {
+    obj.forEach((item, index) => {
+      if (typeof item === 'string') {
+        obj[index] = fixPath(item)
+      } else {
+        fixPathsInObject(item)
+      }
+    })
+  } else {
+    for (const key in obj) {
+      if (typeof obj[key] === 'string' && (key === 'image' || key === 'default' || key === 'hover' || key === 'pc' || key === 'tablet' || key === 'mobile' || key === 'logo' || key === 'backgroundImage' || key === 'selectedVideos' || key === 'hotPrograms')) {
+        obj[key] = fixPath(obj[key])
+      } else {
+        fixPathsInObject(obj[key])
+      }
+    }
+  }
 }
 
 // Site configuration (Migrated from Manager)
 export const siteConfig = reactive<SiteConfig>({
   title: '博九娱乐网',
   description: 'B9 Entertainment Website',
-  baseUrl: getBaseUrl(),
+  baseUrl: typeof window !== 'undefined' ? window.location.origin : '',
   useApi: true, // Default to true, but assets below are used when API fails or is disabled
   floatAdButtons: [],
 
@@ -81,6 +110,9 @@ export const siteConfig = reactive<SiteConfig>({
 
 // Function to update local assets for non-API mode
 export const updateLocalAssets = (config: any) => {
+  // 自動修正傳入配置中所有路徑
+  fixPathsInObject(config)
+
   if (config.logo !== undefined) Object.assign(assetsState, { logo: config.logo })
   if (config.banner) Object.assign(banner, config.banner)
   if (config.backgroundImage !== undefined) Object.assign(assetsState, { backgroundImage: config.backgroundImage })
@@ -111,9 +143,12 @@ export const updateLocalAssets = (config: any) => {
 export const assetManifest = originalAssetManifest
 export const loadRuntimeConfig = async () => {
   try {
-    const response = await fetch('/site-settings.json')
+    const response = await fetch(`${BASE_URL}site-settings.json`)
     if (response.ok) {
       const runtimeConfig = await response.json()
+
+      // 自動修正 JSON 數據中所有路徑
+      fixPathsInObject(runtimeConfig)
 
       // Update core site config
       if (runtimeConfig.siteConfig) {
@@ -446,33 +481,33 @@ export const carouselSlides = reactive([
 ])
 
 export const floatAdButtons = reactive([
-    {
-      "id": "float-0",
-      "name": "Float 0",
-      "href": "https://example.com/customer-service",
-      "default": "/defaults/floatAdButtons-0-default-1774324606498.png",
-      "hover": "/defaults/floatAdButtons-0-hover-1774324612151.png",
-      "tablet": "/defaults/floatAdButtons-0-tablet-1774324650635.png",
-      "mobile": "/defaults/floatAdButtons-0-mobile-1774325524932.png"
-    },
-    {
-      "id": "float-1",
-      "name": "Float 1",
-      "href": "https://example.com/girl-douyin",
-      "default": "/defaults/floatAdButtons-1-default-1774324621557.png",
-      "hover": "/defaults/floatAdButtons-1-hover-1774324624507.png",
-      "tablet": "/defaults/floatAdButtons-1-tablet-1774324655594.png",
-      "mobile": "/defaults/floatAdButtons-1-mobile-1774325528535.png"
-    },
-    {
-      "id": "float-2",
-      "name": "Float 2",
-      "href": "https://example.com/sports-douyin",
-      "default": "/defaults/floatAdButtons-2-default-1774324633499.png",
-      "hover": "/defaults/floatAdButtons-2-hover-1774324638235.png",
-      "tablet": "/defaults/floatAdButtons-2-tablet-1774324659376.png",
-      "mobile": "/defaults/floatAdButtons-2-mobile-1774325532199.png"
-    }
+  {
+    "id": "float-0",
+    "name": "Float 0",
+    "href": "https://example.com/customer-service",
+    "default": "/defaults/floatAdButtons-0-default.png",
+    "hover": "/defaults/floatAdButtons-0-hover.png",
+    "tablet": "/defaults/floatAdButtons-0-tablet.png",
+    "mobile": "/defaults/floatAdButtons-0-mobile.png"
+  },
+  {
+    "id": "float-1",
+    "name": "Float 1",
+    "href": "https://example.com/girl-douyin",
+    "default": "/defaults/floatAdButtons-1-default.png",
+    "hover": "/defaults/floatAdButtons-1-hover.png",
+    "tablet": "/defaults/floatAdButtons-1-tablet.png",
+    "mobile": "/defaults/floatAdButtons-1-mobile.png"
+  },
+  {
+    "id": "float-2",
+    "name": "Float 2",
+    "href": "https://example.com/sports-douyin",
+    "default": "/defaults/floatAdButtons-2-default.png",
+    "hover": "/defaults/floatAdButtons-2-hover.png",
+    "tablet": "/defaults/floatAdButtons-2-tablet.png",
+    "mobile": "/defaults/floatAdButtons-2-mobile.png"
+  }
 ])
 
 export const videoContent = videoThumbnails

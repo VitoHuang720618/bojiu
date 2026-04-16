@@ -47,8 +47,8 @@ export class UserService {
         
         const defaultAdmin: CreateUserRequest = {
           username: 'admin',
-          email: 'admin@b9website.local',
-          password: 'Admin123!', // Ready to use immediately
+          email: 'admin@b9.com',
+          password: 'Admin123!',
           role: 'admin',
           mustChangePassword: false
         };
@@ -56,7 +56,6 @@ export class UserService {
         await this.createUser(defaultAdmin);
         console.log('Default admin user created successfully');
         console.log('⚠️  Default credentials: username=admin, password=Admin123!');
-        console.log('⚠️  Please change the default password on first login');
       }
     } catch (error) {
       console.error('Error creating default user:', error);

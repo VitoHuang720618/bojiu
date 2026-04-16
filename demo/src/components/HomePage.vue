@@ -96,6 +96,12 @@ const updateRecommendDynamicStyle = (css: string) => {
   dynamicStyleTag.value.innerHTML = css
 }
 
+// UI Interaction
+const isScrolled = ref(false)
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 150
+}
+
 // Lifecycle Hooks
 onMounted(async () => {
   await loadConfig()
@@ -103,6 +109,7 @@ onMounted(async () => {
   if (effectiveRecommendContentCss.value) {
     updateRecommendDynamicStyle(effectiveRecommendContentCss.value)
   }
+  window.addEventListener('scroll', handleScroll)
 })
 
 watch(() => effectiveRecommendContentCss.value, (newCss) => {
@@ -115,6 +122,7 @@ onUnmounted(() => {
     document.head.removeChild(dynamicStyleTag.value)
     dynamicStyleTag.value = null
   }
+  window.removeEventListener('scroll', handleScroll)
 })
 
 // UI Interaction
@@ -193,9 +201,7 @@ const scrollToTop = () => {
             <!-- Recommended Routes -->
             <div class="recommend-links">
               <div class="block-title recommend-routes-title">
-                <ImageComponent
-                  :src="effectiveTitles.recommendedRoutes"
-                  alt="皇冠圖標" class="crown-icon" />
+                <ImageComponent :src="effectiveTitles.recommendedRoutes" alt="皇冠圖標" class="crown-icon" />
                 <span class="title-text">推荐优质线路</span>
               </div>
               <div class="links">
@@ -210,9 +216,7 @@ const scrollToTop = () => {
           <!-- Bottom Tools (Browsers) -->
           <div class="recommend-footer">
             <div class="block-title">
-              <ImageComponent
-                :src="effectiveTitles.recommendedBrowsers"
-                alt="推荐浏览器标题" :lazy="false" />
+              <ImageComponent :src="effectiveTitles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />
             </div>
             <div class="tools">
               <div v-for="tool in effectiveToolIcons" :key="tool.id" class="item">
@@ -265,7 +269,7 @@ const scrollToTop = () => {
     </div>
 
     <!-- Float Ad Buttons -->
-    <div id="float-ad">
+    <div id="float-ad" :class="{ 'at-top': !isScrolled }">
       <!-- 收合/展開按鈕 -->
 
 
@@ -290,9 +294,9 @@ const scrollToTop = () => {
       </div>
     </div>
 
-    <!-- Scroll To Top Button -->
-    <button class="scroll-to-top" @click="scrollToTop" aria-label="Scroll to top">
-      <div class="arrow-up"></div>
+    <!-- Scroll To Top -->
+    <button class="scroll-to-top" @click="scrollToTop" title="回到頂部" :class="{ 'visible': isScrolled }">
+      <span class="arrow-up"></span>
     </button>
   </div>
 </template>

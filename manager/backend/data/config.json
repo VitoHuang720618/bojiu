@@ -268,8 +268,8 @@
     "floatAd"
   ],
   "programmeLayout": [
-    "hotPrograms",
-    "selectedVideos"
+    "selectedVideos",
+    "hotPrograms"
   ],
   "headerBackgroundRgba": "rgba(20, 10, 104, 1.00)",
   "recommendContentBackground": "rgba(20, 10, 104, 1.00)",

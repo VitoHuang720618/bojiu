@@ -111,14 +111,6 @@
               :getImageUrl="getImageUrl" @reset="resetFloatAdButtons" @add="addFloatAdButton"
               @remove="removeFloatAdButton" @upload="handleFloatAdImageUpload" @removeImage="removeFloatAdImage"
               @change="hasChanges = true" />
-
-            <!-- 頁面佈局配置 -->
-            <LayoutConfigPanel v-if="activeTab === 'layout'" 
-              :pageLayout="config.pageLayout || []"
-              :programmeLayout="config.programmeLayout || []" 
-              @update:pageLayout="(val) => config.pageLayout = val"
-              @update:programmeLayout="(val) => config.programmeLayout = val"
-              @change="hasChanges = true" />
           </div>
         </div>
 
@@ -233,7 +225,6 @@ const tabs = [
   { id: 'videos', label: '娛樂直播', icon: '🎬' },
   { id: 'programs', label: '賽事精選', icon: '🏆' },
   { id: 'floatads', label: '浮動廣告', icon: '📢' },
-  { id: 'layout', label: '頁面佈局', icon: '🧩' },
   { id: 'preview', label: '預覽頁面', icon: '👁️' }
 ]
 

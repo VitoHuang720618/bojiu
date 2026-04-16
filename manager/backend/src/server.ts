@@ -64,6 +64,13 @@ app.use(cors(corsOptions))
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true, limit: '50mb' }))
 
+// 🚀 全域請求紀錄器：幫我們抓出是誰在敲門
+app.use((req, res, next) => {
+  console.log(`[REQ] ${new Date().toLocaleTimeString()} - ${req.method} ${req.originalUrl} - IP: ${req.ip}`)
+  next()
+})
+
+
 // 靜態檔案服務 - 使用環境變量配置的路徑
 app.use('/uploads', express.static(uploadPath))
 app.use('/assets', express.static(path.join(__dirname, '../public/assets')))
@@ -95,10 +102,10 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     // 根據 assetPath 獲取身分標記
     const { assetPath } = req.body
-    
+
     // 獲取原始副檔名 (預設 .png)
     const ext = path.extname(file.originalname).toLowerCase() || '.png'
-    
+
     let targetFilename = `upload-${Date.now()}${ext}`
 
     if (assetPath) {
@@ -212,6 +219,20 @@ async function startServer() {
     })
 
     // Public configuration endpoint for demo frontend (no authentication required)
+    // 診斷路由：檢查路徑與權限
+    app.get('/api/test-path', async (req: Request, res: Response) => {
+      const diag = {
+        cwd: process.cwd(),
+        dirname: __dirname,
+        uploadsDir: UPLOADS_DIR,
+        uploadsExist: fs.existsSync(UPLOADS_DIR),
+        configPath: configPath,
+        configExist: fs.existsSync(path.join(configPath, 'config.json')),
+        env: process.env.NODE_ENV
+      }
+      res.json(diag)
+    })
+
     app.get('/api/public/config', async (req: Request, res: Response) => {
       try {
         const manifest = await assetManager.readManifest()
