@@ -2,6 +2,16 @@ import fs from 'fs'
 import path from 'path'
 import { AssetManifest, ConfigUpdateEvent } from './types.js'
 
+const DEFAULT_SECTION_COLORS = {
+  recommendFooterTitleBackground: '#200cc5',
+  recommendFooterItemBackground: '#221e1e',
+  recommendFooterItemHoverBackground: '#3625c3',
+  thumbnailTitleBackground: '#3b27de',
+  thumbnailBorderColor: '#f8eec9',
+  thumbnailTextColor: '#ffffff',
+  footerBackground: '#060417'
+}
+
 export class AssetManager {
   private configPath: string
   private backupPath: string
@@ -12,18 +22,31 @@ export class AssetManager {
   }
 
   /**
+   * 相容舊設定檔：新欄位未保存時，仍提供完整且可用的預設色彩。
+   */
+  private normalizeManifest(manifest: AssetManifest): AssetManifest {
+    return {
+      ...manifest,
+      sectionColors: {
+        ...DEFAULT_SECTION_COLORS,
+        ...(manifest.sectionColors || {})
+      }
+    }
+  }
+
+  /**
    * 讀取 Asset Manifest
    */
   async readManifest(): Promise<AssetManifest> {
     try {
       const data = await fs.promises.readFile(this.configPath, 'utf8')
-      return JSON.parse(data) as AssetManifest
+      return this.normalizeManifest(JSON.parse(data) as AssetManifest)
     } catch (error) {
       // 如果主配置檔案讀取失敗，嘗試從備份恢復
       try {
         console.warn('主配置檔案讀取失敗，嘗試從備份恢復...')
         const backupData = await fs.promises.readFile(this.backupPath, 'utf8')
-        const manifest = JSON.parse(backupData) as AssetManifest
+        const manifest = this.normalizeManifest(JSON.parse(backupData) as AssetManifest)
         
         // 恢復主配置檔案
         await this.writeManifest(manifest)
@@ -39,13 +62,14 @@ export class AssetManager {
    */
   async writeManifest(manifest: AssetManifest): Promise<void> {
     try {
+      const normalizedManifest = this.normalizeManifest(manifest)
       // 先備份現有配置
       await this.createBackup()
       
       // 寫入新配置
       await fs.promises.writeFile(
         this.configPath, 
-        JSON.stringify(manifest, null, 2), 
+        JSON.stringify(normalizedManifest, null, 2), 
         'utf8'
       )
     } catch (error) {

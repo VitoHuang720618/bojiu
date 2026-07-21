@@ -52,14 +52,12 @@
               :logo="config.logo"
               :headerStyles="config.headerStyles"
               :recommendStyles="config.recommendStyles"
-              :headerCss="config.headerCss"
-              :recommendContentCss="config.recommendContentCss"
+              :sectionColors="config.sectionColors"
               :titles="config.titles"
               :getImageUrl="getImageUrl"
               @update:headerStyles="(val) => updateConfigValue('headerStyles', val)"
               @update:recommendStyles="(val) => updateConfigValue('recommendStyles', val)"
-              @update:headerCss="(val: string) => updateConfigValue('headerCss', val)"
-              @update:recommendContentCss="(val: string) => updateConfigValue('recommendContentCss', val)"
+              @update:sectionColors="(val) => updateConfigValue('sectionColors', val)"
               @upload="(e, field) => handleImageUpload(e, field as any)"
               @clear="(field) => clearImage(field as any)"
               @uploadTitleImage="(e, field) => uploadTitleImage(e, field as any)"
@@ -280,6 +278,15 @@ const config = reactive<ConfigData>({
       opacity: 0.5
     }
   },
+  sectionColors: {
+    recommendFooterTitleBackground: '#200cc5',
+    recommendFooterItemBackground: '#221e1e',
+    recommendFooterItemHoverBackground: '#3625c3',
+    thumbnailTitleBackground: '#3b27de',
+    thumbnailBorderColor: '#f8eec9',
+    thumbnailTextColor: '#ffffff',
+    footerBackground: '#060417'
+  },
   headerCss: '',
   recommendContentCss: '',
   buttonLinks: [],
@@ -314,6 +321,16 @@ const loadConfig = async () => {
     }
 
     Object.assign(config, data)
+    config.sectionColors = {
+      recommendFooterTitleBackground: '#200cc5',
+      recommendFooterItemBackground: '#221e1e',
+      recommendFooterItemHoverBackground: '#3625c3',
+      thumbnailTitleBackground: '#3b27de',
+      thumbnailBorderColor: '#f8eec9',
+      thumbnailTextColor: '#ffffff',
+      footerBackground: '#060417',
+      ...(data.sectionColors || {})
+    }
 
     // 初始化佈局預設值
     if (!config.pageLayout) {
@@ -683,22 +700,11 @@ const clearImage = async (field: keyof ConfigData) => {
   }
 }
 
-// 通用配置更新方法
-const updateConfigValue = async (field: keyof ConfigData, value: any) => {
+// 一般設定（包含色彩）先標記為未保存，由使用者按「保存配置」統一寫入。
+const updateConfigValue = (field: keyof ConfigData, value: any) => {
+  if (JSON.stringify((config as any)[field]) === JSON.stringify(value)) return
   (config as any)[field] = value
   hasChanges.value = true
-  
-  loading.value = true
-  try {
-    await configService.updateConfig(config)
-    hasChanges.value = false
-    reloadPreview()
-  } catch (error) {
-    console.error(`更新 ${field} 失敗:`, error)
-    toast.error(`更新 ${field} 失敗`)
-  } finally {
-    loading.value = false
-  }
 }
 
 // 上傳標題圖片

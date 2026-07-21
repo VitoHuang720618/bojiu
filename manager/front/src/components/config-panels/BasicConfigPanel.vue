@@ -54,17 +54,17 @@
                     <div class="group-header">🎨 背景填充 (Fill)</div>
                     <div class="mode-selector">
                         <button class="mode-btn" :class="{ active: headerStyles.backgroundMode === 'solid' }"
-                            @click="updateHeaderStyle({ backgroundMode: 'solid' })">純色</button>
+                            @click="setHeaderBackgroundMode('solid')">純色</button>
                         <button class="mode-btn" :class="{ active: headerStyles.backgroundMode === 'gradient' }"
-                            @click="updateHeaderStyle({ backgroundMode: 'gradient' })">線性漸層</button>
+                            @click="setHeaderBackgroundMode('gradient')">線性漸層</button>
                     </div>
 
                     <!-- 純色模式 -->
                     <div v-if="headerStyles.backgroundMode === 'solid'" class="controls-grid single-row">
                         <div class="field-item">
                             <label>顏色</label>
-                            <input type="color" :value="headerStyles.solidColor"
-                                @input="updateHeaderStyle({ solidColor: ($event.target as HTMLInputElement).value })" />
+                            <ColorInput :model-value="headerStyles.solidColor"
+                                @update:model-value="updateHeaderStyle({ solidColor: $event })" />
                         </div>
                     </div>
 
@@ -72,13 +72,13 @@
                     <div v-else class="controls-grid">
                         <div class="field-item">
                             <label>起始色 (C1)</label>
-                            <input type="color" :value="headerStyles.gradient.color1"
-                                @input="updateHeaderStyle({ gradient: { ...headerStyles.gradient, color1: ($event.target as HTMLInputElement).value } })" />
+                            <ColorInput :model-value="headerStyles.gradient.color1"
+                                @update:model-value="updateHeaderStyle({ gradient: { ...headerStyles.gradient, color1: $event } })" />
                         </div>
                         <div class="field-item">
                             <label>結束色 (C2)</label>
-                            <input type="color" :value="headerStyles.gradient.color2"
-                                @input="updateHeaderStyle({ gradient: { ...headerStyles.gradient, color2: ($event.target as HTMLInputElement).value } })" />
+                            <ColorInput :model-value="headerStyles.gradient.color2"
+                                @update:model-value="updateHeaderStyle({ gradient: { ...headerStyles.gradient, color2: $event } })" />
                         </div>
                         <div class="field-item">
                             <label>角度 (Angle)</label>
@@ -121,8 +121,8 @@
                         </div>
                         <div class="field-item">
                             <label>陰影顏色</label>
-                            <input type="color" :value="headerStyles.boxShadow.color"
-                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, color: ($event.target as HTMLInputElement).value } })" />
+                            <ColorInput :model-value="headerStyles.boxShadow.color"
+                                @update:model-value="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, color: $event } })" />
                         </div>
                         <div class="field-item">
                             <label>陰影透明度</label>
@@ -143,15 +143,6 @@
                 </div>
             </div>
 
-            <!-- CSS 編輯器 (覆寫用) -->
-            <div class="css-editor-card mt-4">
-                <label class="control-label mb-2 d-block">進階自定義 CSS (Override)</label>
-                <div class="editor-wrapper">
-                    <textarea :value="headerCss"
-                        @input="(e) => $emit('update:headerCss', (e.target as HTMLTextAreaElement).value)"
-                        placeholder="#header { /* 您的自定義 CSS */ }" class="css-textarea"></textarea>
-                </div>
-            </div>
         </div>
 
         <!-- 推薦區域 樣式設置 (Pro Designer Mode) -->
@@ -167,17 +158,17 @@
                     <div class="group-header">🎨 背景填充 (Fill)</div>
                     <div class="mode-selector">
                         <button class="mode-btn" :class="{ active: recommendStyles.backgroundMode === 'solid' }"
-                            @click="updateRecommendStyle({ backgroundMode: 'solid' })">純色</button>
+                            @click="setRecommendBackgroundMode('solid')">純色</button>
                         <button class="mode-btn" :class="{ active: recommendStyles.backgroundMode === 'gradient' }"
-                            @click="updateRecommendStyle({ backgroundMode: 'gradient' })">線性漸層</button>
+                            @click="setRecommendBackgroundMode('gradient')">線性漸層</button>
                     </div>
 
                     <!-- 控制項與 Header 類似，僅更新函式不同 -->
                     <div v-if="recommendStyles.backgroundMode === 'solid'" class="controls-grid single-row">
                         <div class="field-item">
                             <label>顏色</label>
-                            <input type="color" :value="recommendStyles.solidColor"
-                                @input="updateRecommendStyle({ solidColor: ($event.target as HTMLInputElement).value })" />
+                            <ColorInput :model-value="recommendStyles.solidColor"
+                                @update:model-value="updateRecommendStyle({ solidColor: $event })" />
                         </div>
                         <div class="field-item">
                             <label>不透明度</label>
@@ -188,13 +179,13 @@
                     <div v-else class="controls-grid">
                         <div class="field-item">
                             <label>起始色</label>
-                            <input type="color" :value="recommendStyles.gradient.color1"
-                                @input="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, color1: ($event.target as HTMLInputElement).value } })" />
+                            <ColorInput :model-value="recommendStyles.gradient.color1"
+                                @update:model-value="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, color1: $event } })" />
                         </div>
                         <div class="field-item">
                             <label>結束色</label>
-                            <input type="color" :value="recommendStyles.gradient.color2"
-                                @input="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, color2: ($event.target as HTMLInputElement).value } })" />
+                            <ColorInput :model-value="recommendStyles.gradient.color2"
+                                @update:model-value="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, color2: $event } })" />
                         </div>
                         <div class="field-item">
                             <label>角度</label>
@@ -215,13 +206,35 @@
                 </div>
             </div>
 
-            <!-- CSS 編輯器 -->
-            <div class="css-editor-card mt-4">
-                <label class="control-label mb-2 d-block">進階自定義 CSS (Override)</label>
-                <div class="editor-wrapper">
-                    <textarea :value="recommendContentCss"
-                        @input="(e) => $emit('update:recommendContentCss', (e.target as HTMLTextAreaElement).value)"
-                        placeholder=".recommend-content { /* 您的自定義 CSS */ }" class="css-textarea"></textarea>
+        </div>
+
+        <!-- 推薦工具列色彩設置 -->
+        <div class="form-section designer-section">
+            <div class="section-title">
+                <h4>推薦工具列色彩設定</h4>
+                <p>設定推薦工具列的底色與滑過底色</p>
+            </div>
+
+            <div class="designer-card">
+                <div class="designer-group">
+                    <div class="group-header">🎨 推薦工具列色彩</div>
+                    <div class="controls-grid">
+                        <div class="field-item">
+                            <label>推薦工具左側底色</label>
+                            <ColorInput :model-value="sectionColors.recommendFooterTitleBackground"
+                                @update:model-value="updateSectionColors({ recommendFooterTitleBackground: $event })" />
+                        </div>
+                        <div class="field-item">
+                            <label>推薦工具底色</label>
+                            <ColorInput :model-value="sectionColors.recommendFooterItemBackground"
+                                @update:model-value="updateSectionColors({ recommendFooterItemBackground: $event })" />
+                        </div>
+                        <div class="field-item">
+                            <label>推薦工具 Hover 底色</label>
+                            <ColorInput :model-value="sectionColors.recommendFooterItemHoverBackground"
+                                @update:model-value="updateSectionColors({ recommendFooterItemHoverBackground: $event })" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -234,39 +247,89 @@
             </div>
 
             <div class="title-images-grid">
-                <div class="title-image-card">
-                    <label>推薦優質線路標題</label>
+                <div class="title-image-card is-disabled" title="此圖片目前固定使用，不提供修改">
+                    <label>推薦優質線路標題（固定）</label>
                     <div class="uploader-container title-uploader">
                         <ImageUploader :preview-url="titles.recommendedRoutes ? getImageUrl(titles.recommendedRoutes) : ''"
-                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'recommendedRoutes')"
-                            @clear="$emit('clearTitleImage', 'recommendedRoutes')" />
+                            placeholder="固定圖示" disabled />
                     </div>
                 </div>
 
-                <div class="title-image-card">
-                    <label>推薦瀏覽器標題</label>
+                <div class="title-image-card is-disabled" title="此圖片目前固定使用，不提供修改">
+                    <label>推薦瀏覽器標題（固定）</label>
                     <div class="uploader-container title-uploader">
                         <ImageUploader :preview-url="titles.recommendedBrowsers ? getImageUrl(titles.recommendedBrowsers) : ''"
-                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'recommendedBrowsers')"
-                            @clear="$emit('clearTitleImage', 'recommendedBrowsers')" />
+                            placeholder="固定圖示" disabled />
                     </div>
                 </div>
 
                 <div class="title-image-card">
-                    <label>娛樂直播標題</label>
+                    <label>左側影片區標題</label>
                     <div class="uploader-container title-uploader">
                         <ImageUploader :preview-url="titles.selectedVideos ? getImageUrl(titles.selectedVideos) : ''"
-                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'selectedVideos')"
+                            placeholder="上傳標題圖片" @upload="(file) => handleTitleUpload(file, 'selectedVideos')"
                             @clear="$emit('clearTitleImage', 'selectedVideos')" />
                     </div>
                 </div>
 
                 <div class="title-image-card">
-                    <label>賽事精選標題</label>
+                    <label>右側影片區標題</label>
                     <div class="uploader-container title-uploader">
                         <ImageUploader :preview-url="titles.hotPrograms ? getImageUrl(titles.hotPrograms) : ''"
-                            placeholder="設置圖示" @upload="(file) => handleTitleUpload(file, 'hotPrograms')"
+                            placeholder="上傳標題圖片" @upload="(file) => handleTitleUpload(file, 'hotPrograms')"
                             @clear="$emit('clearTitleImage', 'hotPrograms')" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 影片縮圖色彩設定 -->
+        <div class="form-section designer-section">
+            <div class="section-title">
+                <h4>影片縮圖底色</h4>
+                <p>設定娛樂直播與賽事精選影片縮圖的底色與框線顏色</p>
+            </div>
+
+            <div class="designer-card">
+                <div class="designer-group">
+                    <div class="group-header">🎨 影片縮圖色彩</div>
+                    <div class="controls-grid">
+                        <div class="field-item">
+                            <label>影片縮圖底色</label>
+                            <ColorInput :model-value="sectionColors.thumbnailTitleBackground"
+                                @update:model-value="updateSectionColors({ thumbnailTitleBackground: $event })" />
+                        </div>
+                        <div class="field-item">
+                            <label>影片縮圖框線顏色</label>
+                            <ColorInput :model-value="sectionColors.thumbnailBorderColor"
+                                @update:model-value="updateSectionColors({ thumbnailBorderColor: $event })" />
+                        </div>
+                        <div class="field-item">
+                            <label>影片縮圖文字顏色</label>
+                            <ColorInput :model-value="sectionColors.thumbnailTextColor"
+                                @update:model-value="updateSectionColors({ thumbnailTextColor: $event })" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁尾色彩設定 -->
+        <div class="form-section designer-section">
+            <div class="section-title">
+                <h4>頁尾色彩設定</h4>
+                <p>設定最底部 Copyright 區域的背景底色</p>
+            </div>
+
+            <div class="designer-card">
+                <div class="designer-group">
+                    <div class="group-header">🎨 頁尾底色</div>
+                    <div class="controls-grid single-row">
+                        <div class="field-item">
+                            <label>背景色</label>
+                            <ColorInput :model-value="sectionColors.footerBackground"
+                                @update:model-value="updateSectionColors({ footerBackground: $event })" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -277,14 +340,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ImageUploader from '../common/ImageUploader.vue'
-import { VisualStylesConfig } from '../../services/configService'
+import ColorInput from '../common/ColorInput.vue'
+import { SectionColorsConfig, VisualStylesConfig } from '../../services/configService'
 
 const props = defineProps<{
     logo: string | undefined
     headerStyles: VisualStylesConfig
     recommendStyles: VisualStylesConfig
-    headerCss?: string
-    recommendContentCss?: string
+    sectionColors: SectionColorsConfig
     titles: {
         recommendedRoutes: string
         recommendedBrowsers: string
@@ -299,8 +362,7 @@ const emit = defineEmits<{
     (e: 'clear', field: string): void
     (e: 'update:headerStyles', value: VisualStylesConfig): void
     (e: 'update:recommendStyles', value: VisualStylesConfig): void
-    (e: 'update:headerCss', value: string): void
-    (e: 'update:recommendContentCss', value: string): void
+    (e: 'update:sectionColors', value: SectionColorsConfig): void
     (e: 'uploadTitleImage', event: Event, field: string): void
     (e: 'clearTitleImage', field: string): void
 }>()
@@ -320,6 +382,22 @@ const updateHeaderStyle = (updates: Partial<VisualStylesConfig>) => {
 
 const updateRecommendStyle = (updates: Partial<VisualStylesConfig>) => {
     emit('update:recommendStyles', { ...props.recommendStyles, ...updates })
+}
+
+const setHeaderBackgroundMode = (backgroundMode: VisualStylesConfig['backgroundMode']) => {
+    if (props.headerStyles.backgroundMode !== backgroundMode) {
+        updateHeaderStyle({ backgroundMode })
+    }
+}
+
+const setRecommendBackgroundMode = (backgroundMode: VisualStylesConfig['backgroundMode']) => {
+    if (props.recommendStyles.backgroundMode !== backgroundMode) {
+        updateRecommendStyle({ backgroundMode })
+    }
+}
+
+const updateSectionColors = (updates: Partial<SectionColorsConfig>) => {
+    emit('update:sectionColors', { ...props.sectionColors, ...updates })
 }
 
 // 輔助函式：將 Hex + Opacity 轉為 RGBA

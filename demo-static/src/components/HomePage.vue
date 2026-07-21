@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import ImageComponent from './ImageComponent.vue'
 import ImageButton from './ImageButton.vue'
 import { assetManifest } from '../config/assetManifest'
@@ -20,7 +20,7 @@ const {
   effectiveBanner,
   effectiveBackgroundImage,
   effectiveRecommendContentBackground,
-  effectiveRecommendContentCss,
+  effectiveSectionColors,
   effectiveTitles,
   effectiveVideoThumbnails,
   effectiveProgramThumbnails,
@@ -77,44 +77,14 @@ const stopCarousel = () => {
   }
 }
 
-// Handle dynamic CSS injection for recommend section
-const dynamicStyleTag = ref<HTMLStyleElement | null>(null)
-
-const updateRecommendDynamicStyle = (css: string) => {
-  if (!css) {
-    if (dynamicStyleTag.value) {
-      dynamicStyleTag.value.innerHTML = ''
-    }
-    return
-  }
-
-  if (!dynamicStyleTag.value) {
-    dynamicStyleTag.value = document.createElement('style')
-    dynamicStyleTag.value.setAttribute('data-dynamic-recommend', '')
-    document.head.appendChild(dynamicStyleTag.value)
-  }
-  dynamicStyleTag.value.innerHTML = css
-}
-
 // Lifecycle Hooks
 onMounted(async () => {
   await loadConfig()
   startCarousel()
-  if (effectiveRecommendContentCss.value) {
-    updateRecommendDynamicStyle(effectiveRecommendContentCss.value)
-  }
-})
-
-watch(() => effectiveRecommendContentCss.value, (newCss) => {
-  updateRecommendDynamicStyle(newCss || '')
 })
 
 onUnmounted(() => {
   stopCarousel()
-  if (dynamicStyleTag.value) {
-    document.head.removeChild(dynamicStyleTag.value)
-    dynamicStyleTag.value = null
-  }
 })
 
 // UI Interaction
@@ -208,7 +178,11 @@ const scrollToTop = () => {
           </div>
 
           <!-- Bottom Tools (Browsers) -->
-          <div class="recommend-footer">
+          <div class="recommend-footer" :style="{
+            '--recommend-footer-title-background': effectiveSectionColors.recommendFooterTitleBackground,
+            '--recommend-footer-item-background': effectiveSectionColors.recommendFooterItemBackground,
+            '--recommend-footer-item-hover-background': effectiveSectionColors.recommendFooterItemHoverBackground
+          }">
             <div class="block-title">
               <ImageComponent
                 :src="effectiveTitles.recommendedBrowsers"
@@ -224,12 +198,17 @@ const scrollToTop = () => {
         </div>
 
         <!-- Programme Sections -->
-        <div class="programme-wrap">
+        <div class="programme-wrap" :style="{
+          '--thumbnail-title-background': effectiveSectionColors.thumbnailTitleBackground,
+          '--thumbnail-border-color': effectiveSectionColors.thumbnailBorderColor,
+          '--thumbnail-text-color': effectiveSectionColors.thumbnailTextColor
+        }">
           <template v-for="blockId in effectiveProgrammeLayout" :key="blockId">
             <!-- Selected Videos (娛樂直播/精選短視頻) -->
             <div v-if="blockId === 'selectedVideos'" class="programme-block">
               <div class="block-title">
-                <ImageComponent :src="effectiveTitles.selectedVideos" alt="精选短视频標題圖" :lazy="false" />
+                <ImageComponent v-if="effectiveTitles.selectedVideos" :src="effectiveTitles.selectedVideos" alt="左側影片區標題圖" :lazy="false" />
+                <div v-else class="programme-title-placeholder" aria-hidden="true"></div>
               </div>
               <div class="list">
                 <div v-for="(video, index) in effectiveVideoThumbnails" :key="`video-${index}`" class="item">
@@ -246,7 +225,8 @@ const scrollToTop = () => {
             <!-- Hot Programs (賽事精選/火熱預告) -->
             <div v-else-if="blockId === 'hotPrograms'" class="programme-block sport-block">
               <div class="block-title">
-                <ImageComponent :src="effectiveTitles.hotPrograms" alt="火熱節目標題圖" :lazy="false" />
+                <ImageComponent v-if="effectiveTitles.hotPrograms" :src="effectiveTitles.hotPrograms" alt="右側影片區標題圖" :lazy="false" />
+                <div v-else class="programme-title-placeholder" aria-hidden="true"></div>
               </div>
               <div class="list">
                 <div v-for="(program, index) in effectiveProgramThumbnails" :key="`program-${index}`" class="item">

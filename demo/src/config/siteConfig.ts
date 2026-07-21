@@ -116,10 +116,12 @@ export const updateLocalAssets = (config: any) => {
   if (config.logo !== undefined) Object.assign(assetsState, { logo: config.logo })
   if (config.banner) Object.assign(banner, config.banner)
   if (config.backgroundImage !== undefined) Object.assign(assetsState, { backgroundImage: config.backgroundImage })
+  if (config.headerStyles !== undefined) Object.assign(assetsState, { headerStyles: config.headerStyles })
   if (config.headerBackgroundRgba !== undefined) Object.assign(assetsState, { headerBackgroundRgba: config.headerBackgroundRgba })
   if (config.headerCss !== undefined) Object.assign(assetsState, { headerCss: config.headerCss })
   if (config.recommendContentBackground !== undefined) Object.assign(assetsState, { recommendContentBackground: config.recommendContentBackground })
   if (config.recommendContentCss !== undefined) Object.assign(assetsState, { recommendContentCss: config.recommendContentCss })
+  if (config.sectionColors) Object.assign(sectionColors, config.sectionColors)
   if (config.titles) Object.assign(titles, config.titles)
   if (config.buttonLinks) {
     siteConfig.navigation.splice(0, siteConfig.navigation.length, ...config.buttonLinks)
@@ -182,10 +184,28 @@ export const banner = reactive({
 export const assetsState = reactive({
   logo: "/assets/images/logo.png",
   backgroundImage: "/defaults/backgroundImage.png",
+  headerStyles: {
+    height: 75,
+    backgroundMode: 'gradient' as const,
+    solidColor: '#3041b9',
+    opacity: 1,
+    gradient: { color1: '#3041b9', color2: '#081fb3', angle: 0 },
+    boxShadow: { enabled: true, x: 0, y: 0, blur: 20, spread: 0, color: '#000000', opacity: 0.3 }
+  },
   headerBackgroundRgba: "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
   headerCss: "",
   recommendContentBackground: "rgba(20, 10, 104, 1.0)",
   recommendContentCss: ""
+})
+
+export const sectionColors = reactive({
+  recommendFooterTitleBackground: '#200cc5',
+  recommendFooterItemBackground: '#221e1e',
+  recommendFooterItemHoverBackground: '#3625c3',
+  thumbnailTitleBackground: '#3b27de',
+  thumbnailBorderColor: '#f8eec9',
+  thumbnailTextColor: '#ffffff',
+  footerBackground: '#060417'
 })
 
 export const titles = reactive({

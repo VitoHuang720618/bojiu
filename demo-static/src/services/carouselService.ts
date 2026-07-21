@@ -1,5 +1,23 @@
 import type { BannerConfig } from '../types'
 
+type HeaderStylesConfig = {
+  height?: number
+  backgroundMode: 'solid' | 'gradient'
+  solidColor: string
+  opacity: number
+  gradient: { color1: string, color2: string, angle: number }
+  boxShadow: { enabled: boolean, x: number, y: number, blur: number, spread: number, color: string, opacity: number }
+}
+
+const defaultHeaderStyles: HeaderStylesConfig = {
+  height: 75,
+  backgroundMode: 'gradient',
+  solidColor: '#3041b9',
+  opacity: 1,
+  gradient: { color1: '#3041b9', color2: '#081fb3', angle: 0 },
+  boxShadow: { enabled: true, x: 0, y: 0, blur: 20, spread: 0, color: '#000000', opacity: 0.3 }
+}
+
 // 简单的轮播图和banner API服务
 class CarouselService {
   private baseUrl: string
@@ -17,10 +35,20 @@ class CarouselService {
     carouselSlides: { image: string, href: string, alt: string }[],
     banner: string | BannerConfig,
     backgroundImage: string,
+    headerStyles: HeaderStylesConfig,
     headerBackgroundRgba: string,
     headerCss: string,
     recommendContentBackground: string,
     recommendContentCss: string,
+    sectionColors: {
+      recommendFooterTitleBackground: string,
+      recommendFooterItemBackground: string,
+      recommendFooterItemHoverBackground: string,
+      thumbnailTitleBackground: string,
+      thumbnailBorderColor: string,
+      thumbnailTextColor: string,
+      footerBackground: string
+    },
     titles: {
         recommendedRoutes: string
         recommendedBrowsers: string
@@ -51,6 +79,7 @@ class CarouselService {
         routeLinksImages,
         titles,
         assetManifest,
+        sectionColors,
         pageLayout,
         programmeLayout
       } = await import('../config/siteConfig')
@@ -62,10 +91,12 @@ class CarouselService {
           carouselSlides,
           banner,
           backgroundImage: assetsState.backgroundImage,
+          headerStyles: assetsState.headerStyles,
           headerBackgroundRgba: assetsState.headerBackgroundRgba,
           headerCss: assetsState.headerCss,
           recommendContentBackground: assetsState.recommendContentBackground,
           recommendContentCss: assetsState.recommendContentCss,
+          sectionColors,
           titles: {
             recommendedRoutes: titles.recommendedRoutes || assetManifest.titles.recommendedRoutes,
             recommendedBrowsers: titles.recommendedBrowsers || assetManifest.titles.recommendedBrowsers,
@@ -120,6 +151,33 @@ class CarouselService {
         return url
       }
 
+      // The manager stores the recommendation block background as a structured
+      // `recommendStyles` value. Published static settings already contain the
+      // pre-rendered CSS string, so support both representations.
+      const getRecommendContentBackground = () => {
+        if (config.recommendContentBackground) return config.recommendContentBackground
+
+        const styles = config.recommendStyles
+        if (styles?.backgroundMode === 'solid' && styles.solidColor) {
+          const hex = styles.solidColor.replace('#', '')
+          if (/^[0-9a-fA-F]{6}$/.test(hex)) {
+            const red = parseInt(hex.slice(0, 2), 16)
+            const green = parseInt(hex.slice(2, 4), 16)
+            const blue = parseInt(hex.slice(4, 6), 16)
+            return `rgba(${red}, ${green}, ${blue}, ${styles.opacity ?? 1})`
+          }
+        }
+
+        if (styles?.backgroundMode === 'gradient' && styles.gradient) {
+          const { angle, color1, color2 } = styles.gradient
+          if (color1 && color2) {
+            return `linear-gradient(${angle ?? 0}deg, ${color1} 0%, ${color2} 100%)`
+          }
+        }
+
+        return 'rgba(20, 10, 104, 1.0)'
+      }
+
       return {
         logo: processImageUrl(config.logo || ''),
         carouselSlides: (config.carouselSlides || []).map((slide: any) => ({
@@ -132,10 +190,20 @@ class CarouselService {
           mobile: processImageUrl(config.banner.mobile || '')
         } : processImageUrl(config.banner || ''),
         backgroundImage: processImageUrl(config.backgroundImage || ''),
+        headerStyles: config.headerStyles || defaultHeaderStyles,
         headerBackgroundRgba: config.headerBackgroundRgba || 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
         headerCss: config.headerCss || '',
-        recommendContentBackground: config.recommendContentBackground || 'rgba(20, 10, 104, 1.0)',
+        recommendContentBackground: getRecommendContentBackground(),
         recommendContentCss: config.recommendContentCss || '',
+        sectionColors: config.sectionColors || {
+          recommendFooterTitleBackground: '#200cc5',
+          recommendFooterItemBackground: '#221e1e',
+          recommendFooterItemHoverBackground: '#3625c3',
+          thumbnailTitleBackground: '#3b27de',
+          thumbnailBorderColor: '#f8eec9',
+          thumbnailTextColor: '#ffffff',
+          footerBackground: '#060417'
+        },
         titles: {
           recommendedRoutes: processImageUrl(config.titles?.recommendedRoutes || ''),
           recommendedBrowsers: processImageUrl(config.titles?.recommendedBrowsers || ''),
@@ -194,10 +262,20 @@ class CarouselService {
         ],
         banner: '',
         backgroundImage: '',
+        headerStyles: defaultHeaderStyles,
         headerBackgroundRgba: 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
         headerCss: '',
         recommendContentBackground: 'rgba(20, 10, 104, 1.0)',
         recommendContentCss: '',
+        sectionColors: {
+          recommendFooterTitleBackground: '#200cc5',
+          recommendFooterItemBackground: '#221e1e',
+          recommendFooterItemHoverBackground: '#3625c3',
+          thumbnailTitleBackground: '#3b27de',
+          thumbnailBorderColor: '#f8eec9',
+          thumbnailTextColor: '#ffffff',
+          footerBackground: '#060417'
+        },
         titles: {
           recommendedRoutes: '',
           recommendedBrowsers: '',

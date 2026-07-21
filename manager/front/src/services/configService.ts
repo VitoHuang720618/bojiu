@@ -28,12 +28,23 @@ export interface VisualStylesConfig {
   }
 }
 
+export interface SectionColorsConfig {
+  recommendFooterTitleBackground: string
+  recommendFooterItemBackground: string
+  recommendFooterItemHoverBackground: string
+  thumbnailTitleBackground: string
+  thumbnailBorderColor: string
+  thumbnailTextColor: string
+  footerBackground: string
+}
+
 export interface ConfigData {
   logo: string
   banner: string | BannerConfig
   backgroundImage: string
   headerStyles: VisualStylesConfig
   recommendStyles: VisualStylesConfig
+  sectionColors: SectionColorsConfig
   headerCss: string
   recommendContentCss: string
   buttonLinks: Array<{

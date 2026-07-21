@@ -39,10 +39,39 @@
     "mobile": "/defaults/banner-mobile.jpg"
   },
   "backgroundImage": "/defaults/backgroundImage.jpg",
-  "headerBackgroundRgba": "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
-  "headerCss": "#header {\n    /* 強制恢復原本的高質感漸層與陰影 */\n    background: linear-gradient(0deg, #3041b9 0%, #081fb3 100%), #000000 !important;\n    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.30) !important;\n    border-top: none !important; /* 移除剛才試做的細邊框 */\n    height: 75px !important; /* 恢復標準高度 */\n}",
-  "recommendContentBackground": "rgba(20, 10, 104, 1)",
+  "headerStyles": {
+    "height": 75,
+    "backgroundMode": "solid",
+    "solidColor": "#4d040d",
+    "opacity": 0.4,
+    "gradient": {
+      "color1": "#3041b9",
+      "color2": "#081fb3",
+      "angle": 0
+    },
+    "boxShadow": {
+      "enabled": false,
+      "x": 0,
+      "y": 0,
+      "blur": 20,
+      "spread": 0,
+      "color": "#000000",
+      "opacity": 0.3
+    }
+  },
+  "headerBackgroundRgba": "rgba(77, 4, 13, 0.4)",
+  "headerCss": "",
+  "recommendContentBackground": "rgba(77, 4, 13, 0.7)",
   "recommendContentCss": "",
+  "sectionColors": {
+    "recommendFooterTitleBackground": "#820010",
+    "recommendFooterItemBackground": "#221e1e",
+    "recommendFooterItemHoverBackground": "#820010",
+    "thumbnailTitleBackground": "#820010",
+    "thumbnailBorderColor": "#f8eec9",
+    "thumbnailTextColor": "#ffffff",
+    "footerBackground": "#4d040d"
+  },
   "titles": {
     "recommendedRoutes": "",
     "recommendedBrowsers": "",
@@ -166,7 +195,7 @@
   "videoThumbnails": [
     {
       "id": "video-0",
-      "title": "甜美Aura",
+      "title": "甜美Aura123",
       "href": "https://www.fun99666.com/index.php/funfans/",
       "image": "/defaults/videoThumbnails-0-image.png",
       "alt": ""

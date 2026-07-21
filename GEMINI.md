@@ -23,28 +23,27 @@
 - **Desktop (>= 1280px)**:
   - 最大內容寬度限制在 1520px/1500px。
 
-## ✅ 近期關鍵修改 (2026-03)
+## ✅ 近期關鍵修改 (2026-04)
 
-- **生產環境自動化發布流程 (GCP/VPS)**:
-  - **成品化模型 (Build-Artifact Model)**: 引進 `release` 專用分支，僅存放本地編譯後的成品 (`dist/`)，徹底解決伺服器端編譯工具依賴問題。
-  - **發布雙引擎**:
-    - `publish-release.sh` (本地機): 一鍵完成「三端編譯 + 抽離成品 + 強力推送」。
-    - `deploy.sh` (伺服器端): 支援「自動安裝 PM2 + 持久化金庫掛載 + 服務重啟」。
-  - **一鍵更新工具**: 新增 `update.sh` 與 `generate-nginx-conf.sh`，大幅簡化營運人員的操作難度。
-- **數據與核心分離 (Decoupling Architecture)**:
-  - **持久化金庫 (`bojiu-data`)**: 在代碼目錄旁建立獨立資料夾，保護上傳圖片、資料庫與動態設定。
-  - **絕對路徑傳送門 (Absolute Symlinks)**: 透過部署腳本自動建立絕對路徑軟連結，確保 `git reset --hard` 更新代碼時，使用者數據依然穩如泰山且能正確讀取。
-- **穩定性與安全性修正**:
-  - **動態樣式優化**: 重構 `HomePage.vue` 與 `HeaderComponent.vue`，改用 `watch` + 手動 `document.head` 注入動態 CSS，解決了熱更新時 Vue 全域側邊效應報錯的問題。
-  - **預設認證固化**: 於後端初始化邏輯中鎖定預設管理員為 `admin` / `Admin123!`，且關閉初次登入強制修改密碼，確保新環境佈署後的即時可用性。
+- **路徑自動化與網址去硬編碼 (Path-Agnostic Architecture)**:
+  - **動態前綴修復**: 實作 `fixPath` 函數，全面排除程式碼中的硬編碼 `/b9-site/` 前綴。
+  - **網址大掃除**: 清除全站（包含 `config.json` 與 `assetManifest.ts`）中殘留的 `localhost:3002/3005` 網址，徹底解決 HTTPS 環境下的混合內容 (Mixed Content) 錯誤。
+  - **三位一體對齊**: 確立了「Vite Base = Nginx Location = try_files Fallback」的部屬公式，終結了單頁應用 (SPA) 在子路徑下的無限刷新 (Infinite Reload) 難題。
+- **高級絕對路徑金庫模式 (Absolute Path Persistent Store)**:
+  - **金庫防護 (`bojiu-data`)**: 在專案根目錄旁建立獨立金庫，透過絕對路徑軟連結 (Symlink) 隔離代碼與數據（圖片、資料庫與設定檔）。
+  - **自癒部屬腳本**: 升級 `build-local-release.sh` 產出的 `deploy.sh`，新增 PM2 自動偵測、絕對路徑連接與生產環境相依自動安裝功能，確保更新代碼時數據「穩如泰山」。
+- **安全性與穩定性增強**:
+  - **後端診斷偵查**: 於 `server.ts` 加入 `/api/test-path` 診斷接口，利於快速排查部屬環境中的路徑與權限問題。
+  - **Multer 容錯邏輯**: 修正檔案上傳時 `req.body` 解析順序導致的崩潰風險，並增加全域請求 Log 監控。
 
 ## 📌 待辦與維護重點
 
-1. **部署標準流程 (重要)**:
-   - **發布**: 在本機執行 `./publish-release.sh`。
-   - **更新**: 在伺服器執行 `./update.sh`。
-2. **雙專案同步流程**:
-   - `demo` 修改後，執行 `rsync -av --delete --exclude 'node_modules' --exclude 'dist' --exclude '.git' --exclude 'public/uploads' demo/ demo-static/`。
+1. **部署標準路徑**:
+   - 如果要掛在根目錄 (`/`)，Vite 的 `base` 設為 `/`。
+   - 如果要掛在子目錄 (`/abc/`)，Vite 的 `base` 則對齊 `/abc/`。
+2. **Nginx 配置要領**:
+   - `location /admin/` 必須搭配 `alias` 指向實體目錄。
+   - `try_files` 最後一項必須寫 `/admin/index.html` 以防止路由重定向失敗。
 3. **金庫管理**: 定期備份伺服器根目錄外的 `bojiu-data` 資料夾，這比備份代碼庫更重要。
 
 ## 🚀 跨機器快速遷移指南 (Know-how)

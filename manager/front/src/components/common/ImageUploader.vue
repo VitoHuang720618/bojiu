@@ -1,8 +1,8 @@
 <template>
-    <div class="image-uploader" :class="{ 'is-loading': loading }">
+    <div class="image-uploader" :class="{ 'is-loading': loading, 'is-disabled': disabled }">
         <div v-if="previewUrl" class="preview-container">
             <img :src="previewUrl" :alt="altText" class="preview-img" />
-            <div class="overlay">
+            <div v-if="!disabled" class="overlay">
                 <div class="actions">
                     <button @click.stop="triggerInput" class="btn btn-edit" title="更換圖片">
                         <span class="icon">✎</span>
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <input type="file" ref="fileInput" class="file-input" accept="image/*" @change="handleFileChange" />
+        <input type="file" ref="fileInput" class="file-input" accept="image/*" :disabled="disabled" @change="handleFileChange" />
 
         <div v-if="loading" class="loading-overlay">
             <div class="spinner"></div>
@@ -39,6 +39,7 @@ const props = defineProps<{
     placeholder?: string
     dimensions?: string // e.g. "1920x500"
     loading?: boolean
+    disabled?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -49,10 +50,12 @@ const emit = defineEmits<{
 const fileInput = ref<HTMLInputElement | null>(null)
 
 const triggerInput = () => {
+    if (props.disabled) return
     fileInput.value?.click()
 }
 
 const handleFileChange = (event: Event) => {
+    if (props.disabled) return
     const target = event.target as HTMLInputElement
     const file = target.files?.[0]
     if (file) {
@@ -79,6 +82,20 @@ const handleFileChange = (event: Event) => {
 .image-uploader:hover {
     border-color: #3498db;
     background: #f1f8ff;
+}
+
+.image-uploader.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.image-uploader.is-disabled:hover {
+    border-color: #e0e0e0;
+    background: #f8f9fa;
+}
+
+.image-uploader.is-disabled .placeholder {
+    cursor: not-allowed;
 }
 
 .preview-container {

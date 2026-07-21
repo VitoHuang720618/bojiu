@@ -9,6 +9,7 @@ export interface AssetManifest {
   backgroundImage?: string
   headerStyles: VisualStylesConfig
   recommendStyles: VisualStylesConfig
+  sectionColors: SectionColorsConfig
   headerCss?: string
   recommendContentCss?: string
   buttonLinks: ButtonLinkConfig[]
@@ -165,4 +166,14 @@ export interface VisualStylesConfig {
     color: string
     opacity: number
   }
+}
+
+export interface SectionColorsConfig {
+  recommendFooterTitleBackground: string
+  recommendFooterItemBackground: string
+  recommendFooterItemHoverBackground: string
+  thumbnailTitleBackground: string
+  thumbnailBorderColor: string
+  thumbnailTextColor: string
+  footerBackground: string
 }

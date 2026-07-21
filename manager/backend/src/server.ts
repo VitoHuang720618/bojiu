@@ -111,7 +111,10 @@ const storage = multer.diskStorage({
     if (assetPath) {
       // 依據身分標記命名 (例如: banner.pc -> banner-pc.png)
       const cleanPath = assetPath.replace(/\./g, '-')
-      targetFilename = `${cleanPath}${ext}`
+      // 標題圖使用新檔名，避免同一路徑被瀏覽器快取而無法顯示最新圖片。
+      targetFilename = req.body.assetType === 'title'
+        ? `${cleanPath}-${Date.now()}${ext}`
+        : `${cleanPath}${ext}`
     } else {
       console.warn('⚠️ 上傳請求缺少 assetPath，使用臨時檔名以避免覆蓋預設資源。')
     }
@@ -546,10 +549,20 @@ async function startServer() {
             mobile: processImage(config.banner.mobile)
           },
           backgroundImage: processImage(config.backgroundImage || ''),
+          headerStyles: config.headerStyles,
           headerBackgroundRgba: getBackgroundString(config.headerStyles) || 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
           headerCss: config.headerCss || '',
           recommendContentBackground: getBackgroundString(config.recommendStyles) || 'rgba(20, 10, 104, 1.0)',
           recommendContentCss: config.recommendContentCss || '',
+          sectionColors: config.sectionColors || {
+            recommendFooterTitleBackground: '#200cc5',
+            recommendFooterItemBackground: '#221e1e',
+            recommendFooterItemHoverBackground: '#3625c3',
+            thumbnailTitleBackground: '#3b27de',
+            thumbnailBorderColor: '#f8eec9',
+            thumbnailTextColor: '#ffffff',
+            footerBackground: '#060417'
+          },
           titles: {
             recommendedRoutes: processImage(config.titles?.recommendedRoutes || ''),
             recommendedBrowsers: processImage(config.titles?.recommendedBrowsers || ''),

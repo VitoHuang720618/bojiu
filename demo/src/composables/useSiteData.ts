@@ -13,11 +13,30 @@ import {
     pageLayout,
     programmeLayout,
     banner,
-    assetsState
+    assetsState,
+    sectionColors
 } from '../config/siteConfig'
 import { carouselService } from '../services/carouselService'
 import { apiService } from '../services/apiService'
 import type { ButtonLinkConfig, BannerConfig } from '../types'
+
+type HeaderStylesConfig = {
+    height?: number
+    backgroundMode: 'solid' | 'gradient'
+    solidColor: string
+    opacity: number
+    gradient: { color1: string, color2: string, angle: number }
+    boxShadow: { enabled: boolean, x: number, y: number, blur: number, spread: number, color: string, opacity: number }
+}
+
+const defaultHeaderStyles: HeaderStylesConfig = {
+    height: 75,
+    backgroundMode: 'gradient',
+    solidColor: '#3041b9',
+    opacity: 1,
+    gradient: { color1: '#3041b9', color2: '#081fb3', angle: 0 },
+    boxShadow: { enabled: true, x: 0, y: 0, blur: 20, spread: 0, color: '#000000', opacity: 0.3 }
+}
 
 // Global (shared) refs for API data
 const dynamicHostnames = ref<string[]>([])
@@ -27,8 +46,18 @@ const apiBanner = ref<string | BannerConfig | undefined>(undefined)
 const apiBackgroundImage = ref<string | undefined>(undefined)
 const apiHeaderCss = ref<string | undefined>(undefined)
 const apiHeaderBackgroundRgba = ref<string | undefined>(undefined)
+const apiHeaderStyles = ref<HeaderStylesConfig | undefined>(undefined)
 const apiRecommendContentBackground = ref<string | undefined>(undefined)
 const apiRecommendContentCss = ref<string | undefined>(undefined)
+const apiSectionColors = ref<{
+    recommendFooterTitleBackground: string
+    recommendFooterItemBackground: string
+    recommendFooterItemHoverBackground: string
+    thumbnailTitleBackground: string
+    thumbnailBorderColor: string
+    thumbnailTextColor: string
+    footerBackground: string
+} | undefined>(undefined)
 const apiTitles = ref<{
     recommendedRoutes: string
     recommendedBrowsers: string
@@ -107,11 +136,43 @@ export function useSiteData() {
         return assetsState.headerBackgroundRgba !== undefined ? assetsState.headerBackgroundRgba : ''
     })
 
+    const effectiveHeaderStyle = computed(() => {
+        const styles = (siteConfig.useApi ? apiHeaderStyles.value : assetsState.headerStyles) || defaultHeaderStyles
+        const hexToRgba = (hex: string, opacity: number) => {
+            const normalized = hex.replace('#', '')
+            if (!/^[0-9a-fA-F]{6}$/.test(normalized)) return hex
+            const red = parseInt(normalized.slice(0, 2), 16)
+            const green = parseInt(normalized.slice(2, 4), 16)
+            const blue = parseInt(normalized.slice(4, 6), 16)
+            return `rgba(${red}, ${green}, ${blue}, ${opacity})`
+        }
+        const opacity = styles.opacity ?? 1
+        const background = styles.backgroundMode === 'solid'
+            ? hexToRgba(styles.solidColor, opacity)
+            : `linear-gradient(${styles.gradient.angle}deg, ${hexToRgba(styles.gradient.color1, opacity)} 0%, ${hexToRgba(styles.gradient.color2, opacity)} 100%)`
+        const boxShadow = styles.boxShadow?.enabled
+            ? `${styles.boxShadow.x}px ${styles.boxShadow.y}px ${styles.boxShadow.blur}px ${styles.boxShadow.spread}px ${hexToRgba(styles.boxShadow.color, styles.boxShadow.opacity)}`
+            : 'none'
+
+        return {
+            background,
+            height: styles.height ? `${styles.height}px` : undefined,
+            boxShadow
+        }
+    })
+
     const effectiveRecommendContentCss = computed(() => {
         if (siteConfig.useApi) {
             return apiRecommendContentCss.value !== undefined ? apiRecommendContentCss.value : ''
         }
         return assetsState.recommendContentCss !== undefined ? assetsState.recommendContentCss : ''
+    })
+
+    const effectiveSectionColors = computed(() => {
+        if (siteConfig.useApi) {
+            return apiSectionColors.value || sectionColors
+        }
+        return sectionColors
     })
 
     const effectiveTitles = computed(() => {
@@ -126,8 +187,9 @@ export function useSiteData() {
         return {
             recommendedRoutes: titles.recommendedRoutes || assetManifest.titles.recommendedRoutes,
             recommendedBrowsers: titles.recommendedBrowsers || assetManifest.titles.recommendedBrowsers,
-            selectedVideos: titles.selectedVideos || assetManifest.titles.selectedVideos,
-            hotPrograms: titles.hotPrograms || assetManifest.titles.hotPrograms
+            // 影片區標題可刻意留空，前台會保留標題區高度而不回退為舊的內建圖片。
+            selectedVideos: titles.selectedVideos,
+            hotPrograms: titles.hotPrograms
         }
     })
 
@@ -266,8 +328,10 @@ export function useSiteData() {
             apiBackgroundImage.value = config.backgroundImage
             apiHeaderCss.value = config.headerCss
             apiHeaderBackgroundRgba.value = config.headerBackgroundRgba
+            apiHeaderStyles.value = config.headerStyles
             apiRecommendContentBackground.value = config.recommendContentBackground
             apiRecommendContentCss.value = config.recommendContentCss
+            apiSectionColors.value = config.sectionColors
             apiTitles.value = config.titles
             apiVideoThumbnails.value = config.videoThumbnails
             apiProgramThumbnails.value = config.programThumbnails
@@ -295,8 +359,10 @@ export function useSiteData() {
         effectiveBackgroundImage,
         effectiveHeaderCss,
         effectiveHeaderBackgroundRgba,
+        effectiveHeaderStyle,
         effectiveRecommendContentBackground,
         effectiveRecommendContentCss,
+        effectiveSectionColors,
         effectiveTitles,
         effectiveVideoThumbnails,
         effectiveProgramThumbnails,
