@@ -549,6 +549,12 @@ async function startServer() {
             mobile: processImage(config.banner.mobile)
           },
           backgroundImage: processImage(config.backgroundImage || ''),
+          backgroundSettings: config.backgroundSettings || {
+            displayMode: 'repeat',
+            topBorderEnabled: true,
+            topBorderColor: '#dfb082',
+            topBorderWidth: 4
+          },
           headerStyles: config.headerStyles,
           headerBackgroundRgba: getBackgroundString(config.headerStyles) || 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
           headerCss: config.headerCss || '',
@@ -558,6 +564,7 @@ async function startServer() {
             recommendFooterTitleBackground: '#200cc5',
             recommendFooterItemBackground: '#221e1e',
             recommendFooterItemHoverBackground: '#3625c3',
+            recommendFooterTopBorderColor: '#dfb082',
             thumbnailTitleBackground: '#3b27de',
             thumbnailBorderColor: '#f8eec9',
             thumbnailTextColor: '#ffffff',

@@ -234,6 +234,11 @@
                             <ColorInput :model-value="sectionColors.recommendFooterItemHoverBackground"
                                 @update:model-value="updateSectionColors({ recommendFooterItemHoverBackground: $event })" />
                         </div>
+                        <div class="field-item">
+                            <label>推薦工具上框線顏色</label>
+                            <ColorInput :model-value="sectionColors.recommendFooterTopBorderColor"
+                                @update:model-value="updateSectionColors({ recommendFooterTopBorderColor: $event })" />
+                        </div>
                     </div>
                 </div>
             </div>

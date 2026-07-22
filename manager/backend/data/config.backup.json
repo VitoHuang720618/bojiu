@@ -6,6 +6,12 @@
     "mobile": "/uploads/banner-mobile.jpg"
   },
   "backgroundImage": "/uploads/backgroundImage.jpg",
+  "backgroundSettings": {
+    "displayMode": "repeat",
+    "topBorderEnabled": true,
+    "topBorderColor": "#ffffff",
+    "topBorderWidth": 20
+  },
   "headerStyles": {
     "height": 75,
     "backgroundMode": "solid",
@@ -96,7 +102,7 @@
     {
       "image": "/uploads/carouselSlides-1-image.png",
       "title": "",
-      "href": "",
+      "href": "https://bet9.net:9900/web/#/",
       "description": ""
     }
   ],

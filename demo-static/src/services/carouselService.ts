@@ -35,6 +35,12 @@ class CarouselService {
     carouselSlides: { image: string, href: string, alt: string }[],
     banner: string | BannerConfig,
     backgroundImage: string,
+    backgroundSettings: {
+      displayMode: 'repeat' | 'contain' | 'fit-width',
+      topBorderEnabled: boolean,
+      topBorderColor: string,
+      topBorderWidth: number
+    },
     headerStyles: HeaderStylesConfig,
     headerBackgroundRgba: string,
     headerCss: string,
@@ -44,6 +50,7 @@ class CarouselService {
       recommendFooterTitleBackground: string,
       recommendFooterItemBackground: string,
       recommendFooterItemHoverBackground: string,
+      recommendFooterTopBorderColor: string,
       thumbnailTitleBackground: string,
       thumbnailBorderColor: string,
       thumbnailTextColor: string,
@@ -190,6 +197,12 @@ class CarouselService {
           mobile: processImageUrl(config.banner.mobile || '')
         } : processImageUrl(config.banner || ''),
         backgroundImage: processImageUrl(config.backgroundImage || ''),
+        backgroundSettings: {
+          displayMode: config.backgroundSettings?.displayMode || 'repeat',
+          topBorderEnabled: config.backgroundSettings?.topBorderEnabled ?? true,
+          topBorderColor: config.backgroundSettings?.topBorderColor || '#dfb082',
+          topBorderWidth: config.backgroundSettings?.topBorderWidth ?? 4
+        },
         headerStyles: config.headerStyles || defaultHeaderStyles,
         headerBackgroundRgba: config.headerBackgroundRgba || 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
         headerCss: config.headerCss || '',
@@ -199,6 +212,7 @@ class CarouselService {
           recommendFooterTitleBackground: '#200cc5',
           recommendFooterItemBackground: '#221e1e',
           recommendFooterItemHoverBackground: '#3625c3',
+          recommendFooterTopBorderColor: '#dfb082',
           thumbnailTitleBackground: '#3b27de',
           thumbnailBorderColor: '#f8eec9',
           thumbnailTextColor: '#ffffff',
@@ -262,6 +276,12 @@ class CarouselService {
         ],
         banner: '',
         backgroundImage: '',
+        backgroundSettings: {
+          displayMode: 'repeat',
+          topBorderEnabled: true,
+          topBorderColor: '#dfb082',
+          topBorderWidth: 4
+        },
         headerStyles: defaultHeaderStyles,
         headerBackgroundRgba: 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
         headerCss: '',
@@ -271,6 +291,7 @@ class CarouselService {
           recommendFooterTitleBackground: '#200cc5',
           recommendFooterItemBackground: '#221e1e',
           recommendFooterItemHoverBackground: '#3625c3',
+          recommendFooterTopBorderColor: '#dfb082',
           thumbnailTitleBackground: '#3b27de',
           thumbnailBorderColor: '#f8eec9',
           thumbnailTextColor: '#ffffff',

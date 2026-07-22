@@ -6,6 +6,12 @@
     "mobile": "/uploads/banner-mobile.jpg"
   },
   "backgroundImage": "/uploads/backgroundImage.jpg",
+  "backgroundSettings": {
+    "displayMode": "repeat",
+    "topBorderEnabled": true,
+    "topBorderColor": "#ffffff",
+    "topBorderWidth": 4
+  },
   "headerStyles": {
     "height": 75,
     "backgroundMode": "solid",

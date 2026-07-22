@@ -44,6 +44,12 @@ const apiLogo = ref<string | undefined>(undefined)
 const apiCarouselSlides = ref<{ image: string, href: string, alt: string }[]>([])
 const apiBanner = ref<string | BannerConfig | undefined>(undefined)
 const apiBackgroundImage = ref<string | undefined>(undefined)
+const apiBackgroundSettings = ref<{
+    displayMode: 'repeat' | 'contain' | 'fit-width'
+    topBorderEnabled: boolean
+    topBorderColor: string
+    topBorderWidth: number
+} | undefined>(undefined)
 const apiHeaderCss = ref<string | undefined>(undefined)
 const apiHeaderBackgroundRgba = ref<string | undefined>(undefined)
 const apiHeaderStyles = ref<HeaderStylesConfig | undefined>(undefined)
@@ -53,6 +59,7 @@ const apiSectionColors = ref<{
     recommendFooterTitleBackground: string
     recommendFooterItemBackground: string
     recommendFooterItemHoverBackground: string
+    recommendFooterTopBorderColor: string
     thumbnailTitleBackground: string
     thumbnailBorderColor: string
     thumbnailTextColor: string
@@ -113,6 +120,18 @@ export function useSiteData() {
             return apiBackgroundImage.value !== undefined ? apiBackgroundImage.value : ''
         }
         return assetsState.backgroundImage !== undefined ? assetsState.backgroundImage : assetManifest.backgroundImage
+    })
+
+    const effectiveBackgroundSettings = computed(() => {
+        if (siteConfig.useApi) {
+            return apiBackgroundSettings.value || {
+                displayMode: 'repeat' as const,
+                topBorderEnabled: true,
+                topBorderColor: '#dfb082',
+                topBorderWidth: 4
+            }
+        }
+        return assetsState.backgroundSettings
     })
 
     const effectiveHeaderCss = computed(() => {
@@ -326,6 +345,7 @@ export function useSiteData() {
             apiCarouselSlides.value = config.carouselSlides
             apiBanner.value = config.banner
             apiBackgroundImage.value = config.backgroundImage
+            apiBackgroundSettings.value = config.backgroundSettings
             apiHeaderCss.value = config.headerCss
             apiHeaderBackgroundRgba.value = config.headerBackgroundRgba
             apiHeaderStyles.value = config.headerStyles
@@ -357,6 +377,7 @@ export function useSiteData() {
         effectiveCarouselSlides,
         effectiveBanner,
         effectiveBackgroundImage,
+        effectiveBackgroundSettings,
         effectiveHeaderCss,
         effectiveHeaderBackgroundRgba,
         effectiveHeaderStyle,

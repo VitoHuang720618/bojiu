@@ -6,10 +6,18 @@ const DEFAULT_SECTION_COLORS = {
   recommendFooterTitleBackground: '#200cc5',
   recommendFooterItemBackground: '#221e1e',
   recommendFooterItemHoverBackground: '#3625c3',
+  recommendFooterTopBorderColor: '#dfb082',
   thumbnailTitleBackground: '#3b27de',
   thumbnailBorderColor: '#f8eec9',
   thumbnailTextColor: '#ffffff',
   footerBackground: '#060417'
+}
+
+const DEFAULT_BACKGROUND_SETTINGS = {
+  displayMode: 'repeat' as const,
+  topBorderEnabled: true,
+  topBorderColor: '#dfb082',
+  topBorderWidth: 4
 }
 
 export class AssetManager {
@@ -30,6 +38,10 @@ export class AssetManager {
       sectionColors: {
         ...DEFAULT_SECTION_COLORS,
         ...(manifest.sectionColors || {})
+      },
+      backgroundSettings: {
+        ...DEFAULT_BACKGROUND_SETTINGS,
+        ...(manifest.backgroundSettings || {})
       }
     }
   }

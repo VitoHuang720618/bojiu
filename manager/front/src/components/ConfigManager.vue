@@ -69,8 +69,10 @@
 
             <!-- Background 配置 -->
             <BackgroundConfigPanel v-if="activeTab === 'background'" :backgroundImage="config.backgroundImage"
+              :backgroundSettings="config.backgroundSettings"
               :getImageUrl="getImageUrl" @upload="(e) => handleImageUpload(e, 'backgroundImage')"
-              @clear="clearImage('backgroundImage')" />
+              @clear="clearImage('backgroundImage')"
+              @update:backgroundSettings="(val) => updateConfigValue('backgroundSettings', val)" />
 
             <!-- Button Links 配置 -->
             <ButtonLinksConfigPanel v-if="activeTab === 'buttonlinks'" :buttonLinks="config.buttonLinks"
@@ -92,17 +94,18 @@
               :getImageUrl="getImageUrl" @add="addCarouselSlide" @remove="removeCarouselSlide"
               @upload="handleCarouselImageUpload" @clearImage="clearCarouselImage" @change="hasChanges = true" />
 
-            <!-- Videos 配置 -->
-            <ThumbnailConfigPanel v-if="activeTab === 'videos'" title="娛樂直播設置" itemLabel="影片"
-              :items="config.videoThumbnails" :getImageUrl="getImageUrl" @add="addVideoThumbnail"
-              @remove="removeVideoThumbnail" @upload="handleVideoUpload" @removeImage="removeVideoImage"
-              @change="hasChanges = true" />
+            <!-- 影片區配置 -->
+            <div v-if="activeTab === 'videos'" class="video-sections-panel">
+              <ThumbnailConfigPanel title="左側影片區設定" itemLabel="影片"
+                :items="config.videoThumbnails" :getImageUrl="getImageUrl" @add="addVideoThumbnail"
+                @remove="removeVideoThumbnail" @upload="handleVideoUpload" @removeImage="removeVideoImage"
+                @change="hasChanges = true" />
 
-            <!-- Programs 配置 -->
-            <ThumbnailConfigPanel v-if="activeTab === 'programs'" title="賽事精選設置" itemLabel="節目"
-              :items="config.programThumbnails" :getImageUrl="getImageUrl" @add="addProgramThumbnail"
-              @remove="removeProgramThumbnail" @upload="handleProgramUpload" @removeImage="removeProgramImage"
-              @change="hasChanges = true" />
+              <ThumbnailConfigPanel title="右側影片區設定" itemLabel="影片"
+                :items="config.programThumbnails" :getImageUrl="getImageUrl" @add="addProgramThumbnail"
+                @remove="removeProgramThumbnail" @upload="handleProgramUpload" @removeImage="removeProgramImage"
+                @change="hasChanges = true" />
+            </div>
 
             <!-- Float Ad Buttons 配置 -->
             <FloatAdConfigPanel v-if="activeTab === 'floatads'" :floatAdButtons="config.floatAdButtons"
@@ -217,11 +220,10 @@ const tabs = [
   { id: 'banner', label: 'Banner', icon: '🖼️' },
   { id: 'background', label: '背景圖', icon: '🌄' },
   { id: 'buttonlinks', label: '按鈕鏈接', icon: '🔗' },
-  { id: 'toolicons', label: '工具圖標', icon: '🛠️' },
+  { id: 'toolicons', label: '推薦工具', icon: '🧰' },
   { id: 'routelinks', label: '推薦路線', icon: '🛣️' },
   { id: 'carousel', label: '輪播圖', icon: '🎠' },
-  { id: 'videos', label: '娛樂直播', icon: '🎬' },
-  { id: 'programs', label: '賽事精選', icon: '🏆' },
+  { id: 'videos', label: '影片區', icon: '🎞️' },
   { id: 'floatads', label: '浮動廣告', icon: '📢' },
   { id: 'preview', label: '預覽頁面', icon: '👁️' }
 ]
@@ -239,6 +241,12 @@ const config = reactive<ConfigData>({
     mobile: ''
   },
   backgroundImage: '',
+  backgroundSettings: {
+    displayMode: 'repeat',
+    topBorderEnabled: true,
+    topBorderColor: '#dfb082',
+    topBorderWidth: 4
+  },
   headerStyles: {
     height: 75,
     backgroundMode: 'gradient',
@@ -282,6 +290,7 @@ const config = reactive<ConfigData>({
     recommendFooterTitleBackground: '#200cc5',
     recommendFooterItemBackground: '#221e1e',
     recommendFooterItemHoverBackground: '#3625c3',
+    recommendFooterTopBorderColor: '#dfb082',
     thumbnailTitleBackground: '#3b27de',
     thumbnailBorderColor: '#f8eec9',
     thumbnailTextColor: '#ffffff',
@@ -321,10 +330,18 @@ const loadConfig = async () => {
     }
 
     Object.assign(config, data)
+    config.backgroundSettings = {
+      displayMode: 'repeat',
+      topBorderEnabled: true,
+      topBorderColor: '#dfb082',
+      topBorderWidth: 4,
+      ...(data.backgroundSettings || {})
+    }
     config.sectionColors = {
       recommendFooterTitleBackground: '#200cc5',
       recommendFooterItemBackground: '#221e1e',
       recommendFooterItemHoverBackground: '#3625c3',
+      recommendFooterTopBorderColor: '#dfb082',
       thumbnailTitleBackground: '#3b27de',
       thumbnailBorderColor: '#f8eec9',
       thumbnailTextColor: '#ffffff',
@@ -1672,6 +1689,12 @@ onMounted(() => {
   overflow-y: auto;
   padding: 2rem;
   background: #fff;
+}
+
+.video-sections-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
 
 /* Preview Pane */

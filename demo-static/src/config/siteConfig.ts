@@ -84,6 +84,7 @@ export const updateLocalAssets = (config: any) => {
   if (config.logo !== undefined) Object.assign(assetsState, { logo: config.logo })
   if (config.banner) Object.assign(banner, config.banner)
   if (config.backgroundImage !== undefined) Object.assign(assetsState, { backgroundImage: config.backgroundImage })
+  if (config.backgroundSettings !== undefined) Object.assign(assetsState, { backgroundSettings: config.backgroundSettings })
   if (config.headerStyles !== undefined) Object.assign(assetsState, { headerStyles: config.headerStyles })
   if (config.headerBackgroundRgba !== undefined) Object.assign(assetsState, { headerBackgroundRgba: config.headerBackgroundRgba })
   if (config.headerCss !== undefined) Object.assign(assetsState, { headerCss: config.headerCss })
@@ -149,6 +150,12 @@ export const banner = reactive({
 export const assetsState = reactive({
   logo: "/assets/images/logo.png",
   backgroundImage: "/defaults/backgroundImage.png",
+  backgroundSettings: {
+    displayMode: 'repeat' as const,
+    topBorderEnabled: true,
+    topBorderColor: '#dfb082',
+    topBorderWidth: 4
+  },
   headerStyles: {
     height: 75,
     backgroundMode: 'gradient' as const,
@@ -167,6 +174,7 @@ export const sectionColors = reactive({
   recommendFooterTitleBackground: '#200cc5',
   recommendFooterItemBackground: '#221e1e',
   recommendFooterItemHoverBackground: '#3625c3',
+  recommendFooterTopBorderColor: '#dfb082',
   thumbnailTitleBackground: '#3b27de',
   thumbnailBorderColor: '#f8eec9',
   thumbnailTextColor: '#ffffff',

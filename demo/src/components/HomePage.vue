@@ -19,6 +19,7 @@ const {
   effectiveCarouselSlides,
   effectiveBanner,
   effectiveBackgroundImage,
+  effectiveBackgroundSettings,
   effectiveRecommendContentBackground,
   effectiveSectionColors,
   effectiveTitles,
@@ -120,9 +121,10 @@ const scrollToTop = () => {
       backgroundImage: effectiveBackgroundImage ? `url('${effectiveBackgroundImage}')` :
         'radial-gradient(circle, rgba(80, 80, 80, 0.4) 1.5px, transparent 1.5px), radial-gradient(circle, rgba(60, 60, 60, 0.3) 1px, transparent 1px), linear-gradient(180deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px), linear-gradient(0deg, rgba(223, 176, 130, 0.25) 0%, transparent 60px)',
       backgroundColor: effectiveBackgroundImage ? 'transparent' : '#0a0a0a',
-      backgroundSize: effectiveBackgroundImage ? 'auto' : '16px 16px, 32px 32px, 100% 60px, 100% 60px',
-      backgroundPosition: effectiveBackgroundImage ? 'top left' : '0 0, 8px 8px, top, bottom',
-      backgroundRepeat: effectiveBackgroundImage ? 'repeat' : 'repeat, repeat, repeat-x, repeat-x'
+      backgroundSize: effectiveBackgroundImage ? (effectiveBackgroundSettings.displayMode === 'contain' ? 'contain' : effectiveBackgroundSettings.displayMode === 'fit-width' ? '100% auto' : 'auto') : '16px 16px, 32px 32px, 100% 60px, 100% 60px',
+      backgroundPosition: effectiveBackgroundImage ? (effectiveBackgroundSettings.displayMode === 'repeat' ? 'top left' : 'center top') : '0 0, 8px 8px, top, bottom',
+      backgroundRepeat: effectiveBackgroundImage ? (effectiveBackgroundSettings.displayMode === 'repeat' ? 'repeat' : 'no-repeat') : 'repeat, repeat, repeat-x, repeat-x',
+      borderTop: effectiveBackgroundSettings.topBorderEnabled ? `${effectiveBackgroundSettings.topBorderWidth}px solid ${effectiveBackgroundSettings.topBorderColor}` : 'none'
     }">
       <div class="home-main__inner">
         <!-- Top Button Links -->
@@ -187,7 +189,8 @@ const scrollToTop = () => {
           <div class="recommend-footer" :style="{
             '--recommend-footer-title-background': effectiveSectionColors.recommendFooterTitleBackground,
             '--recommend-footer-item-background': effectiveSectionColors.recommendFooterItemBackground,
-            '--recommend-footer-item-hover-background': effectiveSectionColors.recommendFooterItemHoverBackground
+            '--recommend-footer-item-hover-background': effectiveSectionColors.recommendFooterItemHoverBackground,
+            '--recommend-footer-top-border-color': effectiveSectionColors.recommendFooterTopBorderColor
           }">
             <div class="block-title">
               <ImageComponent :src="effectiveTitles.recommendedBrowsers" alt="推荐浏览器标题" :lazy="false" />

@@ -7,6 +7,7 @@ export interface AssetManifest {
     mobile: string
   }
   backgroundImage?: string
+  backgroundSettings: BackgroundSettingsConfig
   headerStyles: VisualStylesConfig
   recommendStyles: VisualStylesConfig
   sectionColors: SectionColorsConfig
@@ -172,8 +173,16 @@ export interface SectionColorsConfig {
   recommendFooterTitleBackground: string
   recommendFooterItemBackground: string
   recommendFooterItemHoverBackground: string
+  recommendFooterTopBorderColor: string
   thumbnailTitleBackground: string
   thumbnailBorderColor: string
   thumbnailTextColor: string
   footerBackground: string
+}
+
+export interface BackgroundSettingsConfig {
+  displayMode: 'repeat' | 'contain' | 'fit-width'
+  topBorderEnabled: boolean
+  topBorderColor: string
+  topBorderWidth: number
 }
