@@ -15,6 +15,12 @@
           <span class="nav-icon" v-if="tab.icon">{{ tab.icon }}</span>
           <span class="nav-label" v-show="!isSidebarCollapsed">{{ tab.label }}</span>
         </button>
+        <button v-if="authStore.user?.role === 'admin'" @click="activeTab = 'users'"
+          :class="['nav-item', 'nav-item--system', { active: activeTab === 'users' }]"
+          :title="isSidebarCollapsed ? '用戶管理' : ''">
+          <span class="nav-icon">👥</span>
+          <span class="nav-label" v-show="!isSidebarCollapsed">用戶管理</span>
+        </button>
       </nav>
 
       <div class="sidebar-footer">
@@ -34,6 +40,10 @@
             <span v-else>發布為靜態預設</span>
           </button>
         </div>
+        <button @click="handleLogout" class="btn btn-logout btn-block" :title="isSidebarCollapsed ? '登出系統' : ''">
+          <span v-if="isSidebarCollapsed">↪</span>
+          <span v-else>登出系統</span>
+        </button>
       </div>
     </aside>
 
@@ -107,6 +117,9 @@
                 @change="hasChanges = true" />
             </div>
 
+            <!-- 用戶管理 -->
+            <UsersView v-if="activeTab === 'users'" />
+
             <!-- Float Ad Buttons 配置 -->
             <FloatAdConfigPanel v-if="activeTab === 'floatads'" :floatAdButtons="config.floatAdButtons"
               :getImageUrl="getImageUrl" @reset="resetFloatAdButtons" @add="addFloatAdButton"
@@ -151,6 +164,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 import BannerConfigPanel from './config-panels/BannerConfigPanel.vue'
 import BackgroundConfigPanel from './config-panels/BackgroundConfigPanel.vue'
@@ -164,13 +178,17 @@ import FloatAdConfigPanel from './config-panels/FloatAdConfigPanel.vue'
 import LayoutConfigPanel from './config-panels/LayoutConfigPanel.vue'
 import { configService, type ConfigData } from '../services/configService'
 import { useToastStore } from '../stores/toastStore'
+import { useAuthStore } from '../stores/auth'
 import ConfirmModal from './ConfirmModal.vue'
+import UsersView from '../views/UsersView.vue'
 
 
 
 
 
 const toast = useToastStore()
+const router = useRouter()
+const authStore = useAuthStore()
 const confirmModal = ref<InstanceType<typeof ConfirmModal>>()
 const loading = ref(false)
 const hasChanges = ref(false)
@@ -228,7 +246,14 @@ const tabs = [
   { id: 'preview', label: '預覽頁面', icon: '👁️' }
 ]
 
+const handleLogout = async () => {
+  if (!confirm('確定要登出系統嗎？')) return
+  await authStore.logout()
+  router.push('/login')
+}
+
 const currentTabLabel = computed(() => {
+  if (activeTab.value === 'users') return '用戶管理'
   const tab = tabs.find(t => t.id === activeTab.value)
   return tab?.label || '配置'
 })
@@ -1448,25 +1473,25 @@ onMounted(() => {
 .config-manager-layout {
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
-  background-color: #f5f7fa;
+  background: #edf2f7;
   flex-direction: row;
   /* Default to Row (Sidebar Left) for Desktop */
 }
 
 /* Sidebar (Desktop) */
 .sidebar {
-  width: 260px;
+  width: 232px;
   height: 100%;
-  background: #2c3e50;
-  /* Dark sidebar */
+  background: linear-gradient(180deg, #182b40 0%, #112235 100%);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   z-index: 10;
   color: white;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   transition: width 0.3s ease;
 }
 
@@ -1475,7 +1500,7 @@ onMounted(() => {
 }
 
 .sidebar-header {
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
   color: white;
@@ -1488,19 +1513,21 @@ onMounted(() => {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1rem 0;
+  padding: 0.75rem;
+  gap: 0.2rem;
 }
 
 .nav-item {
   width: 100%;
   text-align: left;
-  padding: 0.8rem 1.5rem;
+  padding: 0.72rem 0.85rem;
   background: none;
   border: none;
-  border-left: 4px solid transparent;
-  color: #a0aec0;
-  font-size: 0.95rem;
-  font-weight: 500;
+  border-left: 3px solid transparent;
+  border-radius: 8px;
+  color: #aebdcd;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
@@ -1524,19 +1551,19 @@ onMounted(() => {
 }
 
 .nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.08);
   color: white;
 }
 
 .nav-item.active {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(94, 135, 173, 0.32);
   color: white;
-  border-left-color: #007bff;
+  border-left-color: #f0b765;
 }
 
 .sidebar-footer {
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.85rem;
+  background-color: rgba(0, 0, 0, 0.16);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
@@ -1687,8 +1714,8 @@ onMounted(() => {
   flex:
     1;
   overflow-y: auto;
-  padding: 2rem;
-  background: #fff;
+  padding: clamp(1.25rem, 2.5vw, 2.5rem);
+  background: #f7f9fc;
 }
 
 .video-sections-panel {
@@ -1822,15 +1849,15 @@ onMounted(() => {
 
 /* Utility buttons */
 .btn {
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-weight:
     500;
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 .btn:hover {
@@ -1844,14 +1871,14 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: #2563a4;
   color: white;
-  border-color: #007bff;
+  border-color: #2563a4;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+  background-color: #1d4f84;
+  border-color: #1d4f84;
 }
 
 .btn-primary:disabled {
@@ -1877,12 +1904,12 @@ onMounted(() => {
 }
 
 .btn-danger {
-  background-color: #e74c3c;
+  background-color: #b7414b;
   color: white;
 }
 
 .btn-danger:hover {
-  background-color: #c0392b;
+  background-color: #92353e;
 }
 
 .mb-2 {
@@ -2078,4 +2105,33 @@ onMounted(() => {
     flex-direction: column;
   }
 }
+
+/* Casino control-room finish */
+.config-manager-layout { background: #090d13; }
+.sidebar {
+  width: 248px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(166, 28, 47, 0.3), transparent 16rem),
+    linear-gradient(180deg, #161a22 0%, #0d1118 100%);
+  border-right-color: rgba(229, 183, 99, 0.22);
+}
+.sidebar-header { padding: 1.4rem 1rem 1.15rem; border-bottom-color: rgba(229, 183, 99, 0.16); }
+.sidebar-header h1 { color: #f3c06e; font-size: 1.1rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.toggle-btn { color: #d6a656; border: 1px solid rgba(229, 183, 99, 0.28); border-radius: 6px; padding: 0.25rem 0.45rem; }
+.nav-menu { padding: 0.8rem; gap: 0.3rem; }
+.nav-item { color: #aeb6c2; border-left-width: 3px; border-radius: 5px; }
+.nav-item:hover { background: rgba(229, 183, 99, 0.09); color: #f8ddae; }
+.nav-item.active { background: linear-gradient(90deg, rgba(165, 21, 43, 0.9), rgba(116, 18, 36, 0.58)); border-left-color: #f2bf68; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1); }
+.nav-item--system { margin-top: 0.75rem; border-top: 1px solid rgba(229, 183, 99, 0.16); border-radius: 0; padding-top: 1rem; }
+.sidebar-footer { background: rgba(0, 0, 0, 0.3); border-top-color: rgba(229, 183, 99, 0.14); }
+.btn-primary { background: linear-gradient(135deg, #b84b32, #8c2028); border-color: #c96545; }
+.btn-primary:hover { background: linear-gradient(135deg, #cf6042, #9e2732); border-color: #e1805d; }
+.btn-secondary { background: #202a36; color: #d8dee7; border-color: #3a4654; }
+.btn-danger { background: linear-gradient(135deg, #d14936, #a71d2b); border-color: #e76b53; }
+.btn-logout { grid-column: 1 / -1; background: transparent; color: #e5b86e; border-color: rgba(229, 184, 110, 0.35); }
+.btn-logout:hover { background: rgba(229, 184, 110, 0.1); border-color: rgba(229, 184, 110, 0.7); }
+.editor-pane { background: #111720; border-right-color: rgba(229, 183, 99, 0.16); }
+.editor-header { padding: 1.15rem 2rem; background: linear-gradient(90deg, #151d28, #10151d); border-bottom-color: rgba(229, 183, 99, 0.16); }
+.editor-header h2 { color: #f4c778; font-size: 1.15rem; letter-spacing: 0.05em; }
+.editor-body { background: radial-gradient(circle at 80% 0%, rgba(157, 30, 44, 0.12), transparent 24rem), #0d1219; }
 </style>

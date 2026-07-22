@@ -32,6 +32,10 @@ const validatePassword = (password: string): string[] => {
   if (!/(?=.*\d)/.test(password)) {
     errors.push('密碼需要包含至少一個數字')
   }
+
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/.test(password)) {
+    errors.push('密碼需要包含至少一個特殊字元')
+  }
   
   return errors
 }
@@ -128,6 +132,7 @@ const handleLogout = async () => {
               <li>至少 8 個字符</li>
               <li>包含大寫字母</li>
               <li>包含小寫字母</li>
+              <li>包含特殊字元（如 ! @ #）</li>
               <li>包含數字</li>
             </ul>
           </div>

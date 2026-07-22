@@ -146,6 +146,10 @@ const validatePassword = (password: string): string[] => {
   if (!/(?=.*\d)/.test(password)) {
     errors.push('密碼需要包含至少一個數字')
   }
+
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/.test(password)) {
+    errors.push('密碼需要包含至少一個特殊字元')
+  }
   
   return errors
 }
@@ -399,7 +403,7 @@ onMounted(() => {
               placeholder="請輸入密碼"
             />
             <div class="password-requirements">
-              <p>密碼要求：至少 8 個字符，包含大小寫字母和數字</p>
+              <p>密碼要求：至少 8 個字元，包含大小寫字母、數字與特殊字元（如 ! @ #）</p>
             </div>
           </div>
           
@@ -465,7 +469,7 @@ onMounted(() => {
               placeholder="請輸入新密碼"
             />
             <div class="password-requirements">
-              <p>密碼要求：至少 8 個字符，包含大小寫字母和數字</p>
+              <p>密碼要求：至少 8 個字元，包含大小寫字母、數字與特殊字元（如 ! @ #）</p>
             </div>
           </div>
           
