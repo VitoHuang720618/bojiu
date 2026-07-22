@@ -2,7 +2,6 @@
     <div class="config-panel">
         <div class="panel-header">
             <h3>基本設置</h3>
-            <p class="subtitle">管理網站的全局基本配置項目</p>
         </div>
 
         <!-- Logo 設置 -->
@@ -22,8 +21,7 @@
         <!-- Header 樣式設置 (Pro Designer Mode) -->
         <div class="form-section designer-section">
             <div class="section-title">
-                <h4>頁首 (Header) 專業設計工具</h4>
-                <p>參照設計稿欄位進行填寫，前端將自動生成對應效果</p>
+                <h4>頁首 (Header)</h4>
             </div>
 
             <div class="designer-card">
@@ -105,8 +103,7 @@
         <!-- 推薦區域 樣式設置 (Pro Designer Mode) -->
         <div class="form-section designer-section">
             <div class="section-title">
-                <h4>推薦區域 專業設計工具</h4>
-                <p>設定推薦內容區塊的背景與陰影</p>
+                <h4>推薦區域</h4>
             </div>
 
             <div class="designer-card">
@@ -170,8 +167,7 @@
         <!-- 推薦工具列色彩設置 -->
         <div class="form-section designer-section">
             <div class="section-title">
-                <h4>推薦工具列色彩設定</h4>
-                <p>設定推薦工具列的底色與滑過底色</p>
+                <h4>推薦工具列</h4>
             </div>
 
             <div class="designer-card">
@@ -179,22 +175,22 @@
                     <div class="group-header">🎨 推薦工具列色彩</div>
                     <div class="controls-grid">
                         <div class="field-item">
-                            <label>推薦工具左側底色</label>
+                            <label>左側底色</label>
                             <ColorInput :model-value="sectionColors.recommendFooterTitleBackground"
                                 @update:model-value="updateSectionColors({ recommendFooterTitleBackground: $event })" />
                         </div>
                         <div class="field-item">
-                            <label>推薦工具底色</label>
+                            <label>底色</label>
                             <ColorInput :model-value="sectionColors.recommendFooterItemBackground"
                                 @update:model-value="updateSectionColors({ recommendFooterItemBackground: $event })" />
                         </div>
                         <div class="field-item">
-                            <label>推薦工具 Hover 底色</label>
+                            <label>Hover 底色</label>
                             <ColorInput :model-value="sectionColors.recommendFooterItemHoverBackground"
                                 @update:model-value="updateSectionColors({ recommendFooterItemHoverBackground: $event })" />
                         </div>
                         <div class="field-item">
-                            <label>推薦工具上框線顏色</label>
+                            <label>上框線顏色</label>
                             <ColorInput :model-value="sectionColors.recommendFooterTopBorderColor"
                                 @update:model-value="updateSectionColors({ recommendFooterTopBorderColor: $event })" />
                         </div>
@@ -250,8 +246,7 @@
         <!-- 影片縮圖色彩設定 -->
         <div class="form-section designer-section">
             <div class="section-title">
-                <h4>影片縮圖底色</h4>
-                <p>設定娛樂直播與賽事精選影片縮圖的底色與框線顏色</p>
+                <h4>影片</h4>
             </div>
 
             <div class="designer-card">
@@ -259,17 +254,17 @@
                     <div class="group-header">🎨 影片縮圖色彩</div>
                     <div class="controls-grid">
                         <div class="field-item">
-                            <label>影片縮圖底色</label>
+                            <label>文字背景色</label>
                             <ColorInput :model-value="sectionColors.thumbnailTitleBackground"
                                 @update:model-value="updateSectionColors({ thumbnailTitleBackground: $event })" />
                         </div>
                         <div class="field-item">
-                            <label>影片縮圖框線顏色</label>
+                            <label>外框顏色</label>
                             <ColorInput :model-value="sectionColors.thumbnailBorderColor"
                                 @update:model-value="updateSectionColors({ thumbnailBorderColor: $event })" />
                         </div>
                         <div class="field-item">
-                            <label>影片縮圖文字顏色</label>
+                            <label>文字顏色</label>
                             <ColorInput :model-value="sectionColors.thumbnailTextColor"
                                 @update:model-value="updateSectionColors({ thumbnailTextColor: $event })" />
                         </div>
@@ -281,8 +276,7 @@
         <!-- 頁尾色彩設定 -->
         <div class="form-section designer-section">
             <div class="section-title">
-                <h4>頁尾色彩設定</h4>
-                <p>設定最底部 Copyright 區域的背景底色</p>
+                <h4>頁尾</h4>
             </div>
 
             <div class="designer-card">
