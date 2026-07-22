@@ -42,7 +42,11 @@ export class AssetManager {
       backgroundSettings: {
         ...DEFAULT_BACKGROUND_SETTINGS,
         ...(manifest.backgroundSettings || {})
-      }
+      },
+      recommendStyles: manifest.recommendStyles ? {
+        ...manifest.recommendStyles,
+        height: manifest.recommendStyles.height ?? 75
+      } : manifest.recommendStyles
     }
   }
 

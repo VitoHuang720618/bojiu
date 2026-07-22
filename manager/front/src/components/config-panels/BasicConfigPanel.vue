@@ -91,54 +91,11 @@
                     </div>
                 </div>
 
-                <!-- 外陰影 -->
-                <div class="designer-group">
-                    <div class="group-header">
-                        <span>🌓 外陰影 (Box Shadow)</span>
-                        <input type="checkbox" :checked="headerStyles.boxShadow.enabled"
-                            @change="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, enabled: ($event.target as HTMLInputElement).checked } })" />
-                    </div>
-                    <div v-if="headerStyles.boxShadow.enabled" class="controls-grid">
-                        <div class="field-item">
-                            <label>X 偏移</label>
-                            <input type="number" :value="headerStyles.boxShadow.x"
-                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, x: Number(($event.target as HTMLInputElement).value) } })" />
-                        </div>
-                        <div class="field-item">
-                            <label>Y 偏移</label>
-                            <input type="number" :value="headerStyles.boxShadow.y"
-                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, y: Number(($event.target as HTMLInputElement).value) } })" />
-                        </div>
-                        <div class="field-item">
-                            <label>Blur (模糊)</label>
-                            <input type="number" :value="headerStyles.boxShadow.blur"
-                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, blur: Number(($event.target as HTMLInputElement).value) } })" />
-                        </div>
-                        <div class="field-item">
-                            <label>Spread (擴展)</label>
-                            <input type="number" :value="headerStyles.boxShadow.spread"
-                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, spread: Number(($event.target as HTMLInputElement).value) } })" />
-                        </div>
-                        <div class="field-item">
-                            <label>陰影顏色</label>
-                            <ColorInput :model-value="headerStyles.boxShadow.color"
-                                @update:model-value="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, color: $event } })" />
-                        </div>
-                        <div class="field-item">
-                            <label>陰影透明度</label>
-                            <input type="number" step="0.1" min="0" max="1" :value="headerStyles.boxShadow.opacity"
-                                @input="updateHeaderStyle({ boxShadow: { ...headerStyles.boxShadow, opacity: Number(($event.target as HTMLInputElement).value) } })" />
-                        </div>
-                    </div>
-                </div>
-
                 <!-- 預覽區域 -->
                 <div class="designer-preview-section">
                     <div class="preview-title">即時預覽 (Live Preview)</div>
                     <div class="checkerboard-bg">
-                        <div class="preview-element" :style="headerPreviewStyle">
-                            <span class="element-label">Header Preview</span>
-                        </div>
+                        <div class="preview-element" :style="headerPreviewStyle"></div>
                     </div>
                 </div>
             </div>
@@ -153,6 +110,28 @@
             </div>
 
             <div class="designer-card">
+                <!-- 幾何與佈局 -->
+                <div class="designer-group">
+                    <div class="group-header">📏 幾何與佈局</div>
+                    <div class="controls-grid">
+                        <div class="field-item">
+                            <label>高度 (H)</label>
+                            <div class="input-with-unit">
+                                <input type="number" :value="recommendStyles.height"
+                                    @input="updateRecommendStyle({ height: Number(($event.target as HTMLInputElement).value) })" />
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="field-item">
+                            <label>不透明度 (Opacity)</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.1" min="0" max="1" :value="recommendStyles.opacity"
+                                    @input="updateRecommendStyle({ opacity: Number(($event.target as HTMLInputElement).value) })" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 背景填充 -->
                 <div class="designer-group">
                     <div class="group-header">🎨 背景填充 (Fill)</div>
@@ -163,17 +142,11 @@
                             @click="setRecommendBackgroundMode('gradient')">線性漸層</button>
                     </div>
 
-                    <!-- 控制項與 Header 類似，僅更新函式不同 -->
                     <div v-if="recommendStyles.backgroundMode === 'solid'" class="controls-grid single-row">
                         <div class="field-item">
                             <label>顏色</label>
                             <ColorInput :model-value="recommendStyles.solidColor"
                                 @update:model-value="updateRecommendStyle({ solidColor: $event })" />
-                        </div>
-                        <div class="field-item">
-                            <label>不透明度</label>
-                            <input type="number" step="0.1" min="0" max="1" :value="recommendStyles.opacity"
-                                @input="updateRecommendStyle({ opacity: Number(($event.target as HTMLInputElement).value) })" />
                         </div>
                     </div>
                     <div v-else class="controls-grid">
@@ -199,9 +172,7 @@
                 <div class="designer-preview-section">
                     <div class="preview-title">即時預覽 (Live Preview)</div>
                     <div class="checkerboard-bg">
-                        <div class="preview-element recommend-preview" :style="recommendPreviewStyle">
-                            <span class="element-label">Recommend Area</span>
-                        </div>
+                        <div class="preview-element recommend-preview" :style="recommendPreviewStyle"></div>
                     </div>
                 </div>
             </div>
@@ -422,16 +393,10 @@ const getPreviewStyle = (config: VisualStylesConfig) => {
         background = `linear-gradient(${config.gradient.angle}deg, ${config.gradient.color1} 0%, ${config.gradient.color2} 100%)`
     }
 
-    let boxShadow = 'none'
-    if (config.boxShadow.enabled) {
-        const shadowColor = hexToRgba(config.boxShadow.color, config.boxShadow.opacity)
-        boxShadow = `${config.boxShadow.x}px ${config.boxShadow.y}px ${config.boxShadow.blur}px ${config.boxShadow.spread}px ${shadowColor}`
-    }
-
     return {
         background,
-        boxShadow,
-        height: config.height ? `${config.height}px` : 'auto'
+        // 預覽採固定畫布高度，避免 Header 與推薦區塊因實際高度設定不同而難以比較色彩效果。
+        height: '96px'
     }
 }
 
@@ -610,20 +575,9 @@ const recommendPreviewStyle = computed(() => getPreviewStyle(props.recommendStyl
 }
 
 .recommend-preview {
-    max-width: 400px;
-    height: 150px;
-    border-radius: 8px;
-}
-
-.element-label {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(4px);
-    padding: 4px 12px;
+    max-width: 600px;
+    min-height: 40px;
     border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #1e293b;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-section {

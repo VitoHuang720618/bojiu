@@ -3,16 +3,16 @@
 /* CSS Custom Properties */
 :root {
   /* Primary Colors */
-  --color-primary: #ba081f;
-  --color-secondary: #8b0012;
-  --color-background: #16181b;
-  --color-text: #ffd08c;
-  --color-accent: #dfb082;
-  --color-border: #dfb082;
+  --color-primary: #405b76;
+  --color-secondary: #344d66;
+  --color-background: #eef1f4;
+  --color-text: #273b4f;
+  --color-accent: #8fa4b8;
+  --color-border: #c8d3de;
   
   /* Gradients */
-  --gradient-header: linear-gradient(0deg, #ba081f, #8b0012);
-  --gradient-footer: linear-gradient(0deg, #232323, #000);
+  --gradient-header: linear-gradient(0deg, #405b76, #344d66);
+  --gradient-footer: linear-gradient(0deg, #2e4053, #243545);
   
   /* Spacing */
   --spacing-xs: 0.5rem;

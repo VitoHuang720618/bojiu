@@ -252,17 +252,17 @@ const handleUpload = (file: File, index: number, type: 'default' | 'hover') => {
     border-radius: 8px;
 }
 
-/* Casino control-room finish */
-.panel-header h3 { color: #f2c36f; }
+/* Muted enterprise administration theme */
+.panel-header h3 { color: #344e67; }
 .subtitle { color: #aeb9c6; }
-.btn-primary { background: linear-gradient(135deg, #bd4d34, #8e202a); border-color: #d47852; }
-.btn-outline-secondary { background: #19222d; color: #e5c27e; border-color: rgba(229, 194, 126, 0.38); }
-.item-card { background: #141c26; border-color: rgba(229, 194, 126, 0.22); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24); }
-.item-card-header { background: linear-gradient(90deg, #1b2633, #151c26); border-bottom-color: rgba(229, 194, 126, 0.16); }
-.item-badge { background: rgba(195, 52, 61, 0.18); color: #f0c26d; border: 1px solid rgba(240, 194, 109, 0.24); }
-.field-group label, .upload-slot label { color: #d4dde8; }
-.form-control { background: #0d131b; color: #e8edf3; border-color: #394757; }
-.form-control:focus { border-color: #d29a46; box-shadow: 0 0 0 3px rgba(210, 154, 70, 0.16); }
-.dual-upload-row { border-top-color: rgba(229, 194, 126, 0.14); }
-.upload-slot { background: #101720; border-color: rgba(229, 194, 126, 0.14); }
+.btn-primary { background: #405b76; border-color: #405b76; }
+.btn-outline-secondary { background: #fff; color: #52667a; border-color: #ccd8e4; }
+.item-card { background: #fff; border-color: #dfe7ef; box-shadow: 0 8px 18px rgba(51, 71, 91, 0.08); }
+.item-card-header { background: #f5f8fb; border-bottom-color: #e7edf3; }
+.item-badge { background: #e5f0fb; color: #3f6485; border: 1px solid #cddfec; }
+.field-group label, .upload-slot label { color: #52667a; }
+.form-control { background: #fff; color: #283a4b; border-color: #cad7e3; }
+.form-control:focus { border-color: #6b8eac; box-shadow: 0 0 0 3px rgba(107, 142, 172, 0.14); }
+.dual-upload-row { border-top-color: #e7edf3; }
+.upload-slot { background: #f8fafc; border-color: #e5edf5; }
 </style>

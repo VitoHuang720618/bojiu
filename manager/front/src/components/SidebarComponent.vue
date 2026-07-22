@@ -145,7 +145,7 @@ const handleLogout = async () => {
 }
 
 .sidebar-nav li:hover {
-  background: rgba(186, 8, 31, 0.1);
+  background: rgba(64, 91, 118, 0.18);
   color: white;
 }
 

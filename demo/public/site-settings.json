@@ -47,7 +47,7 @@
   },
   "headerStyles": {
     "height": 75,
-    "backgroundMode": "solid",
+    "backgroundMode": "gradient",
     "solidColor": "#4d040d",
     "opacity": 0.4,
     "gradient": {
@@ -65,7 +65,7 @@
       "opacity": 0.3
     }
   },
-  "headerBackgroundRgba": "rgba(77, 4, 13, 0.4)",
+  "headerBackgroundRgba": "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
   "headerCss": "",
   "recommendContentBackground": "rgba(77, 4, 13, 0.7)",
   "recommendContentCss": "",
@@ -73,6 +73,7 @@
     "recommendFooterTitleBackground": "#820010",
     "recommendFooterItemBackground": "#221e1e",
     "recommendFooterItemHoverBackground": "#820010",
+    "recommendFooterTopBorderColor": "#dfb082",
     "thumbnailTitleBackground": "#820010",
     "thumbnailBorderColor": "#f8eec9",
     "thumbnailTextColor": "#ffffff",
@@ -158,44 +159,30 @@
     {
       "id": "tool-0",
       "name": "Tool 0",
-      "href": "https://live.titan007.com/oldIndexall.aspx",
-      "default": "/defaults/toolIcons-0-default.png",
-      "hover": "/defaults/toolIcons-0-hover.png"
+      "href": "https://www.xiaohongshu.com",
+      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
     },
     {
       "id": "tool-1",
       "name": "Tool 1",
-      "href": "https://live.leisu.com",
-      "default": "/defaults/toolIcons-1-default.png",
-      "hover": "/defaults/toolIcons-1-hover.png"
+      "href": "https://www.douyin.com",
+      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
+      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
     },
     {
       "id": "tool-2",
       "name": "Tool 2",
-      "href": "https://live.nowscore.com/2in1.aspx",
-      "default": "/defaults/toolIcons-2-default.png",
-      "hover": "/defaults/toolIcons-2-hover.png"
+      "href": "https://www.baidu.com",
+      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
+      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
     },
     {
       "id": "tool-3",
       "name": "Tool 3",
-      "href": "https://v.douyin.com/KZUpEUBUIlI/",
-      "default": "/defaults/toolIcons-3-default.png",
-      "hover": "/defaults/toolIcons-3-hover.png"
-    },
-    {
-      "id": "tool-4",
-      "name": "Tool 4",
-      "href": "https://www.baidu.com/",
-      "default": "/defaults/toolIcons-4-default.png",
-      "hover": "/defaults/toolIcons-4-hover.png"
-    },
-    {
-      "id": "tool-5",
-      "name": "Tool 5",
-      "href": "https://x.com",
-      "default": "/defaults/toolIcons-5-default.png",
-      "hover": "/defaults/toolIcons-5-hover.png"
+      "href": "https://www.youku.com",
+      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
     }
   ],
   "videoThumbnails": [
@@ -269,20 +256,6 @@
       "title": "英超賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
       "image": "/defaults/programThumbnails-3-image.png",
-      "alt": ""
-    },
-    {
-      "id": "program-4",
-      "title": "英超賽事",
-      "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-4-image.png",
-      "alt": ""
-    },
-    {
-      "id": "program-5",
-      "title": "英超賽事",
-      "href": "https://www.fun99666.com/index.php/sport-information/",
-      "image": "/defaults/programThumbnails-5-image.png",
       "alt": ""
     }
   ],

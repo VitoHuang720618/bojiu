@@ -169,14 +169,9 @@ export function useSiteData() {
         const background = styles.backgroundMode === 'solid'
             ? hexToRgba(styles.solidColor, opacity)
             : `linear-gradient(${styles.gradient.angle}deg, ${hexToRgba(styles.gradient.color1, opacity)} 0%, ${hexToRgba(styles.gradient.color2, opacity)} 100%)`
-        const boxShadow = styles.boxShadow?.enabled
-            ? `${styles.boxShadow.x}px ${styles.boxShadow.y}px ${styles.boxShadow.blur}px ${styles.boxShadow.spread}px ${hexToRgba(styles.boxShadow.color, styles.boxShadow.opacity)}`
-            : 'none'
-
         return {
             background,
-            height: styles.height ? `${styles.height}px` : undefined,
-            boxShadow
+            height: styles.height ? `${styles.height}px` : undefined
         }
     })
 

@@ -52,19 +52,19 @@ const togglePasswordVisibility = () => {
   <div class="login-container">
     <div class="login-shell">
       <aside class="login-brand" aria-hidden="true">
-        <div class="brand-mark">B9</div>
+        <div class="brand-mark">✉</div>
         <div>
-          <span class="brand-eyebrow">CONTROL ROOM</span>
-          <h2>內容管理<br />從容掌握</h2>
-          <p>管理網站內容、視覺與發布設定。</p>
+          <span class="brand-eyebrow">MAIL ADMINISTRATION</span>
+          <h2>郵件管理<br />安全掌握</h2>
+          <p>集中管理郵件帳號與系統服務。</p>
         </div>
         <div class="brand-grid"></div>
       </aside>
 
     <div class="login-card">
       <div class="login-header">
-        <h1>B9 管理系統</h1>
-        <p>請登入您的帳號</p>
+        <h1>郵件管理系統</h1>
+        <p>請使用您的系統帳號登入</p>
       </div>
       
       <form @submit.prevent="handleLogin" class="login-form">
@@ -112,7 +112,7 @@ const togglePasswordVisibility = () => {
       </form>
       
       <div class="login-footer">
-        <p>© 2025 B9 Entertainment. All rights reserved.</p>
+        <p>© 2025 Mail Administration System</p>
       </div>
     </div>
     </div>
@@ -276,20 +276,18 @@ const togglePasswordVisibility = () => {
   min-height: 100vh;
   height: auto;
   padding: 2rem;
-  background:
-    radial-gradient(circle at 82% 18%, rgba(211, 157, 72, 0.16), transparent 26rem),
-    linear-gradient(135deg, #0a1624 0%, #12283c 55%, #0c1827 100%);
+  background: #eef1f4;
 }
 
 .login-shell {
-  width: min(100%, 960px);
-  min-height: 560px;
+  width: min(100%, 880px);
+  min-height: 520px;
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   overflow: hidden;
-  border: 1px solid rgba(238, 191, 112, 0.25);
-  border-radius: 22px;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.36);
+  border: 1px solid #d7dde4;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(30, 41, 59, 0.1);
 }
 
 .login-brand {
@@ -297,36 +295,28 @@ const togglePasswordVisibility = () => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 3rem;
+  padding: 2.75rem;
   overflow: hidden;
   color: #f8fafc;
-  background: linear-gradient(155deg, #183750 0%, #122b42 56%, #0d1e30 100%);
+  background: #34495e;
 }
 
 .login-brand::before {
-  content: '';
-  position: absolute;
-  width: 22rem;
-  height: 22rem;
-  right: -8rem;
-  top: -10rem;
-  border: 1px solid rgba(238, 191, 112, 0.32);
-  border-radius: 50%;
-  box-shadow: 0 0 0 28px rgba(238, 191, 112, 0.04), 0 0 0 56px rgba(238, 191, 112, 0.025);
+  display: none;
 }
 
 .brand-mark,
 .login-brand > div:not(.brand-grid) { position: relative; z-index: 1; }
-.brand-mark { font-size: 2.1rem; font-weight: 800; letter-spacing: 0.12em; color: #f1bc6d; }
-.brand-eyebrow { display: block; margin-bottom: 1rem; color: #e7b769; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; }
-.login-brand h2 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.18; letter-spacing: 0.02em; }
-.login-brand p { max-width: 17rem; margin: 1rem 0 0; color: #b9c8d7; font-size: 0.95rem; line-height: 1.8; }
-.brand-grid { position: absolute; inset: auto -3rem -5rem auto; width: 18rem; height: 18rem; opacity: 0.22; background-image: linear-gradient(rgba(236, 187, 108, 0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(236, 187, 108, 0.35) 1px, transparent 1px); background-size: 22px 22px; transform: rotate(15deg); }
+.brand-mark { font-size: 1.6rem; font-weight: 600; letter-spacing: 0; color: #d7e0e9; }
+.brand-eyebrow { display: block; margin-bottom: 0.9rem; color: #b8c5d1; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; }
+.login-brand h2 { margin: 0; font-size: clamp(1.85rem, 3vw, 2.5rem); line-height: 1.25; font-weight: 600; letter-spacing: 0; }
+.login-brand p { max-width: 17rem; margin: 0.85rem 0 0; color: #c4ced8; font-size: 0.9rem; line-height: 1.7; }
+.brand-grid { display: none; }
 
 .login-card {
   max-width: none;
   margin: 0;
-  padding: 3.25rem;
+  padding: 3rem;
   border: 0;
   border-radius: 0;
   background: #ffffff;
@@ -335,13 +325,14 @@ const togglePasswordVisibility = () => {
 }
 
 .login-header { text-align: left; margin-bottom: 2.4rem; }
-.login-header h1 { color: #172b40; font-size: 1.7rem; letter-spacing: 0.02em; }
+.login-header h1 { color: #25384b; font-size: 1.55rem; letter-spacing: 0; }
 .login-header p { color: #718096; }
 .login-form label { color: #40556c; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; }
 .login-form input { background: #f8fafc; border-color: #dbe4ed; border-radius: 9px; color: #1c2d3f; }
-.login-form input:focus { border-color: #c58c3e; box-shadow: 0 0 0 3px rgba(197, 140, 62, 0.14); }
-.password-toggle { color: #a16b25; font-weight: 700; }
-.login-btn { padding: 0.82rem 1rem; border-radius: 9px; background: linear-gradient(135deg, #b97a2d, #8d511c); box-shadow: 0 8px 18px rgba(148, 83, 25, 0.22); }
+.login-form input:focus { border-color: #607d99; box-shadow: 0 0 0 3px rgba(96, 125, 153, 0.12); }
+.password-toggle { color: #526b84; font-weight: 600; }
+.login-btn { padding: 0.82rem 1rem; border-radius: 7px; background: #405b76; box-shadow: none; }
+.login-btn:hover:not(:disabled) { background: #344d66; opacity: 1; transform: none; }
 .login-footer { margin-top: 2.2rem; text-align: left; color: #94a3b8; }
 .login-footer p:first-child { color: #94a3b8; font-weight: 400; }
 .error-message { border-radius: 9px; text-align: left; }

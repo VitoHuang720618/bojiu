@@ -41,7 +41,7 @@ const handleLogout = async () => {
 <style scoped>
 #header {
   align-items: center;
-  background: linear-gradient(0deg, #ba081f, #8b0012) #000;
+  background: linear-gradient(0deg, #405b76, #344d66);
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
   display: flex;
   height: 60px;

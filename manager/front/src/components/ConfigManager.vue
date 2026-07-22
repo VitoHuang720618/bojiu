@@ -5,20 +5,24 @@
       <div class="sidebar-header">
         <h1 v-show="!isSidebarCollapsed">配置管理</h1>
         <button class="toggle-btn" @click="isSidebarCollapsed = !isSidebarCollapsed">
-          {{ isSidebarCollapsed ? '☰' : '◀' }}
+          {{ isSidebarCollapsed ? '›' : '‹' }}
         </button>
       </div>
 
       <nav class="nav-menu">
         <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
           :class="['nav-item', { active: activeTab === tab.id }]" :title="isSidebarCollapsed ? tab.label : ''">
-          <span class="nav-icon" v-if="tab.icon">{{ tab.icon }}</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path :d="iconPaths[tab.icon]" />
+          </svg>
           <span class="nav-label" v-show="!isSidebarCollapsed">{{ tab.label }}</span>
         </button>
         <button v-if="authStore.user?.role === 'admin'" @click="activeTab = 'users'"
           :class="['nav-item', 'nav-item--system', { active: activeTab === 'users' }]"
           :title="isSidebarCollapsed ? '用戶管理' : ''">
-          <span class="nav-icon">👥</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path :d="iconPaths.users" />
+          </svg>
           <span class="nav-label" v-show="!isSidebarCollapsed">用戶管理</span>
         </button>
       </nav>
@@ -30,13 +34,13 @@
         </button>
         <button @click="saveConfig" class="btn btn-primary" :disabled="!hasChanges"
           :title="isSidebarCollapsed ? '保存配置' : ''">
-          <span v-if="isSidebarCollapsed">💾</span>
+          <span v-if="isSidebarCollapsed">↓</span>
           <span v-else>保存配置</span>
         </button>
         <div class="publish-section">
           <button @click="publishConfig" class="btn btn-danger btn-block" :disabled="hasChanges"
             :title="isSidebarCollapsed ? '發布為靜態預設' : ''">
-            <span v-if="isSidebarCollapsed">🚀</span>
+            <span v-if="isSidebarCollapsed">↑</span>
             <span v-else>發布為靜態預設</span>
           </button>
         </div>
@@ -135,7 +139,9 @@
               <button v-for="device in devices" :key="device.id"
                 :class="['device-btn', { active: previewDevice === device.id }]" @click="previewDevice = device.id"
                 :title="device.label">
-                <span>{{ device.icon }}</span>
+                <svg class="device-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path :d="iconPaths[device.icon]" />
+                </svg>
               </button>
             </div>
             <div class="preview-dims">
@@ -199,9 +205,9 @@ const activeTab = ref('banner')
 const previewFrame = ref<HTMLIFrameElement>()
 const previewDevice = ref('pc')
 const devices = [
-  { id: 'pc', label: '電腦', icon: '💻', width: '100%', height: '100%' },
-  { id: 'tablet', label: '平板', icon: '📱', width: '820', height: '1180' },
-  { id: 'mobile', label: '手機', icon: '📱', width: '430', height: '932' }
+  { id: 'pc', label: '電腦', icon: 'desktop', width: '100%', height: '100%' },
+  { id: 'tablet', label: '平板', icon: 'tablet', width: '820', height: '1180' },
+  { id: 'mobile', label: '手機', icon: 'mobile', width: '430', height: '932' }
 ]
 
 const currentDeviceWidth = computed(() => {
@@ -233,17 +239,34 @@ const previewFrameStyle = computed(() => {
   }
 })
 
+const iconPaths: Record<string, string> = {
+  settings: 'M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V20.3h-3v-.08A1.7 1.7 0 0 0 10.66 18.7a1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15.04a1.7 1.7 0 0 0-1.56-1.04h-.08v-3h.08A1.7 1.7 0 0 0 7 9.96a1.7 1.7 0 0 0-.34-1.88l-.06-.06L8.72 5.9l.06.06A1.7 1.7 0 0 0 10.66 6.3a1.7 1.7 0 0 0 1.04-1.56v-.08h3v.08a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.04h.08v3h-.08A1.7 1.7 0 0 0 19.4 15Z',
+  image: 'M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13ZM4 16l4.5-4.5 3 3 2.5-2.5L20 18M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z',
+  landscape: 'M3.5 19.5h17M4 18l5.2-6 3.2 3.4 2.8-3L20 18M4 4.5h16v15H4z',
+  link: 'M10.2 13.8 8.6 15.4a3 3 0 0 1-4.2-4.2L8 7.6a3 3 0 0 1 4.2 0M13.8 10.2l1.6-1.6a3 3 0 0 1 4.2 4.2L16 16.4a3 3 0 0 1-4.2 0M8.5 15.5l7-7',
+  toolbox: 'M4 9h16v10.5H4zM9 9V6.5h6V9M4 13h16M10 13h4v2h-4z',
+  route: 'M6 4v16M18 4v16M6 7h6a2 2 0 1 1 0 4h-2a2 2 0 1 0 0 4h8',
+  slides: 'M5 5h12v12H5zM8 8h11v11H8zM11 11h8v8h-8z',
+  video: 'M4 6.5h12v11H4zM16 10l4-2.5v9L16 14',
+  announcement: 'M4 13h3l8 4V7l-8 4H4zM7 13v4',
+  eye: 'M2.5 12s3.5-5 9.5-5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5ZM12 14.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
+  users: 'M16 19v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V19M9.5 9.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM17 10a2.5 2.5 0 1 0 0-5M21 19v-1.2a3.5 3.5 0 0 0-2.5-3.35',
+  desktop: 'M4 5h16v11H4zM9 20h6M12 16v4',
+  tablet: 'M6.5 3.5h11v17h-11zM11 17.5h2',
+  mobile: 'M8 3.5h8v17H8zM11 17.5h2'
+}
+
 const tabs = [
-  { id: 'basic', label: '基本設置', icon: '⚙️' },
-  { id: 'banner', label: 'Banner', icon: '🖼️' },
-  { id: 'background', label: '背景圖', icon: '🌄' },
-  { id: 'buttonlinks', label: '按鈕鏈接', icon: '🔗' },
-  { id: 'toolicons', label: '推薦工具', icon: '🧰' },
-  { id: 'routelinks', label: '推薦路線', icon: '🛣️' },
-  { id: 'carousel', label: '輪播圖', icon: '🎠' },
-  { id: 'videos', label: '影片區', icon: '🎞️' },
-  { id: 'floatads', label: '浮動廣告', icon: '📢' },
-  { id: 'preview', label: '預覽頁面', icon: '👁️' }
+  { id: 'basic', label: '基本設置', icon: 'settings' },
+  { id: 'banner', label: 'Banner', icon: 'image' },
+  { id: 'background', label: '背景圖', icon: 'landscape' },
+  { id: 'buttonlinks', label: '按鈕鏈接', icon: 'link' },
+  { id: 'toolicons', label: '推薦工具', icon: 'toolbox' },
+  { id: 'routelinks', label: '推薦路線', icon: 'route' },
+  { id: 'carousel', label: '輪播圖', icon: 'slides' },
+  { id: 'videos', label: '影片區', icon: 'video' },
+  { id: 'floatads', label: '浮動廣告', icon: 'announcement' },
+  { id: 'preview', label: '預覽頁面', icon: 'eye' }
 ]
 
 const handleLogout = async () => {
@@ -293,6 +316,7 @@ const config = reactive<ConfigData>({
     }
   },
   recommendStyles: {
+    height: 75,
     backgroundMode: 'solid',
     solidColor: '#140a68',
     opacity: 1.0,
@@ -372,6 +396,10 @@ const loadConfig = async () => {
       thumbnailTextColor: '#ffffff',
       footerBackground: '#060417',
       ...(data.sectionColors || {})
+    }
+    config.recommendStyles = {
+      ...config.recommendStyles,
+      height: data.recommendStyles?.height ?? 75
     }
 
     // 初始化佈局預設值
@@ -2106,32 +2134,140 @@ onMounted(() => {
   }
 }
 
-/* Casino control-room finish */
-.config-manager-layout { background: #090d13; }
+/* Quiet control-room theme */
+.config-manager-layout { background: #f3f5f7; }
 .sidebar {
   width: 248px;
-  background:
-    radial-gradient(circle at 15% 0%, rgba(166, 28, 47, 0.3), transparent 16rem),
-    linear-gradient(180deg, #161a22 0%, #0d1118 100%);
-  border-right-color: rgba(229, 183, 99, 0.22);
+  background: #f8fafb;
+  border-right-color: #e1e7ed;
+  color: #64748b;
 }
-.sidebar-header { padding: 1.4rem 1rem 1.15rem; border-bottom-color: rgba(229, 183, 99, 0.16); }
-.sidebar-header h1 { color: #f3c06e; font-size: 1.1rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-.toggle-btn { color: #d6a656; border: 1px solid rgba(229, 183, 99, 0.28); border-radius: 6px; padding: 0.25rem 0.45rem; }
+.sidebar-header { padding: 1.4rem 1.15rem 1.15rem; border-bottom-color: #e6ebf0; }
+.sidebar-header h1 { color: #586b7e; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: none; }
+.toggle-btn { color: #8392a1; border: 0; border-radius: 6px; padding: 0.15rem 0.45rem; font-size: 1.5rem; line-height: 1; }
 .nav-menu { padding: 0.8rem; gap: 0.3rem; }
-.nav-item { color: #aeb6c2; border-left-width: 3px; border-radius: 5px; }
-.nav-item:hover { background: rgba(229, 183, 99, 0.09); color: #f8ddae; }
-.nav-item.active { background: linear-gradient(90deg, rgba(165, 21, 43, 0.9), rgba(116, 18, 36, 0.58)); border-left-color: #f2bf68; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1); }
-.nav-item--system { margin-top: 0.75rem; border-top: 1px solid rgba(229, 183, 99, 0.16); border-radius: 0; padding-top: 1rem; }
-.sidebar-footer { background: rgba(0, 0, 0, 0.3); border-top-color: rgba(229, 183, 99, 0.14); }
-.btn-primary { background: linear-gradient(135deg, #b84b32, #8c2028); border-color: #c96545; }
-.btn-primary:hover { background: linear-gradient(135deg, #cf6042, #9e2732); border-color: #e1805d; }
-.btn-secondary { background: #202a36; color: #d8dee7; border-color: #3a4654; }
-.btn-danger { background: linear-gradient(135deg, #d14936, #a71d2b); border-color: #e76b53; }
-.btn-logout { grid-column: 1 / -1; background: transparent; color: #e5b86e; border-color: rgba(229, 184, 110, 0.35); }
-.btn-logout:hover { background: rgba(229, 184, 110, 0.1); border-color: rgba(229, 184, 110, 0.7); }
-.editor-pane { background: #111720; border-right-color: rgba(229, 183, 99, 0.16); }
-.editor-header { padding: 1.15rem 2rem; background: linear-gradient(90deg, #151d28, #10151d); border-bottom-color: rgba(229, 183, 99, 0.16); }
-.editor-header h2 { color: #f4c778; font-size: 1.15rem; letter-spacing: 0.05em; }
-.editor-body { background: radial-gradient(circle at 80% 0%, rgba(157, 30, 44, 0.12), transparent 24rem), #0d1219; }
+.nav-item { color: #728094; border-left-width: 0; border-radius: 8px; font-weight: 600; }
+.nav-icon { width: 18px; height: 18px; margin-right: 11px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sidebar.collapsed .nav-icon { margin-right: 0; }
+.nav-item:hover { background: #f0f3f6; color: #52667a; }
+.nav-item.active { background: #f3eee7; color: #8b7557; box-shadow: none; }
+.nav-item--system { margin-top: 0.75rem; border-top: 1px solid #e6ebf0; border-radius: 0; padding-top: 1rem; }
+.sidebar-footer { background: #f8fafb; border-top-color: #e6ebf0; }
+.btn-primary { background: #3f6f98; border-color: #3f6f98; }
+.btn-primary:hover:not(:disabled) { background: #315f87; border-color: #315f87; }
+.btn-primary:disabled { background: #b7c0c9; border-color: #b7c0c9; color: #f8fafc; opacity: 1; }
+.btn-secondary { background: #ffffff; color: #617387; border-color: #d7e0e8; }
+.btn-danger { background: #7a8ea2; border-color: #7a8ea2; }
+.btn-danger:hover { background: #687d92; }
+.btn-logout { grid-column: 1 / -1; background: #fff; color: #6b7b8b; border-color: #dce4eb; }
+.btn-logout:hover { background: #f2f5f7; border-color: #ccd7e1; }
+.editor-pane { background: #ffffff; border-right-color: #d8e0e8; }
+.editor-header { padding: 1.15rem 2rem; background: #f8fafc; border-bottom-color: #dce4ec; }
+.editor-header h2 { color: #344e67; font-size: 1.15rem; letter-spacing: 0.03em; }
+.editor-body { background: #f1f4f7; }
+.device-icon { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Responsive workspace: navigation becomes a scrollable command bar on smaller screens. */
+@media (max-width: 1024px) {
+  .config-manager-layout {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .sidebar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    width: 100%;
+    height: auto;
+    padding: 0;
+    overflow: hidden;
+    background: #f8fafb;
+    border-right: 0;
+    border-bottom: 1px solid #e1e7ed;
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.9rem;
+    margin: 0;
+    border: 0;
+    border-right: 1px solid #e6ebf0;
+  }
+
+  .sidebar-header h1 { font-size: 0.9rem; }
+  .sidebar.collapsed { width: 100%; }
+  .sidebar.collapsed .sidebar-header { width: auto; }
+
+  .nav-menu {
+    flex-direction: row;
+    gap: 0.35rem;
+    height: auto;
+    padding: 0.5rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .nav-item,
+  .sidebar.collapsed .nav-item {
+    width: auto;
+    flex: 0 0 auto;
+    padding: 0.55rem 0.7rem;
+    justify-content: flex-start;
+    border: 0;
+    border-radius: 7px;
+  }
+
+  .nav-icon,
+  .sidebar.collapsed .nav-icon { margin-right: 0.42rem; }
+  .nav-item--system { margin-top: 0; padding-top: 0.55rem; border-top: 0; }
+
+  .sidebar-footer {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    margin: 0;
+    background: #f4f7f9;
+    border: 0;
+    border-top: 1px solid #e6ebf0;
+  }
+
+  .publish-section { display: contents; }
+  .sidebar-footer .btn,
+  .sidebar-footer .btn-block { width: 100%; padding: 0.55rem 0.45rem; font-size: 0.82rem; }
+
+  .main-content,
+  .panels-container { overflow: visible; }
+  .editor-pane,
+  .preview-pane { min-height: calc(100dvh - 145px); }
+  .editor-body { padding: 1.25rem; }
+  .preview-viewport-wrapper { min-height: 520px; }
+}
+
+@media (max-width: 640px) {
+  .sidebar-header h1 { display: none; }
+  .sidebar-header { padding: 0.6rem 0.7rem; }
+  .toggle-btn { font-size: 1.35rem; }
+  .nav-menu { padding: 0.45rem; }
+  .nav-item,
+  .sidebar.collapsed .nav-item { padding: 0.52rem 0.6rem; font-size: 0.82rem; }
+  .nav-icon { width: 17px; height: 17px; }
+
+  .sidebar-footer { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0.55rem; }
+  .sidebar-footer .btn,
+  .sidebar-footer .btn-block { font-size: 0.78rem; }
+
+  .editor-header,
+  .preview-header { padding: 0.85rem 1rem; }
+  .editor-body { padding: 0.85rem; }
+  .video-sections-panel { gap: 1.5rem; }
+  .preview-header { gap: 0.75rem; flex-wrap: wrap; }
+  .preview-viewport-wrapper { min-height: 440px; padding: 1rem; }
+  .preview-dims { font-size: 0.75rem; }
+}
 </style>
