@@ -42,7 +42,7 @@
   "backgroundSettings": {
     "displayMode": "repeat",
     "topBorderEnabled": true,
-    "topBorderColor": "#ffffff",
+    "topBorderColor": "#dfb082",
     "topBorderWidth": 4
   },
   "headerStyles": {
@@ -67,7 +67,7 @@
   },
   "headerBackgroundRgba": "rgba(77, 4, 13, 0.4)",
   "headerCss": "",
-  "recommendContentBackground": "rgba(77, 4, 13, 0.7)",
+  "recommendContentBackground": "rgba(77, 4, 13, 1)",
   "recommendContentCss": "",
   "sectionColors": {
     "recommendFooterTitleBackground": "#820010",
@@ -183,6 +183,20 @@
       "href": "https://www.youku.com",
       "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
       "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
+    },
+    {
+      "id": "tool-4",
+      "name": "Tool 4",
+      "href": "https://www.iqiyi.com",
+      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
+    },
+    {
+      "id": "tool-5",
+      "name": "Tool 5",
+      "href": "https://x.com",
+      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
     }
   ],
   "videoThumbnails": [
@@ -220,13 +234,6 @@
       "href": "https://www.fun99666.com/index.php/funfans/",
       "image": "/defaults/videoThumbnails-4-image.png",
       "alt": ""
-    },
-    {
-      "id": "video-5",
-      "title": "撩人双飞闺蜜秀",
-      "href": "https://www.fun99666.com/index.php/funfans/",
-      "image": "/defaults/videoThumbnails-5-image.png",
-      "alt": ""
     }
   ],
   "programThumbnails": [
@@ -256,6 +263,13 @@
       "title": "英超賽事",
       "href": "https://www.fun99666.com/index.php/sport-information/",
       "image": "/defaults/programThumbnails-3-image.png",
+      "alt": ""
+    },
+    {
+      "id": "program-4",
+      "title": "英超賽事",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "image": "/defaults/programThumbnails-4-image.png",
       "alt": ""
     }
   ],

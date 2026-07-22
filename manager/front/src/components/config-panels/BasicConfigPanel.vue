@@ -53,14 +53,14 @@
                 <div class="designer-group">
                     <div class="group-header">🎨 背景填充 (Fill)</div>
                     <div class="mode-selector">
-                        <button class="mode-btn" :class="{ active: headerStyles.backgroundMode === 'solid' }"
+                        <button class="mode-btn" :class="{ active: headerPreviewMode === 'solid' }"
                             @click="setHeaderBackgroundMode('solid')">純色</button>
-                        <button class="mode-btn" :class="{ active: headerStyles.backgroundMode === 'gradient' }"
+                        <button class="mode-btn" :class="{ active: headerPreviewMode === 'gradient' }"
                             @click="setHeaderBackgroundMode('gradient')">線性漸層</button>
                     </div>
 
                     <!-- 純色模式 -->
-                    <div v-if="headerStyles.backgroundMode === 'solid'" class="controls-grid single-row">
+                    <div v-if="headerPreviewMode === 'solid'" class="controls-grid single-row">
                         <div class="field-item">
                             <label>顏色</label>
                             <ColorInput :model-value="headerStyles.solidColor"
@@ -114,13 +114,13 @@
                 <div class="designer-group">
                     <div class="group-header">🎨 背景填充 (Fill)</div>
                     <div class="mode-selector">
-                        <button class="mode-btn" :class="{ active: recommendStyles.backgroundMode === 'solid' }"
+                        <button class="mode-btn" :class="{ active: recommendPreviewMode === 'solid' }"
                             @click="setRecommendBackgroundMode('solid')">純色</button>
-                        <button class="mode-btn" :class="{ active: recommendStyles.backgroundMode === 'gradient' }"
+                        <button class="mode-btn" :class="{ active: recommendPreviewMode === 'gradient' }"
                             @click="setRecommendBackgroundMode('gradient')">線性漸層</button>
                     </div>
 
-                    <div v-if="recommendStyles.backgroundMode === 'solid'" class="controls-grid single-row">
+                    <div v-if="recommendPreviewMode === 'solid'" class="controls-grid single-row">
                         <div class="field-item">
                             <label>顏色</label>
                             <ColorInput :model-value="recommendStyles.solidColor"
@@ -302,7 +302,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import ImageUploader from '../common/ImageUploader.vue'
 import ColorInput from '../common/ColorInput.vue'
 import { SectionColorsConfig, VisualStylesConfig } from '../../services/configService'
@@ -331,6 +331,18 @@ const emit = defineEmits<{
     (e: 'clearTitleImage', field: string): void
 }>()
 
+// 切換純色／漸層只影響控制面板與預覽；實際修改欄位時才寫入設定。
+const headerPreviewMode = ref<VisualStylesConfig['backgroundMode']>(props.headerStyles.backgroundMode)
+const recommendPreviewMode = ref<VisualStylesConfig['backgroundMode']>(props.recommendStyles.backgroundMode)
+
+watch(() => props.headerStyles.backgroundMode, (mode) => {
+    headerPreviewMode.value = mode
+})
+
+watch(() => props.recommendStyles.backgroundMode, (mode) => {
+    recommendPreviewMode.value = mode
+})
+
 const handleUpload = (file: File, field: string) => {
     emit('upload', { target: { files: [file] } } as unknown as Event, field)
 }
@@ -341,23 +353,19 @@ const handleTitleUpload = (file: File, field: string) => {
 
 // 通用樣式更新函式
 const updateHeaderStyle = (updates: Partial<VisualStylesConfig>) => {
-    emit('update:headerStyles', { ...props.headerStyles, ...updates })
+    emit('update:headerStyles', { ...props.headerStyles, backgroundMode: headerPreviewMode.value, ...updates })
 }
 
 const updateRecommendStyle = (updates: Partial<VisualStylesConfig>) => {
-    emit('update:recommendStyles', { ...props.recommendStyles, ...updates })
+    emit('update:recommendStyles', { ...props.recommendStyles, backgroundMode: recommendPreviewMode.value, ...updates })
 }
 
 const setHeaderBackgroundMode = (backgroundMode: VisualStylesConfig['backgroundMode']) => {
-    if (props.headerStyles.backgroundMode !== backgroundMode) {
-        updateHeaderStyle({ backgroundMode })
-    }
+    headerPreviewMode.value = backgroundMode
 }
 
 const setRecommendBackgroundMode = (backgroundMode: VisualStylesConfig['backgroundMode']) => {
-    if (props.recommendStyles.backgroundMode !== backgroundMode) {
-        updateRecommendStyle({ backgroundMode })
-    }
+    recommendPreviewMode.value = backgroundMode
 }
 
 const updateSectionColors = (updates: Partial<SectionColorsConfig>) => {
@@ -388,8 +396,8 @@ const getPreviewStyle = (config: VisualStylesConfig) => {
     }
 }
 
-const headerPreviewStyle = computed(() => getPreviewStyle(props.headerStyles))
-const recommendPreviewStyle = computed(() => getPreviewStyle(props.recommendStyles))
+const headerPreviewStyle = computed(() => getPreviewStyle({ ...props.headerStyles, backgroundMode: headerPreviewMode.value }))
+const recommendPreviewStyle = computed(() => getPreviewStyle({ ...props.recommendStyles, backgroundMode: recommendPreviewMode.value }))
 </script>
 
 <style scoped>
