@@ -110,28 +110,6 @@
             </div>
 
             <div class="designer-card">
-                <!-- 幾何與佈局 -->
-                <div class="designer-group">
-                    <div class="group-header">📏 幾何與佈局</div>
-                    <div class="controls-grid">
-                        <div class="field-item">
-                            <label>高度 (H)</label>
-                            <div class="input-with-unit">
-                                <input type="number" :value="recommendStyles.height"
-                                    @input="updateRecommendStyle({ height: Number(($event.target as HTMLInputElement).value) })" />
-                                <span>px</span>
-                            </div>
-                        </div>
-                        <div class="field-item">
-                            <label>不透明度 (Opacity)</label>
-                            <div class="input-with-unit">
-                                <input type="number" step="0.1" min="0" max="1" :value="recommendStyles.opacity"
-                                    @input="updateRecommendStyle({ opacity: Number(($event.target as HTMLInputElement).value) })" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- 背景填充 -->
                 <div class="designer-group">
                     <div class="group-header">🎨 背景填充 (Fill)</div>
@@ -147,6 +125,11 @@
                             <label>顏色</label>
                             <ColorInput :model-value="recommendStyles.solidColor"
                                 @update:model-value="updateRecommendStyle({ solidColor: $event })" />
+                        </div>
+                        <div class="field-item">
+                            <label>不透明度</label>
+                            <input type="number" step="0.1" min="0" max="1" :value="recommendStyles.opacity"
+                                @input="updateRecommendStyle({ opacity: Number(($event.target as HTMLInputElement).value) })" />
                         </div>
                     </div>
                     <div v-else class="controls-grid">
@@ -164,6 +147,11 @@
                             <label>角度</label>
                             <input type="number" :value="recommendStyles.gradient.angle"
                                 @input="updateRecommendStyle({ gradient: { ...recommendStyles.gradient, angle: Number(($event.target as HTMLInputElement).value) } })" />
+                        </div>
+                        <div class="field-item">
+                            <label>不透明度</label>
+                            <input type="number" step="0.1" min="0" max="1" :value="recommendStyles.opacity"
+                                @input="updateRecommendStyle({ opacity: Number(($event.target as HTMLInputElement).value) })" />
                         </div>
                     </div>
                 </div>

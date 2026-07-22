@@ -14,7 +14,7 @@
   },
   "headerStyles": {
     "height": 75,
-    "backgroundMode": "gradient",
+    "backgroundMode": "solid",
     "solidColor": "#4d040d",
     "opacity": 0.4,
     "gradient": {
@@ -50,7 +50,7 @@
       "color": "#000000",
       "opacity": 0.5
     },
-    "height": 75
+    "height": 10
   },
   "sectionColors": {
     "recommendFooterTitleBackground": "#820010",

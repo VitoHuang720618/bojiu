@@ -47,7 +47,7 @@
   },
   "headerStyles": {
     "height": 75,
-    "backgroundMode": "gradient",
+    "backgroundMode": "solid",
     "solidColor": "#4d040d",
     "opacity": 0.4,
     "gradient": {
@@ -65,7 +65,7 @@
       "opacity": 0.3
     }
   },
-  "headerBackgroundRgba": "linear-gradient(0deg, #3041b9 0%, #081fb3 100%)",
+  "headerBackgroundRgba": "rgba(77, 4, 13, 0.4)",
   "headerCss": "",
   "recommendContentBackground": "rgba(77, 4, 13, 0.7)",
   "recommendContentCss": "",
