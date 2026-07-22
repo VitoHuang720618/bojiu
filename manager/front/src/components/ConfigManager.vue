@@ -55,7 +55,7 @@
     <main class="main-content">
       <div class="panels-container">
         <!-- Editor Pane (Middle) -->
-        <div class="editor-pane" v-show="activeTab !== 'preview'">
+        <div class="editor-pane">
           <div class="editor-header">
             <h2>{{ currentTabLabel }}</h2>
           </div>
@@ -132,30 +132,6 @@
           </div>
         </div>
 
-        <!-- Preview Pane (Right) -->
-        <div class="preview-pane" v-show="activeTab === 'preview'">
-          <div class="preview-header">
-            <div class="device-switcher">
-              <button v-for="device in devices" :key="device.id"
-                :class="['device-btn', { active: previewDevice === device.id }]" @click="previewDevice = device.id"
-                :title="device.label">
-                <svg class="device-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path :d="iconPaths[device.icon]" />
-                </svg>
-              </button>
-            </div>
-            <div class="preview-dims">
-              {{ currentDeviceWidth }} x {{ currentDeviceHeight }}
-            </div>
-          </div>
-
-          <div class="preview-viewport-wrapper">
-            <div class="preview-viewport" :class="previewDevice">
-              <iframe ref="previewFrame" :src="getPreviewUrl()" class="preview-frame" :style="previewFrameStyle"
-                @load="onPreviewLoad"></iframe>
-            </div>
-          </div>
-        </div>
       </div> <!-- End of panels-container -->
     </main>
 
@@ -202,42 +178,6 @@ const isSidebarCollapsed = ref(false)
 // removed mainActiveTab logic
 
 const activeTab = ref('banner')
-const previewFrame = ref<HTMLIFrameElement>()
-const previewDevice = ref('pc')
-const devices = [
-  { id: 'pc', label: '電腦', icon: 'desktop', width: '100%', height: '100%' },
-  { id: 'tablet', label: '平板', icon: 'tablet', width: '820', height: '1180' },
-  { id: 'mobile', label: '手機', icon: 'mobile', width: '430', height: '932' }
-]
-
-const currentDeviceWidth = computed(() => {
-  const device = devices.find(d => d.id === previewDevice.value)
-  return device?.width === '100%' ? '自動' : device?.width + 'px'
-})
-
-const currentDeviceHeight = computed(() => {
-  const device = devices.find(d => d.id === previewDevice.value)
-  return device?.height === '100%' ? '自動' : device?.height + 'px'
-})
-
-const previewFrameStyle = computed(() => {
-  const device = devices.find(d => d.id === previewDevice.value)
-  if (!device || device.id === 'pc') {
-    return {
-      width: '117.65%',
-      height: '117.65%',
-      transform: 'scale(0.85)',
-      transformOrigin: 'top left'
-    }
-  }
-
-  return {
-    width: `${device.width}px`,
-    height: `${device.height}px`,
-    transform: 'none',
-    transformOrigin: 'unset'
-  }
-})
 
 const iconPaths: Record<string, string> = {
   settings: 'M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V20.3h-3v-.08A1.7 1.7 0 0 0 10.66 18.7a1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15.04a1.7 1.7 0 0 0-1.56-1.04h-.08v-3h.08A1.7 1.7 0 0 0 7 9.96a1.7 1.7 0 0 0-.34-1.88l-.06-.06L8.72 5.9l.06.06A1.7 1.7 0 0 0 10.66 6.3a1.7 1.7 0 0 0 1.04-1.56v-.08h3v.08a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.04h.08v3h-.08A1.7 1.7 0 0 0 19.4 15Z',
@@ -249,10 +189,7 @@ const iconPaths: Record<string, string> = {
   slides: 'M5 5h12v12H5zM8 8h11v11H8zM11 11h8v8h-8z',
   video: 'M4 6.5h12v11H4zM16 10l4-2.5v9L16 14',
   announcement: 'M4 13h3l8 4V7l-8 4H4zM7 13v4',
-  eye: 'M2.5 12s3.5-5 9.5-5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5ZM12 14.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
   users: 'M16 19v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V19M9.5 9.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM17 10a2.5 2.5 0 1 0 0-5M21 19v-1.2a3.5 3.5 0 0 0-2.5-3.35',
-  desktop: 'M4 5h16v11H4zM9 20h6M12 16v4',
-  tablet: 'M6.5 3.5h11v17h-11zM11 17.5h2',
   mobile: 'M8 3.5h8v17H8zM11 17.5h2'
 }
 
@@ -265,8 +202,7 @@ const tabs = [
   { id: 'routelinks', label: '推薦路線', icon: 'route' },
   { id: 'carousel', label: '輪播圖', icon: 'slides' },
   { id: 'videos', label: '影片區', icon: 'video' },
-  { id: 'floatads', label: '浮動廣告', icon: 'announcement' },
-  { id: 'preview', label: '預覽頁面', icon: 'eye' }
+  { id: 'floatads', label: '浮動廣告', icon: 'announcement' }
 ]
 
 const handleLogout = async () => {
@@ -1448,27 +1384,7 @@ const updateRouteLink = async (index: number, key: string, value: string) => {
 
 // 重新載入預覽
 const reloadPreview = () => {
-  if (previewFrame.value) {
-    // 添加時間戳避免緩存
-    const timestamp = Date.now()
-    const currentSrc = previewFrame.value.src.split('?')[0]
-    previewFrame.value.src = `${currentSrc}?t=${timestamp}`
-  }
-}
-
-// 獲取預覽 URL
-const getPreviewUrl = () => {
-  // In container deployment, demo is served at root path
-  if (import.meta.env.PROD) {
-    return '/'
-  }
-  // In development, use localhost:3000 (demo frontend)
-  return 'http://localhost:3000'
-}
-
-// 預覽載入完成
-const onPreviewLoad = () => {
-  console.log('預覽載入完成')
+  // 預覽頁面已移除；保留呼叫點以避免影響既有儲存／上傳流程。
 }
 
 // 處理圖片 URL，確保能正確顯示
