@@ -1,0 +1,625 @@
+import express from 'express';
+import multer from 'multer';
+import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { createServer } from 'http';
+import { AssetManager } from './assetManager.js';
+import { WebSocketManager } from './websocket.js';
+import { validateImageFileStrict, validateAssetPath } from './validation.js';
+import { DatabaseService } from './databaseService.js';
+import { AuthMiddleware } from './authMiddleware.js';
+import { createUserRoutes } from './userRoutes.js';
+import { AuthService } from './authService.js';
+import { UserService } from './userService.js';
+console.log('Starting backend server initialization...');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+console.log('Directory name:', __dirname);
+const app = express();
+const httpServer = createServer(app);
+// Environment configuration for container deployment
+const port = process.env.PORT ? parseInt(process.env.PORT) :
+    process.env.API_PORT ? parseInt(process.env.API_PORT) : 3002;
+const uploadPath = process.env.UPLOAD_PATH || process.env.UPLOAD_DIR || path.join(__dirname, '../uploads');
+const configPath = process.env.CONFIG_PATH || process.env.CONFIG_DIR || path.join(__dirname, '../data');
+const maxFileSize = process.env.MAX_FILE_SIZE ? parseInt(process.env.MAX_FILE_SIZE) : 10 * 1024 * 1024; // 10MB default
+const nodeEnv = process.env.NODE_ENV || 'development';
+console.log('Environment configuration:');
+console.log(`  NODE_ENV: ${nodeEnv}`);
+console.log(`  Port: ${port}`);
+console.log(`  Upload path: ${uploadPath}`);
+console.log(`  Config path: ${configPath}`);
+console.log(`  Max file size: ${maxFileSize} bytes`);
+// CORS configuration for container deployment
+const corsOptions = {
+    origin: function (origin, callback) {
+        // In container deployment, allow same-origin requests (no origin header)
+        // and requests from the same host
+        if (!origin ||
+            origin.includes('localhost') ||
+            origin.includes('127.0.0.1') ||
+            nodeEnv === 'development') {
+            callback(null, true);
+        }
+        else {
+            // In production container, allow requests from same host
+            callback(null, true);
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+// 中介軟體設置
+app.set('trust proxy', true); // Trust proxy headers from Nginx
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+// 🚀 全域請求紀錄器：幫我們抓出是誰在敲門
+app.use((req, res, next) => {
+    console.log(`[REQ] ${new Date().toLocaleTimeString()} - ${req.method} ${req.originalUrl} - IP: ${req.ip}`);
+    next();
+});
+// 靜態檔案服務 - 使用環境變量配置的路徑
+app.use('/uploads', express.static(uploadPath));
+app.use('/assets', express.static(path.join(__dirname, '../public/assets')));
+// 路徑配置
+const CONFIG_PATH = path.join(configPath, 'config.json');
+const UPLOADS_DIR = uploadPath;
+// 確保必要目錄存在
+if (!fs.existsSync(UPLOADS_DIR)) {
+    console.log(`Creating uploads directory: ${UPLOADS_DIR}`);
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+if (!fs.existsSync(configPath)) {
+    console.log(`Creating config directory: ${configPath}`);
+    fs.mkdirSync(configPath, { recursive: true });
+}
+// 初始化管理器
+const assetManager = new AssetManager(CONFIG_PATH);
+const wsManager = new WebSocketManager(httpServer);
+// Multer 配置 - 直接使用固定檔名
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, UPLOADS_DIR);
+    },
+    filename: (req, file, cb) => {
+        // 根據 assetPath 獲取身分標記
+        const { assetPath } = req.body;
+        // 獲取原始副檔名 (預設 .png)
+        const ext = path.extname(file.originalname).toLowerCase() || '.png';
+        let targetFilename = `upload-${Date.now()}${ext}`;
+        if (assetPath) {
+            // 依據身分標記命名 (例如: banner.pc -> banner-pc.png)
+            const cleanPath = assetPath.replace(/\./g, '-');
+            // 標題圖使用新檔名，避免同一路徑被瀏覽器快取而無法顯示最新圖片。
+            targetFilename = req.body.assetType === 'title'
+                ? `${cleanPath}-${Date.now()}${ext}`
+                : `${cleanPath}${ext}`;
+        }
+        else {
+            console.warn('⚠️ 上傳請求缺少 assetPath，使用臨時檔名以避免覆蓋預設資源。');
+        }
+        cb(null, targetFilename);
+    }
+});
+const upload = multer({
+    storage,
+    limits: {
+        fileSize: maxFileSize
+    },
+    fileFilter: (req, file, cb) => {
+        // 只允許圖片文件
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error('只允許上傳圖片文件'));
+        }
+    }
+});
+// API 路由
+/**
+ * 健康檢查端點 - 容器部署必需
+ */
+app.get('/api/health', (req, res) => {
+    try {
+        // 檢查基本服務狀態
+        const healthStatus = {
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime(),
+            environment: nodeEnv,
+            services: {
+                api: 'running',
+                fileSystem: fs.existsSync(UPLOADS_DIR) && fs.existsSync(configPath),
+                config: fs.existsSync(CONFIG_PATH)
+            }
+        };
+        // 檢查配置文件是否可讀
+        try {
+            fs.accessSync(CONFIG_PATH, fs.constants.R_OK);
+            healthStatus.services.config = true;
+        }
+        catch (error) {
+            healthStatus.services.config = false;
+        }
+        const allServicesHealthy = Object.values(healthStatus.services).every(service => service === 'running' || service === true);
+        if (allServicesHealthy) {
+            res.status(200).json(healthStatus);
+        }
+        else {
+            res.status(503).json({
+                ...healthStatus,
+                status: 'unhealthy'
+            });
+        }
+    }
+    catch (error) {
+        console.error('Health check failed:', error);
+        res.status(503).json({
+            status: 'unhealthy',
+            error: 'Health check failed',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+// 啟動伺服器
+let serverStarted = false;
+async function startServer() {
+    if (serverStarted) {
+        console.log('Server already started, skipping...');
+        return;
+    }
+    serverStarted = true;
+    try {
+        // Initialize database service
+        const databaseService = new DatabaseService(path.join(configPath, 'users.db'));
+        console.log('Initializing database service...');
+        await databaseService.initializeDatabase();
+        console.log('Database service initialized successfully');
+        // Initialize user management services
+        const userService = new UserService(databaseService);
+        await userService.initialize();
+        const authService = new AuthService(userService);
+        const authMiddlewareInstance = new AuthMiddleware(authService);
+        // Create user management routes
+        const userRoutes = createUserRoutes(authService, userService, authMiddlewareInstance);
+        app.use('/api', userRoutes);
+        // Create auth middleware function for protecting routes
+        const authMiddleware = authMiddlewareInstance.authenticate();
+        // Test endpoint without authentication
+        app.get('/api/test', (req, res) => {
+            res.json({ success: true, message: 'Test endpoint working' });
+        });
+        // Public configuration endpoint for demo frontend (no authentication required)
+        // 診斷路由：檢查路徑與權限
+        app.get('/api/test-path', async (req, res) => {
+            const diag = {
+                cwd: process.cwd(),
+                dirname: __dirname,
+                uploadsDir: UPLOADS_DIR,
+                uploadsExist: fs.existsSync(UPLOADS_DIR),
+                configPath: configPath,
+                configExist: fs.existsSync(path.join(configPath, 'config.json')),
+                env: process.env.NODE_ENV
+            };
+            res.json(diag);
+        });
+        app.get('/api/public/config', async (req, res) => {
+            try {
+                const manifest = await assetManager.readManifest();
+                res.json(manifest);
+            }
+            catch (error) {
+                console.error('讀取公開配置失敗:', error);
+                res.status(500).json({
+                    success: false,
+                    error: '讀取配置失敗'
+                });
+            }
+        });
+        // Protected configuration endpoints
+        app.get('/api/config', authMiddleware, async (req, res) => {
+            try {
+                const manifest = await assetManager.readManifest();
+                res.json(manifest);
+            }
+            catch (error) {
+                console.error('讀取配置失敗:', error);
+                res.status(500).json({
+                    success: false,
+                    error: '讀取配置失敗'
+                });
+            }
+        });
+        app.post('/api/config', authMiddleware, async (req, res) => {
+            try {
+                const config = req.body;
+                await assetManager.writeManifest(config);
+                // 廣播配置更新
+                const updateEvent = assetManager.createUpdateEvent([{ path: 'full_config', oldValue: null, newValue: config }], config);
+                wsManager.broadcastConfigUpdate(updateEvent);
+                res.json({
+                    success: true,
+                    message: '配置更新成功'
+                });
+            }
+            catch (error) {
+                console.error('更新配置失敗:', error);
+                res.status(500).json({
+                    success: false,
+                    error: '更新配置失敗'
+                });
+            }
+        });
+        app.post('/api/upload', authMiddleware, upload.single('file'), async (req, res) => {
+            try {
+                const { assetPath, assetType, position } = req.body;
+                console.log('Upload request:', { assetPath, assetType, position });
+                if (!req.file) {
+                    return res.status(400).json({
+                        success: false,
+                        error: '沒有上傳檔案'
+                    });
+                }
+                // 驗證檔案
+                validateImageFileStrict(req.file);
+                // 檔案已經被 Multer 直接寫入固定檔名，直接建立 URL
+                const filename = req.file.filename;
+                console.log('File uploaded to:', filename);
+                // 建立圖片 URL - 統一使用相對路徑，由 Nginx 處理
+                const imageUrl = `/uploads/${filename}`;
+                res.json({
+                    success: true,
+                    data: {
+                        filename,
+                        path: imageUrl,
+                        size: req.file.size,
+                        mimetype: req.file.mimetype
+                    }
+                });
+            }
+            catch (error) {
+                console.error('上傳失敗:', error);
+                // 刪除已上傳的檔案（如果存在）
+                if (req.file) {
+                    try {
+                        fs.unlinkSync(req.file.path);
+                    }
+                    catch (deleteError) {
+                        console.error('刪除檔案失敗:', deleteError);
+                    }
+                }
+                let errorMessage = '上傳失敗';
+                let statusCode = 500;
+                if (error instanceof Error) {
+                    errorMessage = error.message;
+                    if (error.name === 'UploadError') {
+                        statusCode = 400;
+                    }
+                }
+                res.status(statusCode).json({
+                    success: false,
+                    error: errorMessage
+                });
+            }
+        });
+        app.put('/api/asset/:path', authMiddleware, async (req, res) => {
+            try {
+                const assetPath = req.params.path;
+                const { value } = req.body;
+                if (!validateAssetPath(assetPath)) {
+                    return res.status(400).json({
+                        success: false,
+                        error: '無效的資產路徑格式'
+                    });
+                }
+                const result = await assetManager.updateAssetPath(assetPath, value);
+                // 廣播配置更新
+                const updateEvent = assetManager.createUpdateEvent([{ path: assetPath, oldValue: result.oldValue, newValue: result.newValue }], result.manifest);
+                wsManager.broadcastConfigUpdate(updateEvent);
+                res.json({
+                    success: true,
+                    data: result
+                });
+            }
+            catch (error) {
+                console.error('更新資產失敗:', error);
+                res.status(500).json({
+                    success: false,
+                    error: '更新資產失敗'
+                });
+            }
+        });
+        app.delete('/api/asset/:path', authMiddleware, async (req, res) => {
+            try {
+                const assetPath = req.params.path;
+                if (!validateAssetPath(assetPath)) {
+                    return res.status(400).json({
+                        success: false,
+                        error: '無效的資產路徑格式'
+                    });
+                }
+                const result = await assetManager.updateAssetPath(assetPath, null);
+                // 廣播配置更新
+                const updateEvent = assetManager.createUpdateEvent([{ path: assetPath, oldValue: result.oldValue, newValue: null }], result.manifest);
+                wsManager.broadcastConfigUpdate(updateEvent);
+                res.json({
+                    success: true,
+                    message: '圖片映射已移除',
+                    data: result
+                });
+            }
+            catch (error) {
+                console.error('刪除圖片映射失敗:', error);
+                res.status(500).json({
+                    success: false,
+                    error: '刪除圖片映射失敗'
+                });
+            }
+        });
+        app.post('/api/assets/batch', authMiddleware, async (req, res) => {
+            try {
+                const { updates } = req.body;
+                // 驗證所有路徑
+                for (const update of updates) {
+                    if (!validateAssetPath(update.path)) {
+                        return res.status(400).json({
+                            success: false,
+                            error: `無效的資產路徑格式: ${update.path}`
+                        });
+                    }
+                }
+                const result = await assetManager.updateMultipleAssets(updates);
+                // 廣播配置更新
+                const updateEvent = assetManager.createUpdateEvent(result.changes, result.manifest);
+                wsManager.broadcastConfigUpdate(updateEvent);
+                res.json({
+                    success: true,
+                    data: result
+                });
+            }
+            catch (error) {
+                console.error('批次更新失敗:', error);
+                res.status(500).json({
+                    success: false,
+                    error: '批次更新失敗'
+                });
+            }
+        });
+        app.post('/api/publish', authMiddleware, async (req, res) => {
+            try {
+                const config = await assetManager.readManifest();
+                // Define Paths
+                let targetDefaultsDir;
+                let targetSettingsPath;
+                const vpsReleasePath = path.resolve(__dirname, '../../'); // In release branch, this is /var/www/bojiu-release
+                if (nodeEnv === 'production') {
+                    // Docker container path
+                    targetDefaultsDir = '/usr/share/nginx/html/demo/defaults';
+                    targetSettingsPath = '/usr/share/nginx/html/demo/site-settings.json';
+                }
+                else if (fs.existsSync(path.join(vpsReleasePath, 'demo'))) {
+                    // VPS Release branch path structure
+                    targetDefaultsDir = path.join(vpsReleasePath, 'demo/defaults');
+                    targetSettingsPath = path.join(vpsReleasePath, 'demo/site-settings.json');
+                    console.log('Detected VPS release structure, targeting:', targetSettingsPath);
+                }
+                else {
+                    // Local development path
+                    targetDefaultsDir = path.join(__dirname, '../../../demo/public/defaults');
+                    targetSettingsPath = path.join(__dirname, '../../../demo/public/site-settings.json');
+                }
+                console.log(`Publishing to: ${targetDefaultsDir}`);
+                // Ensure target directory exists
+                if (!fs.existsSync(targetDefaultsDir)) {
+                    fs.mkdirSync(targetDefaultsDir, { recursive: true });
+                }
+                // Helper to copy image and return new path
+                const processImage = (url) => {
+                    if (!url)
+                        return '';
+                    // 如果已經是 defaults 或 assets 路徑，直接回傳
+                    if (url.includes('/defaults/') || url.includes('/assets/'))
+                        return url;
+                    // 只有 uploads 目錄的圖需要複製到 defaults
+                    if (url.includes('/uploads/')) {
+                        const filename = url.split('/uploads/').pop();
+                        if (!filename)
+                            return url;
+                        const sourcePath = path.join(UPLOADS_DIR, filename);
+                        const targetPath = path.join(targetDefaultsDir, filename);
+                        if (fs.existsSync(sourcePath)) {
+                            fs.copyFileSync(sourcePath, targetPath);
+                        }
+                        return `/defaults/${filename}`;
+                    }
+                    return url;
+                };
+                // 輔助函式：將視覺樣式轉為 CSS 字串
+                const hexToRgba = (hex, opacity) => {
+                    if (!hex || !hex.startsWith('#'))
+                        return `rgba(0, 0, 0, ${opacity})`;
+                    const r = parseInt(hex.slice(1, 3), 16);
+                    const g = parseInt(hex.slice(3, 5), 16);
+                    const b = parseInt(hex.slice(5, 7), 16);
+                    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+                };
+                const getBackgroundString = (styles) => {
+                    if (!styles)
+                        return '';
+                    if (styles.backgroundMode === 'solid') {
+                        return hexToRgba(styles.solidColor, styles.opacity);
+                    }
+                    else {
+                        return `linear-gradient(${styles.gradient.angle}deg, ${styles.gradient.color1} 0%, ${styles.gradient.color2} 100%)`;
+                    }
+                };
+                // Process Data & Assets
+                const runtimeConfig = {
+                    siteConfig: {
+                        useApi: false // Force API off
+                    },
+                    logo: processImage(config.logo || ''),
+                    buttonLinks: (config.buttonLinks || []).map(btn => ({
+                        label: btn.text || '', // 後端用 text
+                        href: btn.href || '',
+                        isExternal: btn.target === '_blank', // 後端用 target
+                        default: processImage(btn.defaultImage || ''),
+                        hover: processImage(btn.hoverImage || '')
+                    })),
+                    banner: {
+                        pc: processImage(config.banner.pc),
+                        tablet: processImage(config.banner.tablet),
+                        mobile: processImage(config.banner.mobile)
+                    },
+                    backgroundImage: processImage(config.backgroundImage || ''),
+                    backgroundSettings: config.backgroundSettings || {
+                        displayMode: 'repeat',
+                        topBorderEnabled: true,
+                        topBorderColor: '#dfb082',
+                        topBorderWidth: 4
+                    },
+                    headerStyles: config.headerStyles,
+                    headerBackgroundRgba: getBackgroundString(config.headerStyles) || 'linear-gradient(0deg, #3041b9 0%, #081fb3 100%)',
+                    headerCss: config.headerCss || '',
+                    recommendContentBackground: getBackgroundString(config.recommendStyles) || 'rgba(20, 10, 104, 1.0)',
+                    recommendContentCss: config.recommendContentCss || '',
+                    sectionColors: config.sectionColors || {
+                        recommendFooterTitleBackground: '#200cc5',
+                        recommendFooterItemBackground: '#221e1e',
+                        recommendFooterItemHoverBackground: '#3625c3',
+                        recommendFooterTopBorderColor: '#dfb082',
+                        thumbnailTitleBackground: '#3b27de',
+                        thumbnailBorderColor: '#f8eec9',
+                        thumbnailTextColor: '#ffffff',
+                        footerBackground: '#060417'
+                    },
+                    titles: {
+                        recommendedRoutes: processImage(config.titles?.recommendedRoutes || ''),
+                        recommendedBrowsers: processImage(config.titles?.recommendedBrowsers || ''),
+                        selectedVideos: processImage(config.titles?.selectedVideos || ''),
+                        hotPrograms: processImage(config.titles?.hotPrograms || '')
+                    },
+                    routeLinksImages: (config.routeLinks || []).map(link => ({
+                        default: processImage(link.default),
+                        hover: processImage(link.hover),
+                        href: link.href || ''
+                    })),
+                    recommendedRoutes: (config.routeLinks || []).map((link, index) => ({
+                        id: `route-${index + 1}`,
+                        index: index + 1,
+                        title: `线路 ${index + 1}`,
+                        href: link.href || ''
+                    })),
+                    recommendedTools: (config.toolIcons || []).map((tool, index) => ({
+                        id: `tool-${index}`,
+                        name: `Tool ${index}`,
+                        href: tool.href || '#',
+                        default: processImage(tool.default),
+                        hover: processImage(tool.hover)
+                    })),
+                    videoThumbnails: (config.videoThumbnails || []).map((video, index) => ({
+                        id: `video-${index}`,
+                        title: video.title || '',
+                        href: video.href || '#',
+                        image: processImage(video.image || ''),
+                        alt: video.alt || ''
+                    })),
+                    programThumbnails: (config.programThumbnails || []).map((program, index) => ({
+                        id: `program-${index}`,
+                        title: program.title || '',
+                        href: program.href || '#',
+                        image: processImage(program.image || ''),
+                        alt: program.alt || ''
+                    })),
+                    carouselSlides: (config.carouselSlides || []).map((slide, index) => ({
+                        id: `slide-${index}`,
+                        image: processImage(slide.image),
+                        href: slide.href || '',
+                        alt: slide.title || `Carousel ${index}`
+                    })),
+                    floatAdButtons: (config.floatAdButtons || []).map((btn, index) => ({
+                        id: `float-${index}`,
+                        name: `Float ${index}`,
+                        href: btn.href || '#',
+                        default: processImage(btn.default),
+                        hover: processImage(btn.hover),
+                        tablet: processImage(btn.tablet || ''),
+                        mobile: processImage(btn.mobile || '')
+                    })),
+                    pageLayout: config.pageLayout || ['banner', 'buttonLinks', 'recommend', 'programme', 'floatAd'],
+                    programmeLayout: config.programmeLayout || ['selectedVideos', 'hotPrograms']
+                };
+                // Write site-settings.json
+                fs.writeFileSync(targetSettingsPath, JSON.stringify(runtimeConfig, null, 2), 'utf8');
+                console.log(`Successfully published settings to ${targetSettingsPath}`);
+                res.json({
+                    success: true,
+                    message: '發布成功！靜態設定已生成。'
+                });
+            }
+            catch (error) {
+                console.error('發布失敗:', error);
+                res.status(500).json({
+                    success: false,
+                    error: '發布失敗'
+                });
+            }
+        });
+        app.get('/api/status', authMiddleware, (req, res) => {
+            res.json({
+                success: true,
+                data: {
+                    status: 'running',
+                    connectedClients: wsManager.getConnectedClientsCount(),
+                    timestamp: new Date().toISOString()
+                }
+            });
+        });
+        httpServer.listen(port, '0.0.0.0', () => {
+            console.log(`Backend server successfully running at http://0.0.0.0:${port}`);
+            console.log(`Environment: ${nodeEnv}`);
+            console.log(`WebSocket server ready for connections`);
+            console.log(`Health check available at: http://0.0.0.0:${port}/api/health`);
+            console.log(`User management system initialized`);
+        }).on('error', (err) => {
+            console.error('Failed to start server:', err);
+            process.exit(1);
+        });
+    }
+    catch (error) {
+        console.error('Failed to initialize server:', error);
+        process.exit(1);
+    }
+}
+startServer();
+// 錯誤處理中介軟體
+app.use((error, req, res, next) => {
+    console.error('未處理的錯誤:', error);
+    if (!res.headersSent) {
+        res.status(500).json({
+            success: false,
+            error: '伺服器內部錯誤'
+        });
+    }
+});
+// 優雅關閉處理
+process.on('SIGTERM', () => {
+    console.log('Received SIGTERM, shutting down gracefully...');
+    httpServer.close(() => {
+        console.log('HTTP server closed');
+        process.exit(0);
+    });
+});
+process.on('SIGINT', () => {
+    console.log('Received SIGINT, shutting down gracefully...');
+    httpServer.close(() => {
+        console.log('HTTP server closed');
+        process.exit(0);
+    });
+});
+//# sourceMappingURL=server.js.map

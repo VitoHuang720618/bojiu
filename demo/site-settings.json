@@ -1,0 +1,330 @@
+{
+  "siteConfig": {
+    "useApi": false
+  },
+  "logo": "/defaults/logo.png",
+  "buttonLinks": [
+    {
+      "label": "寰宇瀏覽器",
+      "href": "https://www.ub66.com/",
+      "isExternal": true,
+      "default": "/defaults/buttonLinks-0-defaultImage.png",
+      "hover": "/defaults/buttonLinks-0-hoverImage.png"
+    },
+    {
+      "label": "APP",
+      "href": "https://haa68686.com:9900/web/simple.php#/aioDownload",
+      "isExternal": true,
+      "default": "/defaults/buttonLinks-1-defaultImage.png",
+      "hover": "/defaults/buttonLinks-1-hoverImage.png"
+    },
+    {
+      "label": "FUN乐园",
+      "href": "https://fun99666.com/",
+      "isExternal": true,
+      "default": "/defaults/buttonLinks-2-defaultImage.png",
+      "hover": "/defaults/buttonLinks-2-hoverImage.png"
+    },
+    {
+      "label": "合作夥伴",
+      "href": "https://haa68686.com:9900/web/#/article/at3",
+      "isExternal": true,
+      "default": "/defaults/buttonLinks-3-defaultImage.png",
+      "hover": "/defaults/buttonLinks-3-hoverImage.png"
+    }
+  ],
+  "banner": {
+    "pc": "/defaults/banner-pc.jpg",
+    "tablet": "/defaults/banner-tablet.jpg",
+    "mobile": "/defaults/banner-mobile.jpg"
+  },
+  "backgroundImage": "/defaults/backgroundImage.jpg",
+  "backgroundSettings": {
+    "displayMode": "repeat",
+    "topBorderEnabled": true,
+    "topBorderColor": "#dfb082",
+    "topBorderWidth": 4
+  },
+  "headerStyles": {
+    "height": 75,
+    "backgroundMode": "solid",
+    "solidColor": "#4d040d",
+    "opacity": 0.4,
+    "gradient": {
+      "color1": "#3041b9",
+      "color2": "#081fb3",
+      "angle": 0
+    },
+    "boxShadow": {
+      "enabled": false,
+      "x": 0,
+      "y": 0,
+      "blur": 20,
+      "spread": 0,
+      "color": "#000000",
+      "opacity": 0.3
+    }
+  },
+  "headerBackgroundRgba": "rgba(77, 4, 13, 0.4)",
+  "headerCss": "",
+  "recommendContentBackground": "rgba(77, 4, 13, 1)",
+  "recommendContentCss": "",
+  "sectionColors": {
+    "recommendFooterTitleBackground": "#820010",
+    "recommendFooterItemBackground": "#221e1e",
+    "recommendFooterItemHoverBackground": "#820010",
+    "recommendFooterTopBorderColor": "#dfb082",
+    "thumbnailTitleBackground": "#820010",
+    "thumbnailBorderColor": "#f8eec9",
+    "thumbnailTextColor": "#ffffff",
+    "footerBackground": "#4d040d"
+  },
+  "titles": {
+    "recommendedRoutes": "",
+    "recommendedBrowsers": "",
+    "selectedVideos": "/defaults/selectedVideos.png",
+    "hotPrograms": "/defaults/hotPrograms.png"
+  },
+  "routeLinksImages": [
+    {
+      "default": "/defaults/routeLinks-0-default.png",
+      "hover": "/defaults/routeLinks-0-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-1-default.png",
+      "hover": "/defaults/routeLinks-1-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-2-default.png",
+      "hover": "/defaults/routeLinks-2-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-3-default.png",
+      "hover": "/defaults/routeLinks-3-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-4-default.png",
+      "hover": "/defaults/routeLinks-4-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/defaults/routeLinks-5-default.png",
+      "hover": "/defaults/routeLinks-5-hover.png",
+      "href": ""
+    }
+  ],
+  "recommendedRoutes": [
+    {
+      "id": "route-1",
+      "index": 1,
+      "title": "线路 1",
+      "href": ""
+    },
+    {
+      "id": "route-2",
+      "index": 2,
+      "title": "线路 2",
+      "href": ""
+    },
+    {
+      "id": "route-3",
+      "index": 3,
+      "title": "线路 3",
+      "href": ""
+    },
+    {
+      "id": "route-4",
+      "index": 4,
+      "title": "线路 4",
+      "href": ""
+    },
+    {
+      "id": "route-5",
+      "index": 5,
+      "title": "线路 5",
+      "href": ""
+    },
+    {
+      "id": "route-6",
+      "index": 6,
+      "title": "线路 6",
+      "href": ""
+    }
+  ],
+  "recommendedTools": [
+    {
+      "id": "tool-0",
+      "name": "Tool 0",
+      "href": "https://www.xiaohongshu.com",
+      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
+    },
+    {
+      "id": "tool-1",
+      "name": "Tool 1",
+      "href": "https://www.douyin.com",
+      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
+      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
+    },
+    {
+      "id": "tool-2",
+      "name": "Tool 2",
+      "href": "https://www.baidu.com",
+      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
+      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
+    },
+    {
+      "id": "tool-3",
+      "name": "Tool 3",
+      "href": "https://www.youku.com",
+      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
+    },
+    {
+      "id": "tool-4",
+      "name": "Tool 4",
+      "href": "https://www.iqiyi.com",
+      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
+    },
+    {
+      "id": "tool-5",
+      "name": "Tool 5",
+      "href": "https://x.com",
+      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
+    }
+  ],
+  "videoThumbnails": [
+    {
+      "id": "video-0",
+      "title": "甜美Aura123",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "image": "/defaults/videoThumbnails-0-image.png",
+      "alt": ""
+    },
+    {
+      "id": "video-1",
+      "title": "变态马洛",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "image": "/defaults/videoThumbnails-1-image.png",
+      "alt": ""
+    },
+    {
+      "id": "video-2",
+      "title": "阳光Hank",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "image": "/defaults/videoThumbnails-2-image.png",
+      "alt": ""
+    },
+    {
+      "id": "video-3",
+      "title": "蹦蹦冲啊",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "image": "/defaults/videoThumbnails-3-image.png",
+      "alt": ""
+    },
+    {
+      "id": "video-4",
+      "title": "专属福利",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "image": "/defaults/videoThumbnails-4-image.png",
+      "alt": ""
+    }
+  ],
+  "programThumbnails": [
+    {
+      "id": "program-0",
+      "title": "NBA賽事",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "image": "/defaults/programThumbnails-0-image.png",
+      "alt": ""
+    },
+    {
+      "id": "program-1",
+      "title": "NBA賽事",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "image": "/defaults/programThumbnails-1-image.png",
+      "alt": ""
+    },
+    {
+      "id": "program-2",
+      "title": "NBA賽事",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "image": "/defaults/programThumbnails-2-image.png",
+      "alt": ""
+    },
+    {
+      "id": "program-3",
+      "title": "英超賽事",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "image": "/defaults/programThumbnails-3-image.png",
+      "alt": ""
+    },
+    {
+      "id": "program-4",
+      "title": "英超賽事",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "image": "/defaults/programThumbnails-4-image.png",
+      "alt": ""
+    }
+  ],
+  "carouselSlides": [
+    {
+      "id": "slide-0",
+      "image": "/defaults/carouselSlides-0-image.png",
+      "href": "https://bet9.net:9900/web/#/",
+      "alt": "Carousel 0"
+    },
+    {
+      "id": "slide-1",
+      "image": "/defaults/carouselSlides-1-image.png",
+      "href": "https://bet9.net:9900/web/#/",
+      "alt": "Carousel 1"
+    }
+  ],
+  "floatAdButtons": [
+    {
+      "id": "float-0",
+      "name": "Float 0",
+      "href": "https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777",
+      "default": "/defaults/floatAdButtons-0-default.png",
+      "hover": "/defaults/floatAdButtons-0-hover.png",
+      "tablet": "/defaults/floatAdButtons-0-tablet.png",
+      "mobile": "/defaults/floatAdButtons-0-mobile.png"
+    },
+    {
+      "id": "float-1",
+      "name": "Float 1",
+      "href": "https://www.douyin.com/user/MS4wLjABAAAAYBFyAHu_0cdTXYYCxW1TGRSPsU5Ku2wRkWBXBK7mXe0",
+      "default": "/defaults/floatAdButtons-1-default.png",
+      "hover": "/defaults/floatAdButtons-1-hover.png",
+      "tablet": "/defaults/floatAdButtons-1-tablet.png",
+      "mobile": "/defaults/floatAdButtons-1-mobile.png"
+    },
+    {
+      "id": "float-2",
+      "name": "Float 2",
+      "href": "https://www.fun99666.com/",
+      "default": "/defaults/floatAdButtons-2-default.png",
+      "hover": "/defaults/floatAdButtons-2-hover.png",
+      "tablet": "/defaults/floatAdButtons-2-tablet.png",
+      "mobile": "/defaults/floatAdButtons-2-mobile.png"
+    }
+  ],
+  "pageLayout": [
+    "banner",
+    "buttonLinks",
+    "recommend",
+    "programme",
+    "floatAd"
+  ],
+  "programmeLayout": [
+    "selectedVideos",
+    "hotPrograms"
+  ]
+}

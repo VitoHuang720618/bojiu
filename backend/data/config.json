@@ -1,0 +1,282 @@
+{
+  "logo": "/uploads/logo.png",
+  "banner": {
+    "pc": "/uploads/banner-pc.jpg",
+    "tablet": "/uploads/banner-tablet.jpg",
+    "mobile": "/uploads/banner-mobile.jpg"
+  },
+  "backgroundImage": "/uploads/backgroundImage.jpg",
+  "backgroundSettings": {
+    "displayMode": "repeat",
+    "topBorderEnabled": true,
+    "topBorderColor": "#dfb082",
+    "topBorderWidth": 4
+  },
+  "headerStyles": {
+    "height": 75,
+    "backgroundMode": "solid",
+    "solidColor": "#4d040d",
+    "opacity": 0.4,
+    "gradient": {
+      "color1": "#3041b9",
+      "color2": "#081fb3",
+      "angle": 0
+    },
+    "boxShadow": {
+      "enabled": false,
+      "x": 0,
+      "y": 0,
+      "blur": 20,
+      "spread": 0,
+      "color": "#000000",
+      "opacity": 0.3
+    }
+  },
+  "recommendStyles": {
+    "backgroundMode": "solid",
+    "solidColor": "#4d040d",
+    "opacity": 1,
+    "gradient": {
+      "color1": "#4d040d",
+      "color2": "#a21a2a",
+      "angle": 28
+    },
+    "boxShadow": {
+      "enabled": true,
+      "x": -11,
+      "y": 23,
+      "blur": 10,
+      "spread": 0,
+      "color": "#000000",
+      "opacity": 0.5
+    },
+    "height": 10
+  },
+  "sectionColors": {
+    "recommendFooterTitleBackground": "#820010",
+    "recommendFooterItemBackground": "#221e1e",
+    "recommendFooterItemHoverBackground": "#820010",
+    "recommendFooterTopBorderColor": "#dfb082",
+    "thumbnailTitleBackground": "#820010",
+    "thumbnailBorderColor": "#f8eec9",
+    "thumbnailTextColor": "#ffffff",
+    "footerBackground": "#4d040d"
+  },
+  "headerCss": "",
+  "recommendContentCss": "",
+  "buttonLinks": [
+    {
+      "text": "寰宇瀏覽器",
+      "href": "https://www.ub66.com/",
+      "target": "_blank",
+      "defaultImage": "/uploads/buttonLinks-0-defaultImage.png",
+      "hoverImage": "/uploads/buttonLinks-0-hoverImage.png"
+    },
+    {
+      "text": "APP",
+      "href": "https://haa68686.com:9900/web/simple.php#/aioDownload",
+      "target": "_blank",
+      "defaultImage": "/uploads/buttonLinks-1-defaultImage.png",
+      "hoverImage": "/uploads/buttonLinks-1-hoverImage.png"
+    },
+    {
+      "text": "FUN乐园",
+      "href": "https://fun99666.com/",
+      "target": "_blank",
+      "defaultImage": "/uploads/buttonLinks-2-defaultImage.png",
+      "hoverImage": "/uploads/buttonLinks-2-hoverImage.png"
+    },
+    {
+      "text": "合作夥伴",
+      "href": "https://haa68686.com:9900/web/#/article/at3",
+      "target": "_blank",
+      "defaultImage": "/uploads/buttonLinks-3-defaultImage.png",
+      "hoverImage": "/uploads/buttonLinks-3-hoverImage.png"
+    }
+  ],
+  "carouselSlides": [
+    {
+      "image": "/uploads/carouselSlides-0-image.png",
+      "title": "",
+      "href": "https://bet9.net:9900/web/#/",
+      "description": "神准预测世界杯"
+    },
+    {
+      "image": "/uploads/carouselSlides-1-image.png",
+      "title": "",
+      "href": "https://bet9.net:9900/web/#/",
+      "description": ""
+    }
+  ],
+  "titles": {
+    "recommendedRoutes": "",
+    "recommendedBrowsers": "",
+    "selectedVideos": "/uploads/selectedVideos.png",
+    "hotPrograms": "/uploads/hotPrograms.png"
+  },
+  "routeLinks": [
+    {
+      "default": "/uploads/routeLinks-0-default.png",
+      "hover": "/uploads/routeLinks-0-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/uploads/routeLinks-1-default.png",
+      "hover": "/uploads/routeLinks-1-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/uploads/routeLinks-2-default.png",
+      "hover": "/uploads/routeLinks-2-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/uploads/routeLinks-3-default.png",
+      "hover": "/uploads/routeLinks-3-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/uploads/routeLinks-4-default.png",
+      "hover": "/uploads/routeLinks-4-hover.png",
+      "href": ""
+    },
+    {
+      "default": "/uploads/routeLinks-5-default.png",
+      "hover": "/uploads/routeLinks-5-hover.png",
+      "href": ""
+    }
+  ],
+  "toolIcons": [
+    {
+      "href": "https://www.xiaohongshu.com",
+      "default": "/assets/images/528b90ea-525d-40e3-ab72-e84c2d5a0c48.png",
+      "hover": "/assets/images/e3e86498-1b63-4206-8dee-a37119ca35fc.png"
+    },
+    {
+      "href": "https://www.douyin.com",
+      "default": "/assets/images/5e0418de-ace2-4990-9941-e1431d865040.png",
+      "hover": "/assets/images/480863fc-6a80-4015-9ad1-9fb4e13aeb93.png"
+    },
+    {
+      "href": "https://www.baidu.com",
+      "default": "/assets/images/9ba24a2e-89f3-4555-9bce-406b5241ec19.png",
+      "hover": "/assets/images/696e04f0-1e4b-46f3-b8d0-1a1f5e435151.png"
+    },
+    {
+      "href": "https://www.youku.com",
+      "default": "/assets/images/7e2227c0-d36b-4e07-aa82-627b814e9019.png",
+      "hover": "/assets/images/0bade21c-9e90-45bf-96d9-e531a926738a.png"
+    },
+    {
+      "href": "https://www.iqiyi.com",
+      "default": "/assets/images/1037fae9-36e7-4029-8cf0-98c7bd730ec6.png",
+      "hover": "/assets/images/7323e4c6-e84e-4dc0-b3a7-9da22ad4c52b.png"
+    },
+    {
+      "href": "https://x.com",
+      "default": "/assets/images/a9fbeba0-1070-46bd-98c9-0e96b0ad2778.png",
+      "hover": "/assets/images/ad9555d9-6d93-4544-a7f0-a75098a5f638.png"
+    }
+  ],
+  "videoThumbnails": [
+    {
+      "image": "/uploads/videoThumbnails-0-image.png",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "title": "甜美Aura123",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/videoThumbnails-1-image.png",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "title": "变态马洛",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/videoThumbnails-2-image.png",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "title": "阳光Hank",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/videoThumbnails-3-image.png",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "title": "蹦蹦冲啊",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/videoThumbnails-4-image.png",
+      "href": "https://www.fun99666.com/index.php/funfans/",
+      "title": "专属福利",
+      "alt": ""
+    }
+  ],
+  "programThumbnails": [
+    {
+      "image": "/uploads/programThumbnails-0-image.png",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "title": "NBA賽事",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/programThumbnails-1-image.png",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "title": "NBA賽事",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/programThumbnails-2-image.png",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "title": "NBA賽事",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/programThumbnails-3-image.png",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "title": "英超賽事",
+      "alt": ""
+    },
+    {
+      "image": "/uploads/programThumbnails-4-image.png",
+      "href": "https://www.fun99666.com/index.php/sport-information/",
+      "title": "英超賽事",
+      "alt": ""
+    }
+  ],
+  "floatAdButtons": [
+    {
+      "href": "https://3pisx.60bfjtkb.com/5d54e83dd5f4de784021jkfle-kelid25743e4810614cc6843da934461925da950daa8a0a72e5a809b5d75b381e777",
+      "default": "/uploads/floatAdButtons-0-default.png",
+      "hover": "/uploads/floatAdButtons-0-hover.png",
+      "tablet": "/uploads/floatAdButtons-0-tablet.png",
+      "mobile": "/uploads/floatAdButtons-0-mobile.png"
+    },
+    {
+      "href": "https://www.douyin.com/user/MS4wLjABAAAAYBFyAHu_0cdTXYYCxW1TGRSPsU5Ku2wRkWBXBK7mXe0",
+      "default": "/uploads/floatAdButtons-1-default.png",
+      "hover": "/uploads/floatAdButtons-1-hover.png",
+      "tablet": "/uploads/floatAdButtons-1-tablet.png",
+      "mobile": "/uploads/floatAdButtons-1-mobile.png"
+    },
+    {
+      "href": "https://www.fun99666.com/",
+      "default": "/uploads/floatAdButtons-2-default.png",
+      "hover": "/uploads/floatAdButtons-2-hover.png",
+      "tablet": "/uploads/floatAdButtons-2-tablet.png",
+      "mobile": "/uploads/floatAdButtons-2-mobile.png"
+    }
+  ],
+  "pageLayout": [
+    "banner",
+    "buttonLinks",
+    "recommend",
+    "programme",
+    "floatAd"
+  ],
+  "programmeLayout": [
+    "selectedVideos",
+    "hotPrograms"
+  ],
+  "headerBackgroundRgba": "rgba(20, 10, 104, 1.00)",
+  "recommendContentBackground": "rgba(20, 10, 104, 1.00)",
+  "headerBackground": "/uploads/headerBackground.png"
+}
